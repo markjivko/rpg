@@ -1,8 +1,8 @@
-# Stephino RPG (Game)
-
 <p align="center">
   <img src="https://ps.w.org/stephino-rpg/assets/banner-772x250.jpg"/>
 </p>
+
+# Stephino RPG (Game)
 
 Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on [WordPress](https://wordpress.org/plugins/stephino-rpg).
 
