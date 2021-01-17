@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://ps.w.org/stephino-rpg/assets/banner-772x250.jpg"/>
+    <a href="https://wordpress.org/plugins/stephino-rpg">
+        <img src="https://ps.w.org/stephino-rpg/assets/banner-772x250.jpg"/>
+    </a>
 </p>
 
 # Stephino RPG (Game)
