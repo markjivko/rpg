@@ -1,0 +1,6249 @@
+# Copyright (c) 2021 Stephino
+# 
+# Thomas a Kempis | First keep peace with yourself, then you can also bring peace to others.
+# 
+# Distributed under the GNU General Public License v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: Stephino Rpg v.0.2.9\n"
+"POT-Creation-Date: 2021-01-11 14:22:31+00:00\n"
+"PO-Revision-Date: 2021-01-11 14:22:31+00:00\n"
+"Last-Translator: Stephino\n"
+"Language-Team: Stephino\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Report-Msgid-Bugs-To: https://mors.fun/\n"
+"X-Generator: stephino-rpg\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Language: fr_FR\n"
+
+#: lib/Stephino/Rpg/Db/Model/Announcement.php:80
+#, fuzzy
+#@ stephino-rpg
+msgid "Announcement title is mandatory"
+msgstr "Le titre de l'annonce est obligatoire"
+
+#: lib/Stephino/Rpg/Db/Model/Announcement.php:85
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Maximum title length is %d characters"
+msgstr "La longueur maximale du titre est de %d caractères"
+
+#: lib/Stephino/Rpg/Db/Model/Announcement.php:93
+#, fuzzy
+#@ stephino-rpg
+msgid "Announcement content is mandatory"
+msgstr "Le contenu de l'annonce est obligatoire"
+
+#: lib/Stephino/Rpg/Db/Model/Announcement.php:98
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Maximum content length is %d characters"
+msgstr "La longueur maximale du contenu est de %d caractères"
+
+#: lib/Stephino/Rpg/Db/Model/Announcement.php:109
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Announcements last between 1 and %d days"
+msgstr "Les annonces durent entre 1 et %d jours"
+
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:34
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:54
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:133
+#: lib/Stephino/Rpg/Db/Model/Cities.php:350
+#: lib/Stephino/Rpg/Db/Model/Cities.php:428
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:332
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:502
+#: lib/Stephino/Rpg/Db/Model/Entities.php:71
+#: lib/Stephino/Rpg/Db/Model/Islands.php:173
+#: lib/Stephino/Rpg/Db/Model/Queues.php:76
+#: lib/Stephino/Rpg/Db/Model/Queues.php:186
+#: lib/Stephino/Rpg/Db/Model/Queues.php:293
+#: lib/Stephino/Rpg/Db/Model/ResearchFields.php:34
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:222
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:292
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Research.php:45
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:452
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:464
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1078
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1741
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:2042
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:201
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:213
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:451
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:121
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:51
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:95
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:158
+#: lib/Stephino/Rpg/Task/Initializer.php:135
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Invalid configuration (%s)"
+msgstr "Configuration non valide (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:44
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:143
+#: lib/Stephino/Rpg/Db/Model/Cities.php:143
+#: lib/Stephino/Rpg/Db/Model/Cities.php:340
+#: lib/Stephino/Rpg/Db/Model/Cities.php:406
+#: lib/Stephino/Rpg/Db/Model/Entities.php:38
+#: lib/Stephino/Rpg/Db/Model/Queues.php:117
+#: lib/Stephino/Rpg/Db/Model/Queues.php:319
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Research.php:35
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:411
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:954
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1060
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1068
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1723
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:175
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:113
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:150
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Invalid ID (%s)"
+msgstr "Id non valide (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:77
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:177
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:191
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Could not update level (%s)"
+msgstr "Impossible de mettre à jour le niveau (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Buildings.php:161
+#: lib/Stephino/Rpg/Db/Model/Cities.php:229
+#: lib/Stephino/Rpg/Db/Model/Islands.php:186
+#: lib/Stephino/Rpg/Db/Model/Queues.php:143
+#: lib/Stephino/Rpg/Db/Model/Queues.php:226
+#: lib/Stephino/Rpg/Db/Model/ResearchFields.php:61
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Could not create (%s)"
+msgstr "Impossible de créer (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Cities.php:133
+#: lib/Stephino/Rpg/Db/Model/Cities.php:159
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:515
+#: lib/Stephino/Rpg/Db/Model/Islands.php:156
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Invalid slots configuration (%s)"
+msgstr "Configuration des emplacements non valide (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Cities.php:184
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s at maximum capacity"
+msgstr "%s à capacité maximale"
+
+#: lib/Stephino/Rpg/Db/Model/Cities.php:201
+#, fuzzy
+#@ stephino-rpg
+msgid "Lot already occupied"
+msgstr "Lot déjà occupé"
+
+#: lib/Stephino/Rpg/Db/Model/Cities.php:363
+#: lib/Stephino/Rpg/Db/Model/ResearchFields.php:76
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Could not update (%s)"
+msgstr "Impossible de mettre à jour (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Cities.php:396
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid resource name"
+msgstr "Nom de ressource non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Cities.php:453
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not update resource"
+msgstr "Impossible de mettre à jour la ressource"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:35
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:115
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:213
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:300
+#, fuzzy
+#@ stephino-rpg
+msgid "Origin not found"
+msgstr "Origine introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:40
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:223
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:305
+#, fuzzy
+#@ stephino-rpg
+msgid "Destination not found"
+msgstr "Destination introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Your army has not troops"
+msgstr "Votre armée n'a pas de troupes"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:78
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:176
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:263
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:393
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not initiate the convoy"
+msgstr "Impossible de lancer le convoi"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:94
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:192
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:281
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:409
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not update entities"
+msgstr "Impossible de mettre à jour les entités"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:126
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonizer entity not found"
+msgstr "Entité colonisateur introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:131
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonizer entity not garrisoned"
+msgstr "L'entité colonisateur n'est pas en garnison"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:141
+#, fuzzy
+#@ stephino-rpg
+msgid "This entity cannot colonize"
+msgstr "Cette entité ne peut pas coloniser"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:218
+#, fuzzy
+#@ stephino-rpg
+msgid "Origin user not found"
+msgstr "Utilisateur d'origine introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:228
+#, fuzzy
+#@ stephino-rpg
+msgid "The origin must not be the same as the destination"
+msgstr "L'origine ne doit pas être la même que la destination"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:233
+#, fuzzy
+#@ stephino-rpg
+msgid "Your convoy has no transporters"
+msgstr "Votre convoi n'a pas de transporteurs"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:310
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy entity not found"
+msgstr "Entité espion introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:315
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy entity not garrisoned"
+msgstr "L'entité d'espionnage n'est pas en garnison"
+
+#: lib/Stephino/Rpg/Db/Model/Convoys.php:325
+#, fuzzy
+#@ stephino-rpg
+msgid "This entity cannot spy"
+msgstr "Cette entité ne peut pas espionner"
+
+#: lib/Stephino/Rpg/Db/Model/Entities.php:64
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid entity type or configuration ID"
+msgstr "Type d'entité ou ID de configuration non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Entities.php:102
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not create entity"
+msgstr "Impossible de créer l'entité"
+
+#: lib/Stephino/Rpg/Db/Model/Entities.php:112
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not update entity count"
+msgstr "Impossible de mettre à jour le nombre d'entités"
+
+#: lib/Stephino/Rpg/Db/Model/Entities.php:160
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid entities list"
+msgstr "Liste d'entités non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:104
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:197
+#, fuzzy
+#@ stephino-rpg
+msgid "Plugin not activated"
+msgstr "Plugin non activé"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:110
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid user ID"
+msgstr "Identifiant invalide"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:118
+#, fuzzy
+#@ stephino-rpg
+msgid "Cost not set for this package"
+msgstr "Coût non défini pour ce forfait"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:124
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:203
+#, fuzzy
+#@ stephino-rpg
+msgid "PayPal not enabled"
+msgstr "Paypal non activé"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:208
+#, fuzzy
+#@ stephino-rpg
+msgid "Payment not found"
+msgstr "Paiement introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:213
+#, fuzzy
+#@ stephino-rpg
+msgid "Payment already processed"
+msgstr "Paiement déjà traité"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:223
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:38
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid premium package"
+msgstr "Forfait premium non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Invoices.php:245
+#, fuzzy
+#@ stephino-rpg
+msgid "PayPal payment failed"
+msgstr "Le paiement PayPal a échoué"
+
+#: lib/Stephino/Rpg/Db/Model/Islands.php:216
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Could not update name (%s)"
+msgstr "Impossible de mettre à jour le nom (%s)"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:71
+#, fuzzy
+#@ stephino-rpg
+msgid "You cannot contact yourself"
+msgstr "Vous ne pouvez pas vous contacter"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:76
+#, fuzzy
+#@ stephino-rpg
+msgid "Message subject missing"
+msgstr "Objet du message manquant"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:79
+#, fuzzy
+#@ stephino-rpg
+msgid "Message content missing"
+msgstr "Contenu du message manquant"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:84
+#, fuzzy
+#@ stephino-rpg
+msgid "Recipient not found"
+msgstr "Destinataire introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:89
+#, fuzzy
+#@ stephino-rpg
+msgid "You cannot contact robots"
+msgstr "Vous ne pouvez pas contacter les robots"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:98
+#, fuzzy
+#@ stephino-rpg
+msgid "Sender not found"
+msgstr "Expéditeur introuvable"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:103
+#, fuzzy
+#@ stephino-rpg
+msgid "Daily message limit reached"
+msgstr "Limite quotidienne de messages atteinte"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:142
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid notification template"
+msgstr "Modèle de notification non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Messages.php:151
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid notification recipient ID"
+msgstr "Id du destinataire de la notification non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:55
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid author ID"
+msgstr "Id d'auteur non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:62
+#, fuzzy
+#@ stephino-rpg
+msgid "You cannot create more games"
+msgstr "Vous ne pouvez pas créer plus de jeux"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:120
+#, fuzzy
+#@ stephino-rpg
+msgid "Cannot finish this game"
+msgstr "Impossible de terminer ce jeu"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:208
+#, fuzzy
+#@ stephino-rpg
+msgid "Royalties"
+msgstr "Redevance"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:248
+#, fuzzy
+#@ stephino-rpg
+msgid "Incomplete definition"
+msgstr "Définition incomplète"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:254
+#, fuzzy
+#@ stephino-rpg
+msgid "Name must be between 3 and 64 characters long"
+msgstr "Le nom doit comporter entre 3 et 64 caractères"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:260
+#, fuzzy
+#@ stephino-rpg
+msgid "Version must be greater than 1"
+msgstr "La version doit être supérieure à 1"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:268
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Width must be greater than %d"
+msgstr "La largeur doit être supérieure à %d"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:279
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Height must be greater than %d"
+msgstr "La hauteur doit être supérieure à %d"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:287
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid tile set data"
+msgstr "Données de jeu de tuiles non valides"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:300
+#, fuzzy
+#@ stephino-rpg
+msgid "You must place at least one gate"
+msgstr "Vous devez placer au moins une porte"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:307
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Invalid tile set size (%d instead of %d)"
+msgstr "Taille de l'ensemble de tuiles non valide (%d au lieu de %d)"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:456
+#, fuzzy
+#@ stephino-rpg
+msgid "Void"
+msgstr "Néant"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:457
+#, fuzzy
+#@ stephino-rpg
+msgid "An empty tile"
+msgstr "Une tuile vide"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:460
+#, fuzzy
+#@ stephino-rpg
+msgid "Pipe"
+msgstr "Tuyau"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:461
+#, fuzzy
+#@ stephino-rpg
+msgid "A solid structure to stand on"
+msgstr "Une structure solide sur laquelle se tenir"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:464 themes/default/i18n.php:29
+#, fuzzy
+#@ stephino-rpg
+msgid "Crystal"
+msgstr "Cristal"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:465
+#, fuzzy
+#@ stephino-rpg
+msgid "A rare item that must be collected to open the gate"
+msgstr "Un objet rare qui doit être collecté pour ouvrir la porte"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:468
+#, fuzzy
+#@ stephino-rpg
+msgid "Bomb"
+msgstr "Bombe"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:469
+#, fuzzy
+#@ stephino-rpg
+msgid "Instant death"
+msgstr "Mort instantanée"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:472
+#, fuzzy
+#@ stephino-rpg
+msgid "Gate"
+msgstr "Porte"
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:473
+#, fuzzy
+#@ stephino-rpg
+msgid "Escape the current level with your loot"
+msgstr "Échappez au niveau actuel avec votre butin"
+
+#: lib/Stephino/Rpg/Db/Model/Queues.php:41
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:179
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:246
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid premium modifier"
+msgstr "Modificateur de prime non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Queues.php:46
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:168
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:235
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid number of premium modifiers"
+msgstr "Nombre incorrect de modificateurs premium"
+
+#: lib/Stephino/Rpg/Db/Model/Queues.php:286
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid entity configuration ID"
+msgstr "Id de configuration d'entité non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Queues.php:417
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid User or Item ID"
+msgstr "Id d'utilisateur ou d'élément non valide"
+
+#: lib/Stephino/Rpg/Db/Model/Queues.php:494
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:65
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid quantity"
+msgstr "Quantité invalide"
+
+#: lib/Stephino/Rpg/Db/Model/Queues.php:577
+#, fuzzy
+#@ stephino-rpg
+msgid "Max. queue reached"
+msgstr "Max. file d'attente atteinte"
+
+#: lib/Stephino/Rpg/Db/Model/Users.php:70
+#, fuzzy
+#@ stephino-rpg
+msgid "Super Admin accounts cannot be deleted"
+msgstr "Les comptes super-administrateurs ne peuvent pas être supprimés"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:52
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:141
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:433
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:122
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Research.php:128
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:440
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:978
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1113
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1805
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:186
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:441
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:41
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:92
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:216
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:397
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Not found (%s)"
+msgstr "Non trouvé (%s)"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid number of workers"
+msgstr "Nombre de nœuds de calcul incorrect"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:77
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Cannot assign more than %d workers"
+msgstr "Impossible d'affecter plus de %d travailleurs"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:149
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:224
+#: ui/tpl/dialogs/city/city-advisor.php:65
+#: ui/tpl/dialogs/city/city-workforce.php:86
+#, fuzzy
+#@ stephino-rpg
+msgid "Under construction"
+msgstr "En construction"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:154
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:229
+#, fuzzy
+#@ stephino-rpg
+msgid "The market is not enabled"
+msgstr "Le marché n'est pas activé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:159
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:173
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:104
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:138
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:161
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:388
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:234
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid request"
+msgstr "Requête invalide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:167
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:55
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid trade type"
+msgstr "Type d'échange non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:245
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not afford this transaction"
+msgstr "Ne pouvait pas se permettre cette transaction"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:322
+#, fuzzy
+#@ stephino-rpg
+msgid "Construction in progress"
+msgstr "Construction en cours"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:57
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid name provided, use alpha-numeric characters only"
+msgstr "Nom non valide fourni, utilisez uniquement des caractères alphanumériques"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:64
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The name is too long, please keep it shorter than %d characters"
+msgstr "Le nom est trop long, veuillez le garder plus court que %d caractères"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:74
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not update name, please try again later"
+msgstr "Impossible de mettre à jour le nom, veuillez réessayer plus tard"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:132
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "\"%s\" does not use workers"
+msgstr "\"%s\" n'utilise pas de nœuds de calcul"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:142
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "\"%s\" is still under construction"
+msgstr "\"%s\" est toujours en construction"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:159
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Too many workers assigned to \"%s\""
+msgstr "Trop de travailleurs affectés à «%s»"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:173
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:83
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:2761
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:110
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Insufficient resources (%s)"
+msgstr "Ressources insuffisantes (%s)"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:207
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "This %s is already your empire's metropolis"
+msgstr "Ce %s est déjà la métropole de votre empire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:236
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:172
+#, fuzzy
+#@ stephino-rpg
+msgid "Metropolis cannot be changed"
+msgstr "Metropolis ne peut pas être modifié"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:249
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not move metropolis"
+msgstr "Impossible de déplacer la métropole"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:253
+#, fuzzy
+#@ stephino-rpg
+msgid "Metropolis moved successfully"
+msgstr "Metropolis a déménagé avec succès"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:276
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Not supported (%s)"
+msgstr "Non pris en charge (%s)"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:68
+#: ui/tpl/dialogs/entity/entity-recruit.php:33
+#, fuzzy
+#@ stephino-rpg
+msgid "Recruitment cost"
+msgstr "Coût de recrutement"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:69
+#: ui/tpl/dialogs/entity/entity-recruit.php:34
+#, fuzzy
+#@ stephino-rpg
+msgid "Construction cost"
+msgstr "Coût de construction"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:71
+#: ui/tpl/dialogs/entity/entity-dequeue.php:32
+#, fuzzy
+#@ stephino-rpg
+msgid "Refund"
+msgstr "Rembourser"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:130
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Island.php:120
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Research.php:67
+#: ui/tpl/dialogs/entity/entity-recruit.php:75
+#, fuzzy
+#@ stephino-rpg
+msgid "Not enough resources"
+msgstr "Pas assez de ressources"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:150
+#, fuzzy
+#@ stephino-rpg
+msgid "No entities to dequeue"
+msgstr "Aucune entité à retirer de la file d'attente"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:214
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Cannot disband \"%s\""
+msgstr "Impossible de dissoudre \"%s\""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Entity.php:224
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Not enough \"%s\" left to disband"
+msgstr "Il ne reste pas assez de \"%s\" pour se dissoudre"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Island.php:46
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:178
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid slot"
+msgstr "Emplacement non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Island.php:51
+#, fuzzy
+#@ stephino-rpg
+msgid "You can only colonize an empty slot"
+msgstr "Vous ne pouvez coloniser qu'un emplacement vide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Island.php:65
+#, fuzzy
+#@ stephino-rpg
+msgid "This slot was already claimed by another colonizer"
+msgstr "Cet emplacement a déjà été réclamé par un autre colonisateur"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Island.php:114
+#, fuzzy
+#@ stephino-rpg
+msgid "Cannot upgrade this"
+msgstr "Impossible de mettre à jour ceci"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:40
+#, fuzzy
+#@ stephino-rpg
+msgid "Message ID mandatory"
+msgstr "Id de message obligatoire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:69
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid recipient"
+msgstr "Récipient invalide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:76
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Subject maximum lenght of %d characters exceeded"
+msgstr "Longueur maximale du sujet de %d caractères dépassée"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:86
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Content maximum lenght of %d characters exceeded"
+msgstr "Dépassement de la longueur maximale du contenu de %d caractères"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:47
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid currency"
+msgstr "Devise invalide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:59
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:82
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:105
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You cannot buy this package with %s"
+msgstr "Vous ne pouvez pas acheter ce package avec %s"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:112
+#, fuzzy
+#@ stephino-rpg
+msgid "Proceeding to checkout..."
+msgstr "Passer à la caisse..."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:187
+#, fuzzy
+#@ stephino-rpg
+msgid "Premium modifier already enabled"
+msgstr "Modificateur Premium déjà activé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:204
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Premium modifier \"%s\" enabled"
+msgstr "Modificateur de prime «%s» activé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:211
+#, fuzzy
+#@ stephino-rpg
+msgid "activated"
+msgstr "activé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:285
+#, fuzzy
+#@ stephino-rpg
+msgid "acquired"
+msgstr "acquis"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:300
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Thank you for buying %s!"
+msgstr "Merci d'avoir acheté %s!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Research.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid "Research maximum reached"
+msgstr "Maximum de recherche atteint"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:42
+#, fuzzy
+#@ stephino-rpg
+msgid "Passwords must be at least 6 characters long"
+msgstr "Les mots de passe doivent comporter au moins 6 caractères"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "You are logged out"
+msgstr "Vous êtes déconnecté"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:62
+#, fuzzy
+#@ stephino-rpg
+msgid "Password updated successfully"
+msgstr "Mot de passe mis à jour avec succès"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:78
+#, fuzzy
+#@ stephino-rpg
+msgid "Setting key missing"
+msgstr "Clé de réglage manquante"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:84
+#, fuzzy
+#@ stephino-rpg
+msgid "Setting value missing"
+msgstr "Valeur de réglage manquante"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:95
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid user"
+msgstr "Utilisateur invalide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:106
+#, fuzzy
+#@ stephino-rpg
+msgid "Nickname is mandatory"
+msgstr "Le pseudo est obligatoire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:131
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid volume specified. Expected [0, 100]"
+msgstr "Volume spécifié non valide. Attendu [0, 100]"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:142
+#, fuzzy
+#@ stephino-rpg
+msgid "Unknown setting"
+msgstr "Paramètre inconnu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:160
+#, fuzzy
+#@ stephino-rpg
+msgid "Insufficient privileges"
+msgstr "Privilèges insuffisants"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:168
+#, fuzzy
+#@ stephino-rpg
+msgid "Console not enabled from Game Mechanics"
+msgstr "La console n'est pas activée depuis Game Mechanics"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:176
+#, fuzzy
+#@ stephino-rpg
+msgid "No command given"
+msgstr "Aucune commande donnée"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:218
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid number of arguments"
+msgstr "Nombre d'arguments non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:232
+#, fuzzy
+#@ stephino-rpg
+msgid "Commands are read-only for non-admins"
+msgstr "Les commandes sont en lecture seule pour les non-administrateurs"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:308
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Command not found, try %s"
+msgstr "Commande introuvable, essayez %s"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Spy.php:40
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:39
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Spy.php:34
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:45
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:89
+#, fuzzy
+#@ stephino-rpg
+msgid "Destination does not exist"
+msgstr "La destination n'existe pas"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Spy.php:54
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Spy.php:67
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy not available"
+msgstr "Espion non disponible"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Spy.php:59
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy not initialized"
+msgstr "Spy non initialisé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:55
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:82
+#, fuzzy
+#@ stephino-rpg
+msgid "No transporters available"
+msgstr "Aucun transporteur disponible"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:60
+#, fuzzy
+#@ stephino-rpg
+msgid "Origin and destination must differ"
+msgstr "L'origine et la destination doivent différer"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:76
+#, fuzzy
+#@ stephino-rpg
+msgid "Entity cannot perform transport tasks"
+msgstr "L'entité ne peut pas effectuer de tâches de transport"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:101
+#, fuzzy
+#@ stephino-rpg
+msgid "The transport payload cannot be empty"
+msgstr "La charge utile de transport ne peut pas être vide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Transport.php:136
+#, fuzzy
+#@ stephino-rpg
+msgid "Over capacity"
+msgstr "Surcapacité"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Tutorial.php:215
+#, fuzzy
+#@ stephino-rpg
+msgid "Tutorial reward"
+msgstr "Récompense du tutoriel"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:60
+#, fuzzy
+#@ stephino-rpg
+msgid "Trading is disabled"
+msgstr "Le trading est désactivé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:76
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:103
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:153
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:310
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:366
+#, fuzzy
+#@ stephino-rpg
+msgid "User not initialized"
+msgstr "Utilisateur non initialisé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:134
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:222
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:142
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:189
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:236
+#, fuzzy
+#@ stephino-rpg
+msgid "The arena is not available"
+msgstr "L'arène n'est pas disponible"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:145
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:241
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid game ID"
+msgstr "Id de jeu non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:150
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:246
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:201
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:257
+#: ui/tpl/wordpress/wp-ptf.php:47
+#, fuzzy
+#@ stephino-rpg
+msgid "Game not found"
+msgstr "Jeu non trouvé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:155
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:262
+#, fuzzy
+#@ stephino-rpg
+msgid "You cannot edit this game"
+msgstr "Vous ne pouvez pas modifier ce jeu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:169
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid game visibility"
+msgstr "Visibilité du jeu non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:208
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not update game. Please try again later."
+msgstr "Impossible de mettre à jour le jeu. Veuillez réessayer plus tard."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:743
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "No traits defined for \"%s\""
+msgstr "Aucun trait défini pour «%s»"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:815
+#, fuzzy
+#@ stephino-rpg
+msgid "Requirements not met"
+msgstr "Les exigences ne sont pas satisfaites"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1734
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid entity type"
+msgstr "Type d'entité non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1742
+#: ui/tpl/dialogs/building/building-info-metrics.php:230
+#: ui/tpl/dialogs/settings/settings-resources.php:131
+#, fuzzy
+#@ stephino-rpg
+msgid "entity"
+msgstr "entité"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:1759
+#, fuzzy
+#@ stephino-rpg
+msgid "Entity configuration ID is invalid"
+msgstr "L'id de configuration de l'entité n'est pas valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:2711
+#, fuzzy
+#@ stephino-rpg
+msgid "Nothing to refund"
+msgstr "Rien à rembourser"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:2712
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not acquire item"
+msgstr "Impossible d'acquérir l'élément"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:43
+#, fuzzy
+#@ stephino-rpg
+msgid "You do not have access to the Dashboard"
+msgstr "Vous n'avez pas accès au tableau de bord"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:62
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:86
+#, fuzzy
+#@ stephino-rpg
+msgid "You do not have access to the Announcements"
+msgstr "Vous n'avez pas accès aux annonces"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:106
+#, fuzzy
+#@ stephino-rpg
+msgid "You do not have permission to export the game configuration"
+msgstr "Vous n'êtes pas autorisé à exporter la configuration du jeu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:116
+#, fuzzy
+#@ stephino-rpg
+msgid "You do not have permission to reset the game configuration"
+msgstr "Vous n'êtes pas autorisé à réinitialiser la configuration du jeu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:128
+#, fuzzy
+#@ stephino-rpg
+msgid "You do not have permission to reset the game"
+msgstr "Vous n'êtes pas autorisé à réinitialiser le jeu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:146
+#, fuzzy
+#@ stephino-rpg
+msgid "(DEMO) You are free to experiment but your changes will not be saved"
+msgstr "(DEMO) Vous êtes libre d'expérimenter mais vos modifications ne seront pas enregistrées"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:150
+#, fuzzy
+#@ stephino-rpg
+msgid "You need to unlock the game to save your changes"
+msgstr "Vous devez déverrouiller le jeu pour enregistrer vos modifications"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:155
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid configuration object"
+msgstr "Objet de configuration non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:64
+#, fuzzy
+#@ stephino-rpg
+msgid "X coordinate not provided"
+msgstr "Coordonnée X non fournie"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:70
+#, fuzzy
+#@ stephino-rpg
+msgid "Y coordinate not provided"
+msgstr "Coordonnée Y non fournie"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:64
+#, fuzzy
+#@ stephino-rpg
+msgid "Prepare army"
+msgstr "Préparer l'armée"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:107
+#, fuzzy
+#@ stephino-rpg
+msgid "Your army has no troops"
+msgstr "Votre armée n'a pas de troupes"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:116
+#, fuzzy
+#@ stephino-rpg
+msgid "Confirm attack"
+msgstr "Confirmer l'attaque"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:64
+#, fuzzy
+#@ stephino-rpg
+msgid "Rename Metropolis"
+msgstr "Renommer Metropolis"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:65
+#: ui/tpl/dialogs/city/city-advisor.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "Rename"
+msgstr "Renommer"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:123
+#, fuzzy
+#@ stephino-rpg
+msgid "Information"
+msgstr "Information"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:146
+#, fuzzy
+#@ stephino-rpg
+msgid "This is already your empire's metropolis"
+msgstr "C'est déjà la métropole de ton empire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:181
+#, fuzzy
+#@ stephino-rpg
+msgid "Move metropolis"
+msgstr "Déplacer la métropole"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:213
+#, fuzzy
+#@ stephino-rpg
+msgid "Workers are not needed"
+msgstr "Les travailleurs ne sont pas nécessaires"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:223
+#: ui/tpl/dialogs/building/building-info.php:84
+#, fuzzy
+#@ stephino-rpg
+msgid "Workforce"
+msgstr "La main d'oeuvre"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:255
+#, fuzzy
+#@ stephino-rpg
+msgid "No stages to unlock"
+msgstr "Aucune étape à débloquer"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:265
+#: ui/tpl/dialogs/building/building-info.php:91
+#: ui/tpl/dialogs/city/city-queues.php:177
+#, fuzzy
+#@ stephino-rpg
+msgid "Progress"
+msgstr "Le progrès"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:289
+#, fuzzy
+#@ stephino-rpg
+msgid "Not found"
+msgstr "Pas trouvé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:294
+#, fuzzy
+#@ stephino-rpg
+msgid "Has no owner"
+msgstr "N'a pas de propriétaire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:412
+#: ui/tpl/wordpress/wp-game.php:124
+#, fuzzy
+#@ stephino-rpg
+msgid "Queues"
+msgstr "Files d'attente"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Entity.php:83
+#: ui/tpl/dialogs/building/building-info-entities.php:260
+#: ui/tpl/dialogs/entity/entity-recruit.php:69
+#, fuzzy
+#@ stephino-rpg
+msgid "Recruit"
+msgstr "Recruter"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Entity.php:101
+#: ui/tpl/dialogs/building/building-info-entities.php:248
+#: ui/tpl/dialogs/entity/entity-disband.php:54
+#, fuzzy
+#@ stephino-rpg
+msgid "Disband"
+msgstr "Dissoudre"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Entity.php:105
+#, fuzzy
+#@ stephino-rpg
+msgid "Cannot disband this entity"
+msgstr "Impossible de dissoudre cette entité"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Entity.php:111
+#: ui/tpl/dialogs/building/building-info-entities.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid "Dequeue"
+msgstr "Retirer la file d'attente"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Entity.php:196
+#: ui/tpl/wordpress/wp-game.php:76
+#, fuzzy
+#@ stephino-rpg
+msgid "Garrison"
+msgstr "Garnison"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:59
+#, fuzzy
+#@ stephino-rpg
+msgid "Codex"
+msgstr "Manuscrit"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:84
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid help item type"
+msgstr "Type d'élément d'aide non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:94
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid help item ID"
+msgstr "Id d'élément d'aide non valide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:104
+#, fuzzy
+#@ stephino-rpg
+msgid "Item"
+msgstr "Article"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:85
+#, fuzzy
+#@ stephino-rpg
+msgid "Upgrade not allowed"
+msgstr "Mise à niveau non autorisée"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:94
+#: ui/tpl/dialogs/building/building-info.php:64
+#: ui/tpl/dialogs/building/building-upgrade.php:56
+#: ui/tpl/dialogs/city/city-advisor.php:69
+#: ui/tpl/dialogs/island/island-info.php:46
+#: ui/tpl/dialogs/island/island-upgrade.php:39
+#: ui/tpl/dialogs/settings/settings-resources.php:230
+#, fuzzy
+#@ stephino-rpg
+msgid "Upgrade"
+msgstr "Améliorer"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:123
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid lot"
+msgstr "Lot invalide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:149
+#, fuzzy
+#@ stephino-rpg
+msgid "Vacant slot"
+msgstr "Emplacement vacant"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:207
+#: ui/tpl/dialogs/island/island-colonize-prepare.php:24
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonize"
+msgstr "Coloniser"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:51
+#: ui/tpl/wordpress/wp-game.php:129
+#, fuzzy
+#@ stephino-rpg
+msgid "Messages"
+msgstr "Messages"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:54
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:338
+#, fuzzy
+#@ stephino-rpg
+msgid "Diplomacy"
+msgstr "Diplomatie"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:58
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:340 themes/default/i18n.php:146
+#, fuzzy
+#@ stephino-rpg
+msgid "Military"
+msgstr "Militaire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:62
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:339 themes/default/i18n.php:144
+#, fuzzy
+#@ stephino-rpg
+msgid "Economy"
+msgstr "Économie"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:66
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:341
+#: ui/tpl/dialogs/city/city-advisor.php:78
+#: ui/tpl/dialogs/research/research-info.php:192
+#, fuzzy
+#@ stephino-rpg
+msgid "Research"
+msgstr "Recherche"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:102
+#: ui/tpl/dialogs/messages/messages-read.php:28
+#, fuzzy
+#@ stephino-rpg
+msgid "Message not found"
+msgstr "Message non trouvé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Premium.php:27
+#, fuzzy
+#@ stephino-rpg
+msgid "No premium packages available"
+msgstr "Aucun forfait premium disponible"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Premium.php:39
+#, fuzzy
+#@ stephino-rpg
+msgid "Packages"
+msgstr "Paquets"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Premium.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "No premium modifiers available"
+msgstr "Aucun modificateur premium disponible"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Premium.php:75
+#: ui/tpl/dialogs/help/help.php:76 ui/tpl/wordpress/wp-game.php:109
+#, fuzzy
+#@ stephino-rpg
+msgid "Modifiers"
+msgstr "Modificateurs"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:125
+#, fuzzy
+#@ stephino-rpg
+msgid "Resources not initialized"
+msgstr "Ressources non initialisées"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:140
+#, fuzzy
+#@ stephino-rpg
+msgid "Resources"
+msgstr "Ressources"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:159
+#: themes/default/i18n.php:249 ui/tpl/wordpress/wp-game.php:77
+#: ui/tpl/wordpress/wp-game.php:93
+#, fuzzy
+#@ stephino-rpg
+msgid "Settings"
+msgstr "Réglages"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:174
+#, fuzzy
+#@ stephino-rpg
+msgid "Delete Account"
+msgstr "Supprimer le compte"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:192
+#: ui/tpl/dialogs/settings/settings-info.php:132
+#, fuzzy
+#@ stephino-rpg
+msgid "Credits"
+msgstr "Crédits"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Spy.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Send a spy"
+msgstr "Envoyer un espion"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Prepare transport"
+msgstr "Préparer le transport"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:83
+#, fuzzy
+#@ stephino-rpg
+msgid "Origin does not exist"
+msgstr "L'origine n'existe pas"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:101
+#, fuzzy
+#@ stephino-rpg
+msgid "You cannot send goods without transporters"
+msgstr "Vous ne pouvez pas envoyer de marchandises sans transporteurs"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:124
+#, fuzzy
+#@ stephino-rpg
+msgid "No entities in garrison"
+msgstr "Aucune entité en garnison"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Transport.php:143
+#, fuzzy
+#@ stephino-rpg
+msgid "Review transport"
+msgstr "Examiner le transport"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:37
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:294
+#, fuzzy
+#@ stephino-rpg
+msgid "User ID is mandatory"
+msgstr "L'id utilisateur est obligatoire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:45
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:302
+#, fuzzy
+#@ stephino-rpg
+msgid "User not found"
+msgstr "Utilisateur non trouvé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:62
+#: ui/tpl/dialogs/settings/settings-info.php:129
+#, fuzzy
+#@ stephino-rpg
+msgid "Profile"
+msgstr "Profil"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:120
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Buying %s is not allowed"
+msgstr "L'achat de %s n'est pas autorisé"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:130
+#, fuzzy
+#@ stephino-rpg
+msgid "Trading"
+msgstr "Commerce"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:176
+#: ui/tpl/dialogs/help/help-content-core.php:290
+#: ui/tpl/dialogs/user/user-arena-list.php:24 ui/tpl/wordpress/wp-game.php:120
+#, fuzzy
+#@ stephino-rpg
+msgid "Game arena"
+msgstr "Arène de jeu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:206
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid game"
+msgstr "Jeu invalide"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:223
+#, fuzzy
+#@ stephino-rpg
+msgid "Playing"
+msgstr "En jouant"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:251
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not create a new game"
+msgstr "Impossible de créer un nouveau jeu"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:273
+#, fuzzy
+#@ stephino-rpg
+msgid "Game Creator"
+msgstr "Créateur de jeux"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:399
+#: ui/tpl/wordpress/wp-dashboard.php:60 ui/tpl/wordpress/wp-game.php:122
+#, fuzzy
+#@ stephino-rpg
+msgid "Leader board"
+msgstr "Classement"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:77
+#, fuzzy
+#@ stephino-rpg
+msgid "Invalid coordinates"
+msgstr "Coordonnées invalides"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:158
+#, fuzzy
+#@ stephino-rpg
+msgid "You can only visit our own empire"
+msgstr "Vous ne pouvez visiter que notre propre empire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:324
+#, fuzzy
+#@ stephino-rpg
+msgid "Updated workers"
+msgstr "Travailleurs mis à jour"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:325
+#, fuzzy
+#@ stephino-rpg
+msgid "Request timed out. Please try again later."
+msgstr "La demande a expiré. Veuillez réessayer plus tard."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:326
+#, fuzzy
+#@ stephino-rpg
+msgid "No Internet"
+msgstr "Pas d'Internet"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:327
+#, fuzzy
+#@ stephino-rpg
+msgid "Please check your Internet connection and try again!"
+msgstr "S'il vous plaît, vérifiez votre connexion à internet et réessayez!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:328
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Type \"%s\" to list all available commands"
+msgstr "Tapez \"%s\" pour lister toutes les commandes disponibles"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:329
+#, fuzzy
+#@ stephino-rpg
+msgid "Type a command and press Enter"
+msgstr "Tapez une commande et appuyez sur Entrée"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:330
+#, fuzzy
+#@ stephino-rpg
+msgid "Type and press Enter"
+msgstr "Tapez et appuyez sur Entrée"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:331 ui/tpl/wordpress/wp-game.php:127
+#, fuzzy
+#@ stephino-rpg
+msgid "Chat Room"
+msgstr "Tchat"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:332
+#, fuzzy
+#@ stephino-rpg
+msgid "Welcome to our chat room!"
+msgstr "Bienvenue dans notre salle de chat!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:333
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "For more features and feedback, please visit %s"
+msgstr "Pour plus de fonctionnalités et de commentaires, veuillez visiter %s"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:334
+#, fuzzy
+#@ stephino-rpg
+msgid "Validating payment..."
+msgstr "Validation du paiement..."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:335
+#, fuzzy
+#@ stephino-rpg
+msgid "Preparing payment..."
+msgstr "Préparation du paiement..."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:336
+#, fuzzy
+#@ stephino-rpg
+msgid "App installed successfully!"
+msgstr "Application installée avec succès!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:337
+#, fuzzy
+#@ stephino-rpg
+msgid "Step"
+msgstr "Étape"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:342
+#, fuzzy
+#@ stephino-rpg
+msgid "Close message"
+msgstr "Fermer le message"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:343
+#, fuzzy
+#@ stephino-rpg
+msgid "Previous"
+msgstr "Précédent"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:344 ui/tpl/wordpress/wp-game.php:186
+#, fuzzy
+#@ stephino-rpg
+msgid "Next"
+msgstr "Prochain"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:345
+#, fuzzy
+#@ stephino-rpg
+msgid "Sorry to see you go!"
+msgstr "Désolé de vous voir partir!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:346
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Please type \"%s\" to continue. This action is permanent and irreversible!"
+msgstr "Veuillez taper «%s» pour continuer. Cette action est permanente et irréversible!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:347
+#, fuzzy
+#@ stephino-rpg
+msgid "See you soon!"
+msgstr "À bientôt!"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:348 ui/tpl/wordpress/wp-game.php:45
+#: ui/tpl/wordpress/wp-options.php:17
+#, fuzzy
+#@ stephino-rpg
+msgid "Loading..."
+msgstr "Chargement..."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:349
+#, fuzzy
+#@ stephino-rpg
+msgid "Error"
+msgstr "Erreur"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:350
+#, fuzzy
+#@ stephino-rpg
+msgid "Constant"
+msgstr "Constant"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:351
+#, fuzzy
+#@ stephino-rpg
+msgid "No change"
+msgstr "Pas de changement"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:352
+#, fuzzy
+#@ stephino-rpg
+msgid "Linear"
+msgstr "Linéaire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:353
+#, fuzzy
+#@ stephino-rpg
+msgid "Linear multiplicative inverse"
+msgstr "Inverse multiplicatif linéaire"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:354
+#, fuzzy
+#@ stephino-rpg
+msgid "Quadratic"
+msgstr "Quadratique"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:355
+#, fuzzy
+#@ stephino-rpg
+msgid "Quadratic multiplicative inverse"
+msgstr "Inverse multiplicatif quadratique"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:356
+#, fuzzy
+#@ stephino-rpg
+msgid "Exponential"
+msgstr "Exponentiel"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:357
+#, fuzzy
+#@ stephino-rpg
+msgid "Exponential multiplicative inverse"
+msgstr "Inverse multiplicatif exponentiel"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:371
+#, fuzzy
+#@ stephino-rpg
+msgid "Internet connection lost"
+msgstr "Connexion Internet perdue"
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:375
+#, fuzzy
+#@ stephino-rpg
+msgid "Retrying in 3 seconds..."
+msgstr "Nouvelle tentative dans 3 secondes..."
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:392 ui/tpl/wordpress/wp-game.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "Offline"
+msgstr "Hors ligne"
+
+#: lib/Stephino/Rpg/Renderer/Html.php:47
+#, fuzzy
+#@ stephino-rpg
+msgid "Please try again later"
+msgstr "Veuillez réessayer plus tard"
+
+#: lib/Stephino/Rpg/Task/Initializer.php:104
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not create a new user"
+msgstr "Impossible de créer un nouvel utilisateur"
+
+#: lib/Stephino/Rpg/Task/Robot.php:348
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "More %s needed"
+msgstr "Plus %s nécessaire"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:230
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:371 ui/tpl/dialogs/help/help.php:149
+#: ui/tpl/dialogs/help/help.php:166
+#, fuzzy
+#@ stephino-rpg
+msgid "empty"
+msgstr "vide"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:243
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: research complete"
+msgstr "%s: recherche terminée"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:250
+#, fuzzy
+#@ stephino-rpg
+msgid "Transporter returned"
+msgstr "Transporteur retourné"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:252
+#, fuzzy
+#@ stephino-rpg
+msgid "Goods delivered"
+msgstr "Marchandises livrées"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:265
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: upgraded"
+msgstr "%s: mis à jour"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:277
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: recruited"
+msgstr "%s: recruté"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:289
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: built"
+msgstr "%s: construit"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:302
+#: ui/tpl/timelapse/timelapse-military.php:107
+#, fuzzy
+#@ stephino-rpg
+msgid "Retreat"
+msgstr "Battre en retraite"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:306
+#, fuzzy
+#@ stephino-rpg
+msgid "Crushing Defeat"
+msgstr "Une défaite écrasante"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:310
+#, fuzzy
+#@ stephino-rpg
+msgid "Crushing Victory"
+msgstr "Victoire écrasante"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:314
+#, fuzzy
+#@ stephino-rpg
+msgid "Heroic Defeat"
+msgstr "Défaite héroïque"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:318
+#, fuzzy
+#@ stephino-rpg
+msgid "Heroic Victory"
+msgstr "Victoire héroïque"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:322
+#, fuzzy
+#@ stephino-rpg
+msgid "Bitter Defeat"
+msgstr "Défaite amère"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:326
+#, fuzzy
+#@ stephino-rpg
+msgid "Bitter Victory"
+msgstr "Victoire amère"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:335
+#, fuzzy
+#@ stephino-rpg
+msgid "We caught a spy"
+msgstr "Nous avons attrapé un espion"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:339
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy mission successful"
+msgstr "Mission d'espionnage réussie"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:340
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy mission failed"
+msgstr "La mission d'espionnage a échoué"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:344
+#, fuzzy
+#@ stephino-rpg
+msgid "Our spy has returned"
+msgstr "Notre espion est de retour"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:349
+#, fuzzy
+#@ stephino-rpg
+msgid "Our troops have returned"
+msgstr "Nos troupes sont revenues"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:356
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonization"
+msgstr "La colonisation"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:360
+#, fuzzy
+#@ stephino-rpg
+msgid "Premium modifier expired"
+msgstr "Le modificateur de prime a expiré"
+
+#: lib/Stephino/Rpg/TimeLapse/Abstract.php:364
+#, fuzzy
+#@ stephino-rpg
+msgid "Discovery"
+msgstr "Découverte"
+
+#: lib/Stephino/Rpg/WordPress.php:115 lib/Stephino/Rpg/WordPress.php:335
+#, fuzzy
+#@ stephino-rpg
+msgid "Play"
+msgstr "Jouer"
+
+#: lib/Stephino/Rpg/WordPress.php:123 lib/Stephino/Rpg/WordPress.php:345
+#: lib/Stephino/Rpg/WordPress.php:346 ui/tpl/wordpress/wp-dashboard.php:28
+#, fuzzy
+#@ stephino-rpg
+msgid "Dashboard"
+msgstr "Tableau de bord"
+
+#: lib/Stephino/Rpg/WordPress.php:131 lib/Stephino/Rpg/WordPress.php:355
+#: lib/Stephino/Rpg/WordPress.php:356
+#: ui/tpl/dialogs/settings/settings-info.php:155
+#: ui/tpl/dialogs/settings/settings-info.php:160
+#: ui/tpl/wordpress/wp-options.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "Game Mechanics"
+msgstr "Mécanique de jeu"
+
+#: lib/Stephino/Rpg/WordPress.php:155
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Upgrade Pro to version %s"
+msgstr "Mettre à niveau Pro vers la version %s"
+
+#: lib/Stephino/Rpg/WordPress.php:156
+#: ui/tpl/dialogs/settings/settings-info.php:192
+#: ui/tpl/dialogs/settings/settings-info.php:204
+#: ui/tpl/wordpress/wp-dashboard.php:126 ui/tpl/wordpress/wp-notice.php:49
+#: ui/tpl/wordpress/wp-options.php:46
+#, fuzzy
+#@ stephino-rpg
+msgid "Unlock Game"
+msgstr "Débloquer le jeu"
+
+#: lib/Stephino/Rpg/WordPress.php:196
+#, fuzzy
+#@ stephino-rpg
+msgid "Log In"
+msgstr "S'identifier"
+
+#: lib/Stephino/Rpg/WordPress.php:197
+#, fuzzy
+#@ stephino-rpg
+msgid "or"
+msgstr "ou"
+
+#: themes/default/i18n.php:18
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"As you fight against other players for dominance over the resources of Mors and expand your empire, an archaeological expedition of planetary proportions is afoot. With each new technological finding you uncover bits and pieces of the true story of your origin and ultimately the dark secret that should have never been revealed.\n"
+"\n"
+"This RPG allows for infinite gameplay but it also has a finite storyline. Please don't reveal the ending to new players."
+msgstr "Alors que vous vous battez contre d'autres joueurs pour dominer les ressources de Mors et étendre votre empire, une expédition archéologique aux proportions planétaires est en cours. Avec chaque nouvelle découverte technologique, vous découvrez des bribes de la véritable histoire de votre origine et finalement le sombre secret qui n'aurait jamais dû être révélé. Ce RPG permet un gameplay infini mais il a également un scénario fini. Veuillez ne pas révéler la fin aux nouveaux joueurs."
+
+#: themes/default/i18n.php:21
+#, fuzzy
+#@ stephino-rpg
+msgid "Gold"
+msgstr "Or"
+
+#: themes/default/i18n.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "Very rare mineral at the center of our economy"
+msgstr "Minéral très rare au centre de notre économie"
+
+#: themes/default/i18n.php:23
+#, fuzzy
+#@ stephino-rpg
+msgid "Diamonds"
+msgstr "Diamants"
+
+#: themes/default/i18n.php:24
+#, fuzzy
+#@ stephino-rpg
+msgid "Valuable crystals and the symbol of our people"
+msgstr "Cristaux précieux et symbole de notre peuple"
+
+#: themes/default/i18n.php:25
+#, fuzzy
+#@ stephino-rpg
+msgid "Research points"
+msgstr "Points de recherche"
+
+#: themes/default/i18n.php:26
+#, fuzzy
+#@ stephino-rpg
+msgid "Hard work and dedication are required for scientific achievement"
+msgstr "Le travail acharné et le dévouement sont nécessaires pour la réalisation scientifique"
+
+#: themes/default/i18n.php:27
+#, fuzzy
+#@ stephino-rpg
+msgid "Iron"
+msgstr "Le fer"
+
+#: themes/default/i18n.php:28
+#, fuzzy
+#@ stephino-rpg
+msgid "The backbone of our infrastructure"
+msgstr "L'épine dorsale de notre infrastructure"
+
+#: themes/default/i18n.php:30
+#, fuzzy
+#@ stephino-rpg
+msgid "A vital element of our technology"
+msgstr "Un élément vital de notre technologie"
+
+#: themes/default/i18n.php:31
+#, fuzzy
+#@ stephino-rpg
+msgid "Sulphur"
+msgstr "Soufre"
+
+#: themes/default/i18n.php:32
+#, fuzzy
+#@ stephino-rpg
+msgid "Resource of military importance"
+msgstr "Ressource d'importance militaire"
+
+#: themes/default/i18n.php:33
+#, fuzzy
+#@ stephino-rpg
+msgid "Methane"
+msgstr "Méthane"
+
+#: themes/default/i18n.php:34
+#, fuzzy
+#@ stephino-rpg
+msgid "A high density energy source"
+msgstr "Une source d'énergie haute densité"
+
+#: themes/default/i18n.php:35
+#, fuzzy
+#@ stephino-rpg
+msgid "Oxygen"
+msgstr "Oxygène"
+
+#: themes/default/i18n.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "Indispensable to life but very dangerous"
+msgstr "Indispensable à la vie mais très dangereux"
+
+#: themes/default/i18n.php:37
+#, fuzzy
+#@ stephino-rpg
+msgid "Population"
+msgstr "Population"
+
+#: themes/default/i18n.php:38
+#, fuzzy
+#@ stephino-rpg
+msgid "Total number of civilians in a city"
+msgstr "Nombre total de civils dans une ville"
+
+#: themes/default/i18n.php:39
+#, fuzzy
+#@ stephino-rpg
+msgid "Satisfaction"
+msgstr "La satisfaction"
+
+#: themes/default/i18n.php:40
+#, fuzzy
+#@ stephino-rpg
+msgid "Cities flourish when citizens are happy"
+msgstr "Les villes fleurissent quand les citoyens sont heureux"
+
+#: themes/default/i18n.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "Storage"
+msgstr "Espace de rangement"
+
+#: themes/default/i18n.php:42
+#, fuzzy
+#@ stephino-rpg
+msgid "Stockpile capacity for each resource"
+msgstr "Capacité de stockage pour chaque ressource"
+
+#: themes/default/i18n.php:43 ui/tpl/dialogs/attack/attack-review.php:115
+#, fuzzy
+#@ stephino-rpg
+msgid "Attack"
+msgstr "Attaque"
+
+#: themes/default/i18n.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "Defense"
+msgstr "La défense"
+
+#: themes/default/i18n.php:45
+#, fuzzy
+#@ stephino-rpg
+msgid "Government"
+msgstr "Gouvernement"
+
+#: themes/default/i18n.php:46
+#, fuzzy
+#@ stephino-rpg
+msgid "Governments"
+msgstr "Gouvernements"
+
+#: themes/default/i18n.php:47
+#, fuzzy
+#@ stephino-rpg
+msgid "Island"
+msgstr "Île"
+
+#: themes/default/i18n.php:48
+#, fuzzy
+#@ stephino-rpg
+msgid "Islands"
+msgstr "Îles"
+
+#: themes/default/i18n.php:49
+#, fuzzy
+#@ stephino-rpg
+msgid "Island Statue"
+msgstr "Statue de l'île"
+
+#: themes/default/i18n.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "Island Statues"
+msgstr "Statues de l'île"
+
+#: themes/default/i18n.php:51
+#, fuzzy
+#@ stephino-rpg
+msgid "City"
+msgstr "Ville"
+
+#: themes/default/i18n.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Cities"
+msgstr "Villes"
+
+#: themes/default/i18n.php:53
+#, fuzzy
+#@ stephino-rpg
+msgid "Building"
+msgstr "Bâtiment"
+
+#: themes/default/i18n.php:54
+#, fuzzy
+#@ stephino-rpg
+msgid "Buildings"
+msgstr "Immeubles"
+
+#: themes/default/i18n.php:55
+#, fuzzy
+#@ stephino-rpg
+msgid "Unit"
+msgstr "Unité"
+
+#: themes/default/i18n.php:56
+#, fuzzy
+#@ stephino-rpg
+msgid "Units"
+msgstr "Unités"
+
+#: themes/default/i18n.php:57
+#, fuzzy
+#@ stephino-rpg
+msgid "Ship"
+msgstr "Navire"
+
+#: themes/default/i18n.php:58
+#, fuzzy
+#@ stephino-rpg
+msgid "Ships"
+msgstr "Navires"
+
+#: themes/default/i18n.php:59
+#, fuzzy
+#@ stephino-rpg
+msgid "Research Field"
+msgstr "Domaine de recherche"
+
+#: themes/default/i18n.php:60
+#, fuzzy
+#@ stephino-rpg
+msgid "Research Fields"
+msgstr "Domaines de recherche"
+
+#: themes/default/i18n.php:61
+#, fuzzy
+#@ stephino-rpg
+msgid "Research Area"
+msgstr "Zone de recherche"
+
+#: themes/default/i18n.php:62
+#, fuzzy
+#@ stephino-rpg
+msgid "Research Areas"
+msgstr "Domaines de recherche"
+
+#: themes/default/i18n.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Anarchy"
+msgstr "Anarchie"
+
+#: themes/default/i18n.php:64
+#, fuzzy
+#@ stephino-rpg
+msgid "There is nothing our people love more than freedom and we are ready to pay the cost!"
+msgstr "Il n'y a rien que notre peuple aime plus que la liberté et nous sommes prêts à en payer le prix!"
+
+#: themes/default/i18n.php:65
+#, fuzzy
+#@ stephino-rpg
+msgid "Monarchy"
+msgstr "La monarchie"
+
+#: themes/default/i18n.php:66
+#, fuzzy
+#@ stephino-rpg
+msgid "Enough with political parties and backstabbing and lies! Our people stands strong united under our beloved king."
+msgstr "Assez de partis politiques, de coups de poignard dans le dos et de mensonges! Notre peuple est fort uni sous notre roi bien-aimé."
+
+#: themes/default/i18n.php:67
+#, fuzzy
+#@ stephino-rpg
+msgid "Theocracy"
+msgstr "Théocratie"
+
+#: themes/default/i18n.php:68
+#, fuzzy
+#@ stephino-rpg
+msgid "There is only one Way, and that is the path the Ancient Gods have set for us in the Holy Scrolls."
+msgstr "Il n'y a qu'une seule voie, et c'est la voie que les anciens dieux nous ont tracée dans les parchemins sacrés."
+
+#: themes/default/i18n.php:69
+#, fuzzy
+#@ stephino-rpg
+msgid "Democracy"
+msgstr "La démocratie"
+
+#: themes/default/i18n.php:70
+#, fuzzy
+#@ stephino-rpg
+msgid "The greatest form of government respects the will of its people and silences no voice!"
+msgstr "La plus grande forme de gouvernement respecte la volonté de son peuple et ne fait taire aucune voix!"
+
+#: themes/default/i18n.php:71
+#, fuzzy
+#@ stephino-rpg
+msgid "Technocracy"
+msgstr "Technocratie"
+
+#: themes/default/i18n.php:72
+#, fuzzy
+#@ stephino-rpg
+msgid "Quantum computing ensures the absolute best life for all of our citizens."
+msgstr "L'informatique quantique garantit la meilleure vie à tous nos citoyens."
+
+#: themes/default/i18n.php:73
+#, fuzzy
+#@ stephino-rpg
+msgid "Methane field"
+msgstr "Champ de méthane"
+
+#: themes/default/i18n.php:74
+#, fuzzy
+#@ stephino-rpg
+msgid "These fields are very rich in methane."
+msgstr "Ces champs sont très riches en méthane."
+
+#: themes/default/i18n.php:75
+#, fuzzy
+#@ stephino-rpg
+msgid "Rust belt"
+msgstr "Ceinture rouillée"
+
+#: themes/default/i18n.php:76
+#, fuzzy
+#@ stephino-rpg
+msgid "We have found a vast reserve of oxygen in this area."
+msgstr "Nous avons trouvé une vaste réserve d'oxygène dans ce domaine."
+
+#: themes/default/i18n.php:77
+#, fuzzy
+#@ stephino-rpg
+msgid "The Corridors"
+msgstr "Les couloirs"
+
+#: themes/default/i18n.php:78
+#, fuzzy
+#@ stephino-rpg
+msgid "A methane-rich area is a great place for a city."
+msgstr "Une zone riche en méthane est un endroit idéal pour une ville."
+
+#: themes/default/i18n.php:79
+#, fuzzy
+#@ stephino-rpg
+msgid "Wasteland"
+msgstr "Terre en friche"
+
+#: themes/default/i18n.php:80
+#, fuzzy
+#@ stephino-rpg
+msgid "Nothing grows here, but at least we have plenty of oxygen!"
+msgstr "Rien ne pousse ici, mais au moins nous avons beaucoup d'oxygène!"
+
+#: themes/default/i18n.php:81
+#, fuzzy
+#@ stephino-rpg
+msgid "Medusa fields"
+msgstr "Champs Medusa"
+
+#: themes/default/i18n.php:82
+#, fuzzy
+#@ stephino-rpg
+msgid "This is the best place to start a colony, with plentiful oxygen and methane."
+msgstr "C'est le meilleur endroit pour démarrer une colonie, avec beaucoup d'oxygène et de méthane."
+
+#: themes/default/i18n.php:83
+#, fuzzy
+#@ stephino-rpg
+msgid "Ancient Iron Forge"
+msgstr "Ancienne forge de fer"
+
+#: themes/default/i18n.php:84
+#, fuzzy
+#@ stephino-rpg
+msgid "Among the relics on this island there is a very old artifact that yields iron for all cities."
+msgstr "Parmi les reliques de cette île, il y a un artefact très ancien qui produit du fer pour toutes les villes."
+
+#: themes/default/i18n.php:85
+#, fuzzy
+#@ stephino-rpg
+msgid "Crystal Artifact"
+msgstr "Artefact de cristal"
+
+#: themes/default/i18n.php:86
+#, fuzzy
+#@ stephino-rpg
+msgid "The Ancient Gods were master glass-makers. We've uncovered a great crystal artifact that generates crystal for all cities on this island."
+msgstr "Les dieux antiques étaient des maîtres verriers. Nous avons découvert un grand artefact de cristal qui génère du cristal pour toutes les villes de cette île."
+
+#: themes/default/i18n.php:87
+#, fuzzy
+#@ stephino-rpg
+msgid "Sulphur Factory"
+msgstr "Usine de soufre"
+
+#: themes/default/i18n.php:88
+#, fuzzy
+#@ stephino-rpg
+msgid "One of the great wonders of the Ancient world is a complex of factories that appears to produce extra sulphur on the entire island."
+msgstr "L'une des grandes merveilles du monde antique est un complexe d'usines qui semble produire du soufre supplémentaire sur toute l'île."
+
+#: themes/default/i18n.php:89
+#, fuzzy
+#@ stephino-rpg
+msgid "Crater dome"
+msgstr "Dôme du cratère"
+
+#: themes/default/i18n.php:90
+#, fuzzy
+#@ stephino-rpg
+msgid "Our citizens are safe inside the domes the Ancient Gods built for us on this planet"
+msgstr "Nos citoyens sont en sécurité à l'intérieur des dômes que les anciens dieux ont construits pour nous sur cette planète"
+
+#: themes/default/i18n.php:91
+#, fuzzy
+#@ stephino-rpg
+msgid "Parliament"
+msgstr "Parlement"
+
+#: themes/default/i18n.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"A modern city flourishes when the citizen's will is put into action. \n"
+"Get an overview of your city and expand to allow more citizens to settle here."
+msgstr "Une ville moderne s'épanouit lorsque la volonté des citoyens est mise en œuvre. Obtenez un aperçu de votre ville et développez-vous pour permettre à plus de citoyens de s'installer ici."
+
+#: themes/default/i18n.php:94
+#, fuzzy
+#@ stephino-rpg
+msgid "Research Center"
+msgstr "Centre de recherche"
+
+#: themes/default/i18n.php:95
+#, fuzzy
+#@ stephino-rpg
+msgid "Uncovering the secrets of the Ancient artifacts is the best way to advance our technology and understand our place in the Universe."
+msgstr "Découvrir les secrets des artefacts anciens est le meilleur moyen de faire progresser notre technologie et de comprendre notre place dans l'Univers."
+
+#: themes/default/i18n.php:96
+#, fuzzy
+#@ stephino-rpg
+msgid "Warehouse"
+msgstr "Entrepôt"
+
+#: themes/default/i18n.php:97
+#, fuzzy
+#@ stephino-rpg
+msgid "Slowly gather resources and help consolidate our city's storage capacity."
+msgstr "Rassemblez lentement les ressources et aidez à consolider la capacité de stockage de notre ville."
+
+#: themes/default/i18n.php:98
+#, fuzzy
+#@ stephino-rpg
+msgid "Palace"
+msgstr "Palais"
+
+#: themes/default/i18n.php:99
+#, fuzzy
+#@ stephino-rpg
+msgid "The Palace collects taxes for our empire and trains Governors."
+msgstr "Le palais collecte les impôts pour notre empire et forme les gouverneurs."
+
+#: themes/default/i18n.php:100
+#, fuzzy
+#@ stephino-rpg
+msgid "Museum"
+msgstr "Musée"
+
+#: themes/default/i18n.php:101
+#, fuzzy
+#@ stephino-rpg
+msgid "There is nothing more satisfying for our people than learning about our origin and the Ancient Gods."
+msgstr "Il n'y a rien de plus satisfaisant pour notre peuple que d'apprendre notre origine et les anciens dieux."
+
+#: themes/default/i18n.php:102
+#, fuzzy
+#@ stephino-rpg
+msgid "Shipyard"
+msgstr "Chantier naval"
+
+#: themes/default/i18n.php:103
+#, fuzzy
+#@ stephino-rpg
+msgid "Large military ships require constant maintenance but they also keep us all safe."
+msgstr "Les grands navires militaires nécessitent un entretien constant, mais ils nous protègent également tous."
+
+#: themes/default/i18n.php:104
+#, fuzzy
+#@ stephino-rpg
+msgid "Barracks"
+msgstr "Caserne"
+
+#: themes/default/i18n.php:105
+#, fuzzy
+#@ stephino-rpg
+msgid "Recruiting and building military units is an expensive task but not one we afford to spare."
+msgstr "Le recrutement et la construction d'unités militaires sont une tâche coûteuse, mais que nous ne pouvons pas nous permettre."
+
+#: themes/default/i18n.php:106
+#, fuzzy
+#@ stephino-rpg
+msgid "Artillery"
+msgstr "Artillerie"
+
+#: themes/default/i18n.php:107
+#, fuzzy
+#@ stephino-rpg
+msgid "This is our main defense structure against invaders."
+msgstr "C'est notre principale structure de défense contre les envahisseurs."
+
+#: themes/default/i18n.php:108
+#, fuzzy
+#@ stephino-rpg
+msgid "Energy Ltd"
+msgstr "Energy Ltd"
+
+#: themes/default/i18n.php:109
+#, fuzzy
+#@ stephino-rpg
+msgid "This is a privately-funded research facility that specializes in cutting-edge military technology."
+msgstr "Il s'agit d'un centre de recherche à financement privé spécialisé dans la technologie militaire de pointe."
+
+#: themes/default/i18n.php:110
+#, fuzzy
+#@ stephino-rpg
+msgid "Tech Center"
+msgstr "Centre technique"
+
+#: themes/default/i18n.php:111
+#, fuzzy
+#@ stephino-rpg
+msgid "The Information Technology Center is a secondary research institute that is almost entirely privately funded. Its main goal is to speed-up the advancement of Computer Science."
+msgstr "Le Centre de technologie de l'information est un institut de recherche secondaire qui est presque entièrement financé par le secteur privé. Son objectif principal est d'accélérer les progrès de l'informatique."
+
+#: themes/default/i18n.php:112
+#, fuzzy
+#@ stephino-rpg
+msgid "Stock Market"
+msgstr "Bourse"
+
+#: themes/default/i18n.php:113
+#, fuzzy
+#@ stephino-rpg
+msgid "The Stock Market allows you to exchange resources instantly, with no 3rd party interference!"
+msgstr "La Bourse vous permet d'échanger des ressources instantanément, sans intervention de tiers!"
+
+#: themes/default/i18n.php:114
+#, fuzzy
+#@ stephino-rpg
+msgid "Extractor"
+msgstr "Extracteur"
+
+#: themes/default/i18n.php:115
+#, fuzzy
+#@ stephino-rpg
+msgid "Extract Iron, Crystal and Sulphur, the basic elements that our empire relies upon."
+msgstr "Extrayez le fer, le cristal et le soufre, les éléments de base sur lesquels s'appuie notre empire."
+
+#: themes/default/i18n.php:116
+#, fuzzy
+#@ stephino-rpg
+msgid "Oxygen Facility"
+msgstr "Installation d'oxygène"
+
+#: themes/default/i18n.php:117
+#, fuzzy
+#@ stephino-rpg
+msgid "Even though the red bacteria of our seas produce it, oxygen is a rare commodity on Mors. This factory uses advanced technology to speed-up nature and supply the needs of our people."
+msgstr "Même si les bactéries rouges de nos mers le produisent, l'oxygène est une denrée rare sur Mors. Cette usine utilise une technologie de pointe pour accélérer la nature et répondre aux besoins de notre personnel."
+
+#: themes/default/i18n.php:118
+#, fuzzy
+#@ stephino-rpg
+msgid "Methane Plant"
+msgstr "Usine de méthane"
+
+#: themes/default/i18n.php:119
+#, fuzzy
+#@ stephino-rpg
+msgid "Through advancements in microbiology and reverse-engineering of Ancient technology we are now able to produce the large quantities of methane our industry needs!"
+msgstr "Grâce aux progrès de la microbiologie et de la rétro-ingénierie de la technologie ancienne, nous sommes maintenant en mesure de produire les grandes quantités de méthane dont notre industrie a besoin!"
+
+#: themes/default/i18n.php:120
+#, fuzzy
+#@ stephino-rpg
+msgid "Black Market"
+msgstr "Marché noir"
+
+#: themes/default/i18n.php:121
+#, fuzzy
+#@ stephino-rpg
+msgid "A lawless place where anything and everything can be bought... for a price. There are things for sale here that are sometimes truly out of this world!"
+msgstr "Un endroit sans loi où tout et tout peut être acheté... pour un prix. Il y a des choses à vendre ici qui sont parfois vraiment hors de ce monde!"
+
+#: themes/default/i18n.php:122
+#, fuzzy
+#@ stephino-rpg
+msgid "Governor"
+msgstr "Gouverneur"
+
+#: themes/default/i18n.php:123
+#, fuzzy
+#@ stephino-rpg
+msgid "The Governor can fund new cities and expand our Empire. Our people are very happy to see a Governor walking among them, giving any host city a boost in Satisfaction"
+msgstr "Le gouverneur peut financer de nouvelles villes et étendre notre empire. Nos gens sont très heureux de voir un gouverneur marcher parmi eux, donnant à toute ville hôte un regain de satisfaction"
+
+#: themes/default/i18n.php:124 ui/tpl/dialogs/help/help-content-units.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy"
+msgstr "Espion"
+
+#: themes/default/i18n.php:125
+#, fuzzy
+#@ stephino-rpg
+msgid "Spies gather information about rival cities. Careful, spies are not loyal and they will disclose your intentions when caught!"
+msgstr "Les espions recueillent des informations sur les villes rivales. Attention, les espions ne sont pas fidèles et ils divulgueront vos intentions lorsqu'ils seront pris!"
+
+#: themes/default/i18n.php:126
+#, fuzzy
+#@ stephino-rpg
+msgid "Soldier"
+msgstr "Soldat"
+
+#: themes/default/i18n.php:127
+#, fuzzy
+#@ stephino-rpg
+msgid "Our most loyal citizens become soldiers, helping our Empire grow and defend itself from foes"
+msgstr "Nos citoyens les plus fidèles deviennent des soldats, aidant notre empire à grandir et à se défendre contre ses ennemis"
+
+#: themes/default/i18n.php:128
+#, fuzzy
+#@ stephino-rpg
+msgid "Battle Droid"
+msgstr "Battle Droid"
+
+#: themes/default/i18n.php:129
+#, fuzzy
+#@ stephino-rpg
+msgid "These are capable military machines, remote-controlled and very agile"
+msgstr "Ce sont des machines militaires performantes, télécommandées et très agiles"
+
+#: themes/default/i18n.php:130
+#, fuzzy
+#@ stephino-rpg
+msgid "Clutter"
+msgstr "Désordre"
+
+#: themes/default/i18n.php:131
+#, fuzzy
+#@ stephino-rpg
+msgid "This is an autonomous cluster of military vehicles that can form very complex battle formations and implement sophisticated military tactics"
+msgstr "Il s'agit d'un groupe autonome de véhicules militaires pouvant former des formations de combat très complexes et mettre en œuvre des tactiques militaires sophistiquées"
+
+#: themes/default/i18n.php:132 ui/tpl/dialogs/help/help-content-ships.php:99
+#, fuzzy
+#@ stephino-rpg
+msgid "Transporter"
+msgstr "Transporteur"
+
+#: themes/default/i18n.php:133
+#, fuzzy
+#@ stephino-rpg
+msgid "These machines are the backbone of our empire, allowing us to send goods and troops from one city to another"
+msgstr "Ces machines sont l'épine dorsale de notre empire, nous permettant d'envoyer des marchandises et des troupes d'une ville à une autre"
+
+#: themes/default/i18n.php:134
+#, fuzzy
+#@ stephino-rpg
+msgid "Tank"
+msgstr "Réservoir"
+
+#: themes/default/i18n.php:135
+#, fuzzy
+#@ stephino-rpg
+msgid "Very reliable war machines with heavy armor and massive damage"
+msgstr "Machines de guerre très fiables avec une armure lourde et des dégâts massifs"
+
+#: themes/default/i18n.php:136
+#, fuzzy
+#@ stephino-rpg
+msgid "Drone"
+msgstr "Drone"
+
+#: themes/default/i18n.php:137
+#, fuzzy
+#@ stephino-rpg
+msgid "These remote-controlled military flying vehicles will provide a tactical advantage over our enemies"
+msgstr "Ces véhicules volants militaires télécommandés offriront un avantage tactique sur nos ennemis"
+
+#: themes/default/i18n.php:138
+#, fuzzy
+#@ stephino-rpg
+msgid "Destroyer"
+msgstr "Destructeur"
+
+#: themes/default/i18n.php:139
+#, fuzzy
+#@ stephino-rpg
+msgid "Heavily defended and a very fast war machine. There are few cities that can withstand an attack from a fleet of Destroyers!"
+msgstr "Fortement défendu et une machine de guerre très rapide. Il y a peu de villes qui peuvent résister à une attaque d'une flotte de destroyers!"
+
+#: themes/default/i18n.php:140
+#, fuzzy
+#@ stephino-rpg
+msgid "Mothership"
+msgstr "Mothership"
+
+#: themes/default/i18n.php:141
+#, fuzzy
+#@ stephino-rpg
+msgid "This colossal war machine seems to defy all laws of physics. It is a doomsday device capable of inflicting massive damage to our opponents"
+msgstr "Cette machine de guerre colossale semble défier toutes les lois de la physique. C'est un appareil apocalyptique capable d'infliger d'énormes dégâts à nos adversaires"
+
+#: themes/default/i18n.php:142
+#, fuzzy
+#@ stephino-rpg
+msgid "Engineering"
+msgstr "Ingénierie"
+
+#: themes/default/i18n.php:143
+#, fuzzy
+#@ stephino-rpg
+msgid "We must invest in understanding the fundamental nature of our world in order to thrive."
+msgstr "Nous devons investir dans la compréhension de la nature fondamentale de notre monde afin de prospérer."
+
+#: themes/default/i18n.php:145
+#, fuzzy
+#@ stephino-rpg
+msgid "The only way our empire stays healthy is if positive cashflow runs through its veins."
+msgstr "La seule façon pour notre empire de rester en bonne santé est de disposer de flux de trésorerie positifs dans ses veines."
+
+#: themes/default/i18n.php:147
+#, fuzzy
+#@ stephino-rpg
+msgid "War is an ugly thing. We must always be prepared for it because the only good defense is a terrifying offense."
+msgstr "La guerre est une chose moche. Nous devons toujours y être préparés car la seule bonne défense est une attaque terrifiante."
+
+#: themes/default/i18n.php:148
+#, fuzzy
+#@ stephino-rpg
+msgid "Economic models"
+msgstr "Modèles économiques"
+
+#: themes/default/i18n.php:149
+#, fuzzy
+#@ stephino-rpg
+msgid "This research lays the foundation to our economic progress and ensures a smooth transition to a Technocratic society."
+msgstr "Cette recherche jette les bases de notre progrès économique et assure une transition en douceur vers une société technocratique."
+
+#: themes/default/i18n.php:150
+#, fuzzy
+#@ stephino-rpg
+msgid "We have discovered an ancient statue of a two-legged creature with slender wings and smooth skin, just as it is mentioned in the Holy Scrolls. Do you realize what this means? This proves that we are the sons of Gods, and our home is the Garden of Paradise! Oh, sir, this is a truly wonderful, historic moment for us all!"
+msgstr "Nous avons découvert une ancienne statue d'une créature à deux pattes avec des ailes minces et une peau lisse, comme cela est mentionné dans les parchemins sacrés. Comprenez-vous ce que cela signifie? Cela prouve que nous sommes les fils des dieux et que notre maison est le jardin du paradis! Oh, monsieur, c'est un moment vraiment merveilleux et historique pour nous tous!"
+
+#: themes/default/i18n.php:151
+#, fuzzy
+#@ stephino-rpg
+msgid "Military technology"
+msgstr "Technologie militaire"
+
+#: themes/default/i18n.php:152
+#, fuzzy
+#@ stephino-rpg
+msgid "If our empire is to grow, it must first learn to defend itself. Weapons research is a necessary evil in order to protect peace."
+msgstr "Si notre empire doit croître, il doit d'abord apprendre à se défendre. La recherche sur les armes est un mal nécessaire pour protéger la paix."
+
+#: themes/default/i18n.php:153
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, this is truly wonderful news! We have discovered very large objects that look like landing vehicles of the Gods. This means that they once walked among us! Not only were we the chosen people, Gods even enjoyed living among us and probably blessed our ancestors with wonderful gifts."
+msgstr "Monsieur, c'est vraiment une merveilleuse nouvelle! Nous avons découvert de très gros objets qui ressemblent à des véhicules d'atterrissage des dieux. Cela signifie qu'ils ont autrefois marché parmi nous! Non seulement nous étions le peuple élu, mais les dieux aimaient même vivre parmi nous et ont probablement béni nos ancêtres avec de merveilleux cadeaux."
+
+#: themes/default/i18n.php:154
+#, fuzzy
+#@ stephino-rpg
+msgid "Electric engine"
+msgstr "Moteur électrique"
+
+#: themes/default/i18n.php:155
+#, fuzzy
+#@ stephino-rpg
+msgid "Moving goods between our cities requires enormous amounts of energy. Efficient electric engine research might hold the key to wonderful new transportation advancements."
+msgstr "Le transport de marchandises entre nos villes nécessite d'énormes quantités d'énergie. Une recherche efficace sur les moteurs électriques pourrait être la clé de nouvelles avancées en matière de transport."
+
+#: themes/default/i18n.php:156
+#, fuzzy
+#@ stephino-rpg
+msgid "As we dug deeper inside the sand dunes, millions of fragments of ancient, highly advanced technology came to light. These must surely be gifts the Ancient Gods sent us from the sky. We must keep funding our research, for it is clear that the Gods placed these artifacts here to test us and to teach us."
+msgstr "Alors que nous creusions plus profondément dans les dunes de sable, des millions de fragments de technologie ancienne et très avancée sont apparus. Celles-ci doivent sûrement être des cadeaux que les anciens dieux nous ont envoyés du ciel. Nous devons continuer à financer nos recherches, car il est clair que les dieux ont placé ces artefacts ici pour nous tester et nous enseigner."
+
+#: themes/default/i18n.php:157
+#, fuzzy
+#@ stephino-rpg
+msgid "Imperialism"
+msgstr "Impérialisme"
+
+#: themes/default/i18n.php:158
+#, fuzzy
+#@ stephino-rpg
+msgid "We need to focus on building more than just one city. The entire planet shall soon be ours!"
+msgstr "Nous devons nous concentrer sur la construction de plusieurs villes. La planète entière sera bientôt à nous!"
+
+#: themes/default/i18n.php:159
+#, fuzzy
+#@ stephino-rpg
+msgid "As we continued the excavations, it's clear that some of the relics were, in fact, highly advanced hatcheries. This, right here, is the ultimate proof that the Gods have created us! I have devoted my entire life to the study of the Holy Scrolls and Science, and this discovery is surely my greatest achievement!"
+msgstr "Alors que nous poursuivions les fouilles, il est clair que certaines des reliques étaient en fait des écloseries très avancées. Ceci, ici même, est la preuve ultime que les dieux nous ont créés! J'ai consacré toute ma vie à l'étude des parchemins sacrés et de la science, et cette découverte est sûrement ma plus grande réussite!"
+
+#: themes/default/i18n.php:160
+#, fuzzy
+#@ stephino-rpg
+msgid "Sphere of influence"
+msgstr "Sphère d'influence"
+
+#: themes/default/i18n.php:161
+#, fuzzy
+#@ stephino-rpg
+msgid "Good trade deals are often better than military conquest. Our diplomats must constantly train in the fine art of persuasion."
+msgstr "De bons accords commerciaux valent souvent mieux qu'une conquête militaire. Nos diplomates doivent constamment se former aux beaux-arts de la persuasion."
+
+#: themes/default/i18n.php:162
+#, fuzzy
+#@ stephino-rpg
+msgid "We have finally decoded their language! We still don't understand it fully but it seems the Gods were harvesting precious minerals from the asteroids between our world and theirs. Something went wrong and an explosion diverted several very large metallic asteroids towards their world."
+msgstr "Nous avons enfin décodé leur langue!Nous ne le comprenons toujours pas complètement, mais il semble que les dieux récoltaient des minéraux précieux des astéroïdes entre notre monde et le leur. Quelque chose s'est mal passé et une explosion a détourné plusieurs très gros astéroïdes métalliques vers leur monde."
+
+#: themes/default/i18n.php:163
+#, fuzzy
+#@ stephino-rpg
+msgid "Archaeology"
+msgstr "Archéologie"
+
+#: themes/default/i18n.php:164
+#, fuzzy
+#@ stephino-rpg
+msgid "We have to research our past to fully understand our future. Studying the technology of the Ancient Gods will lead to the development of unimaginable new technology."
+msgstr "Nous devons rechercher notre passé pour comprendre pleinement notre avenir. L'étude de la technologie des dieux antiques conduira au développement d'une nouvelle technologie inimaginable."
+
+#: themes/default/i18n.php:165
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, I just can not believe this. We have uncovered a vast system of artificial caverns that stretches out as far as the north pole. It seems the Gods created them for us but we must have lost our way and abandoned them long ago. We must start an extensive expedition right away. This is a momentous discovery for our entire race!"
+msgstr "Monsieur, je ne peux tout simplement pas y croire. Nous avons découvert un vaste système de cavernes artificielles qui s'étend jusqu'au pôle nord. Il semble que les dieux les ont créés pour nous, mais nous devons avoir perdu notre chemin et les avoir abandonnés depuis longtemps. Nous devons commencer immédiatement une vaste expédition. C'est une découverte capitale pour toute notre course!"
+
+#: themes/default/i18n.php:166
+#, fuzzy
+#@ stephino-rpg
+msgid "Espionage"
+msgstr "Espionnage"
+
+#: themes/default/i18n.php:167
+#, fuzzy
+#@ stephino-rpg
+msgid "When the diplomats fail, a little brute force is necessary... just make sure we don't get caught!"
+msgstr "Lorsque les diplomates échouent, un peu de force brute est nécessaire... assurez-vous simplement de ne pas nous faire prendre!"
+
+#: themes/default/i18n.php:168
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, we've decoded even more of the language of the Gods. Even though not dangerous to life on Urth, a decision was made to try to divert the menacing asteroids. It would have collided with a fleet of artificial satellites, causing something called an \"economic recession\" everybody seemed to fear more than death."
+msgstr "Monsieur, nous avons encore plus décodé le langage des dieux. Même si ce n'est pas dangereux pour la vie sur Urth, il a été décidé d'essayer de détourner les astéroïdes menaçants. Il aurait heurté une flotte de satellites artificiels, provoquant ce qu'on appelle une «récession économique», tout le monde semblait craindre plus que la mort."
+
+#: themes/default/i18n.php:169
+#, fuzzy
+#@ stephino-rpg
+msgid "Ion drive"
+msgstr "Lecteur ionique"
+
+#: themes/default/i18n.php:170
+#, fuzzy
+#@ stephino-rpg
+msgid "This new type of propulsion promises to unlock a new era of prosperity for our cities!"
+msgstr "Ce nouveau type de propulsion promet d'ouvrir une nouvelle ère de prospérité pour nos villes!"
+
+#: themes/default/i18n.php:171
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, terrible news! We've lost 42 of our researchers in one of the caves. It appears that there is some sort of radiation build-up in the walls that poisons and kills us. We've studied the ancient scrolls and it appears that the Gods were masters of what we call \"atomic energy\". This is just a test of our faith. We surely cannot stop now!"
+msgstr "Monsieur, terrible nouvelle! Nous avons perdu 42 de nos chercheurs dans l'une des grottes. Il semble qu'il y ait une sorte d'accumulation de rayonnement dans les murs qui nous empoisonne et nous tue. Nous avons étudié les anciens rouleaux et il semble que les dieux étaient les maîtres de ce que nous appelons «l'énergie atomique». Ceci n'est qu'un test de notre foi. Nous ne pouvons certainement pas nous arrêter maintenant!"
+
+#: themes/default/i18n.php:172
+#, fuzzy
+#@ stephino-rpg
+msgid "Free markets"
+msgstr "Marchés libres"
+
+#: themes/default/i18n.php:173
+#, fuzzy
+#@ stephino-rpg
+msgid "We are on our way to creating the very first Stock Market and establishing a financial empire like no other."
+msgstr "Nous sommes en train de créer la toute première Bourse et d'établir un empire financier pas comme les autres."
+
+#: themes/default/i18n.php:174
+#, fuzzy
+#@ stephino-rpg
+msgid "I'm sorry I haven't updated you lately, sir. The information is very corrupted and hard to analyze, but it appears that the Leader of the Gods decided to send a nuclear warhead to destroy the metal asteroids heading toward the satellite cluster. Something horrible went wrong. We don't know what yet, but you will be the first to know when we find out."
+msgstr "Je suis désolé de ne pas vous avoir mis à jour récemment, monsieur. Les informations sont très corrompues et difficiles à analyser, mais il semble que le chef des dieux ait décidé d'envoyer une ogive nucléaire pour détruire les astéroïdes métalliques se dirigeant vers l'amas de satellites. Quelque chose d'horrible s'est mal passé. Nous ne savons pas encore quoi, mais vous serez les premiers informés lorsque nous le saurons."
+
+#: themes/default/i18n.php:175
+#, fuzzy
+#@ stephino-rpg
+msgid "Gunpowder"
+msgstr "Poudre à canon"
+
+#: themes/default/i18n.php:176
+#, fuzzy
+#@ stephino-rpg
+msgid "We need to reverse engineer this miraculous substance the ancient scrolls mentioned. It will forever change our military capabilities."
+msgstr "Nous devons procéder à une ingénierie inverse de cette substance miraculeuse dont les anciens rouleaux ont été mentionnés. Cela changera à jamais nos capacités militaires."
+
+#: themes/default/i18n.php:177
+#, fuzzy
+#@ stephino-rpg
+msgid "The system of caves is much more complex than originally thought. We've discovered all sorts of ancient machinery and new ancient scrolls in the language of Gods. Our efforts were surely rewarded, as our entire civilization will advance thousands of times faster because of these discoveries. We are entering the age of true Enlightenment!"
+msgstr "Le système des grottes est beaucoup plus complexe qu'on ne le pensait à l'origine. Nous avons découvert toutes sortes de machines anciennes et de nouveaux rouleaux anciens dans le langage des dieux. Nos efforts ont certainement été récompensés, car toute notre civilisation progressera des milliers de fois plus vite grâce à ces découvertes. Nous entrons dans l'ère de la véritable illumination!"
+
+#: themes/default/i18n.php:178
+#, fuzzy
+#@ stephino-rpg
+msgid "Plasma drive"
+msgstr "Lecteur plasma"
+
+#: themes/default/i18n.php:179
+#, fuzzy
+#@ stephino-rpg
+msgid "We need to learn how to stabilize this highly energetic state of matter for our military and economic might!"
+msgstr "Nous devons apprendre à stabiliser cet état de la matière hautement énergétique pour notre puissance militaire et économique!"
+
+#: themes/default/i18n.php:180
+#, fuzzy
+#@ stephino-rpg
+msgid "The craters up north are much more radioactive than we thought. The Gods probably sent nuclear blasts at the north pole to heat-up the atmosphere and make Mors the Paradise it is today! Their wisdom and power is undeniable. We are truly living humbling and exciting times!"
+msgstr "Les cratères du nord sont beaucoup plus radioactifs qu'on ne le pensait. Les dieux ont probablement envoyé des explosions nucléaires au pôle nord pour réchauffer l'atmosphère et faire de Mors le paradis qu'il est aujourd'hui! Leur sagesse et leur puissance sont indéniables. Nous vivons vraiment des temps humbles et passionnants!"
+
+#: themes/default/i18n.php:181
+#, fuzzy
+#@ stephino-rpg
+msgid "Plasma cannon"
+msgstr "Canon à plasma"
+
+#: themes/default/i18n.php:182
+#, fuzzy
+#@ stephino-rpg
+msgid "Our generals see great value in using plasma devices on the battle field."
+msgstr "Nos généraux accordent une grande importance à l'utilisation d'appareils à plasma sur le champ de bataille."
+
+#: themes/default/i18n.php:183
+#, fuzzy
+#@ stephino-rpg
+msgid "We have found ancient scrolls that show how the Gods used their machines to send water asteroids from the sky and form our oceans. They were masters of everything, from the atoms to the stars! However, there are now thousands of ancient scrolls we have not yet deciphered. We need more funding to complete this wonderful work for generations to come!"
+msgstr "Nous avons trouvé d'anciens parchemins qui montrent comment les dieux utilisaient leurs machines pour envoyer des astéroïdes aquatiques depuis le ciel et former nos océans. Ils étaient maîtres de tout, des atomes aux étoiles! Cependant, il y a maintenant des milliers de rouleaux anciens que nous n'avons pas encore déchiffrés. Nous avons besoin de plus de financement pour achever ce merveilleux travail pour les générations à venir!"
+
+#: themes/default/i18n.php:184
+#, fuzzy
+#@ stephino-rpg
+msgid "Scalability"
+msgstr "Évolutivité"
+
+#: themes/default/i18n.php:185
+#, fuzzy
+#@ stephino-rpg
+msgid "We need to learn from the Ancient Gods and increase our productivity ten-fold."
+msgstr "Nous devons apprendre des anciens dieux et multiplier par dix notre productivité."
+
+#: themes/default/i18n.php:186
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, it's terrible news. The nuclear warheads malfunctioned and changed the asteroids' trajectories even more. Instead of going past Urth, the metal asteroids impacted it. All life vanished instantly. Without spare parts from home, technology chains started falling on this world as well, stranding the Gods on Mors."
+msgstr "Monsieur, c'est une terrible nouvelle. Les ogives nucléaires ont mal fonctionné et ont changé encore plus les trajectoires des astéroïdes. Au lieu de dépasser Urth, les astéroïdes métalliques l'ont impacté. Toute vie a disparu instantanément. Sans pièces détachées de chez nous, les chaînes technologiques ont également commencé à tomber sur ce monde, bloquant les dieux sur les mors."
+
+#: themes/default/i18n.php:187
+#, fuzzy
+#@ stephino-rpg
+msgid "Anti-gravity engine"
+msgstr "Moteur anti-gravité"
+
+#: themes/default/i18n.php:188
+#, fuzzy
+#@ stephino-rpg
+msgid "Mastering gravity is going to be the biggest achievement of our species. The stars will be at our fingertips!"
+msgstr "Maîtriser la gravité sera la plus grande réussite de notre espèce. Les étoiles seront à portée de main!"
+
+#: themes/default/i18n.php:189
+#, fuzzy
+#@ stephino-rpg
+msgid "We have discovered large burial sites. It seems that the Gods were not immortal after all. Millions of bones are stacked in neat piles, all aligned with their heads pointing north, and others are scattered around them. We have found some recordings dating thousands of years after these burials and we're doing our best to recover and decode them, sir!"
+msgstr "Nous avons découvert de grands sites de sépulture. Il semble que les dieux n'étaient pas immortels après tout. Des millions d'os sont empilés en tas nets, tous alignés avec leur tête pointant vers le nord, et d'autres sont dispersés autour d'eux. Nous avons trouvé des enregistrements datant de milliers d'années après ces enterrements et nous faisons de notre mieux pour les récupérer et les décoder, monsieur!"
+
+#: themes/default/i18n.php:190
+#, fuzzy
+#@ stephino-rpg
+msgid "Quantum computing"
+msgstr "L'informatique quantique"
+
+#: themes/default/i18n.php:191
+#, fuzzy
+#@ stephino-rpg
+msgid "Solving very complex large-scale problems has become cumbersome. We could try to emulate this long-lost technology the Ancient Gods developed."
+msgstr "La résolution de problèmes à grande échelle très complexes est devenue fastidieuse. Nous pourrions essayer d'imiter cette technologie perdue depuis longtemps que les anciens dieux ont développée."
+
+#: themes/default/i18n.php:192
+#, fuzzy
+#@ stephino-rpg
+msgid "The hatcheries appear to be much more complex than we originally thought. They were developing new species and making all sorts of experiments. They even engineered micro-life and viruses and the red bacteria that makes our oceans so beautiful and generate oxygen for all of us."
+msgstr "Les écloseries semblent beaucoup plus complexes qu'on ne le pensait à l'origine. Ils développaient de nouvelles espèces et faisaient toutes sortes d'expériences. Ils ont même conçu des micro-vies, des virus et des bactéries rouges qui rendent nos océans si beaux et génèrent de l'oxygène pour nous tous."
+
+#: themes/default/i18n.php:193
+#, fuzzy
+#@ stephino-rpg
+msgid "Soft AI"
+msgstr "Ia douce"
+
+#: themes/default/i18n.php:194
+#, fuzzy
+#@ stephino-rpg
+msgid "We are soon reaching the point when every task can be automated!"
+msgstr "Nous arrivons bientôt au point où chaque tâche peut être automatisée!"
+
+#: themes/default/i18n.php:195
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, I... I don't know how to say this. This is just a theory and I don't have enough proof yet but it is clear to me that some sort of virus created by the Urth race was responsible for their extinction. We are trying to prove this but it seems the virus has since mutated and it is now the common, harmless bug we all get as children."
+msgstr "Monsieur, je... je ne sais pas comment dire ça. Ce n'est qu'une théorie et je n'ai pas encore assez de preuves, mais il est clair pour moi qu'une sorte de virus créé par la race Urth était responsable de leur extinction. Nous essayons de le prouver, mais il semble que le virus a muté depuis et que c'est maintenant le bogue commun et inoffensif que nous avons tous dans notre enfance."
+
+#: themes/default/i18n.php:196
+#, fuzzy
+#@ stephino-rpg
+msgid "Dark matter"
+msgstr "Matière noire"
+
+#: themes/default/i18n.php:197
+#, fuzzy
+#@ stephino-rpg
+msgid "This discovery brings us one step closer to uncovering one of the deepest secrets of the Universe."
+msgstr "Cette découverte nous rapproche encore plus de la découverte de l'un des secrets les plus profonds de l'Univers."
+
+#: themes/default/i18n.php:198
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, this new discovery allowed us to repair an ancient computing device and gain access to all of the Urth Gods knowledge! We are just one step away from understanding our origin. We will be able to say exactly why our Gods created us, imperfect as they were."
+msgstr "Monsieur, cette nouvelle découverte nous a permis de réparer un ancien appareil informatique et d'accéder à toutes les connaissances d'Urth Gods! Nous sommes à un pas de la compréhension de notre origine. Nous pourrons dire exactement pourquoi nos dieux nous ont créés, aussi imparfaits soient-ils."
+
+#: themes/default/i18n.php:199
+#, fuzzy
+#@ stephino-rpg
+msgid "ZPE drive"
+msgstr "Lecteur ZPE"
+
+#: themes/default/i18n.php:200
+#, fuzzy
+#@ stephino-rpg
+msgid "The Zero Point Energy drive is the ultimate engine! It converts dark matter into dark energy without the well-known space-time disruptions. This will allow us to truly and completely dominate Mors!"
+msgstr "L'entraînement Zero Point Energy est le moteur ultime! Il convertit la matière noire en énergie noire sans les perturbations spatio-temporelles bien connues. Cela nous permettra de dominer vraiment et complètement les Mors!"
+
+#: themes/default/i18n.php:201
+#, fuzzy
+#@ stephino-rpg
+msgid "Sir, it seems we were engineered for food! The Urth race brought our ancestors here and reproduced us for our sweet meat. They ate our ancestors so that they could stay alive! After their civilization collapsed so did the nuclear technology they brought here, poisoning Mors with radiation. The same virus that killed their race nearly killed us too. The virus mutated and disfigured our bodies horribly. We lost our feathers and gained scales. Most of our ancestors died of horrific mutations. Those that survived developed abnormally large brains, making them very weak physically but extremely intelligent. We must not speak of this for it will lead to the collapse of our society! The shameful secret of our origin must never be known! We will forever be the sons of Gods, not their livestock!"
+msgstr "Monsieur, il semble que nous ayons été conçus pour la nourriture! La race Urth a amené nos ancêtres ici et nous a reproduits pour notre viande sucrée. Ils ont mangé nos ancêtres pour pouvoir rester en vie! Après l'effondrement de leur civilisation, la technologie nucléaire qu'ils ont apportée ici s'est effondrée, empoisonnant Mors avec des radiations. Le même virus qui a tué leur race a failli nous tuer aussi. Le virus a muté et défiguré notre corps horriblement. Nous avons perdu nos plumes et avons gagné des écailles. La plupart de nos ancêtres sont morts d'horribles mutations. Ceux qui ont survécu ont développé un cerveau anormalement gros, ce qui les rend très faibles physiquement mais extrêmement intelligents. Il ne faut pas en parler car cela conduira à l'effondrement de notre société! Le secret honteux de notre origine ne doit jamais être connu! Nous serons à jamais les fils des dieux, pas leur bétail!"
+
+#: themes/default/i18n.php:202
+#, fuzzy
+#@ stephino-rpg
+msgid "Government: Anarchy"
+msgstr "Gouvernement: Anarchie"
+
+#: themes/default/i18n.php:203
+#, fuzzy
+#@ stephino-rpg
+msgid "Government: Monarchy"
+msgstr "Gouvernement: Monarchie"
+
+#: themes/default/i18n.php:204
+#, fuzzy
+#@ stephino-rpg
+msgid "Government: Theocracy"
+msgstr "Gouvernement: théocratie"
+
+#: themes/default/i18n.php:205
+#, fuzzy
+#@ stephino-rpg
+msgid "Government: Democracy"
+msgstr "Gouvernement: démocratie"
+
+#: themes/default/i18n.php:206
+#, fuzzy
+#@ stephino-rpg
+msgid "Government: Technocracy"
+msgstr "Gouvernement: Technocratie"
+
+#: themes/default/i18n.php:207
+#, fuzzy
+#@ stephino-rpg
+msgid "Island Statue: Iron"
+msgstr "Statue de l'île: fer"
+
+#: themes/default/i18n.php:208
+#, fuzzy
+#@ stephino-rpg
+msgid "Island Statue: Crystal"
+msgstr "Statue de l'île: cristal"
+
+#: themes/default/i18n.php:209
+#, fuzzy
+#@ stephino-rpg
+msgid "Island Statue: Sulphur"
+msgstr "Statue de l'île: Sulphur"
+
+#: themes/default/i18n.php:210
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Parliament"
+msgstr "Bâtiment: Parlement"
+
+#: themes/default/i18n.php:211
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Research Center"
+msgstr "Bâtiment: Centre de recherche"
+
+#: themes/default/i18n.php:212
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Warehouse"
+msgstr "Bâtiment: Entrepôt"
+
+#: themes/default/i18n.php:213
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Palace"
+msgstr "Bâtiment: Palace"
+
+#: themes/default/i18n.php:214
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Museum"
+msgstr "Bâtiment: Musée"
+
+#: themes/default/i18n.php:215
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Shipyard"
+msgstr "Bâtiment: chantier naval"
+
+#: themes/default/i18n.php:216
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Barracks"
+msgstr "Bâtiment: Caserne"
+
+#: themes/default/i18n.php:217
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Artillery"
+msgstr "Bâtiment: Artillerie"
+
+#: themes/default/i18n.php:218
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Energy Ltd"
+msgstr "Bâtiment: Energy Ltd"
+
+#: themes/default/i18n.php:219
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Tech Center"
+msgstr "Bâtiment: Tech Center"
+
+#: themes/default/i18n.php:220
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Stock Market"
+msgstr "Bâtiment: Bourse"
+
+#: themes/default/i18n.php:221
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Extractor"
+msgstr "Bâtiment: Extracteur"
+
+#: themes/default/i18n.php:222
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Oxygen Generator"
+msgstr "Bâtiment: Générateur d'oxygène"
+
+#: themes/default/i18n.php:223
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Methane Plant"
+msgstr "Bâtiment: Usine de méthane"
+
+#: themes/default/i18n.php:224
+#, fuzzy
+#@ stephino-rpg
+msgid "Building: Black Market"
+msgstr "Bâtiment: Marché noir"
+
+#: themes/default/i18n.php:225
+#, fuzzy
+#@ stephino-rpg
+msgid "Unit: Governor"
+msgstr "Unité: Gouverneur"
+
+#: themes/default/i18n.php:226
+#, fuzzy
+#@ stephino-rpg
+msgid "Premium: Production"
+msgstr "Premium: Production"
+
+#: themes/default/i18n.php:227
+#, fuzzy
+#@ stephino-rpg
+msgid "Research Field: ZPE Drive"
+msgstr "Domaine de recherche: ZPE Drive"
+
+#: themes/default/i18n.php:228
+#, fuzzy
+#@ stephino-rpg
+msgid "Unit: Spy"
+msgstr "Unité: Spy"
+
+#: themes/default/i18n.php:229
+#, fuzzy
+#@ stephino-rpg
+msgid "Ship: Omega 12"
+msgstr "Navire: Omega 12"
+
+#: themes/default/i18n.php:230
+#, fuzzy
+#@ stephino-rpg
+msgid "Ship: Destroyer"
+msgstr "Navire: Destroyer"
+
+#: themes/default/i18n.php:231
+#, fuzzy
+#@ stephino-rpg
+msgid "Unit: Swarm"
+msgstr "Unité: Essaim"
+
+#: themes/default/i18n.php:232
+#, fuzzy
+#@ stephino-rpg
+msgid "Unit: Battle Droid"
+msgstr "Unité: Battle Droid"
+
+#: themes/default/i18n.php:233
+#, fuzzy
+#@ stephino-rpg
+msgid "Unit: Soldier"
+msgstr "Unité: soldat"
+
+#: themes/default/i18n.php:234
+#, fuzzy
+#@ stephino-rpg
+msgid "Ship: Drone"
+msgstr "Navire: Drone"
+
+#: themes/default/i18n.php:235
+#, fuzzy
+#@ stephino-rpg
+msgid "Ship: Tank"
+msgstr "Navire: Tank"
+
+#: themes/default/i18n.php:236
+#, fuzzy
+#@ stephino-rpg
+msgid "Ship: Transporter"
+msgstr "Navire: Transporter"
+
+#: themes/default/i18n.php:237
+#, fuzzy
+#@ stephino-rpg
+msgid "Hello!"
+msgstr "Salut!"
+
+#: themes/default/i18n.php:238
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"My name is **Moosk** and I will be your guide.\n"
+"\n"
+"Let's begin exploring the rich world of **Mors**!\n"
+"\n"
+"Click **Next** to continue."
+msgstr "Je m'appelle ** Moosk ** et je serai votre guide. Commençons à explorer le monde riche de ** Mors **! Cliquer sur Suivant pour continuer."
+
+#: themes/default/i18n.php:243
+#, fuzzy
+#@ stephino-rpg
+msgid "First steps"
+msgstr "Premiers pas"
+
+#: themes/default/i18n.php:244
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"This is your city. It is your job to lead it to prosperity.\n"
+"\n"
+"City resources are listed on the top part of your screen. \n"
+"\n"
+"Click on any of them to learn more and when you are ready click **Next** to continue."
+msgstr "Ceci est votre ville. Il est de votre devoir de le mener à la prospérité. Les ressources de la ville sont répertoriées dans la partie supérieure de votre écran. Cliquez sur l'un d'entre eux pour en savoir plus et lorsque vous êtes prêt, cliquez sur ** Suivant ** pour continuer."
+
+#: themes/default/i18n.php:250
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"Fine-tune your experience by editing your game settings.\n"
+"\n"
+"If you need more information, the **Help** menu is available here as well."
+msgstr "Affinez votre expérience en modifiant vos paramètres de jeu. Si vous avez besoin de plus d'informations, le menu ** Aide ** est également disponible ici."
+
+#: themes/default/i18n.php:253
+#, fuzzy
+#@ stephino-rpg
+msgid "Navigation"
+msgstr "La navigation"
+
+#: themes/default/i18n.php:254
+#, fuzzy
+#@ stephino-rpg
+msgid "Quickly visit other cities or islands with the navigation panel."
+msgstr "Visitez rapidement d'autres villes ou îles avec le panneau de navigation."
+
+#: themes/default/i18n.php:255
+#, fuzzy
+#@ stephino-rpg
+msgid "What next?"
+msgstr "Et ensuite?"
+
+#: themes/default/i18n.php:256
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"If you're not sure what to do next, just click on the city name, in the upper-left corner of your screen.\n"
+"\n"
+"I will be your **Upgrade Advisor** from now on."
+msgstr "Si vous ne savez pas quoi faire ensuite, cliquez simplement sur le nom de la ville, dans le coin supérieur gauche de votre écran. Je serai votre ** Upgrade Advisor ** à partir de maintenant."
+
+#: themes/default/i18n.php:259
+#, fuzzy
+#@ stephino-rpg
+msgid "Our empire begins"
+msgstr "Notre empire commence"
+
+#: themes/default/i18n.php:260
+#, fuzzy
+#@ stephino-rpg
+msgid ""
+"As your **Upgrade Advisor**, I recommend upgrading this item first.\n"
+"\n"
+"You can later check the **city progress** to better organize your actions.\n"
+"\n"
+"Thank you for joining me!"
+msgstr "En tant que ** conseiller de mise à niveau **, je vous recommande de mettre à niveau cet élément en premier. Vous pourrez ensuite vérifier la ** progression de la ville ** pour mieux organiser vos actions. Merci de m'avoir rejoint!"
+
+#: themes/default/i18n.php:265
+#, fuzzy
+#@ stephino-rpg
+msgid "Wormhole"
+msgstr "Trou de ver"
+
+#: themes/default/i18n.php:266
+#, fuzzy
+#@ stephino-rpg
+msgid "Open a gateway to another dimension and gather methane and oxygen at 100% capacity in all cities and generate extra resources every hour!"
+msgstr "Ouvrez une porte vers une autre dimension et collectez du méthane et de l'oxygène à 100% de capacité dans toutes les villes et générez des ressources supplémentaires chaque heure!"
+
+#: themes/default/i18n.php:267
+#, fuzzy
+#@ stephino-rpg
+msgid "Nanobots"
+msgstr "Nanobots"
+
+#: themes/default/i18n.php:268
+#, fuzzy
+#@ stephino-rpg
+msgid "A swarm of nanobots will increase your production queues in all cities!"
+msgstr "Un essaim de nanobots augmentera vos files d'attente de production dans toutes les villes!"
+
+#: themes/default/i18n.php:269
+#, fuzzy
+#@ stephino-rpg
+msgid "Time machine"
+msgstr "Machine à remonter le temps"
+
+#: themes/default/i18n.php:270
+#, fuzzy
+#@ stephino-rpg
+msgid "Decrease construction time for all queues in all cities with this time machine!"
+msgstr "Réduisez le temps de construction de toutes les files d'attente dans toutes les villes avec cette machine à remonter le temps!"
+
+#: themes/default/i18n.php:271
+#, fuzzy
+#@ stephino-rpg
+msgid "Insider trading"
+msgstr "Délit d'initié"
+
+#: themes/default/i18n.php:272
+#, fuzzy
+#@ stephino-rpg
+msgid "Get temporary access to the absolute best upgrade prices on the market!"
+msgstr "Obtenez un accès temporaire aux meilleurs prix de mise à niveau absolus sur le marché!"
+
+#: themes/default/i18n.php:273
+#, fuzzy
+#@ stephino-rpg
+msgid "Starter"
+msgstr "Entrée"
+
+#: themes/default/i18n.php:274
+#, fuzzy
+#@ stephino-rpg
+msgid "A small package of diamonds"
+msgstr "Un petit paquet de diamants"
+
+#: themes/default/i18n.php:275
+#, fuzzy
+#@ stephino-rpg
+msgid "Budget"
+msgstr "Budget"
+
+#: themes/default/i18n.php:276
+#, fuzzy
+#@ stephino-rpg
+msgid "Give your empire the explosive growth it deserves"
+msgstr "Donnez à votre empire la croissance explosive qu'il mérite"
+
+#: themes/default/i18n.php:277
+#, fuzzy
+#@ stephino-rpg
+msgid "Mother lode"
+msgstr "Mère lode"
+
+#: themes/default/i18n.php:278
+#, fuzzy
+#@ stephino-rpg
+msgid "Live the life of a king!"
+msgstr "Vivez la vie d'un roi!"
+
+#: themes/default/i18n.php:279
+#, fuzzy
+#@ stephino-rpg
+msgid "Pro"
+msgstr "Pro"
+
+#: themes/default/i18n.php:280
+#, fuzzy
+#@ stephino-rpg
+msgid "The best value for our most valuable players!"
+msgstr "La meilleure valeur pour nos joueurs les plus précieux!"
+
+#: ui/tpl/dialogs/attack/attack-prepare-empty.php:20
+#, fuzzy
+#@ stephino-rpg
+msgid "Prepare an attack with:"
+msgstr "Préparez une attaque avec:"
+
+#: ui/tpl/dialogs/attack/attack-prepare-empty.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "Prepare an attack with one of the following:"
+msgstr "Préparez une attaque avec l'un des éléments suivants:"
+
+#: ui/tpl/dialogs/attack/attack-prepare-empty.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "This game does not allow attacks"
+msgstr "Ce jeu n'autorise pas les attaques"
+
+#: ui/tpl/dialogs/attack/attack-prepare.php:83
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: total capacity"
+msgstr "%s: capacité totale"
+
+#: ui/tpl/dialogs/attack/attack-prepare.php:92
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: total mass"
+msgstr "%s: masse totale"
+
+#: ui/tpl/dialogs/attack/attack-prepare.php:99
+#, fuzzy
+#@ stephino-rpg
+msgid "Army speed"
+msgstr "Vitesse de l'armée"
+
+#: ui/tpl/dialogs/attack/attack-prepare.php:104
+#, fuzzy
+#@ stephino-rpg
+msgid "Total loot box size"
+msgstr "Taille totale de la boîte à butin"
+
+#: ui/tpl/dialogs/attack/attack-prepare.php:110
+#: ui/tpl/dialogs/attack/attack-prepare.php:119
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Total %s points"
+msgstr "Total %s points"
+
+#: ui/tpl/dialogs/attack/attack-prepare.php:131
+#, fuzzy
+#@ stephino-rpg
+msgid "Review army"
+msgstr "Revoir l'armée"
+
+#: ui/tpl/dialogs/attack/attack-review.php:19
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Attack from %s on %s"
+msgstr "Attaque de %s sur %s"
+
+#: ui/tpl/dialogs/attack/attack-review.php:39
+#: ui/tpl/dialogs/spy/spy-review.php:37
+#: ui/tpl/dialogs/transport/transport-review.php:48
+#, fuzzy
+#@ stephino-rpg
+msgid "Travel time"
+msgstr "Temps de voyage"
+
+#: ui/tpl/dialogs/attack/attack-review.php:46
+#, fuzzy
+#@ stephino-rpg
+msgid "full speed"
+msgstr "pleine vitesse"
+
+#: ui/tpl/dialogs/attack/attack-review.php:48
+#, fuzzy
+#@ stephino-rpg
+msgid "reduced speed"
+msgstr "vitesse réduite"
+
+#: ui/tpl/dialogs/attack/attack-review.php:107
+#: ui/tpl/dialogs/building/building-upgrade-cancel.php:51
+#: ui/tpl/dialogs/building/building-upgrade.php:46
+#: ui/tpl/dialogs/city/city-move-capital.php:30
+#: ui/tpl/dialogs/city/city-workforce.php:144
+#: ui/tpl/dialogs/island/island-upgrade.php:30
+#, fuzzy
+#@ stephino-rpg
+msgid "Go Back"
+msgstr "Retourner"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:82
+#, fuzzy
+#@ stephino-rpg
+msgid "in"
+msgstr "dans"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:102
+#, fuzzy
+#@ stephino-rpg
+msgid "Civilian"
+msgstr "Civil"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:102
+#, fuzzy
+#@ stephino-rpg
+msgid "cannot be sent to battle"
+msgstr "ne peut pas être envoyé au combat"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:107
+#, fuzzy
+#@ stephino-rpg
+msgid "Spy success probability"
+msgstr "Probabilité de succès de l'espion"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:125
+#, fuzzy
+#@ stephino-rpg
+msgid "Transporter capacity"
+msgstr "Capacité du transporteur"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:132
+#: ui/tpl/dialogs/help/help-content-ships.php:92
+#: ui/tpl/dialogs/help/help-content-units.php:87
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonizer"
+msgstr "Colonisateur"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:132
+#, fuzzy
+#@ stephino-rpg
+msgid "can be used to expand your empire"
+msgstr "peut être utilisé pour étendre votre empire"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:137
+#: ui/tpl/dialogs/help/help-content-ships.php:225
+#: ui/tpl/dialogs/help/help-content-units.php:227
+#, fuzzy
+#@ stephino-rpg
+msgid "Mass"
+msgstr "Masse"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:144
+#: ui/tpl/dialogs/building/building-info-entities.php:196
+#: ui/tpl/dialogs/help/help-content-ships.php:118
+#: ui/tpl/dialogs/help/help-content-ships.php:170
+#: ui/tpl/dialogs/help/help-content-units.php:124
+#: ui/tpl/dialogs/help/help-content-units.php:173
+#, fuzzy
+#@ stephino-rpg
+msgid "Damage"
+msgstr "Dommage"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:151
+#: ui/tpl/dialogs/building/building-info-entities.php:196
+#: ui/tpl/dialogs/help/help-content-ships.php:125
+#: ui/tpl/dialogs/help/help-content-ships.php:170
+#: ui/tpl/dialogs/help/help-content-units.php:131
+#: ui/tpl/dialogs/help/help-content-units.php:173
+#, fuzzy
+#@ stephino-rpg
+msgid "Ammo"
+msgstr "Munitions"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:158
+#: ui/tpl/dialogs/building/building-info-entities.php:206
+#: ui/tpl/dialogs/help/help-content-ships.php:132
+#: ui/tpl/dialogs/help/help-content-ships.php:193
+#: ui/tpl/dialogs/help/help-content-units.php:138
+#: ui/tpl/dialogs/help/help-content-units.php:196
+#, fuzzy
+#@ stephino-rpg
+msgid "Armour"
+msgstr "Armure"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:165
+#: ui/tpl/dialogs/building/building-info-entities.php:206
+#: ui/tpl/dialogs/help/help-content-ships.php:139
+#: ui/tpl/dialogs/help/help-content-ships.php:193
+#: ui/tpl/dialogs/help/help-content-units.php:145
+#: ui/tpl/dialogs/help/help-content-units.php:196
+#, fuzzy
+#@ stephino-rpg
+msgid "Agility"
+msgstr "Agilité"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:172
+#: ui/tpl/dialogs/help/help-content-ships.php:146
+#: ui/tpl/dialogs/help/help-content-units.php:152
+#, fuzzy
+#@ stephino-rpg
+msgid "Loot Box"
+msgstr "Boîte à butin"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:180
+#: ui/tpl/dialogs/help/help-content-ships.php:154
+#: ui/tpl/dialogs/help/help-content-units.php:160
+#, fuzzy
+#@ stephino-rpg
+msgid "none"
+msgstr "aucun"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:185
+#: ui/tpl/dialogs/help/help-content-ships.php:158
+#, fuzzy
+#@ stephino-rpg
+msgid "Troops capacity"
+msgstr "Capacité des troupes"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:189
+#, fuzzy
+#@ stephino-rpg
+msgid "Transported mass"
+msgstr "Masse transportée"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:234
+#, fuzzy
+#@ stephino-rpg
+msgid "Garrison effect"
+msgstr "Effet de garnison"
+
+#: ui/tpl/dialogs/building/building-info-entities.php:262
+#: ui/tpl/dialogs/building/building-info.php:64
+#: ui/tpl/dialogs/building/building-upgrade.php:56
+#: ui/tpl/dialogs/city/city-advisor.php:68
+#: ui/tpl/dialogs/entity/entity-recruit.php:70
+#, fuzzy
+#@ stephino-rpg
+msgid "Build"
+msgstr "Construire"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:38
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: not set"
+msgstr "%s: non défini"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:60
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Change %s"
+msgstr "Changer %s"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:67
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Set %s"
+msgstr "Définir %s"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:166
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s of %s by base level"
+msgstr "%s sur %s par niveau de base"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:180
+#: ui/tpl/dialogs/building/building-info-metrics.php:269
+#, fuzzy
+#@ stephino-rpg
+msgid "Growth factor"
+msgstr "Facteur de croissance"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:216
+#: ui/tpl/dialogs/settings/settings-resources.php:117
+#, fuzzy
+#@ stephino-rpg
+msgid "from"
+msgstr "de"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:224
+#: ui/tpl/dialogs/settings/settings-resources.php:125
+#, fuzzy
+#@ stephino-rpg
+msgid "workforce"
+msgstr "la main d'oeuvre"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:249
+#, fuzzy
+#@ stephino-rpg
+msgid "Metropolis bonus"
+msgstr "Bonus Metropolis"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:278
+#, fuzzy
+#@ stephino-rpg
+msgid "Minimum reached: values under 0 are ignored"
+msgstr "Minimum atteint: les valeurs inférieures à 0 sont ignorées"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:284
+#, fuzzy
+#@ stephino-rpg
+msgid "Maximum reached: migration stopped"
+msgstr "Maximum atteint: migration arrêtée"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:287
+#, fuzzy
+#@ stephino-rpg
+msgid "Maximum reached: migration stopped and production at full capacity"
+msgstr "Maximum atteint: migration arrêtée et production à pleine capacité"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:292
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Fix %s to prevent further %s loss"
+msgstr "Correction de %s pour éviter d'autres pertes de %s"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:301
+#, fuzzy
+#@ stephino-rpg
+msgid "Maximum reached: expansion stopped"
+msgstr "Maximum atteint: expansion arrêtée"
+
+#: ui/tpl/dialogs/building/building-info-metrics.php:305
+#: ui/tpl/dialogs/settings/settings-resources.php:183
+#, fuzzy
+#@ stephino-rpg
+msgid "TOTAL"
+msgstr "Total"
+
+#: ui/tpl/dialogs/building/building-info-research-areas.php:68
+#: ui/tpl/dialogs/city/city-government.php:51
+#: ui/tpl/dialogs/help/fragment/help-fragment-description.php:41
+#: ui/tpl/dialogs/research/research-info.php:103
+#, fuzzy
+#@ stephino-rpg
+msgid "no details available"
+msgstr "pas de détails disponibles"
+
+#: ui/tpl/dialogs/building/building-info-research-areas.php:83
+#, fuzzy
+#@ stephino-rpg
+msgid "Explore"
+msgstr "Explorer"
+
+#: ui/tpl/dialogs/building/building-info.php:42
+#: ui/tpl/dialogs/city/city-info.php:21 ui/tpl/dialogs/city/city-queues.php:154
+#: ui/tpl/dialogs/entity/entity-list.php:141
+#: ui/tpl/dialogs/help/help-content-buildings.php:59
+#: ui/tpl/dialogs/help/help-content-cities.php:25
+#: ui/tpl/dialogs/help/help-content-islandStatues.php:28
+#: ui/tpl/dialogs/help/help-content-researchFields.php:34
+#: ui/tpl/dialogs/island/island-info.php:39
+#: ui/tpl/dialogs/research/research-info.php:75
+#: ui/tpl/dialogs/user/user-cities.php:25
+#, fuzzy
+#@ stephino-rpg
+msgid "Level"
+msgstr "Niveau"
+
+#: ui/tpl/dialogs/building/building-info.php:55
+#, fuzzy
+#@ stephino-rpg
+msgid "Stop"
+msgstr "Arrêtez"
+
+#: ui/tpl/dialogs/building/building-info.php:69
+#: ui/tpl/dialogs/settings/settings-resources.php:240
+#, fuzzy
+#@ stephino-rpg
+msgid "Trade"
+msgstr "Commerce"
+
+#: ui/tpl/dialogs/building/building-info.php:122
+#, fuzzy
+#@ stephino-rpg
+msgid "workers"
+msgstr "ouvriers"
+
+#: ui/tpl/dialogs/building/building-info.php:127
+#, fuzzy
+#@ stephino-rpg
+msgid "Workforce overview"
+msgstr "Aperçu des effectifs"
+
+#: ui/tpl/dialogs/building/building-info.php:138
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Dependant on population, %s of %s by base level"
+msgstr "Dépend de la population, %s sur %s par niveau de base"
+
+#: ui/tpl/dialogs/building/building-market.php:31
+#: ui/tpl/dialogs/building/building-market.php:140
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Buy resources with %s"
+msgstr "Achetez des ressources avec %s"
+
+#: ui/tpl/dialogs/building/building-market.php:43
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "No %s to trade for resources"
+msgstr "Non %s pour échanger des ressources"
+
+#: ui/tpl/dialogs/building/building-market.php:54
+#: ui/tpl/dialogs/settings/settings-resources.php:201
+#: ui/tpl/dialogs/settings/settings-resources.php:220
+#: ui/tpl/dialogs/user/user-trade.php:33 ui/tpl/dialogs/user/user-trade.php:80
+#, fuzzy
+#@ stephino-rpg
+msgid "Buy"
+msgstr "Acheter"
+
+#: ui/tpl/dialogs/building/building-market.php:111
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Available %s"
+msgstr "Disponible %s"
+
+#: ui/tpl/dialogs/building/building-market.php:157
+#: ui/tpl/dialogs/building/building-market.php:205
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Sell resources for %s"
+msgstr "Vendre des ressources pour %s"
+
+#: ui/tpl/dialogs/building/building-upgrade-cancel.php:18
+#, fuzzy
+#@ stephino-rpg
+msgid "Refund Policy"
+msgstr "Politique de remboursement"
+
+#: ui/tpl/dialogs/building/building-upgrade-cancel.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "You will not be reimbursed for canceling this upgrade"
+msgstr "Vous ne serez pas remboursé pour l'annulation de cette mise à niveau"
+
+#: ui/tpl/dialogs/building/building-upgrade-cancel.php:30
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Cancel the upgrade and receive a %s refund"
+msgstr "Annulez la mise à niveau et recevez un remboursement de %s"
+
+#: ui/tpl/dialogs/building/building-upgrade-cancel.php:58
+#, fuzzy
+#@ stephino-rpg
+msgid "Stop Upgrade"
+msgstr "Arrêter la mise à niveau"
+
+#: ui/tpl/dialogs/building/building-upgrade.php:22
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Build costs for level %s"
+msgstr "Coûts de construction pour le niveau %s"
+
+#: ui/tpl/dialogs/building/building-upgrade.php:23
+#: ui/tpl/dialogs/island/island-upgrade.php:19
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Upgrade costs for level %s"
+msgstr "Coûts de mise à niveau pour le niveau %s"
+
+#: ui/tpl/dialogs/city/city-advisor.php:32
+#, fuzzy
+#@ stephino-rpg
+msgid "Metropolis"
+msgstr "Métropole"
+
+#: ui/tpl/dialogs/city/city-advisor.php:36
+#: ui/tpl/dialogs/city/city-workforce.php:81
+#: ui/tpl/dialogs/common/common-requirements.php:63
+#: ui/tpl/dialogs/common/common-requirements.php:83
+#: ui/tpl/dialogs/help/fragment/help-fragment-requirements.php:26
+#: ui/tpl/dialogs/help/help-content-ships.php:52
+#: ui/tpl/dialogs/help/help-content-units.php:47
+#, fuzzy
+#@ stephino-rpg
+msgid "level"
+msgstr "niveau"
+
+#: ui/tpl/dialogs/city/city-advisor.php:47
+#: ui/tpl/dialogs/city/city-move-capital.php:39
+#, fuzzy
+#@ stephino-rpg
+msgid "Move metropolis here"
+msgstr "Déplacez la métropole ici"
+
+#: ui/tpl/dialogs/city/city-advisor.php:77
+#, fuzzy
+#@ stephino-rpg
+msgid "Researching"
+msgstr "Recherche"
+
+#: ui/tpl/dialogs/city/city-advisor.php:82
+#, fuzzy
+#@ stephino-rpg
+msgid "Learn about"
+msgstr "En savoir plus"
+
+#: ui/tpl/dialogs/city/city-advisor.php:87
+#, fuzzy
+#@ stephino-rpg
+msgid "Upgrade Advisor"
+msgstr "Conseiller de mise à niveau"
+
+#: ui/tpl/dialogs/city/city-advisor.php:117
+#: ui/tpl/dialogs/city/city-advisor.php:130
+#, fuzzy
+#@ stephino-rpg
+msgid "View progress"
+msgstr "Afficher la progression"
+
+#: ui/tpl/dialogs/city/city-government.php:70
+#, fuzzy
+#@ stephino-rpg
+msgid "In power"
+msgstr "En puissance"
+
+#: ui/tpl/dialogs/city/city-government.php:82
+#, fuzzy
+#@ stephino-rpg
+msgid "Coup costs"
+msgstr "Frais de coup d'État"
+
+#: ui/tpl/dialogs/city/city-government.php:105
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Institute %s"
+msgstr "Institut %s"
+
+#: ui/tpl/dialogs/city/city-info.php:59
+#, fuzzy
+#@ stephino-rpg
+msgid "View my profile"
+msgstr "Voir mon profil"
+
+#: ui/tpl/dialogs/city/city-info.php:63
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Profile of %s"
+msgstr "Profil de %s"
+
+#: ui/tpl/dialogs/city/city-info.php:77
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Visit %s"
+msgstr "Visite %s"
+
+#: ui/tpl/dialogs/city/city-info.php:90
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Attack %s"
+msgstr "Attaque %s"
+
+#: ui/tpl/dialogs/city/city-info.php:101
+#, fuzzy
+#@ stephino-rpg
+msgid "Send spy"
+msgstr "Envoyer un espion"
+
+#: ui/tpl/dialogs/city/city-info.php:110
+#: ui/tpl/dialogs/transport/transport-review.php:175
+#, fuzzy
+#@ stephino-rpg
+msgid "Send goods"
+msgstr "Envoyer des marchandises"
+
+#: ui/tpl/dialogs/city/city-move-capital.php:18
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Metropolis change cost for base level %s"
+msgstr "Coût du changement de Metropolis pour le niveau de base %s"
+
+#: ui/tpl/dialogs/city/city-queues.php:25
+#, fuzzy
+#@ stephino-rpg
+msgid "Entities"
+msgstr "Entités"
+
+#: ui/tpl/dialogs/city/city-queues.php:186
+#, fuzzy
+#@ stephino-rpg
+msgid "The queue is empty"
+msgstr "La file d'attente est vide"
+
+#: ui/tpl/dialogs/city/city-stages.php:95
+#, fuzzy
+#@ stephino-rpg
+msgid "missing"
+msgstr "disparu"
+
+#: ui/tpl/dialogs/city/city-workforce.php:27
+#, fuzzy
+#@ stephino-rpg
+msgid "Assign workers"
+msgstr "Attribuer des travailleurs"
+
+#: ui/tpl/dialogs/city/city-workforce.php:110
+#, fuzzy
+#@ stephino-rpg
+msgid "There is no need for workers yet"
+msgstr "Il n'y a pas encore besoin de travailleurs"
+
+#: ui/tpl/dialogs/city/city-workforce.php:121
+#, fuzzy
+#@ stephino-rpg
+msgid "Assigned workers"
+msgstr "Travailleurs affectés"
+
+#: ui/tpl/dialogs/common/common-costs.php:85
+#, fuzzy
+#@ stephino-rpg
+msgid "Time"
+msgstr "Temps"
+
+#: ui/tpl/dialogs/common/common-costs.php:89
+#, fuzzy
+#@ stephino-rpg
+msgid "instant"
+msgstr "instant"
+
+#: ui/tpl/dialogs/common/common-costs.php:106
+#, fuzzy
+#@ stephino-rpg
+msgid "discount applied"
+msgstr "remise appliquée"
+
+#: ui/tpl/dialogs/common/common-costs.php:120
+#, fuzzy
+#@ stephino-rpg
+msgid "faster than normal"
+msgstr "plus vite que la normale"
+
+#: ui/tpl/dialogs/common/common-production.php:16
+#: ui/tpl/dialogs/help/fragment/help-fragment-production.php:23
+#, fuzzy
+#@ stephino-rpg
+msgid "Production"
+msgstr "Production"
+
+#: ui/tpl/dialogs/common/common-production.php:19
+#: ui/tpl/dialogs/help/help-content-buildings.php:228
+#: ui/tpl/dialogs/help/help-content-ships.php:115
+#: ui/tpl/dialogs/help/help-content-units.php:121
+#, fuzzy
+#@ stephino-rpg
+msgid "Military capabilities"
+msgstr "Capacités militaires"
+
+#: ui/tpl/dialogs/common/common-production.php:72
+#: ui/tpl/dialogs/help/help-content-islands.php:80
+#: ui/tpl/dialogs/help/help-content-islands.php:89
+#: ui/tpl/dialogs/settings/settings-resources.php:147
+#: ui/tpl/dialogs/settings/settings-resources.php:170
+#, fuzzy
+#@ stephino-rpg
+msgid "abundance"
+msgstr "abondance"
+
+#: ui/tpl/dialogs/common/common-requirements.php:44
+#: ui/tpl/dialogs/help/fragment/help-fragment-requirements.php:18
+#, fuzzy
+#@ stephino-rpg
+msgid "Requirements"
+msgstr "Exigences"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:16
+#: ui/tpl/dialogs/convoy/convoy-list.php:20
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: Unknown"
+msgstr "%s: Inconnu"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:37
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Army returing to %s from %s"
+msgstr "L'armée revient à %s de %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:38
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Army from %s to %s"
+msgstr "Armée de %s à %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:55
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Transport returning to %s from %s"
+msgstr "Transport de retour à %s de %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:56
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Transport from %s to %s"
+msgstr "Transport de %s à %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:73
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Spy returning to %s from %s"
+msgstr "L'espion revient à %s de %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:74
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Spy from %s to %s"
+msgstr "Espionner de %s à %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:95
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Colonizer from %s to vacant lot on %s"
+msgstr "Colonisateur du %s au terrain vacant le %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:112
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Convoy returning to %s from %s"
+msgstr "Convoi revenant à %s de %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:113
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Convoy from %s to %s"
+msgstr "Convoi du %s au %s"
+
+#: ui/tpl/dialogs/convoy/convoy-list.php:156
+#, fuzzy
+#@ stephino-rpg
+msgid "You have no active convoys"
+msgstr "Vous n'avez aucun convoi actif"
+
+#: ui/tpl/dialogs/entity/entity-dequeue.php:60
+#, fuzzy
+#@ stephino-rpg
+msgid "Remove from queue"
+msgstr "Supprimer de la file d'attente"
+
+#: ui/tpl/dialogs/entity/entity-dequeue.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "This entity is not queued"
+msgstr "Cette entité n'est pas mise en file d'attente"
+
+#: ui/tpl/dialogs/entity/entity-disband.php:49
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Disband for %s"
+msgstr "Dissoudre pour %s"
+
+#: ui/tpl/dialogs/entity/entity-disband.php:60
+#, fuzzy
+#@ stephino-rpg
+msgid "No entities to disband"
+msgstr "Aucune entité à dissoudre"
+
+#: ui/tpl/dialogs/entity/entity-list.php:97
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "There are no %s or %s garrisoned in this %s"
+msgstr "Il n'y a pas de %s ou %s en garnison dans ce %s"
+
+#: ui/tpl/dialogs/entity/entity-list.php:109
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s (military)"
+msgstr "%s (militaire)"
+
+#: ui/tpl/dialogs/entity/entity-list.php:176
+#, fuzzy
+#@ stephino-rpg
+msgid "Total military capabilities"
+msgstr "Capacités militaires totales"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-abundance.php:18
+#: ui/tpl/dialogs/premium/premium-modifiers.php:65
+#, fuzzy
+#@ stephino-rpg
+msgid "Resource abundance"
+msgstr "Abondance des ressources"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-abundance.php:27
+#: ui/tpl/dialogs/help/fragment/help-fragment-abundance.php:43
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "abundance of %s for all bases"
+msgstr "abondance de %s pour toutes les bases"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-costs.php:21
+#, fuzzy
+#@ stephino-rpg
+msgid "Costs"
+msgstr "Frais"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-discounts.php:20
+#: ui/tpl/dialogs/premium/premium-modifiers.php:107
+#, fuzzy
+#@ stephino-rpg
+msgid "Discounts"
+msgstr "Réductions"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-discounts.php:22
+#: ui/tpl/dialogs/premium/premium-modifiers.php:110
+#, fuzzy
+#@ stephino-rpg
+msgid "A discount is applied to the following items:"
+msgstr "Une remise est appliquée aux articles suivants:"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-unlocks.php:19
+#, fuzzy
+#@ stephino-rpg
+msgid "Unlocks"
+msgstr "Déverrouille"
+
+#: ui/tpl/dialogs/help/fragment/help-fragment-unlocks.php:75
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "at level %s"
+msgstr "au niveau %s"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:44
+#: ui/tpl/dialogs/help/help-content-core.php:364
+#: ui/tpl/dialogs/help/help-content-core.php:383
+#, fuzzy
+#@ stephino-rpg
+msgid "main"
+msgstr "principale"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:66
+#: ui/tpl/dialogs/help/help-content-cities.php:32
+#: ui/tpl/dialogs/help/help-content-governments.php:40
+#: ui/tpl/dialogs/help/help-content-islandStatues.php:35
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:35
+#: ui/tpl/dialogs/help/help-content-researchFields.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "Use this to preview costs, production etc."
+msgstr "Utilisez-Le pour prévisualiser les coûts, la production, etc."
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:80
+#, fuzzy
+#@ stephino-rpg
+msgid "Market sell rates"
+msgstr "Taux de vente du marché"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:83
+#, fuzzy
+#@ stephino-rpg
+msgid "You can sell resources at the exchange rates below"
+msgstr "Vous pouvez vendre des ressources aux taux de change ci-dessous"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:88
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Buying resources costs %s more"
+msgstr "L'achat de ressources coûte %s de plus"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:123
+#, fuzzy
+#@ stephino-rpg
+msgid "Designation"
+msgstr "La désignation"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:159
+#, fuzzy
+#@ stephino-rpg
+msgid "Workers"
+msgstr "Ouvriers"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:176
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Requires %s workers to function at full capacity"
+msgstr "Nécessite %s travailleurs pour fonctionner à pleine capacité"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:181
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Requires maximum %s to function at full capacity"
+msgstr "Nécessite un maximum de %s pour fonctionner à pleine capacité"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:211
+#, fuzzy
+#@ stephino-rpg
+msgid "Cancellation policy"
+msgstr "Politique d'annulation"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:215
+#, fuzzy
+#@ stephino-rpg
+msgid "You will not be reimbursed when canceling an upgrade"
+msgstr "Vous ne serez pas remboursé lors de l'annulation d'un surclassement"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:218
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You will receive a %s refund when canceling an upgrade"
+msgstr "Vous recevrez un remboursement de %s lors de l'annulation d'un surclassement"
+
+#: ui/tpl/dialogs/help/help-content-buildings.php:241
+#: ui/tpl/dialogs/help/help-content-buildings.php:265
+#: ui/tpl/dialogs/help/help-content-ships.php:173
+#: ui/tpl/dialogs/help/help-content-ships.php:196
+#: ui/tpl/dialogs/help/help-content-units.php:176
+#: ui/tpl/dialogs/help/help-content-units.php:199
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s points"
+msgstr "%s points"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "Metropolis change costs"
+msgstr "Coûts de changement de Metropolis"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Metropolis embargo"
+msgstr "Embargo sur les métropoles"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:57
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You may not choose this type of %s as your empire's metropolis"
+msgstr "Vous ne pouvez pas choisir ce type de %s comme métropole de votre empire"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:61
+#, fuzzy
+#@ stephino-rpg
+msgid "It may only be randomly delegated as your metropolis at the start of the game"
+msgstr "Il ne peut être délégué au hasard que votre métropole au début du jeu"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:70
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Metrics: %s"
+msgstr "Métriques: %s"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:81
+#: ui/tpl/dialogs/help/help-content-cities.php:99
+#, fuzzy
+#@ stephino-rpg
+msgid "Maximum"
+msgstr "Maximum"
+
+#: ui/tpl/dialogs/help/help-content-cities.php:117
+#, fuzzy
+#@ stephino-rpg
+msgid "Baseline"
+msgstr "Ligne de base"
+
+#: ui/tpl/dialogs/help/help-content-core.php:21
+#, fuzzy
+#@ stephino-rpg
+msgid "Customized by"
+msgstr "Personnalisé par"
+
+#: ui/tpl/dialogs/help/help-content-core.php:29
+#, fuzzy
+#@ stephino-rpg
+msgid "Common resources"
+msgstr "Ressources communes"
+
+#: ui/tpl/dialogs/help/help-content-core.php:33
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "These resources are generated by and accessible to: %s"
+msgstr "Ces ressources sont générées et accessibles à: %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:75
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: resources"
+msgstr "%s: ressources"
+
+#: ui/tpl/dialogs/help/help-content-core.php:82
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "These resources are generated and stored in: %s"
+msgstr "Ces ressources sont générées et stockées dans: %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:147
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: metrics"
+msgstr "%s: métriques"
+
+#: ui/tpl/dialogs/help/help-content-core.php:155
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: these metrics are not affected by workers"
+msgstr "%s: ces métriques ne sont pas affectées par les travailleurs"
+
+#: ui/tpl/dialogs/help/help-content-core.php:196
+#, fuzzy
+#@ stephino-rpg
+msgid "Game console"
+msgstr "Console de jeu"
+
+#: ui/tpl/dialogs/help/help-content-core.php:201
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You can toggle the game console visibility with %s"
+msgstr "Vous pouvez basculer la visibilité de la console de jeu avec %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:207
+#, fuzzy
+#@ stephino-rpg
+msgid "The console allows you a fine level of control over the game"
+msgstr "La console vous permet un niveau de contrôle fin sur le jeu"
+
+#: ui/tpl/dialogs/help/help-content-core.php:213
+#: ui/tpl/dialogs/user/user-info.php:27
+#: ui/tpl/dialogs/user/user-leader-board.php:33
+#, fuzzy
+#@ stephino-rpg
+msgid "Total score"
+msgstr "Score total"
+
+#: ui/tpl/dialogs/help/help-content-core.php:215
+#, fuzzy
+#@ stephino-rpg
+msgid "Your total score is calculated as follows:"
+msgstr "Votre score total est calculé comme suit:"
+
+#: ui/tpl/dialogs/help/help-content-core.php:222
+#: ui/tpl/dialogs/help/help-content-core.php:245
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s for each upgrade (%s) multiplied by level"
+msgstr "%s pour chaque mise à niveau (%s) multiplié par le niveau"
+
+#: ui/tpl/dialogs/help/help-content-core.php:224
+#: ui/tpl/dialogs/help/help-content-core.php:236
+#: ui/tpl/dialogs/help/help-content-core.php:247
+#: ui/tpl/dialogs/help/help-content-core.php:259
+#: ui/tpl/dialogs/help/help-content-core.php:270
+#: ui/tpl/dialogs/help/help-content-core.php:281
+#, fuzzy
+#@ stephino-rpg
+msgid "point"
+msgid_plural "points"
+msgstr[0] "point"
+msgstr[1] "points"
+
+#: ui/tpl/dialogs/help/help-content-core.php:234
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s for each entity recruited"
+msgstr "%s pour chaque entité recrutée"
+
+#: ui/tpl/dialogs/help/help-content-core.php:257
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s for each defeat"
+msgstr "%s pour chaque défaite"
+
+#: ui/tpl/dialogs/help/help-content-core.php:268
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s for each draw"
+msgstr "%s pour chaque tirage"
+
+#: ui/tpl/dialogs/help/help-content-core.php:279
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s for each victory"
+msgstr "%s pour chaque victoire"
+
+#: ui/tpl/dialogs/help/help-content-core.php:296
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Earn %s by playing games"
+msgstr "Gagnez %s en jouant à des jeux"
+
+#: ui/tpl/dialogs/help/help-content-core.php:306
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Earn %s each time a game you created is won"
+msgstr "Gagnez %s chaque fois qu'un jeu que vous avez créé est gagné"
+
+#: ui/tpl/dialogs/help/help-content-core.php:316
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Rewards reset after %s"
+msgstr "Les récompenses sont réinitialisées après %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:318
+#: ui/tpl/dialogs/premium/premium-modifiers-details.php:59
+#: ui/tpl/timelapse/notification/notif-premium-modifier.php:31
+#, fuzzy
+#@ stephino-rpg
+msgid "hour"
+msgid_plural "hours"
+msgstr[0] "heure"
+msgstr[1] "heures"
+
+#: ui/tpl/dialogs/help/help-content-core.php:321
+#, fuzzy
+#@ stephino-rpg
+msgid "Engage with other users by creating and playing games"
+msgstr "Interagissez avec d'autres utilisateurs en créant et en jouant à des jeux"
+
+#: ui/tpl/dialogs/help/help-content-core.php:329
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Each user can create a maximum of %s"
+msgstr "Chaque utilisateur peut créer un maximum de %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:331
+#, fuzzy
+#@ stephino-rpg
+msgid "game"
+msgid_plural "games"
+msgstr[0] "Jeu"
+msgstr[1] "Jeux"
+
+#: ui/tpl/dialogs/help/help-content-core.php:334
+#, fuzzy
+#@ stephino-rpg
+msgid "Each user can create an unlimited number of games"
+msgstr "Chaque utilisateur peut créer un nombre illimité de jeux"
+
+#: ui/tpl/dialogs/help/help-content-core.php:342
+#: ui/tpl/dialogs/help/help-content-governments.php:53
+#: ui/tpl/dialogs/help/help-content-islandStatues.php:49
+#: ui/tpl/dialogs/help/help-content-researchAreas.php:29
+#, fuzzy
+#@ stephino-rpg
+msgid "Game rules"
+msgstr "Regles du jeu"
+
+#: ui/tpl/dialogs/help/help-content-core.php:344
+#, fuzzy
+#@ stephino-rpg
+msgid "Resource gathering may require workers"
+msgstr "La collecte de ressources peut nécessiter des travailleurs"
+
+#: ui/tpl/dialogs/help/help-content-core.php:350
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: when newly founded, they get the following %s:"
+msgstr "%s: lorsqu'ils sont nouvellement créés, ils reçoivent les %s suivants:"
+
+#: ui/tpl/dialogs/help/help-content-core.php:375
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: Initialized with a level 1 %s"
+msgstr "%s: initialisé avec un niveau 1 %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:391
+#, fuzzy
+#@ stephino-rpg
+msgid "Contact between players is forbidden"
+msgstr "Le contact entre joueurs est interdit"
+
+#: ui/tpl/dialogs/help/help-content-core.php:394
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Each player can send a maximum of %s %s per day"
+msgstr "Chaque joueur peut envoyer un maximum de %s %s par jour"
+
+#: ui/tpl/dialogs/help/help-content-core.php:396
+#, fuzzy
+#@ stephino-rpg
+msgid "message"
+msgid_plural "messages"
+msgstr[0] "message"
+msgstr[1] "messages"
+
+#: ui/tpl/dialogs/help/help-content-core.php:404
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Your inbox can hold a maximum of %s messages"
+msgstr "Votre boîte de réception peut contenir un maximum de %s messages"
+
+#: ui/tpl/dialogs/help/help-content-core.php:412
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Messages are automatically deleted after %s %s"
+msgstr "Les messages sont automatiquement supprimés après %s %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:414
+#: ui/tpl/timelapse/timelapse-diplomacy.php:64
+#: ui/tpl/wordpress/wp-dashboard.php:101
+#, fuzzy
+#@ stephino-rpg
+msgid "day"
+msgid_plural "days"
+msgstr[0] "journée"
+msgstr[1] "journées"
+
+#: ui/tpl/dialogs/help/help-content-core.php:422
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The distance between %s is traveled in %s seconds"
+msgstr "La distance entre %s est parcourue en %s secondes"
+
+#: ui/tpl/dialogs/help/help-content-core.php:427
+#, fuzzy
+#@ stephino-rpg
+msgid "All travel is instantaneous"
+msgstr "Tout voyage est instantané"
+
+#: ui/tpl/dialogs/help/help-content-core.php:435
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The game world was initialized with %s %s (empty)"
+msgstr "Le monde du jeu a été initialisé avec %s %s (vide)"
+
+#: ui/tpl/dialogs/help/help-content-core.php:443
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The game world was initialized with no %s"
+msgstr "Le monde du jeu a été initialisé sans %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:453
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s new %s are created for each player"
+msgstr "%s nouveaux %s sont créés pour chaque joueur"
+
+#: ui/tpl/dialogs/help/help-content-core.php:459
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "No new %s are created with new players"
+msgstr "Aucun nouveau %s n'est créé avec de nouveaux joueurs"
+
+#: ui/tpl/dialogs/help/help-content-core.php:469
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s new %s are spawned for each player"
+msgstr "%s nouveaux %s sont générés pour chaque joueur"
+
+#: ui/tpl/dialogs/help/help-content-core.php:471
+#, fuzzy
+#@ stephino-rpg
+msgid "robot"
+msgid_plural "robots"
+msgstr[0] "robot"
+msgstr[1] "les robots"
+
+#: ui/tpl/dialogs/help/help-content-core.php:474
+#, fuzzy
+#@ stephino-rpg
+msgid "No new robots are spawned with new players"
+msgstr "Aucun nouveau robot n'est généré avec de nouveaux joueurs"
+
+#: ui/tpl/dialogs/help/help-content-core.php:482
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Each player action triggers %s %s by robots"
+msgstr "Chaque action du joueur déclenche %s %s par des robots"
+
+#: ui/tpl/dialogs/help/help-content-core.php:484
+#, fuzzy
+#@ stephino-rpg
+msgid "action"
+msgid_plural "actions"
+msgstr[0] "action"
+msgstr[1] "Actions"
+
+#: ui/tpl/dialogs/help/help-content-core.php:487
+#, fuzzy
+#@ stephino-rpg
+msgid "All robots are inactive"
+msgstr "Tous les robots sont inactifs"
+
+#: ui/tpl/dialogs/help/help-content-core.php:495
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The cool-down period between time-lapse procedures is %s seconds for each player"
+msgstr "La période de récupération entre les procédures de time-lapse est de %s secondes pour chaque joueur"
+
+#: ui/tpl/dialogs/help/help-content-core.php:504
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s needs to be higher than %s to ensure growth of our bases (%s)"
+msgstr "%s doit être supérieur à %s pour assurer la croissance de nos bases (%s)"
+
+#: ui/tpl/dialogs/help/help-content-core.php:511
+#, fuzzy
+#@ stephino-rpg
+msgid "The growth factor is calculated as follows"
+msgstr "Le facteur de croissance est calculé comme suit"
+
+#: ui/tpl/dialogs/help/help-content-core.php:514
+#: ui/tpl/dialogs/help/help-content-core.php:518
+#: ui/tpl/dialogs/help/help-content-core.php:522
+#: ui/tpl/dialogs/help/help-content-core.php:526
+#, fuzzy
+#@ stephino-rpg
+msgid "if"
+msgstr "si"
+
+#: ui/tpl/dialogs/help/help-content-core.php:534
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Metropolises are marked with \"%s\""
+msgstr "Les métropoles sont signalées par \"%s\""
+
+#: ui/tpl/dialogs/help/help-content-core.php:543
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Metropolises get a %s boost of %s"
+msgstr "Les métropoles reçoivent une augmentation de %s de %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:554
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Players get the following resources with their first base (%s)"
+msgstr "Les joueurs obtiennent les ressources suivantes avec leur première base (%s)"
+
+#: ui/tpl/dialogs/help/help-content-core.php:575
+#: ui/tpl/dialogs/help/help-content-core.php:586
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Players can trade %s for %s"
+msgstr "Les joueurs peuvent échanger %s contre %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:594
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:79
+#: ui/tpl/dialogs/premium/premium-modifiers.php:148
+#, fuzzy
+#@ stephino-rpg
+msgid "Maximum queues"
+msgstr "Files d'attente maximum"
+
+#: ui/tpl/dialogs/help/help-content-core.php:599
+#: ui/tpl/dialogs/help/help-content-core.php:608
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:94
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:107
+#: ui/tpl/dialogs/premium/premium-modifiers.php:163
+#: ui/tpl/dialogs/premium/premium-modifiers.php:176
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s - Queues per %s"
+msgstr "%s - Files d'attente par %s"
+
+#: ui/tpl/dialogs/help/help-content-core.php:617
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:120
+#: ui/tpl/dialogs/premium/premium-modifiers.php:189
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s - Queues in %s (total)"
+msgstr "%s - Files d'attente dans %s (total)"
+
+#: ui/tpl/dialogs/help/help-content-governments.php:30
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: level"
+msgstr "%s: niveau"
+
+#: ui/tpl/dialogs/help/help-content-governments.php:57
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: changes are instantaneous"
+msgstr "%s: les changements sont instantanés"
+
+#: ui/tpl/dialogs/help/help-content-governments.php:64
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: changes are more expensive as the base advances"
+msgstr "%s: les changements sont plus chers à mesure que la base avance"
+
+#: ui/tpl/dialogs/help/help-content-islandStatues.php:51
+#, fuzzy
+#@ stephino-rpg
+msgid "Upgrades are instantaneous"
+msgstr "Les mises à niveau sont instantanées"
+
+#: ui/tpl/dialogs/help/help-content-islandStatues.php:54
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: Players can anonymously upgrade them where they have established at least one %s"
+msgstr "%s: Les joueurs peuvent les mettre à niveau de manière anonyme là où ils ont établi au moins un %s"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:18
+#: ui/tpl/dialogs/island/island-colonize-review.php:43
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonization costs"
+msgstr "Coûts de colonisation"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:30
+#, fuzzy
+#@ stephino-rpg
+msgid "Empire size"
+msgstr "Taille Empire"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:37
+#, fuzzy
+#@ stephino-rpg
+msgid "Use this to preview colonization costs"
+msgstr "Utilisez ceci pour prévisualiser les coûts de colonisation"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "Geography"
+msgstr "La géographie"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:56
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "This can host a maximum of %s"
+msgstr "Cela peut héberger un maximum de %s"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:60
+#, fuzzy
+#@ stephino-rpg
+msgid "Cannot be colonized"
+msgstr "Ne peut pas être colonisé"
+
+#: ui/tpl/dialogs/help/help-content-islands.php:74
+#: ui/tpl/dialogs/island/island-info.php:55
+#, fuzzy
+#@ stephino-rpg
+msgid "Natural resources"
+msgstr "Ressources naturelles"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:21
+#, fuzzy
+#@ stephino-rpg
+msgid "Premium Modifiers"
+msgstr "Modificateurs Premium"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:28
+#: ui/tpl/dialogs/help/help-content-ships.php:67
+#: ui/tpl/dialogs/help/help-content-units.php:62
+#, fuzzy
+#@ stephino-rpg
+msgid "Count"
+msgstr "Compter"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:48
+#: ui/tpl/dialogs/premium/premium-modifiers-details.php:58
+#, fuzzy
+#@ stephino-rpg
+msgid "Duration"
+msgstr "Durée"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Expiration time"
+msgstr "Date d'expiration"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:82
+#: ui/tpl/dialogs/premium/premium-modifiers.php:151
+#, fuzzy
+#@ stephino-rpg
+msgid "Overrides"
+msgstr "Remplacements"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:86
+#: ui/tpl/dialogs/premium/premium-modifiers.php:155
+#, fuzzy
+#@ stephino-rpg
+msgid "core settings"
+msgstr "paramètres de base"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:99
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:112
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:125
+#: ui/tpl/dialogs/premium/premium-modifiers.php:168
+#: ui/tpl/dialogs/premium/premium-modifiers.php:181
+#: ui/tpl/dialogs/premium/premium-modifiers.php:194
+#, fuzzy
+#@ stephino-rpg
+msgid "instead of"
+msgstr "au lieu de"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:137
+#: ui/tpl/dialogs/premium/premium-modifiers.php:206
+#, fuzzy
+#@ stephino-rpg
+msgid "Time contraction"
+msgstr "Contraction du temps"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:140
+#: ui/tpl/dialogs/premium/premium-modifiers.php:209
+#, fuzzy
+#@ stephino-rpg
+msgid "Speed-up the expansion of your empire"
+msgstr "Accélérez l'expansion de votre empire"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:147
+#: ui/tpl/dialogs/premium/premium-modifiers.php:216
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s - construction"
+msgstr "%s - construction"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:150
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:160
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:170
+#: ui/tpl/dialogs/premium/premium-modifiers.php:219
+#: ui/tpl/dialogs/premium/premium-modifiers.php:230
+#: ui/tpl/dialogs/premium/premium-modifiers.php:240
+#, fuzzy
+#@ stephino-rpg
+msgid "faster"
+msgstr "plus rapide"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:157
+#: ui/tpl/dialogs/premium/premium-modifiers.php:226
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s - production"
+msgstr "%s - production"
+
+#: ui/tpl/dialogs/help/help-content-premiumModifiers.php:167
+#: ui/tpl/dialogs/premium/premium-modifiers.php:237
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s - completion"
+msgstr "%s - achèvement"
+
+#: ui/tpl/dialogs/help/help-content-researchAreas.php:33
+#: ui/tpl/dialogs/help/help-content-researchFields.php:58
+#, fuzzy
+#@ stephino-rpg
+msgid "Available in"
+msgstr "Disponible en"
+
+#: ui/tpl/dialogs/help/help-content-researchAreas.php:44
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: affect all bases regardless of where they were completed"
+msgstr "%s: affecte toutes les bases, quel que soit leur lieu"
+
+#: ui/tpl/dialogs/help/help-content-researchFields.php:54
+#: ui/tpl/dialogs/help/help-content-ships.php:212
+#: ui/tpl/dialogs/help/help-content-units.php:215
+#, fuzzy
+#@ stephino-rpg
+msgid "Properties"
+msgstr "Propriétés"
+
+#: ui/tpl/dialogs/help/help-content-researchFields.php:69
+#, fuzzy
+#@ stephino-rpg
+msgid "This can be upgraded multiple times"
+msgstr "Cela peut être mis à niveau plusieurs fois"
+
+#: ui/tpl/dialogs/help/help-content-researchFields.php:70
+#, fuzzy
+#@ stephino-rpg
+msgid "This can be upgraded only once"
+msgstr "Cela ne peut être mis à niveau qu'une seule fois"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:59
+#: ui/tpl/dialogs/help/help-content-units.php:54
+#, fuzzy
+#@ stephino-rpg
+msgid "Use this to preview individual costs, abilities etc."
+msgstr "Utilisez-Le pour prévisualiser les coûts individuels, les capacités, etc."
+
+#: ui/tpl/dialogs/help/help-content-ships.php:74
+#, fuzzy
+#@ stephino-rpg
+msgid "Use this to preview fleet costs, abilities etc."
+msgstr "Utilisez-Le pour prévisualiser les coûts de la flotte, les capacités, etc."
+
+#: ui/tpl/dialogs/help/help-content-ships.php:88
+#: ui/tpl/dialogs/help/help-content-units.php:83
+#, fuzzy
+#@ stephino-rpg
+msgid "Special abilities"
+msgstr "Capacités spéciales"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:93
+#: ui/tpl/dialogs/help/help-content-units.php:87
+#, fuzzy
+#@ stephino-rpg
+msgid "claim empty lots, expanding your empire"
+msgstr "réclamer des lots vides, étendre votre empire"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:216
+#: ui/tpl/dialogs/help/help-content-units.php:219
+#, fuzzy
+#@ stephino-rpg
+msgid "Recruited in"
+msgstr "Recruté en"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:228
+#: ui/tpl/dialogs/help/help-content-units.php:239
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "when carried with a transporter (%s) between %s"
+msgstr "lorsqu'il est transporté avec un transporteur (%s) entre %s"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:237
+#: ui/tpl/dialogs/help/help-content-units.php:247
+#, fuzzy
+#@ stephino-rpg
+msgid "Disbandable"
+msgstr "Disbandable"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:240
+#: ui/tpl/dialogs/help/help-content-units.php:250
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "generates %s when disbanded"
+msgstr "génère %s une fois dissous"
+
+#: ui/tpl/dialogs/help/help-content-ships.php:245
+#: ui/tpl/dialogs/help/help-content-units.php:255
+#, fuzzy
+#@ stephino-rpg
+msgid "Not disbandable"
+msgstr "Non dissolvable"
+
+#: ui/tpl/dialogs/help/help-content-units.php:69
+#, fuzzy
+#@ stephino-rpg
+msgid "Use this to preview group costs, abilities etc."
+msgstr "Utilisez-Le pour prévisualiser les coûts de groupe, les capacités, etc."
+
+#: ui/tpl/dialogs/help/help-content-units.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid "gather information on rivals"
+msgstr "recueillir des informations sur les rivaux"
+
+#: ui/tpl/dialogs/help/help-content-units.php:110
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The spy has a success probability of %s"
+msgstr "L'espion a une probabilité de succès de %s"
+
+#: ui/tpl/dialogs/help/help-content-units.php:232
+#, fuzzy
+#@ stephino-rpg
+msgid "ignored"
+msgstr "ignoré"
+
+#: ui/tpl/dialogs/help/help-content-units.php:234
+#, fuzzy
+#@ stephino-rpg
+msgid "when part of a military convoy"
+msgstr "dans le cadre d'un convoi militaire"
+
+#: ui/tpl/dialogs/help/help.php:124
+#, fuzzy
+#@ stephino-rpg
+msgid "About the game"
+msgstr "À propos du jeu"
+
+#: ui/tpl/dialogs/island/island-colonize-review-empty.php:20
+#, fuzzy
+#@ stephino-rpg
+msgid "Expand your empire with:"
+msgstr "Développez votre empire avec:"
+
+#: ui/tpl/dialogs/island/island-colonize-review-empty.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "Expand your empire with one of the following:"
+msgstr "Développez votre empire avec l'un des éléments suivants:"
+
+#: ui/tpl/dialogs/island/island-colonize-review-empty.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "This game does not allow colonizers"
+msgstr "Ce jeu n'autorise pas les colonisateurs"
+
+#: ui/tpl/dialogs/island/island-colonize-review.php:21
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonize from"
+msgstr "Coloniser de"
+
+#: ui/tpl/dialogs/island/island-colonize-review.php:72
+#: ui/tpl/dialogs/spy/spy-review.php:86 ui/tpl/dialogs/user/user-info.php:112
+#, fuzzy
+#@ stephino-rpg
+msgid "Send"
+msgstr "Envoyer"
+
+#: ui/tpl/dialogs/island/island-info.php:25
+#, fuzzy
+#@ stephino-rpg
+msgid "on"
+msgstr "sur"
+
+#: ui/tpl/dialogs/island/island-info.php:64
+#: ui/tpl/dialogs/island/island-info.php:78
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s abundance: %s"
+msgstr "%s abondance: %s"
+
+#: ui/tpl/dialogs/messages/messages-list.php:38
+#, fuzzy
+#@ stephino-rpg
+msgid "Delete message"
+msgstr "Supprimer le message"
+
+#: ui/tpl/dialogs/messages/messages-list.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "You have no messages"
+msgstr "Vous n'avez pas de messages"
+
+#: ui/tpl/dialogs/premium/premium-modifiers-details.php:27
+#, fuzzy
+#@ stephino-rpg
+msgid "Production in all bases"
+msgstr "Production dans toutes les bases"
+
+#: ui/tpl/dialogs/premium/premium-modifiers-details.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "Cost"
+msgstr "Coût"
+
+#: ui/tpl/dialogs/premium/premium-modifiers-details.php:51
+#, fuzzy
+#@ stephino-rpg
+msgid "Remaining"
+msgstr "Restant"
+
+#: ui/tpl/dialogs/premium/premium-modifiers-details.php:68
+#, fuzzy
+#@ stephino-rpg
+msgid "Premium modifier expiration time"
+msgstr "Délai d'expiration du modificateur Premium"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:26
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Get %s"
+msgstr "Obtenez %s"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "active"
+msgstr "actif"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:59
+#: ui/tpl/dialogs/premium/premium-packages.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "no information"
+msgstr "aucune information"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:73
+#: ui/tpl/dialogs/premium/premium-modifiers.php:89
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s: abundance of %s for all bases"
+msgstr "%s: abondance de %s pour toutes les bases"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:270
+#, fuzzy
+#@ stephino-rpg
+msgid "Activate premium modifier"
+msgstr "Activer le modificateur de prime"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:279
+#: ui/tpl/dialogs/settings/settings-info.php:217
+#, fuzzy
+#@ stephino-rpg
+msgid "Install this WordPress plugin for free and host your own game!"
+msgstr "Installez ce plugin WordPress gratuitement et hébergez votre propre jeu!"
+
+#: ui/tpl/dialogs/premium/premium-modifiers.php:282
+#: ui/tpl/dialogs/settings/settings-info.php:216
+#: ui/tpl/dialogs/settings/settings-info.php:222
+#, fuzzy
+#@ stephino-rpg
+msgid "Free Install"
+msgstr "Installation gratuite"
+
+#: ui/tpl/dialogs/premium/premium-packages.php:68
+#: ui/tpl/dialogs/premium/premium-packages.php:96
+#, fuzzy
+#@ stephino-rpg
+msgid "OR"
+msgstr "Ou"
+
+#: ui/tpl/dialogs/premium/premium-packages.php:115
+#, fuzzy
+#@ stephino-rpg
+msgid "Coming soon..."
+msgstr "Bientôt disponible..."
+
+#: ui/tpl/dialogs/research/research-info.php:77
+#: ui/tpl/dialogs/research/research-info.php:88
+#, fuzzy
+#@ stephino-rpg
+msgid "Done"
+msgstr "Terminé"
+
+#: ui/tpl/dialogs/research/research-info.php:114
+#: ui/tpl/dialogs/research/research-info.php:130
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Sets %s abundance to %s for all bases"
+msgstr "Définit l'abondance de %s sur %s pour toutes les bases"
+
+#: ui/tpl/dialogs/research/research-info.php:156
+#, fuzzy
+#@ stephino-rpg
+msgid "Research cost"
+msgstr "Coût de la recherche"
+
+#: ui/tpl/dialogs/research/research-info.php:180
+#, fuzzy
+#@ stephino-rpg
+msgid "Cancel"
+msgstr "Annuler"
+
+#: ui/tpl/dialogs/research/research-info.php:194
+#, fuzzy
+#@ stephino-rpg
+msgid "Start"
+msgstr "Début"
+
+#: ui/tpl/dialogs/research/research-info.php:209
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%: none defined for this %s"
+msgstr "%: aucun défini pour ce %s"
+
+#: ui/tpl/dialogs/settings/settings-delete-account.php:18
+#, fuzzy
+#@ stephino-rpg
+msgid "Are you sure?"
+msgstr "Êtes-Vous sûr?"
+
+#: ui/tpl/dialogs/settings/settings-delete-account.php:19
+#, fuzzy
+#@ stephino-rpg
+msgid "This action is permanent and cannot be undone."
+msgstr "Cette action est permanente et ne peut pas être annulée."
+
+#: ui/tpl/dialogs/settings/settings-delete-account.php:29
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Type %s to continue"
+msgstr "Tapez %s pour continuer"
+
+#: ui/tpl/dialogs/settings/settings-delete-account.php:34
+#, fuzzy
+#@ stephino-rpg
+msgid "Delete my account"
+msgstr "Supprimer mon compte"
+
+#: ui/tpl/dialogs/settings/settings-info.php:19
+#, fuzzy
+#@ stephino-rpg
+msgid "Music"
+msgstr "La musique"
+
+#: ui/tpl/dialogs/settings/settings-info.php:20
+#, fuzzy
+#@ stephino-rpg
+msgid "Set the volume for the game soundtrack"
+msgstr "Réglez le volume de la bande originale du jeu"
+
+#: ui/tpl/dialogs/settings/settings-info.php:37
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Music, Ambience, Sounds (%s) and UI sounds are unlocked with the PRO version"
+msgstr "La musique, l'ambiance, les sons (%s) et les sons de l'interface utilisateur sont déverrouillés avec la version PRO"
+
+#: ui/tpl/dialogs/settings/settings-info.php:50
+#, fuzzy
+#@ stephino-rpg
+msgid "Ambience"
+msgstr "Ambiance"
+
+#: ui/tpl/dialogs/settings/settings-info.php:51
+#, fuzzy
+#@ stephino-rpg
+msgid "Set the volume for the environment sounds"
+msgstr "Réglez le volume des sons d'environnement"
+
+#: ui/tpl/dialogs/settings/settings-info.php:70
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Sounds (%s)"
+msgstr "Sons (%s)"
+
+#: ui/tpl/dialogs/settings/settings-info.php:76
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Set the volume for the sound effects - %s"
+msgstr "Réglez le volume des effets sonores - %s"
+
+#: ui/tpl/dialogs/settings/settings-info.php:96
+#, fuzzy
+#@ stephino-rpg
+msgid "UI sounds"
+msgstr "Sons de l'interface utilisateur"
+
+#: ui/tpl/dialogs/settings/settings-info.php:97
+#, fuzzy
+#@ stephino-rpg
+msgid "Set the volume for taps, clicks and other interactions"
+msgstr "Réglez le volume des robinets, clics et autres interactions"
+
+#: ui/tpl/dialogs/settings/settings-info.php:115
+#, fuzzy
+#@ stephino-rpg
+msgid "More actions"
+msgstr "Plus d'actions"
+
+#: ui/tpl/dialogs/settings/settings-info.php:119
+#, fuzzy
+#@ stephino-rpg
+msgid "Install app"
+msgstr "Installer l'application"
+
+#: ui/tpl/dialogs/settings/settings-info.php:121
+#, fuzzy
+#@ stephino-rpg
+msgid "Help"
+msgstr "Aidez-Moi"
+
+#: ui/tpl/dialogs/settings/settings-info.php:125
+#, fuzzy
+#@ stephino-rpg
+msgid "Feedback"
+msgstr "Retour d'information"
+
+#: ui/tpl/dialogs/settings/settings-info.php:135
+#, fuzzy
+#@ stephino-rpg
+msgid "Log Out"
+msgstr "Se déconnecter"
+
+#: ui/tpl/dialogs/settings/settings-info.php:139
+#, fuzzy
+#@ stephino-rpg
+msgid "Delete account"
+msgstr "Supprimer le compte"
+
+#: ui/tpl/dialogs/settings/settings-info.php:150
+#, fuzzy
+#@ stephino-rpg
+msgid "Admin"
+msgstr "Administrateur"
+
+#: ui/tpl/dialogs/settings/settings-info.php:152
+#: ui/tpl/dialogs/settings/settings-info.php:174
+#, fuzzy
+#@ stephino-rpg
+msgid "demo"
+msgstr "démo"
+
+#: ui/tpl/dialogs/settings/settings-info.php:172
+#, fuzzy
+#@ stephino-rpg
+msgid "Console"
+msgstr "Console"
+
+#: ui/tpl/dialogs/settings/settings-info.php:178
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Show the in-game console %s"
+msgstr "Afficher la console du jeu %s"
+
+#: ui/tpl/dialogs/settings/settings-info.php:183
+#, fuzzy
+#@ stephino-rpg
+msgid "Command Line Interface"
+msgstr "Interface de ligne de commande"
+
+#: ui/tpl/dialogs/settings/settings-info.php:195
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!"
+msgstr "Achetez %s pour débloquer les mécanismes de jeu, activer les micro-transactions PayPal et plus encore!"
+
+#: ui/tpl/dialogs/settings/settings-resources.php:78
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s of %s total storage"
+msgstr "%s sur %s stockage total"
+
+#: ui/tpl/dialogs/settings/settings-resources.php:257
+#, fuzzy
+#@ stephino-rpg
+msgid "Visit"
+msgstr "Visite"
+
+#: ui/tpl/dialogs/spy/spy-review-empty.php:20
+#, fuzzy
+#@ stephino-rpg
+msgid "Begin spying with:"
+msgstr "Commencez à espionner avec:"
+
+#: ui/tpl/dialogs/spy/spy-review-empty.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "Begin spying with one of the following:"
+msgstr "Commencez à espionner avec l'une des méthodes suivantes:"
+
+#: ui/tpl/dialogs/spy/spy-review-empty.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "This game does not allow spies"
+msgstr "Ce jeu n'autorise pas les espions"
+
+#: ui/tpl/dialogs/spy/spy-review.php:21
+#, fuzzy
+#@ stephino-rpg
+msgid "From"
+msgstr "De"
+
+#: ui/tpl/dialogs/spy/spy-review.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Success rate"
+msgstr "Taux de réussite"
+
+#: ui/tpl/dialogs/transport/transport-prepare-empty.php:20
+#, fuzzy
+#@ stephino-rpg
+msgid "Begin transporting goods with:"
+msgstr "Commencez à transporter des marchandises avec:"
+
+#: ui/tpl/dialogs/transport/transport-prepare-empty.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "Begin transporting goods with one of the following:"
+msgstr "Commencez à transporter des marchandises avec l'une des méthodes suivantes:"
+
+#: ui/tpl/dialogs/transport/transport-prepare-empty.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "This game does not allow transporters"
+msgstr "Ce jeu n'autorise pas les transporteurs"
+
+#: ui/tpl/dialogs/transport/transport-prepare.php:68
+#, fuzzy
+#@ stephino-rpg
+msgid "Total capacity"
+msgstr "Capacité totale"
+
+#: ui/tpl/dialogs/transport/transport-prepare.php:78
+#, fuzzy
+#@ stephino-rpg
+msgid "Prepare payload"
+msgstr "Préparer la charge utile"
+
+#: ui/tpl/dialogs/transport/transport-review.php:26
+#, fuzzy
+#@ stephino-rpg
+msgid "Transport from"
+msgstr "Transport depuis"
+
+#: ui/tpl/dialogs/transport/transport-review.php:32
+#: ui/tpl/dialogs/user/user-trade.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "to"
+msgstr "à"
+
+#: ui/tpl/dialogs/transport/transport-review.php:156
+#, fuzzy
+#@ stephino-rpg
+msgid "Total cargo"
+msgstr "Cargaison totale"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:35
+#, fuzzy
+#@ stephino-rpg
+msgid "Tiles"
+msgstr "Carrelage"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "Click on a tile then place it on the canvas above"
+msgstr "Cliquez sur une tuile puis placez-la sur la toile ci-dessus"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:42
+#: ui/tpl/dialogs/user/user-cities.php:24
+#, fuzzy
+#@ stephino-rpg
+msgid "Name"
+msgstr "Nom"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:43
+#, fuzzy
+#@ stephino-rpg
+msgid "Name of your game"
+msgstr "Nom de votre jeu"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:61
+#, fuzzy
+#@ stephino-rpg
+msgid "Width"
+msgstr "Largeur"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Game width"
+msgstr "Largeur du jeu"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:64
+#: ui/tpl/dialogs/user/user-arena-edit.php:86
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Navigate with %s"
+msgstr "Naviguer avec %s"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:83
+#, fuzzy
+#@ stephino-rpg
+msgid "Height"
+msgstr "La taille"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:85
+#, fuzzy
+#@ stephino-rpg
+msgid "Game height"
+msgstr "Hauteur du jeu"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:105
+#: ui/tpl/wordpress/wp-dashboard.php:98
+#, fuzzy
+#@ stephino-rpg
+msgid "Visibility"
+msgstr "Visibilité"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:106
+#, fuzzy
+#@ stephino-rpg
+msgid "Get others to play your game by making it public"
+msgstr "Incitez d'autres personnes à jouer à votre jeu en le rendant public"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:122
+#, fuzzy
+#@ stephino-rpg
+msgid "Public"
+msgstr "Publique"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:126
+#, fuzzy
+#@ stephino-rpg
+msgid "Private"
+msgstr "Privé"
+
+#: ui/tpl/dialogs/user/user-arena-edit.php:137
+#, fuzzy
+#@ stephino-rpg
+msgid "Save and Play"
+msgstr "Enregistrer et jouer"
+
+#: ui/tpl/dialogs/user/user-arena-list.php:31
+#, fuzzy
+#@ stephino-rpg
+msgid "There are no games available"
+msgstr "Il n'y a pas de jeux disponibles"
+
+#: ui/tpl/dialogs/user/user-arena-list.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Create game"
+msgstr "Créer un jeu"
+
+#: ui/tpl/dialogs/user/user-arena-play.php:37
+#, fuzzy
+#@ stephino-rpg
+msgid "Edit game"
+msgstr "Modifier le jeu"
+
+#: ui/tpl/dialogs/user/user-arena-play.php:44
+#: ui/tpl/timelapse/notification/notif-tutorial-rewards.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "Congratulations!"
+msgstr "Toutes nos félicitations!"
+
+#: ui/tpl/dialogs/user/user-arena-play.php:49
+#: ui/tpl/timelapse/notification/notif-ptf-author-reward.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "You have earned"
+msgstr "Tu as gagné"
+
+#: ui/tpl/dialogs/user/user-arena-play.php:55
+#, fuzzy
+#@ stephino-rpg
+msgid "Game over"
+msgstr "Jeu terminé"
+
+#: ui/tpl/dialogs/user/user-arena-play.php:63
+#, fuzzy
+#@ stephino-rpg
+msgid "Play again"
+msgstr "Rejouer"
+
+#: ui/tpl/dialogs/user/user-arena-play.php:72
+#, fuzzy
+#@ stephino-rpg
+msgid "Next game"
+msgstr "Prochain jeu"
+
+#: ui/tpl/dialogs/user/user-info.php:39
+#, fuzzy
+#@ stephino-rpg
+msgid "victory"
+msgid_plural "victories"
+msgstr[0] "la victoire"
+msgstr[1] "victoires"
+
+#: ui/tpl/dialogs/user/user-info.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "draw"
+msgid_plural "draws"
+msgstr[0] "dessiner"
+msgstr[1] "dessine"
+
+#: ui/tpl/dialogs/user/user-info.php:49
+#, fuzzy
+#@ stephino-rpg
+msgid "defeat"
+msgid_plural "defeats"
+msgstr[0] "défaite"
+msgstr[1] "défaites"
+
+#: ui/tpl/dialogs/user/user-info.php:87
+#, fuzzy
+#@ stephino-rpg
+msgid "Contact"
+msgstr "Contact"
+
+#: ui/tpl/dialogs/user/user-info.php:90
+#, fuzzy
+#@ stephino-rpg
+msgid "Message sent"
+msgstr "Message envoyé"
+
+#: ui/tpl/dialogs/user/user-info.php:97
+#, fuzzy
+#@ stephino-rpg
+msgid "Subject"
+msgstr "Matière"
+
+#: ui/tpl/dialogs/user/user-info.php:98 ui/tpl/dialogs/user/user-info.php:105
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "max. %d characters"
+msgstr "max. %d caractères"
+
+#: ui/tpl/dialogs/user/user-info.php:104
+#, fuzzy
+#@ stephino-rpg
+msgid "Message"
+msgstr "Message"
+
+#: ui/tpl/dialogs/user/user-info.php:126
+#: ui/tpl/dialogs/user/user-leader-board.php:28
+#, fuzzy
+#@ stephino-rpg
+msgid "Nickname"
+msgstr "Surnom"
+
+#: ui/tpl/dialogs/user/user-info.php:127
+#, fuzzy
+#@ stephino-rpg
+msgid "Choose a nickname (no spaces)"
+msgstr "Choisissez un surnom (sans espaces)"
+
+#: ui/tpl/dialogs/user/user-info.php:146
+#, fuzzy
+#@ stephino-rpg
+msgid "Bio"
+msgstr "Bio"
+
+#: ui/tpl/dialogs/user/user-info.php:147
+#, fuzzy
+#@ stephino-rpg
+msgid "Describe yourself (optional)"
+msgstr "Décrivez-Vous (facultatif)"
+
+#: ui/tpl/dialogs/user/user-info.php:172
+#, fuzzy
+#@ stephino-rpg
+msgid "Password"
+msgstr "Mot de passe"
+
+#: ui/tpl/dialogs/user/user-info.php:173
+#, fuzzy
+#@ stephino-rpg
+msgid "Set a new password for your account"
+msgstr "Définissez un nouveau mot de passe pour votre compte"
+
+#: ui/tpl/dialogs/user/user-info.php:185
+#, fuzzy
+#@ stephino-rpg
+msgid "Change password"
+msgstr "Changer le mot de passe"
+
+#: ui/tpl/dialogs/user/user-leader-board.php:22
+#, fuzzy
+#@ stephino-rpg
+msgid "The leader board did not initialize correctly, please try again"
+msgstr "Le tableau des leaders ne s'est pas initialisé correctement, veuillez réessayer"
+
+#: ui/tpl/dialogs/user/user-leader-board.php:36
+#: ui/tpl/wordpress/wp-dashboard.php:67
+#, fuzzy
+#@ stephino-rpg
+msgid "Battles"
+msgstr "Batailles"
+
+#: ui/tpl/dialogs/user/user-leader-board.php:37
+#: ui/tpl/wordpress/wp-dashboard.php:69
+#, fuzzy
+#@ stephino-rpg
+msgid "Online"
+msgstr "En ligne"
+
+#: ui/tpl/dialogs/user/user-leader-board.php:53
+#: ui/tpl/dialogs/user/user-leader-board.php:85
+#, fuzzy
+#@ stephino-rpg
+msgid "Victories"
+msgstr "Des victoires"
+
+#: ui/tpl/dialogs/user/user-leader-board.php:56
+#: ui/tpl/dialogs/user/user-leader-board.php:88
+#, fuzzy
+#@ stephino-rpg
+msgid "Draws"
+msgstr "Dessine"
+
+#: ui/tpl/dialogs/user/user-leader-board.php:59
+#: ui/tpl/dialogs/user/user-leader-board.php:91
+#, fuzzy
+#@ stephino-rpg
+msgid "Defeats"
+msgstr "Défaites"
+
+#: ui/tpl/dialogs/user/user-trade.php:19
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You have no %s to trade"
+msgstr "Vous n'avez pas de %s à échanger"
+
+#: ui/tpl/timelapse/notification/notif-premium-modifier.php:22
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You have just activated the %s premium modifier"
+msgstr "Vous venez d'activer le modificateur de prime %s"
+
+#: ui/tpl/timelapse/notification/notif-premium-modifier.php:35
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "The effects of the premium modifier will last for %s"
+msgstr "Les effets du modificateur de prime dureront %s"
+
+#: ui/tpl/timelapse/notification/notif-premium-package.php:19
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Thank you for purchasing %s"
+msgstr "Merci d'avoir acheté %s"
+
+#: ui/tpl/timelapse/notification/notif-premium-package.php:28
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "You have acquired %s"
+msgstr "Vous avez acquis %s"
+
+#: ui/tpl/timelapse/notification/notif-ptf-author-reward.php:24
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s has won your game, %s"
+msgstr "%s a gagné votre partie, %s"
+
+#: ui/tpl/timelapse/notification/notif-tutorial-rewards.php:29
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "For reaching step %s of the tutorial, you have received"
+msgstr "Pour atteindre l'étape %s du didacticiel, vous avez reçu"
+
+#: ui/tpl/timelapse/timelapse-diplomacy.php:43
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s is now part of our empire!"
+msgstr "%s fait maintenant partie de notre empire!"
+
+#: ui/tpl/timelapse/timelapse-diplomacy.php:48
+#, fuzzy
+#@ stephino-rpg
+msgid "Colonization attempt failed"
+msgstr "La tentative de colonisation a échoué"
+
+#: ui/tpl/timelapse/timelapse-diplomacy.php:72
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Premium modifier %s has expired after %s"
+msgstr "Le modificateur de prime %s a expiré après %s"
+
+#: ui/tpl/timelapse/timelapse-diplomacy.php:79
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Unknown premium modifier %s has expired after %s"
+msgstr "Le modificateur de prime inconnu %s a expiré après %s"
+
+#: ui/tpl/timelapse/timelapse-diplomacy.php:99
+#, fuzzy
+#@ stephino-rpg
+msgid "Unknown diplomatic action"
+msgstr "Action diplomatique inconnue"
+
+#: ui/tpl/timelapse/timelapse-diplomacy.php:109
+#, fuzzy
+#@ stephino-rpg
+msgid "Message from"
+msgstr "Message de"
+
+#: ui/tpl/timelapse/timelapse-economy.php:29
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Transport returned from %s to %s"
+msgstr "Transport retourné du %s au %s"
+
+#: ui/tpl/timelapse/timelapse-economy.php:41
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Transport from %s arrived at %s"
+msgstr "Transport de %s arrivé à %s"
+
+#: ui/tpl/timelapse/timelapse-economy.php:89
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s constructed in %s"
+msgstr "%s construit en %s"
+
+#: ui/tpl/timelapse/timelapse-economy.php:96
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s upgraded to level %s in %s"
+msgstr "%s mis à niveau au niveau %s en %s"
+
+#: ui/tpl/timelapse/timelapse-economy.php:138
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s recruitment finished in %s"
+msgstr "%s recrutement terminé en %s"
+
+#: ui/tpl/timelapse/timelapse-economy.php:139
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "%s construction finished in %s"
+msgstr "%s construction terminée en %s"
+
+#: ui/tpl/timelapse/timelapse-economy.php:150
+#, fuzzy
+#@ stephino-rpg
+msgid "Unknown economic action"
+msgstr "Action économique inconnue"
+
+#: ui/tpl/timelapse/timelapse-military.php:30
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "A spy from %s tried to infiltrate %s"
+msgstr "Un espion de %s a tenté d'infiltrer %s"
+
+#: ui/tpl/timelapse/timelapse-military.php:43
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Our spy managed to infiltrate into %s and will return to %s with details"
+msgstr "Notre espion a réussi à s'infiltrer dans %s et reviendra à %s avec des détails"
+
+#: ui/tpl/timelapse/timelapse-military.php:55
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Our spy was caught in %s"
+msgstr "Notre espion a été pris dans %s"
+
+#: ui/tpl/timelapse/timelapse-military.php:66
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Spy mission report for %s"
+msgstr "Rapport de mission d'espionnage pour %s"
+
+#: ui/tpl/timelapse/timelapse-military.php:94
+#, fuzzy
+#@ stephino-rpg
+msgid "Could not gather any information"
+msgstr "Impossible de recueillir des informations"
+
+#: ui/tpl/timelapse/timelapse-military.php:103
+#, fuzzy
+#@ stephino-rpg
+msgid "Draw"
+msgstr "Dessiner"
+
+#: ui/tpl/timelapse/timelapse-military.php:112
+#, fuzzy
+#@ stephino-rpg
+msgid "Easy victory"
+msgstr "Victoire facile"
+
+#: ui/tpl/timelapse/timelapse-military.php:117
+#, fuzzy
+#@ stephino-rpg
+msgid "Crushing defeat"
+msgstr "Une défaite écrasante"
+
+#: ui/tpl/timelapse/timelapse-military.php:122
+#, fuzzy
+#@ stephino-rpg
+msgid "Crushing victory"
+msgstr "Victoire écrasante"
+
+#: ui/tpl/timelapse/timelapse-military.php:127
+#, fuzzy
+#@ stephino-rpg
+msgid "Heroic defeat"
+msgstr "Défaite héroïque"
+
+#: ui/tpl/timelapse/timelapse-military.php:132
+#, fuzzy
+#@ stephino-rpg
+msgid "Heroic victory"
+msgstr "Victoire héroïque"
+
+#: ui/tpl/timelapse/timelapse-military.php:137
+#, fuzzy
+#@ stephino-rpg
+msgid "Bitter defeat"
+msgstr "Une défaite amère"
+
+#: ui/tpl/timelapse/timelapse-military.php:141
+#, fuzzy
+#@ stephino-rpg
+msgid "Bitter victory"
+msgstr "Victoire amère"
+
+#: ui/tpl/timelapse/timelapse-military.php:158
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Our army from %s has attacked %s"
+msgstr "Notre armée de %s a attaqué %s"
+
+#: ui/tpl/timelapse/timelapse-military.php:170
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "A rival army from %s has attacked %s"
+msgstr "Une armée rivale de %s a attaqué %s"
+
+#: ui/tpl/timelapse/timelapse-military.php:188
+#: ui/tpl/timelapse/timelapse-military.php:220
+#, fuzzy
+#@ stephino-rpg
+msgid "Army"
+msgstr "Armée"
+
+#: ui/tpl/timelapse/timelapse-military.php:203
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Army has returned to %s from attack on %s"
+msgstr "L'armée est revenue à %s après une attaque contre %s"
+
+#: ui/tpl/timelapse/timelapse-military.php:234
+#, fuzzy
+#@ stephino-rpg
+msgid "Loot"
+msgstr "Butin"
+
+#: ui/tpl/timelapse/timelapse-military.php:245
+#, fuzzy
+#@ stephino-rpg
+msgid "Unknown military action"
+msgstr "Action militaire inconnue"
+
+#: ui/tpl/timelapse/timelapse-research.php:47
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Research %s level %s complete"
+msgstr "Recherche %s niveau %s terminé"
+
+#: ui/tpl/timelapse/timelapse-research.php:48
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Research %s complete"
+msgstr "Recherche %s terminée"
+
+#: ui/tpl/wordpress/wp-dashboard.php:26 ui/tpl/wordpress/wp-options.php:42
+#, fuzzy
+#@ stephino-rpg
+msgid "LOCKED"
+msgstr "Fermé À CLÉ"
+
+#: ui/tpl/wordpress/wp-dashboard.php:36
+#, fuzzy
+#@ stephino-rpg
+msgid "Online users"
+msgstr "Utilisateurs en ligne"
+
+#: ui/tpl/wordpress/wp-dashboard.php:44
+#, fuzzy
+#@ stephino-rpg
+msgid "Active users"
+msgstr "Utilisateurs actifs"
+
+#: ui/tpl/wordpress/wp-dashboard.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Total users"
+msgstr "Nombre total d'utilisateurs"
+
+#: ui/tpl/wordpress/wp-dashboard.php:65 ui/tpl/wordpress/wp-dashboard.php:139
+#, fuzzy
+#@ stephino-rpg
+msgid "User"
+msgstr "Utilisateur"
+
+#: ui/tpl/wordpress/wp-dashboard.php:66
+#, fuzzy
+#@ stephino-rpg
+msgid "Score"
+msgstr "But"
+
+#: ui/tpl/wordpress/wp-dashboard.php:68
+#, fuzzy
+#@ stephino-rpg
+msgid "Join date"
+msgstr "Date d'inscription"
+
+#: ui/tpl/wordpress/wp-dashboard.php:81
+#, fuzzy
+#@ stephino-rpg
+msgid "Announcement"
+msgstr "Annonce"
+
+#: ui/tpl/wordpress/wp-dashboard.php:85
+#, fuzzy
+#@ stephino-rpg
+msgid "Title"
+msgstr "Titre"
+
+#: ui/tpl/wordpress/wp-dashboard.php:91
+#, fuzzy
+#@ stephino-rpg
+msgid "Announcement title"
+msgstr "Titre de l'annonce"
+
+#: ui/tpl/wordpress/wp-dashboard.php:94
+#, fuzzy
+#@ stephino-rpg
+msgid "Content"
+msgstr "Contenu"
+
+#: ui/tpl/wordpress/wp-dashboard.php:94
+#, fuzzy
+#@ stephino-rpg
+msgid "MarkDown enabled"
+msgstr "Markdown activé"
+
+#: ui/tpl/wordpress/wp-dashboard.php:95
+#, fuzzy
+#@ stephino-rpg
+msgid "Announcement content"
+msgstr "Contenu de l'annonce"
+
+#: ui/tpl/wordpress/wp-dashboard.php:105
+#, fuzzy
+#@ stephino-rpg
+msgid "Announce"
+msgstr "Annoncer"
+
+#: ui/tpl/wordpress/wp-dashboard.php:112
+#, fuzzy
+#@ stephino-rpg
+msgid "Delete"
+msgstr "Effacer"
+
+#: ui/tpl/wordpress/wp-dashboard.php:121
+#, fuzzy
+#@ stephino-rpg
+msgid "Revenue"
+msgstr "Revenu"
+
+#: ui/tpl/wordpress/wp-dashboard.php:134
+#, fuzzy
+#@ stephino-rpg
+msgid "Transactions"
+msgstr "Transactions"
+
+#: ui/tpl/wordpress/wp-dashboard.php:140
+#, fuzzy
+#@ stephino-rpg
+msgid "Package"
+msgstr "Paquet"
+
+#: ui/tpl/wordpress/wp-dashboard.php:141
+#, fuzzy
+#@ stephino-rpg
+msgid "Invoice ID"
+msgstr "Id de la facture"
+
+#: ui/tpl/wordpress/wp-dashboard.php:142
+#, fuzzy
+#@ stephino-rpg
+msgid "Date"
+msgstr "Date"
+
+#: ui/tpl/wordpress/wp-dashboard.php:143
+#, fuzzy
+#@ stephino-rpg
+msgid "Amount"
+msgstr "Montant"
+
+#: ui/tpl/wordpress/wp-dashboard.php:144
+#, fuzzy
+#@ stephino-rpg
+msgid "Status"
+msgstr "Statut"
+
+#: ui/tpl/wordpress/wp-game.php:31 ui/tpl/wordpress/wp-ptf.php:41
+#, fuzzy
+#@ stephino-rpg
+msgid "The first-ever RPG developed for WordPress"
+msgstr "Le tout premier RPG développé pour WordPress"
+
+#: ui/tpl/wordpress/wp-game.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Please rotate your device to landscape"
+msgstr "Veuillez faire pivoter votre appareil en mode paysage"
+
+#: ui/tpl/wordpress/wp-game.php:62 ui/tpl/wordpress/wp-game.php:82
+#, fuzzy
+#@ stephino-rpg
+msgid "Refresh"
+msgstr "Rafraîchir"
+
+#: ui/tpl/wordpress/wp-game.php:64 ui/tpl/wordpress/wp-game.php:84
+#, fuzzy
+#@ stephino-rpg
+msgid "Fullscreen"
+msgstr "Plein écran"
+
+#: ui/tpl/wordpress/wp-game.php:75 ui/tpl/wordpress/wp-game.php:92
+#, fuzzy
+#@ stephino-rpg
+msgid "Convoys"
+msgstr "Convois"
+
+#: ui/tpl/wordpress/wp-game.php:187
+#, fuzzy
+#@ stephino-rpg
+msgid "Skip tutorial"
+msgstr "Passer le tutoriel"
+
+#: ui/tpl/wordpress/wp-notice.php:44
+#, fuzzy, php-format
+#@ stephino-rpg
+msgid "Buy %s version %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!"
+msgstr "Achetez %s version %s pour débloquer les mécanismes de jeu, activer les micro-transactions PayPal et plus encore!"
+
+#: ui/tpl/wordpress/wp-notice.php:52
+#, fuzzy
+#@ stephino-rpg
+msgid "Dismiss"
+msgstr "Rejeter"

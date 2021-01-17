@@ -1,0 +1,8 @@
+{
+    "1": {"name":"Slippery","version":1,"width":26,"height":15},
+    "2": {"name":"Leap of faith","version":1,"width":26,"height":25},
+    "3": {"name":"Gold rush","version":1,"width":52,"height":15},
+    "4": {"name":"Not there","version":1,"width":40,"height":56},
+    "5": {"name":"Maze","version":2,"width":26,"height":22},
+    "6": {"name":"The stairs","version":1,"width":26,"height":15}
+}

@@ -1,0 +1,28 @@
+{
+    "rules": {
+        ".read": false,
+        ".write": false,
+        "chat": {
+            "$message": {
+                ".validate": "newData.hasChildren(['i', 'd', 'n', 't'])",
+                "i": {
+                    ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 99999999"
+                },
+                "d": {
+                    ".validate": "newData.isString() && newData.val().matches(/^[\\w\\.\\-:]{3,60}$/i)"
+                },
+                "n": {
+                    ".validate": "newData.isString() && newData.val().length > 2 && newData.val().length <= 100"
+                },
+                "t": {
+                    ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
+                },
+                "$other": {
+                    ".validate": false
+                }
+            },
+            ".read": true,
+            ".write": true
+        }
+    }
+}
