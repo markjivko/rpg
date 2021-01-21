@@ -5,7 +5,7 @@
  * 
  * @title      Cron Task
  * @desc       Heartbeat
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -55,7 +55,7 @@ class Stephino_Rpg_Task_Cron {
                     $robotId = intval($robotRow[Stephino_Rpg_Db_Table_Users::COL_ID]);
 
                     // Log the robot ID
-                    Stephino_Rpg_Log::info('Cron - Robot: id = ' . $robotId);
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Cron - Robot: id = ' . $robotId);
 
                     try {
                         // Set the workspace
@@ -64,7 +64,7 @@ class Stephino_Rpg_Task_Cron {
                         // Run the time-lapse
                         Stephino_Rpg_TimeLapse::get()->run();
                     } catch(Exception $exc) {
-                        Stephino_Rpg_Log::warning($exc->getMessage(), $exc->getFile(), $exc->getLine());
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage(), $exc->getFile(), $exc->getLine());
                     }
                 }
             }
@@ -86,7 +86,7 @@ class Stephino_Rpg_Task_Cron {
         // Initialize the current user (must be logged in)
         if ($userId = Stephino_Rpg_Task_Initializer::initUser()) {
             // Log the user ID
-            Stephino_Rpg_Log::info('Cron - Player: id = ' . $userId);
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Cron - Player: id = ' . $userId);
                     
             // Run the time-lapse for the current player
             Stephino_Rpg_TimeLapse::get()->run($ajaxOrigin);

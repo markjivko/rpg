@@ -4,7 +4,7 @@
  * 
  * @title      Research area dialog
  * @desc       Template for the building research area dialog
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -175,8 +175,8 @@
                     <div class="col">
                         <button 
                             class="btn btn-warning w-100" 
-                            data-click="researchFieldDequeue" 
-                            data-click-args="<?php echo $researchFieldConfig->getId();?>">
+                            data-click="researchFieldQueue" 
+                            data-click-args="<?php echo $researchFieldConfig->getId();?>,0">
                             <span><?php echo esc_html__('Cancel', 'stephino-rpg');?></span>
                         </button>
                     </div>

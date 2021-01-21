@@ -5,7 +5,7 @@
  * 
  * @title      Ship
  * @desc       Holds the configuration for a single "Ship" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -96,7 +96,6 @@ class Stephino_Rpg_Config_Ship extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -120,7 +119,6 @@ class Stephino_Rpg_Config_Ship extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
     
@@ -195,7 +193,6 @@ class Stephino_Rpg_Config_Ship extends Stephino_Rpg_Config_Item_Single {
     public function setAbilityTransport($enabled) {
         $this->_abilityTransport = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -224,7 +221,6 @@ class Stephino_Rpg_Config_Ship extends Stephino_Rpg_Config_Item_Single {
             $this->_abilityTransportCapacity = 1;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -267,7 +263,6 @@ class Stephino_Rpg_Config_Ship extends Stephino_Rpg_Config_Item_Single {
             $this->_capacity = 0;
         }
         
-        // Method chaining
         return $this;
     }
     

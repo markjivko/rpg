@@ -5,7 +5,7 @@
  * 
  * @title      Research Areas
  * @desc       Holds the configuration for Research Areas
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt

@@ -5,7 +5,7 @@
  * 
  * @title      Table:Cities
  * @desc       Holds the cities information
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -259,6 +259,59 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
             ARRAY_A
         );
         return is_array($result) && count($result) ? $result : null;
+    }
+    
+    /**
+     * Get cities by island IDs
+     * 
+     * @param int[] $islandIds Island IDs
+     * @return array Array of city rows
+     */
+    public function getByIslands($islandIds) {
+        // Prepare the result
+        $result = array();
+        
+        do {
+            // Invalid input
+            if (!is_array($islandIds)) {
+                break;
+            }
+            
+            // Sanitize the island IDs
+            $sanitizedIslandIds = array_filter(array_map('intval', $islandIds), function($islandId) {
+                return $islandId > 0;
+            });
+
+            // Nothing to search for
+            if (!count($sanitizedIslandIds)) {
+                break;
+            }
+
+            // Get the rows
+            $dbResults = $this->getDb()->getWpDb()->get_results(
+                "SELECT * FROM `" . $this->getTableName() . "`"
+                . " WHERE `" . static::COL_CITY_ISLAND_ID . "` IN ( " . implode(', ', $sanitizedIslandIds) . " )",
+                ARRAY_A
+            );
+
+            // Valid data found
+            if (is_array($dbResults) && count($dbResults)) {
+                foreach ($dbResults as $dbRow) {
+                    // Table structure changed
+                    if (!isset($dbRow[static::COL_ID])) {
+                        break;
+                    }
+
+                    // Prepare the item ID
+                    $dbItemId = intval($dbRow[static::COL_ID]);
+
+                    // Append to the results
+                    $result[$dbItemId] = $dbRow;
+                }
+            }
+        } while(false);
+        
+        return $result;
     }
     
     /**

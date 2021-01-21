@@ -4,7 +4,7 @@
  * 
  * @title      Common costs template
  * @desc       Template for building/entity costs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -56,7 +56,7 @@ if (!isset($costTimeContraction)) {
                 <h5><span><?php echo $costTitle;?></span></h5>
             </div>
         <?php endif;?>
-        <div class="col-12 row no-gutters mb-4">
+        <div class="col-12 row no-gutters mb-4 justify-content-center">
             <?php 
                 foreach ($costData as $costKey => $costInfo):
                     list($costInfoName, $costInfoValue, $costInfoKey) = $costInfo;

@@ -5,7 +5,7 @@
  * 
  * @title      Action::User
  * @desc       User actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -112,7 +112,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             }
         }
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($result);
     }
     
@@ -260,7 +259,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Mark the Finish
-        Stephino_Rpg_Db::get()->modelPtfs()->play($ptfId, $playerId, false, $ptfWon);
+        Stephino_Rpg_Db::get()->modelPtfs()->play($ptfId, false, $ptfWon);
         return $playerReward;
     }
 }

@@ -5,7 +5,7 @@
  * 
  * @title      AJAX Renderer
  * @desc       Holds the available AJAX methods
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -85,7 +85,9 @@ class Stephino_Rpg_Renderer_Ajax {
     const RESULT_RESOURCES         = 'resources';
     const RESULT_ENTITIES          = 'entities';
     const RESULT_ANNOUNCEMENT      = 'announcement';
+    const RESULT_CHANGELOG         = 'changelog';
     const RESULT_NAVIGATION        = 'navigation';
+    const RESULT_BUILDING_UPGS     = 'building_upgs';
     const RESULT_SETTINGS          = 'settings';
     const RESULT_MODAL_SIZE        = 'modal_size';
     const RESULT_SET_TLCD          = 'tlcd';
@@ -128,15 +130,6 @@ class Stephino_Rpg_Renderer_Ajax {
     protected static $_modalSize = null;
     
     /**
-     * Game Mechanics - Credits
-     * 
-     * @return string HTML
-     */
-    public static function ajaxGetCredits() {
-        return Stephino_Rpg_Credits::html();
-    }
-    
-    /**
      * Wrap the final result
      * 
      * @param mixed  $result      AJAX method result to return
@@ -148,23 +141,29 @@ class Stephino_Rpg_Renderer_Ajax {
     public static function wrap($result, $resCityId = null, $navIdValue = null, $navIdColumn = Stephino_Rpg_Db_Table_Cities::COL_ID) {
         // Prepare the final result
         $wrappedResult = array(
-            self::RESULT_SETTINGS   => self::getSettings(),
-            self::RESULT_RESOURCES  => self::getResources($resCityId),
-            self::RESULT_ENTITIES   => self::getEntities($resCityId),
-            self::RESULT_MODAL_SIZE => self::getModalSize(),
-            self::RESULT_MESSAGES   => self::_getMessages(),
-            self::RESULT_CONVOYS    => self::_getConvoys(),
-            self::RESULT_PREMIUM    => self::getQueues(null, true),
-            self::RESULT_QUEUES     => self::getQueues($resCityId),
-            self::RESULT_TUTORIAL   => self::_getTutorial(),
-            self::RESULT_NAVIGATION => self::_getNavigation($navIdValue, $navIdColumn),
+            self::RESULT_SETTINGS      => self::getSettings(),
+            self::RESULT_RESOURCES     => self::getResources($resCityId),
+            self::RESULT_ENTITIES      => self::getEntities($resCityId),
+            self::RESULT_MODAL_SIZE    => self::getModalSize(),
+            self::RESULT_PREMIUM       => self::getQueues(null, true),
+            self::RESULT_QUEUES        => self::getQueues($resCityId),
+            self::RESULT_MESSAGES      => self::_getMessages(),
+            self::RESULT_CONVOYS       => self::_getConvoys(),
+            self::RESULT_TUTORIAL      => self::_getTutorial(),
+            self::RESULT_NAVIGATION    => self::_getNavigation($navIdValue, $navIdColumn),
         );
+        
+        // City-level information
+        if (null !== $resCityId) {
+            $wrappedResult[self::RESULT_BUILDING_UPGS] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUpgs($resCityId);
+        }
         
         // Append our details
         if (is_array($result)) {
             // Cell AJAX request
             if (isset($result[Stephino_Rpg_Renderer_Ajax_Cells::RESULT_GRID])) {
                 $wrappedResult[self::RESULT_ANNOUNCEMENT] = self::_getAnnouncement();
+                $wrappedResult[self::RESULT_CHANGELOG]    = self::_getChangelog();
             }
             foreach ($result as $key => $value) {
                 $wrappedResult[$key] = $value;
@@ -175,7 +174,6 @@ class Stephino_Rpg_Renderer_Ajax {
             }
         }
         
-        // All done
         return $wrappedResult;
     }
     
@@ -225,7 +223,6 @@ class Stephino_Rpg_Renderer_Ajax {
             $result[self::RESULT_TUT_TOTAL] = count(Stephino_Rpg_Config::get()->tutorials()->getAll());
         }
         
-        // All done
         return $result;
     }
     
@@ -362,7 +359,6 @@ class Stephino_Rpg_Renderer_Ajax {
             }
         }
         
-        // All done
         return $result;
     }
     
@@ -452,23 +448,17 @@ class Stephino_Rpg_Renderer_Ajax {
             }
         }
         
-        // All done
         return $result;
     }
     
     /**
-     * Get the announcement for the current user and mark it so it does not show-up again
+     * Is there an announcement ready for this user?
      * 
-     * @return array|null Array of <ul>
-     * <li>(string) Announcement ID</li>
-     * <li>(string) Announcement Title</li>
-     * <li>(string) Announcement Content (MarkDown parsed)</li>
-     * <li>(int) Announcement remaining time in seconds</li>
-     * </ul> or <b>null</b> if there is no active announcement for this user
+     * @return boolean An announcement is available for this user
      */
     protected static function _getAnnouncement() {
         // Get the announcement
-        $result = Stephino_Rpg_Db::get()->modelAnnouncement()->get(true);
+        $result = Stephino_Rpg_Db::get()->modelAnnouncement()->get();
         
         do {
             // Valid result that has not expired
@@ -477,8 +467,6 @@ class Stephino_Rpg_Renderer_Ajax {
                 if (Stephino_Rpg_TimeLapse::get()->userId()) {
                     // Have not read this announcement yet
                     if ($result[0] != Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
-                        // Mark it as read so it only pops-up once
-                        Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_ANN_READ, $result[0]);
                         break;
                     }
                 }
@@ -487,7 +475,18 @@ class Stephino_Rpg_Renderer_Ajax {
             // Something went wrong
             $result = null;
         } while(false);
-        return $result;
+        
+        return is_array($result);
+    }
+    
+    /**
+     * Is there a "game updated" message ready for this user?
+     * 
+     * @return boolean A "game updated" message is ready for this user
+     */
+    protected static function _getChangelog() {
+        return Stephino_Rpg_Config::get()->core()->getShowAbout() 
+            && Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_CHL_READ);
     }
     
     /**
@@ -577,7 +576,6 @@ class Stephino_Rpg_Renderer_Ajax {
         // Store the timelapse cooldown
         $result[self::RESULT_SET_TLCD] = Stephino_Rpg_Config::get()->core()->getTimeLapseCooldown();
         
-        // All done
         return $result;
     }
 }

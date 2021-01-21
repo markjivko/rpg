@@ -5,7 +5,7 @@
  * 
  * @title      Table:Convoys
  * @desc       Holds the convoys information
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -292,23 +292,27 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
      * @return int
      */
     public function getCountByUser($userId) {
-        // Get the message count
-        $dbRow = $this->getDb()->getWpDb()->get_row(
-            "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_CONVOY_FROM_USER_ID  . "` = '" . intval($userId) . "'"
-                . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = '" . intval($userId) . "'"
-            . " )", 
-            ARRAY_A
-        );
+        $result = 0;
         
-        // Valid result
-        if (is_array($dbRow) && isset($dbRow['count'])) {
-            return intval($dbRow['count']);
+        // Sanitize the user ID
+        $userId = abs((int) $userId);
+        if ($userId > 0) {
+            $dbRow = $this->getDb()->getWpDb()->get_row(
+                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
+                . " WHERE ("
+                    . " `" . self::COL_CONVOY_FROM_USER_ID  . "` = '$userId'"
+                    . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = '$userId'"
+                . " )", 
+                ARRAY_A
+            );
+
+            // Valid result
+            if (is_array($dbRow) && isset($dbRow['count'])) {
+                $result = intval($dbRow['count']);
+            }
         }
         
-        // Something went wrong
-        return 0;
+        return $result;
     }
     
     /**

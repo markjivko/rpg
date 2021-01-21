@@ -4,7 +4,7 @@
  * 
  * @title     Item modifiers
  * @desc      Define item modifiers
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -43,7 +43,6 @@ trait Stephino_Rpg_Config_Trait_Modifier {
     public function setModifier($modifierId) {
         $this->_modifierId = (null === $modifierId ? null : intval($modifierId));
 
-        // Method chaining
         return $this;
     }
 
@@ -64,7 +63,6 @@ trait Stephino_Rpg_Config_Trait_Modifier {
     public function setModifierPolynomial($modifierPolynomial) {
         $this->_modifierPolynomial = $this->_sanitizePoly($modifierPolynomial);
 
-        // Method chaining
         return $this;
     }
 }

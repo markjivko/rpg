@@ -4,7 +4,7 @@
  * 
  * @title      User Info dialog
  * @desc       Template for the user information dialog
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -12,6 +12,8 @@
 !defined('STEPHINO_RPG_ROOT') && exit();
 
 /* @var $userCities int */
+/* @var $userId int */
+/* @var $userStats array[] */
 ?>
 <div class="row align-items-center justify-content-center mt-2">
     <div class="col-6 col-lg-4">
@@ -78,6 +80,34 @@
         </div>
     <?php endif;?>
 </div>
+<?php if (Stephino_Rpg_Config::get()->core()->getPtfEnabled()):?>
+    <div class="col-12 align-items-center mt-2 framed">
+        <div class="col-12 text-center mb-2">
+            <h4 
+                data-effect="help"
+                data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
+                <?php echo esc_html__('Game arena', 'stephino-rpg');?>
+            </h4>
+        </div>
+        <div class="row col-12">
+            <?php foreach($userStats as list($userStatValue, $userStatName)):?>
+                <div class="col-12 col-lg-4" title="<?php echo number_format($userStatValue);?>">
+                    <span class="label">
+                        <span>
+                            <b><?php echo number_format($userStatValue);?></b> <?php echo esc_html($userStatName);?>
+                        </span>
+                    </span>
+                </div>
+            <?php endforeach;?>
+        </div>
+        <?php if ($userStats[Stephino_Rpg_Renderer_Ajax_Dialog_User::PTF_STAT_CREATED][0] > 0):?>
+            <button 
+                class="btn btn-info w-100" data-click="dialog" data-click-args="dialogUserArenaList,<?php echo $userId;?>">
+                <span><?php echo esc_html__('View games', 'stephino-rpg');?></span>
+            </button>
+        <?php endif;?>
+    </div>
+<?php endif;?>
 <?php if ($userData[Stephino_Rpg_Db_Table_Users::COL_ID] != Stephino_Rpg_TimeLapse::get()->userId()):?>
     <?php if (Stephino_Rpg_Config::get()->core()->getMessageDailyLimit() > 0 && is_numeric($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])): ?>
         <div class="row align-items-center mt-2">

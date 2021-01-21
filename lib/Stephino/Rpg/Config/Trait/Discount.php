@@ -4,7 +4,7 @@
  * 
  * @title     Item discounts
  * @desc      Define item discounts
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -92,7 +92,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
     public function setEnablesDiscountUnits($enabled) {
         $this->_enablesDiscountUnits = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
 
@@ -142,7 +141,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
             $this->_discountUnits = (!count($discountUnitsIds) ? null : $discountUnitsIds);
         }
 
-        // Method chaining
         return $this;
     }
     
@@ -175,7 +173,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
             }
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -196,7 +193,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
     public function setEnablesDiscountShips($enabled) {
         $this->_enablesDiscountShips = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -246,7 +242,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
             $this->_discountShips = (!count($discountShipsIds) ? null : $discountShipsIds);
         }
 
-        // Method chaining
         return $this;
     }
     
@@ -279,7 +274,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
             }
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -300,7 +294,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
     public function setEnablesDiscountBuildings($enabled) {
         $this->_enablesDiscountBuildings = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -350,7 +343,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
             $this->_discountBuildings = (!count($discountBuildingsIds) ? null : $discountBuildingsIds);
         }
 
-        // Method chaining
         return $this;
     }
     
@@ -384,7 +376,6 @@ trait Stephino_Rpg_Config_Trait_Discount {
             }
         }
         
-        // Method chaining
         return $this;
     }
     

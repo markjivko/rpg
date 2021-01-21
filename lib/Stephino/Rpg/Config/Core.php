@@ -5,7 +5,7 @@
  * 
  * @title      Core
  * @desc       Holds the core game configuration
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -86,6 +86,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var boolean
      */
     protected $_showWpLink = true;
+    
+    /**
+     * Show About dialog on update
+     * 
+     * @var boolean
+     */
+    protected $_showAbout = true;
     
     /**
      * Show the Reload button on mobile devices
@@ -531,7 +538,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             }
         } while (false);
 
-        // Method chaining
         return $this;
     }
 
@@ -554,7 +560,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = Stephino_Rpg_Utils_Lingo::cleanup($name);
 
-        // Method chaining
         return $this;
     }
 
@@ -578,12 +583,12 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = Stephino_Rpg_Utils_Lingo::cleanup($description);
 
-        // Method chaining
         return $this;
     }
     
     /**
-     * Show the "Free Install" WordPress.org link to your players
+     * Show the "Free Install" WordPress.org link to your players 
+     * and embed the link in the "Stephino RPG" Gutenberg block
      * 
      * @section User Interface
      * @return boolean Show WordPress Link
@@ -601,7 +606,27 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setShowWpLink($showWpLink) {
         $this->_showWpLink = (boolean) $showWpLink;
         
-        // Method chaining
+        return $this;
+    }
+    
+    /**
+     * Show the Credits and current version's Changelog to your players whenever the game updates
+     * 
+     * @return boolean Updates Announcement
+     */
+    public function getShowAbout() {
+        return (boolean) $this->_showAbout;
+    }
+    
+    /**
+     * Set the "Show About" parameter
+     * 
+     * @param boolean $showAbout Show the About dialog on update
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setShowAbout($showAbout) {
+        $this->_showAbout = (boolean) $showAbout;
+        
         return $this;
     }
     
@@ -623,7 +648,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setShowReloadButton($showReloadButton) {
         $this->_showReloadButton = (boolean) $showReloadButton;
         
-        // Method chaining
         return $this;
     }
     
@@ -647,7 +671,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setPtfEnabled($ptfEnabled) {
         $this->_ptfEnabled = (boolean) $ptfEnabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -678,7 +701,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_ptfAuthorLimit = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -709,7 +731,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_ptfRewardGemsPlayer = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -740,7 +761,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_ptfRewardGemsAuthor = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -774,7 +794,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_ptfRewardResetHours = 720;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -797,7 +816,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setChatRoom($chatRoom) {
         $this->_chatRoom = (boolean) $chatRoom;
         
-        // Method chaining
         return $this;
     }
     
@@ -822,7 +840,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setFirebaseProjectId($projectId) {
         $this->_firebaseProjectId = Stephino_Rpg_Utils_Lingo::cleanup($projectId);
 
-        // Method chaining
         return $this;
     }
     
@@ -846,7 +863,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setFirebaseWebApiKey($webApiKey) {
         $this->_firebaseWebApiKey = Stephino_Rpg_Utils_Lingo::cleanup($webApiKey);
 
-        // Method chaining
         return $this;
     }
     
@@ -879,7 +895,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_messageDailyLimit = 5000;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -911,7 +926,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_messageInboxLimit = 1000;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -943,7 +957,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_messageMaxAge = 365;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -976,7 +989,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_scoreBattleDefeat = 5000;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -1008,7 +1020,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_scoreBattleDraw = 5000;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -1040,7 +1051,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_scoreBattleVictory = 5000;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -1072,7 +1082,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_scoreQueueBuilding = 5000;
         }
 
-        // Method chaining
         return $this;
     }
     
@@ -1104,7 +1113,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_scoreQueueEntity = 5000;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -1136,7 +1144,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_scoreQueueResearch = 5000;
         }
 
-        // Method chaining
         return $this;
     }
     
@@ -1162,7 +1169,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setPayPalClientId($clientId) {
         $this->_payPalClientId = Stephino_Rpg_Utils_Lingo::cleanup($clientId);
         
-        // Method chaining
         return $this;
     }
     
@@ -1185,7 +1191,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setPayPalClientSecret($clientSecret) {
         $this->_payPalClientSecret = Stephino_Rpg_Utils_Lingo::cleanup($clientSecret);
         
-        // Method chaining
         return $this;
     }
     
@@ -1217,7 +1222,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_payPalCurrency = Stephino_Rpg_Db_Model_Invoices::CURRENCY_USD;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1239,7 +1243,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setPayPalSandbox($payPalSandbox) {
         $this->_payPalSandbox = (boolean) $payPalSandbox;
         
-        // Method chaining
         return $this;
     }
     
@@ -1266,7 +1269,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setSandbox($sandbox) {
         $this->_sandbox = (boolean) $sandbox;
         
-        // Method chaining
         return $this;
     }
     
@@ -1288,7 +1290,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setConsoleEnabled($enabled) {
         $this->_consoleEnabled = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
 
@@ -1325,7 +1326,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         // Store it
         $this->_robotsAggression = $aggression;
 
-        // Method chaining
         return $this;
     }
     
@@ -1357,7 +1357,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_robotsFervor = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1391,7 +1390,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_robotTimeLapsesPerRequest = 10;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -1426,7 +1424,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_timeLapseCooldown = 120;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1461,7 +1458,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_cronInterval = 60;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1496,7 +1492,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_cronAccuracy = 48;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1530,7 +1525,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_cronMaxAge = 300;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1564,7 +1558,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialIslandsCount = 5000;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -1596,7 +1589,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialIslandsPerUser = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1628,7 +1620,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialRobotsPerUser = 10;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -1658,7 +1649,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialUserResourceGold = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -1688,7 +1678,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialUserResourceGem = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1718,7 +1707,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialUserResourceResearch = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1766,7 +1754,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_initialCityBuildings = (!count($ids) ? null : $ids);
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -1802,7 +1789,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_travelTime = 86400;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1833,7 +1819,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_gemToGoldRatio = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -1864,7 +1849,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_gemToResearchRatio = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -1887,7 +1871,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setMarketEnabled($marketEnabled) {
         $this->_marketEnabled = (boolean) $marketEnabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -1911,7 +1894,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setMarketBuilding($marketBuildingId) {
         $this->_marketBuildingId = (null === $marketBuildingId ? null : intval($marketBuildingId));
 
-        // Method chaining
         return $this;
     }
     
@@ -1938,7 +1920,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setMarketPolynomial($marketPolynomial) {
         $this->_marketPolynomial = $this->_sanitizePoly($marketPolynomial);
         
-        // Method chaining
         return $this;
     }
     
@@ -1971,7 +1952,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_marketGain = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -2002,7 +1982,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_marketResourceAlpha = 0;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -2033,7 +2012,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_marketResourceBeta = 0;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -2065,7 +2043,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_marketResourceGamma = 0;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -2097,7 +2074,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_marketResourceExtra1 = 0;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -2129,7 +2105,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_marketResourceExtra2 = 0;
         }
 
-        // Method chaining
         return $this;
     }
 
@@ -2152,7 +2127,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setMainBuilding($mainBuildingId) {
         $this->_mainBuildingId = (null === $mainBuildingId ? null : intval($mainBuildingId));
 
-        // Method chaining
         return $this;
     }
 
@@ -2185,7 +2159,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_capitalSatisfactionBonus = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -2214,7 +2187,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_maxQueueBuildings = 1;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -2243,7 +2215,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_maxQueueEntities = 1;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -2272,7 +2243,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
             $this->_maxQueueResearchFields = 1;
         }
         
-        // Method chaining
         return $this;
     }
 }

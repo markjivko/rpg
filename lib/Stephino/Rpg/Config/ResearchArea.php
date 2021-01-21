@@ -5,7 +5,7 @@
  * 
  * @title      Research Area
  * @desc       Holds the configuration for a single "Research Area" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -63,7 +63,6 @@ class Stephino_Rpg_Config_ResearchArea extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -87,7 +86,6 @@ class Stephino_Rpg_Config_ResearchArea extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
     
@@ -109,7 +107,6 @@ class Stephino_Rpg_Config_ResearchArea extends Stephino_Rpg_Config_Item_Single {
     public function setBuilding($id) {
         $this->_buildingId = (null === $id ? null : intval($id));
 
-        // Method chaining
         return $this;
     }
 }

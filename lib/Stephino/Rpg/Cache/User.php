@@ -5,19 +5,45 @@
  * 
  * @title      User Data Caching
  * @desc       Basic session caching for each individual player; only works for authenticated users
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Cache_User {
     
-    // Cache keys
+    /**
+     * Announcement read
+     */
     const KEY_ANN_READ   = 'ann_read';
+    
+    /**
+     * Changelog read (binds to current game version)
+     */
+    const KEY_CHL_READ   = 'chl_read';
+    
+    // Volumes
     const KEY_VOL_MUSIC  = 'vol_music';
     const KEY_VOL_BKG    = 'vol_bkg';
     const KEY_VOL_CELLS  = 'vol_cells';
     const KEY_VOL_EVENTS = 'vol_events';
+    const KEY_PTF_DATA   = 'ptf_data';
+    const KEY_PTF_TIME   = 'ptf_time';
+    
+    /**
+     * Platformer game started 
+     */
+    const PTF_DATA_STARTED = 1;
+    
+    /**
+     * Platformer game lost
+     */
+    const PTF_DATA_LOST = 0;
+    
+    /**
+     * Platformer game won
+     */
+    const PTF_DATA_WON = 2;
     
     /**
      * Singleton instance
@@ -126,7 +152,6 @@ class Stephino_Rpg_Cache_User {
             }
         }
         
-        // All done
         return $result;
     }
 }

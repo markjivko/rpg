@@ -5,7 +5,7 @@
  * 
  * @title      Table
  * @desc       Table object perform changes to the database directly with no business logic
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -101,7 +101,6 @@ abstract class Stephino_Rpg_Db_Table {
             );
         }
         
-        // All done
         return $this->_cache[$objectId];
     }
     
@@ -180,7 +179,6 @@ abstract class Stephino_Rpg_Db_Table {
             }
         }
         
-        // All done
         return $result;
     }
     

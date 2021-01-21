@@ -4,7 +4,7 @@
  * 
  * @title     Action::Island
  * @desc      Island Actions
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -55,9 +55,9 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
         self::getCityInfo($colonizerCityId);
         
         // Get colonization costs
-        $costData = Stephino_Rpg_Renderer_Ajax_Action::getCostData(
+        $costData = self::getCostData(
             $islandConfig,
-            Stephino_Rpg_Renderer_Ajax_Action::getCitiesCount()
+            self::getCitiesCount()
         );
         
         // Other convoy is active
@@ -66,7 +66,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
         }
         
         // Spend the resources
-        Stephino_Rpg_Renderer_Ajax_Action::spend($costData);
+        self::spend($costData);
         
         // Prepare the result
         $result = Stephino_Rpg_Db::get()->modelConvoys()->createColonizer(
@@ -76,11 +76,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
             $islandCityIndex,
             Stephino_Rpg_Db::get()->modelIslands()->getColonizationTime(
                 $islandConfig,
-                Stephino_Rpg_Renderer_Ajax_Action::getCitiesCount()
+                self::getCitiesCount()
             )
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             $result
         );
@@ -106,7 +105,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
             $costData,
             $productionData,
             $affordList
-        ) = Stephino_Rpg_Renderer_Ajax_Action::getIslandInfo($islandId);
+        ) = self::getIslandInfo($islandId);
         
         // Data not retrieved from time-lapse
         if (!isset($islandData[Stephino_Rpg_Db_Table_Users::COL_ID])) {
@@ -121,7 +120,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
         }
         
         // Spend the resources
-        Stephino_Rpg_Renderer_Ajax_Action::spend($costData);
+        self::spend($costData);
         
         // Prepare the result
         $result = Stephino_Rpg_Db::get()->modelIslands()->setStatueLevel(
@@ -129,7 +128,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
             $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_STATUE_LEVEL] + 1
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             $result
         );

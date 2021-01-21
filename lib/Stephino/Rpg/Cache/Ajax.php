@@ -4,7 +4,7 @@
  * 
  * @title      Rendering Cache
  * @desc       Browser cache mechanism
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -86,7 +86,6 @@ class Stephino_Rpg_Cache_Ajax {
             self::$_instances[$instanceKey] = new self($className, $methodName, $instanceKey);
         }
         
-        // All done
         return self::$_instances[$instanceKey];
     }
     

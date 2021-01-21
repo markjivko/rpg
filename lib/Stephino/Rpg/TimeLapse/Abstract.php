@@ -5,7 +5,7 @@
  * 
  * @title      Abstract time-lapses
  * @desc       Handle time-lapse processes
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -399,11 +399,20 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
                                 // Load the template
                                 require Stephino_Rpg_TimeLapse::getTemplatePath($templateFileName);
                             } catch (Exception $ex) {
-                                Stephino_Rpg_Log::warning($ex->getMessage());
+                                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
                             }
                             
                             // Store the result, removing extra spaces
-                            $messageContent = trim(preg_replace('%(?:[\r\n\t]+| {2,})%', ' ', ob_get_clean()));
+                            $messageContent = trim(
+                                preg_replace(
+                                    array(
+                                        '%[\r\n\t]+%',
+                                        '% {2,}%',
+                                    ), 
+                                    ' ', 
+                                    ob_get_clean()
+                                )
+                            );
                         }
 
                         // Add to the payload
@@ -651,7 +660,6 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
             }
         } while(false);
         
-        // All done
         return $result;
     }
     

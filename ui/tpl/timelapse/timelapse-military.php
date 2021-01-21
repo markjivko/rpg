@@ -4,7 +4,7 @@
  * 
  * @title      Timelapse template - Military
  * @desc       Template for the Military messages
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -142,11 +142,7 @@
                             break;
                     }
                 ?>
-                <div 
-                    class="icon-attack icon-attack-<?php echo $attackStatus;?>"
-                    data-effect="sound"
-                    data-effect-args="<?php echo $convoySoundName;?>">
-                </div>
+                <div class="icon-attack icon-attack-<?php echo $attackStatus;?>" data-effect="sound" data-effect-args="<?php echo $convoySoundName;?>"></div>
                 <?php echo $titleText;?>
             </h4>
         </div>
@@ -242,8 +238,10 @@
         <?php endif;?>
     <?php break; default: ?>
         <div class="col-12 p-2 text-center">
-            <?php echo esc_html__('Unknown military action', 'stephino-rpg');?>
-            <?php Stephino_Rpg_Log::warning($itemType, $itemData);?>
+            <?php 
+                echo esc_html__('Unknown military action', 'stephino-rpg');
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($itemType, $itemData);
+            ?>
         </div>
     <?php break; endswitch; ?>
 </div>

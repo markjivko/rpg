@@ -4,7 +4,7 @@
  * 
  * @title      Help Content - Core
  * @desc       Template for the help content - loaded both directly and with AJAX inside [data-role="content"]
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -16,7 +16,7 @@
 ?>
 <div class="col-12 p-2 text-center">
     <h4>
-        <span data-click="settingsViewCredits"><?php echo Stephino_Rpg_Utils_Lingo::getGameName();?></span>
+        <span data-click="dialog" data-click-args="dialogSettingsAbout"><?php echo Stephino_Rpg_Utils_Lingo::getGameName();?></span>
     </h4>
     <h6><?php echo esc_html__('Customized by', 'stephino-rpg');?> <?php echo esc_html(get_bloginfo('name'));?></h6>
 </div>
@@ -289,11 +289,12 @@
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game arena', 'stephino-rpg');?></span></h6>
     <ul>
+        <li><?php echo esc_html__('Objective: collect all the gems then pass through the gate', 'stephino-rpg');?></li>
         <li>
     <?php 
         if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
             echo sprintf(
-                esc_html__('Earn %s by playing games', 'stephino-rpg'),
+                esc_html__('Win to get %s', 'stephino-rpg'),
                 '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
             );
         }
@@ -326,12 +327,12 @@
     <?php 
         if (Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0) {
             echo sprintf(
-                esc_html__('Each user can create a maximum of %s', 'stephino-rpg'),
+                esc_html__('Each player can create a maximum of %s', 'stephino-rpg'),
                 '<b>' . Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() . '</b> ' 
                     . esc_html(_n('game', 'games', Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit(), 'stephino-rpg'))
             );
         } else {
-            echo esc_html__('Each user can create an unlimited number of games', 'stephino-rpg');
+            echo esc_html__('Each player can create an unlimited number of games', 'stephino-rpg');
         }
     ?>
             </li>

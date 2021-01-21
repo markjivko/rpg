@@ -4,7 +4,7 @@
  * 
  * @title      Settings dialog
  * @desc       Template for the Settings dialog
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -128,8 +128,8 @@
         <button class="btn btn-info w-100" data-click="userViewProfile" data-click-args="<?php echo Stephino_Rpg_TimeLapse::get()->userId();?>">
             <span><?php echo esc_html__('Profile', 'stephino-rpg');?></span>
         </button>
-        <button class="btn btn-info w-100" data-click="settingsViewCredits">
-            <span><?php echo esc_html__('Credits', 'stephino-rpg');?></span>
+        <button class="btn btn-info w-100" data-click="dialog" data-click-args="dialogSettingsAbout">
+            <span><?php echo esc_html__('About', 'stephino-rpg');?></span>
         </button>
         <button class="btn btn-info w-100" data-click="settingsLogOut">
             <span><?php echo esc_html__('Log Out', 'stephino-rpg');?></span>

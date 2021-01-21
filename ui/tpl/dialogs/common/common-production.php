@@ -4,7 +4,7 @@
  * 
  * @title      Common production template
  * @desc       Template for production details
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -17,6 +17,10 @@ if (!isset($productionTitle)) {
 }
 if (!isset($militaryTitle)) {
     $militaryTitle = esc_html__('Military capabilities', 'stephino-rpg');
+}
+// Refund mode
+if (!isset($productionRefundMode)) {
+    $productionRefundMode = false;
 }
 ?>
 <?php 
@@ -56,10 +60,13 @@ if (!isset($militaryTitle)) {
                     </h5>
                 </div>
             <?php endif;?>
-            <div class="col-12 row no-gutters mb-4">
+            <div class="col-12 row no-gutters mb-4 justify-content-center">
                 <?php 
                     foreach ($splitProdValue as $prodKey => $prodInfo):
                         list($prodName, $prodValue, $prodAjaxKey, $prodAbundance) = $prodInfo;
+                        if ($productionRefundMode) {
+                            $prodValue *= -1;
+                        }
                 ?>
                     <div class="col-6 col-lg-4 res res-<?php echo $prodAjaxKey;?>">
                         <div class="icon" data-html="true" title="<?php echo Stephino_Rpg_Utils_Lingo::escape($prodName);?>"></div>

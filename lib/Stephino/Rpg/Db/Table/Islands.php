@@ -5,7 +5,7 @@
  * 
  * @title      Table:Islands
  * @desc       Holds the islands information
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -125,7 +125,6 @@ class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
             return null;
         }
         
-        // All done
         return $this->getByIds($islandIds);
     }
     
@@ -201,7 +200,6 @@ class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
             );
         }
         
-        // All done
         return $updateResult;
     }
 }

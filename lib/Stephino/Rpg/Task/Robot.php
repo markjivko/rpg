@@ -5,7 +5,7 @@
  * 
  * @title      Robot
  * @desc       Perform automatic queue/military actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -74,7 +74,7 @@ class Stephino_Rpg_Task_Robot {
             
             // Fervor
             if (mt_rand(1, 100) > Stephino_Rpg_Config::get()->core()->getRobotsFervor()) {
-                Stephino_Rpg_Log::info("{$this->_logTag} Zzz");
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Zzz");
                 break;
             }
             
@@ -170,7 +170,7 @@ class Stephino_Rpg_Task_Robot {
                             $unlockObject->getId()
                         );
                         
-                        Stephino_Rpg_Log::info("{$this->_logTag} Queued building: {$unlockObject->getName()}");
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued building: {$unlockObject->getName()}");
                     } 
                     
                     // Research fields queue
@@ -184,7 +184,7 @@ class Stephino_Rpg_Task_Robot {
                             $cityData[Stephino_Rpg_Db_Table_Users::COL_ID],
                             $unlockObject->getId()
                         );
-                        Stephino_Rpg_Log::info("{$this->_logTag} Queued research field: {$unlockObject->getName()}");
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued research field: {$unlockObject->getName()}");
                     }
                 } catch (Exception $exc) {}
             }
@@ -221,7 +221,7 @@ class Stephino_Rpg_Task_Robot {
                             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
                             $buildingConfig->getId()
                         );
-                        Stephino_Rpg_Log::info("{$this->_logTag} Queued random building: {$buildingConfig->getName()}");
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued random building: {$buildingConfig->getName()}");
                     }
                 } catch (Exception $exc) {}
             }
@@ -297,7 +297,7 @@ class Stephino_Rpg_Task_Robot {
                         Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_WORKERS, 
                         $buildingWorkers
                     );
-                Stephino_Rpg_Log::info("{$this->_logTag} Assigned {$buildingWorkers} / {$buildingWorkersMax} workers to building #{$buildingId}");
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Assigned {$buildingWorkers} / {$buildingWorkersMax} workers to building #{$buildingId}");
             }
         }
     }
@@ -333,8 +333,8 @@ class Stephino_Rpg_Task_Robot {
                 continue;
             }
             
-            // Get the current ballance
-            $costBallance = floatval($cityData[$costKey]);
+            // Get the current balance
+            $costBalance = floatval($cityData[$costKey]);
             
             // Cost multiplier
             if (1 != $multiplier) {
@@ -342,7 +342,7 @@ class Stephino_Rpg_Task_Robot {
             }
             
             // We cannot afford this
-            if ($costValue > $costBallance) {
+            if ($costValue > $costBalance) {
                 throw new Exception(
                     sprintf(
                         __('More %s needed', 'stephino-rpg'),
@@ -363,7 +363,7 @@ class Stephino_Rpg_Task_Robot {
                             Stephino_Rpg_Db_Table_Users::COL_ID, 
                             $userDataId, 
                             $costKey, 
-                            round($costBallance - $costValue, 4)
+                            round($costBalance - $costValue, 4)
                         );
                     break;
                 
@@ -379,7 +379,7 @@ class Stephino_Rpg_Task_Robot {
                             Stephino_Rpg_Db_Table_Cities::COL_ID, 
                             $cityDataId, 
                             $costKey, 
-                            round($costBallance - $costValue, 4)
+                            round($costBalance - $costValue, 4)
                         );
                     break;
             }

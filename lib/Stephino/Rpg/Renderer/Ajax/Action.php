@@ -5,7 +5,7 @@
  * 
  * @title      Actions
  * @desc       Common action methods
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -190,6 +190,83 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         }
         
         return $result;
+    }
+    
+    /**
+     * Get the list of upgradeable buildings from a city
+     * 
+     * @param int $cityId City ID
+     * @return int[]|null Building Configuration IDs or Null if invalid City ID provided
+     */
+    public static function getBuildingUpgs($cityId) {
+        $cityId = abs((int) $cityId);
+        
+        // Prepare the list
+        $buildingsUpgradable = null;
+
+        // Go through the available buildings list
+        if ($cityId > 0) {
+            $buildingsUpgradable = array();
+            if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
+                foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData() as $dbRow) {
+                    if ($cityId !== (int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID]) {
+                        continue;
+                    }
+                    
+                    // Get the configuration ID
+                    $buildingConfigId = (int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID];
+        
+                    // Invalid building configuration
+                    if (null === $buildingConfig = Stephino_Rpg_Config::get()->buildings()->getById($buildingConfigId)) {
+                        continue;
+                    }
+        
+                    // Building already under construction
+                    if (null !== self::getBuildingQueue($dbRow[Stephino_Rpg_Db_Table_Buildings::COL_ID])) {
+                        continue;
+                    }
+                    
+                    // Prepare the cost data
+                    $costData = self::getCostData($buildingConfig, $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL], true);
+
+                    // Validate the cost
+                    $buildingUpgradeable = true;
+                    foreach ($costData as $costKey => $costInfo) {
+                        // Invalid cost information
+                        if (!is_array($costInfo) || count($costInfo) < 2) {
+                            continue;
+                        }
+
+                        // Get the cost name and value
+                        list($costName, $costValue) = $costInfo;
+
+                        // Sanitize the cost
+                        $costValue = floatval($costValue);
+
+                        // No cost or invalid key
+                        if ($costValue <= 0 || !isset($dbRow[$costKey])) {
+                            continue;
+                        }
+
+                        // Get the current balance
+                        $costBalance = floatval($dbRow[$costKey]);
+
+                        // We cannot afford this
+                        if ($costValue > $costBalance) {
+                            $buildingUpgradeable = false;
+                            break;
+                        }
+                    }
+
+                    // Upgrade available
+                    if ($buildingUpgradeable) {
+                        $buildingsUpgradable[] = $buildingConfigId;
+                    }
+                }
+            }
+        }
+
+        return $buildingsUpgradable;
     }
     
     /**
@@ -896,7 +973,6 @@ class Stephino_Rpg_Renderer_Ajax_Action {
             $result[] = $itemQueued;
         }
         
-        // All done
         return $result;
     }
     
@@ -1598,7 +1674,6 @@ class Stephino_Rpg_Renderer_Ajax_Action {
             }
         }
 
-        // All done
         return $queueData;
     }
     
@@ -1908,7 +1983,6 @@ class Stephino_Rpg_Renderer_Ajax_Action {
             }
         }
 
-        // All done
         return $queueData;
     }
     
@@ -2746,8 +2820,8 @@ class Stephino_Rpg_Renderer_Ajax_Action {
                 continue;
             }
             
-            // Get the current ballance
-            $costBallance = floatval($cityData[$costKey]);
+            // Get the current balance
+            $costBalance = floatval($cityData[$costKey]);
             
             // Cost multiplier
             if (1 != $multiplier) {
@@ -2755,7 +2829,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
             }
             
             // We cannot afford this
-            if (!$refund && $costValue > $costBallance) {
+            if (!$refund && $costValue > $costBalance) {
                 throw new Exception(
                     sprintf(
                         __('Insufficient resources (%s)', 'stephino-rpg'),
@@ -2770,7 +2844,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
                 case Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH:
                 case Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM:
                     $updatesUser[$userDataId][$costKey] = round(
-                        $costBallance + ($refund ? 1 : -1) * $costValue, 
+                        $costBalance + ($refund ? 1 : -1) * $costValue, 
                         4
                     );
 
@@ -2791,7 +2865,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
                 case Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_1:
                 case Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_2:
                     $updatesCity[$cityDataId][$costKey] = round(
-                        $costBallance + ($refund ? 1 : -1) * $costValue, 
+                        $costBalance + ($refund ? 1 : -1) * $costValue, 
                         4
                     );
                     

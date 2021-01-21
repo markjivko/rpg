@@ -5,7 +5,7 @@
  * 
  * @title      City
  * @desc       Holds the configuration for a single "City" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -172,7 +172,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -196,7 +195,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
     
@@ -234,7 +232,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
             $this->_cityWidth = 49;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -272,7 +269,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
             $this->_cityHeight = 49;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -297,7 +293,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
         // Store the value
         $this->_cityBuildingSlots = $this->_sanitizeSlots($slots, true);
 
-        // Method chaining
         return $this;
     }
     
@@ -322,7 +317,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
         // Store the value
         $this->_cityAnimationSlots = $this->_sanitizeSlots($slots, true);
 
-        // Method chaining
         return $this;
     }
     
@@ -346,7 +340,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_cityAnimations = $this->_sanitizeAnimations($animations);
         
-        // Method chaining
         return $this;
     }
     
@@ -372,7 +365,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_islandAnimations = $this->_sanitizeLevels($animations, '_sanitizeAnimations');
         
-        // Method chaining
         return $this;
     }
     
@@ -397,7 +389,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_underConstructionAnimations = $this->_sanitizeAnimations($animations);
         
-        // Method chaining
         return $this;
     }
     
@@ -427,7 +418,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
             $this->_satisfaction = 1;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -450,7 +440,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
     public function setSatisfactionPolynomial($satisfactionPolynomial) {
         $this->_satisfactionPolynomial = $this->_sanitizePoly($satisfactionPolynomial);
         
-        // Method chaining
         return $this;
     }
 
@@ -480,7 +469,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
             $this->_maxStorage = 1;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -503,7 +491,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
     public function setMaxStoragePolynomial($maxStoragePolynomial) {
         $this->_maxStoragePolynomial = $this->_sanitizePoly($maxStoragePolynomial);
 
-        // Method chaining
         return $this;
     }
 
@@ -533,7 +520,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
             $this->_maxPopulation = 1;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -556,7 +542,6 @@ class Stephino_Rpg_Config_City extends Stephino_Rpg_Config_Item_Single {
     public function setMaxPopulationPolynomial($maxPopulationPolynomial) {
         $this->_maxPopulationPolynomial = $this->_sanitizePoly($maxPopulationPolynomial);
 
-        // Method chaining
         return $this;
     }
     

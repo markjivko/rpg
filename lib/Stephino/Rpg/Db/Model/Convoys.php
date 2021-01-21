@@ -4,7 +4,7 @@
  * 
  * @title     Model:Convoys
  * @desc      Convoys Model
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -94,7 +94,6 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Could not update entities', 'stephino-rpg'));
         }
         
-        // All done
         return $newConvoyId;
     }
     
@@ -192,7 +191,6 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Could not update entities', 'stephino-rpg'));
         }
         
-        // All done
         return $newConvoyId;
     }
     
@@ -281,7 +279,6 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Could not update entities', 'stephino-rpg'));
         }
         
-        // All done
         return $newConvoyId;
     }
     
@@ -409,7 +406,6 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Could not update entities', 'stephino-rpg'));
         }
         
-        // All done
         return $newConvoyId;
     }
     
@@ -616,7 +612,6 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             }
         }
         
-        // All done
         return $convoyPayload;
     }
     
@@ -658,7 +653,6 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             }
         }
         
-        // All done
         return $convoyPayload;
     }
 }

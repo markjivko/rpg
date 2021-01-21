@@ -4,7 +4,7 @@
  * 
  * @title     Item requirements
  * @desc      Define item requirements
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -57,7 +57,6 @@ trait Stephino_Rpg_Config_Trait_Requirement {
     public function setRequiredBuilding($requiredBuildingId) {
         $this->_requiredBuildingId = (null === $requiredBuildingId ? null : intval($requiredBuildingId));
 
-        // Method chaining
         return $this;
     }
 
@@ -84,7 +83,6 @@ trait Stephino_Rpg_Config_Trait_Requirement {
             $this->_requiredBuildingLevel = 1;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -105,7 +103,6 @@ trait Stephino_Rpg_Config_Trait_Requirement {
     public function setRequiredResearchField($requiredResearchFieldId) {
         $this->_requiredResearchFieldId = (null === $requiredResearchFieldId ? null : intval($requiredResearchFieldId));
 
-        // Method chaining
         return $this;
     }
 
@@ -132,7 +129,6 @@ trait Stephino_Rpg_Config_Trait_Requirement {
             $this->_requiredResearchFieldLevel = 1;
         }
 
-        // Method chaining
         return $this;
     }
 

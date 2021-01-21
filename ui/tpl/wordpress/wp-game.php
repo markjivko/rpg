@@ -4,7 +4,7 @@
  * 
  * @title      Game template
  * @desc       Template for the game pages
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -25,7 +25,7 @@
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#e0d3a5" />
         <meta name="author" content="Mark Jivko" />
-        <meta name="copyright" content="(c) 2020, Stephino" />
+        <meta name="copyright" content="(c) 2021, Stephino" />
         <meta name="generator" content="<?php echo Stephino_Rpg::PLUGIN_SLUG;?>" />
         <meta name="version" content="<?php echo Stephino_Rpg::PLUGIN_VERSION;?>" />
         <meta name="description" content="<?php echo esc_html__('The first-ever RPG developed for WordPress', 'stephino-rpg');?>" />

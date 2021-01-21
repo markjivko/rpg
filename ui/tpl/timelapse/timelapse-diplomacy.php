@@ -4,7 +4,7 @@
  * 
  * @title      Timelapse template - Diplomacy
  * @desc       Template for the Diplomacy messages
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -82,10 +82,7 @@
                             )
                     );
                 ?>
-                <div 
-                    data-effect="sound"
-                    data-effect-args="attackDefeat">
-                </div>
+                <div data-effect="sound" data-effect-args="attackDefeat"></div>
             </div>
         <?php break; case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH: ?>
             <div class="col-12 p-2">
@@ -96,8 +93,10 @@
             </div>
         <?php break; default: ?>
             <div class="col-12 p-2 text-center">
-                <?php echo esc_html__('Unknown diplomatic action', 'stephino-rpg');?>
-                <?php Stephino_Rpg_Log::warning($itemType, $itemData);?>
+                <?php 
+                    echo esc_html__('Unknown diplomatic action', 'stephino-rpg');
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($itemType, $itemData);
+                ?>
             </div>
         <?php break; endswitch;?>
     <?php 

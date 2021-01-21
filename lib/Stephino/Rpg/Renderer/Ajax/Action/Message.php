@@ -5,7 +5,7 @@
  * 
  * @title      Action::Message
  * @desc       Message actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -43,7 +43,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
         // Delete the message
         $result = Stephino_Rpg_Db::get()->tableMessages()->delete($messageId);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($result);
     }
     
@@ -97,7 +96,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
             $messageContent
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($messageId);
     }
     

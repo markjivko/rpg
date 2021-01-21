@@ -4,7 +4,7 @@
  * 
  * @title      Console template - ListUserResources
  * @desc       Template for the Console:ListUserResources command
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt

@@ -4,7 +4,7 @@
  * 
  * @title     Action::City
  * @desc      City Actions
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -74,7 +74,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('Could not update name, please try again later', 'stephino-rpg'));
         }
             
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 Stephino_Rpg_Db_Table_Cities::COL_CITY_NAME       => $cityName,
@@ -97,7 +96,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         $cityWorkers = isset($data[self::REQUEST_CITY_WORKERS]) ? $data[self::REQUEST_CITY_WORKERS] : null;
         
         // Get our city information
-        $cityInfo = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);
+        $cityInfo = self::getCityInfo($cityId);
         
         // Invalid workers type
         if (!is_array($cityWorkers)) {
@@ -110,7 +109,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         // Validate the workers
         foreach ($cityWorkers as $buildingConfigId => $buildingWorkers) {
             /* @var $buildingConfig Stephino_Rpg_Config_Building */
-            list($buildingData, $buildingConfig) = Stephino_Rpg_Renderer_Ajax_Action::getBuildingInfo(
+            list($buildingData, $buildingConfig) = self::getBuildingInfo(
                 $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID], 
                 $buildingConfigId
             );
@@ -179,7 +178,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         // Workers multi-update
         $result = Stephino_Rpg_Db::get()->tableBuildings()->updateWorkers($cityBuildingWorkers);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             $result,
             $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID]
@@ -198,7 +196,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         $cityId = isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null;
         
         // Get our city information
-        $cityInfo = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);
+        $cityInfo = self::getCityInfo($cityId);
         
         // Already the Metropolis
         if ($cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_IS_CAPITAL]) {
@@ -226,7 +224,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Get the Metropolis movement cost data
-        $costData = Stephino_Rpg_Renderer_Ajax_Action::getCostData(
+        $costData = self::getCostData(
             $cityConfig, 
             $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL] - 1
         );

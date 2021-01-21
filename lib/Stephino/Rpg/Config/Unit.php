@@ -5,7 +5,7 @@
  * 
  * @title      Unit
  * @desc       Holds the configuration for a single "Unit" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -116,7 +116,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -140,7 +139,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
     
@@ -215,7 +213,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
     public function setAbilitySpy($enabled) {
         $this->_abilitySpy = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -248,7 +245,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
             $this->_spySuccessRate = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -271,7 +267,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
     public function setSpySuccessRatePolynomial($successRatePolynomial) {
         $this->_spySuccessRatePoly = $this->_sanitizePoly($successRatePolynomial);
 
-        // Method chaining
         return $this;
     }
     
@@ -318,7 +313,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
             $this->_troopMass = 0;
         }
         
-        // Method chaining
         return $this;
     }
     

@@ -5,7 +5,7 @@
  * 
  * @title      Single Item
  * @desc       An abstraction of a "single" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -151,7 +151,6 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
             return null;
         }
         
-        // All done
         return json_encode($result);
     }
     
@@ -186,7 +185,6 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
             } while (false);
         }
         
-        // All done
         return $slot;
     }
     
@@ -235,7 +233,6 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
             } while (false);
         }
         
-        // All done
         return $slots;
     }
     
@@ -261,7 +258,6 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
             } while (false);
         }
         
-        // All done
         return $actionArea;
     }
     
@@ -317,7 +313,6 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
             $polynomial = (null === $newDefinition ? null : json_encode($newDefinition));
         }
         
-        // All done
         return $polynomial;
     }
     
@@ -432,7 +427,6 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
             $animations = (!count($animationsArray) ? null : json_encode($animationsArray));
         }
         
-        // All done
         return $animations;
     }
 }

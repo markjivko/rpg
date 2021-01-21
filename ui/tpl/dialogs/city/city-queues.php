@@ -4,7 +4,7 @@
  * 
  * @title      City dialog - queues
  * @desc       Template for the city queues dialog
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -151,7 +151,7 @@ foreach ($queueData as $queueType => $queueRows):
                                         ?>
                                             &plus;<b><?php echo $entityDelta;?></b>
                                         <?php break; default:?>
-                                            <?php echo esc_html__('Level', 'stephino-rpg');?> <b><?php echo $entityDelta;?></b>
+                                            &#x25B2; <?php echo esc_html__('Level', 'stephino-rpg');?> <b><?php echo $entityDelta;?></b>
                                         <?php break; endswitch;?>
                                     </span>
                                 </span>
@@ -178,6 +178,28 @@ foreach ($queueData as $queueType => $queueRows):
                             data-effect="countdownBar" 
                             data-effect-args="<?php echo ($queueLeft . ',' . $queueTotal);?>">
                         </div>
+                        <?php switch ($queueRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE]): case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_BUILDING: ?>
+                            <button 
+                                class="btn btn-default w-100" 
+                                data-click="buildingUpgradeCancelDialog"
+                                data-click-args="<?php echo $entityConfig->getId();?>">
+                                <span><b><?php echo esc_html__('Stop', 'stephino-rpg');?></b></span>
+                            </button>
+                        <?php break; case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT: case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_SHIP:?>
+                            <button 
+                                class="btn btn-default w-100"
+                                data-click="entityDialog" 
+                                data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
+                                <span><b><?php echo esc_html__('Dequeue', 'stephino-rpg');?></b></span>
+                            </button>
+                        <?php break; case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH: ?>
+                            <button 
+                                class="btn btn-warning w-100" 
+                                data-click="researchFieldQueue" 
+                                data-click-args="<?php echo $entityConfig->getId();?>,0">
+                                <span><b><?php echo esc_html__('Cancel', 'stephino-rpg');?></b></span>
+                            </button>
+                        <?php break; endswitch;?>
                     </div>
                 </div>
             <?php endforeach;?>

@@ -4,7 +4,7 @@
  * 
  * @title      Building-Entities dialog
  * @desc       Template for the building entities
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -89,7 +89,7 @@ foreach ($entitiesData as list($entityConfig)) {
                                     class="w-100 text-center"
                                     data-click="entityDialog" 
                                     data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
-                                    <?php echo esc_html__('Dequeue', 'stephino-rpg');?>
+                                    <b><?php echo esc_html__('Dequeue', 'stephino-rpg');?></b>
                                 </span>
                             </div>
                         <?php endif;?>
@@ -221,23 +221,6 @@ foreach ($entitiesData as list($entityConfig)) {
                         ?>
                     </div>
                 </div>
-                <?php if ($requirementsMet && $entityCount > 0):
-                    // Get the entity production data
-                    $productionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionData(
-                        $entityConfig,
-                        null === $buildingData ? 0 : $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
-                        $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_ISLAND_ID],
-                        $entityCount
-                    );
-
-                    if (count($productionData)):
-                        $productionTitle = esc_html__('Garrison effect', 'stephino-rpg');
-                ?>
-                    <div class="col-12 mt-4">
-                        <?php require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_PRODUCTION);?>
-                    </div>
-                <?php endif;endif;?>
-                
                 <div class="row col-12 m-0">
                     <?php if ($entityConfig->getDisbandable() && $entityCount > 0):?>
                         <div class="col-12 <?php if ($requirementsMet):?>col-lg-6<?php endif;?>">

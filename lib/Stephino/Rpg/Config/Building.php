@@ -5,7 +5,7 @@
  * 
  * @title      Building
  * @desc       Holds the configuration for a single "Building" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -172,7 +172,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -196,7 +195,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
     
@@ -224,7 +222,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
             $this->_attackPoints = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -246,7 +243,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
     public function setAttackPointsPolynomial($attackPointsPolynomial) {
         $this->_attackPointsPolynomial = $this->_sanitizePoly($attackPointsPolynomial);
 
-        // Method chaining
         return $this;
     }
     
@@ -274,7 +270,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
             $this->_defensePoints = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -296,7 +291,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
     public function setDefensePointsPolynomial($defensePointsPolynomial) {
         $this->_defensePointsPolynomial = $this->_sanitizePoly($defensePointsPolynomial);
 
-        // Method chaining
         return $this;
     }
 
@@ -319,7 +313,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
     public function setUseWorkers($enabled) {
         $this->_useWorkers = (boolean) $enabled;
 
-        // Method chaining
         return $this;
     }
 
@@ -348,7 +341,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
             $this->_workersCapacity = 1;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -371,7 +363,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
     public function setWorkersCapacityPolynomial($workersCapacityPolynomial) {
         $this->_workersCapacityPolynomial = $this->_sanitizePoly($workersCapacityPolynomial);
 
-        // Method chaining
         return $this;
     }
     
@@ -403,7 +394,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
             $this->_refundPercent = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -429,7 +419,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_cityAnimations = $this->_sanitizeLevels($animations, '_sanitizeAnimations');
 
-        // Method chaining
         return $this;
     }
 
@@ -453,7 +442,6 @@ class Stephino_Rpg_Config_Building extends Stephino_Rpg_Config_Item_Single {
         // Set the action area
         $this->_actionArea = $this->_sanitizeLevels($actionArea, '_sanitizeActionArea');
 
-        // Method chaining
         return $this;
     }
     

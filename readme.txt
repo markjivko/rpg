@@ -1,6 +1,6 @@
 === Stephino RPG (Game) ===
 Contributors: stephino
-Plugin link: https://mors.fun
+Plugin link: https://stephino.com
 Donate link: https://gum.co/stephino-rpg
 Tags: rpg, mmorpg, platformer, game, games, pwa, browser, strategy, fun, chrome
 Requires at least: 5.0
@@ -28,7 +28,7 @@ Create your own platformer mini-games and play games created by others to earn r
 If you want to learn more about why this project exists, I invite you to watch [this YouTube video](https://youtu.be/6d_Yx_WmHBo).
 
 = Demo and Support =
-You can [access the Demo](https://mors.fun) by simply logging in with a Google or Twitter account.
+You can [access the Demo](https://stephino.com) by simply logging in with a Google or Twitter account.
 
 We strongly believe in the right to be forgotten so when you're done testing the game just click on the "Delete Account" button from the game settings.
 
@@ -130,6 +130,23 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 6. (PRO) Customize all game objects and even monetize your game with PayPal micro-transactions!
 
 == Changelog ==
+
+= [0.3.0] 2021-01-21 =
+* Enhancements
+  * Games Arena: sorting, pagination, author page, rewards and more
+  * Action buttons to Queues/Garrison dialogs
+  * Building level indicator and upgrade arrows in city view
+  * City level and statue level indicators to island view
+  * Occupied slots indicators to world view
+  * Garrison effects to entity recruit/disband dialogs
+* Bug fixes
+  * Fixed Bug: Research field dequeue refund
+* Additional changes
+  * Improved multi-update SQL helper
+  * Improved Changelog announcement
+  * Announcements are marked as read on user action
+  * Moved garrison effect to garrison dialog
+  * Removed the `stephino_rpg_ptf_plays` DB table
 
 = [0.2.9] 2021-01-11 =
 * Enhancements

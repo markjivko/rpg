@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Convoy
  * @desc       Convoy dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -25,7 +25,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Convoy extends Stephino_Rpg_Renderer_Aja
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_LIST);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => 'Active Convoys',

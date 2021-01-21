@@ -4,7 +4,7 @@
  * 
  * @title     Model:Statistics
  * @desc      Statistics Model
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -38,7 +38,7 @@ class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
      * Fill-out missing entries for the last month
      */
     public function gather() {
-        Stephino_Rpg_Log::info('Gathering stats...');
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Gathering stats...');
         
         // Prepare the date array
         $dates = array(

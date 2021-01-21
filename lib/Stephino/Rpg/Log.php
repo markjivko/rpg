@@ -5,7 +5,7 @@
  * 
  * @title      RPG Logging utility
  * @desc       Entry points handler
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -46,6 +46,17 @@ class Stephino_Rpg_Log {
      */
     public static function error() {
         // Disabled in production 
+    }
+    
+    /**
+     * Check whether logs are used; returns false in production
+     * 
+     * @return boolean
+     */
+    public static function check() {
+        // Disabled in production
+        return false;
+        //
     }
     
     /**

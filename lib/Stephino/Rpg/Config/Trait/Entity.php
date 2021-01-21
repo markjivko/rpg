@@ -4,7 +4,7 @@
  * 
  * @title     Entity
  * @desc      Define entity items
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -120,7 +120,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
     public function setBuilding($id) {
         $this->_buildingId = (null === $id ? null : intval($id));
 
-        // Method chaining
         return $this;
     }
     
@@ -143,7 +142,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
     public function setDisbandable($enabled) {
         $this->_disbandable = (boolean) $enabled;
 
-        // Method chaining
         return $this;
     }
     
@@ -172,7 +170,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->__disbandablePopulation = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -193,7 +190,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
     public function setCivilian($civilian) {
         $this->_civilian = (boolean) $civilian;
         
-        // Method chaining
         return $this;
     }
     
@@ -215,7 +211,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
     public function setAbilityColonize($enabled) {
         $this->_abilityColonize = (boolean) $enabled;
         
-        // Method chaining
         return $this;
     }
     
@@ -247,7 +242,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->_armour = 100;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -279,7 +273,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->_agility = 100;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -311,7 +304,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->_damage = 100;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -343,7 +335,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->_ammo = 100;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -371,7 +362,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->_lootBox = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -398,7 +388,6 @@ trait Stephino_Rpg_Config_Trait_Entity {
             $this->_transportMass = 1;
         }
         
-        // Method chaining
         return $this;
     }
     

@@ -4,7 +4,7 @@
  * 
  * @title      Building dialog
  * @desc       Template for the building dialog
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -44,7 +44,8 @@ list($requirements, $requirementsMet) = Stephino_Rpg_Renderer_Ajax_Action::getRe
                 </div>
             <?php endif;?>
             <?php if (null !== $queueData):?>
-                <button class="item-level-uc-cancel btn btn-warning" data-click="buildingUpgradeCancelDialog">
+                <div data-effect="sound" data-effect-args="queueBuilding" class="d-none"></div>
+                <button class="item-level-uc-cancel btn btn-default" data-click="buildingUpgradeCancelDialog">
                     <span>
                         <span 
                             data-effect="countdownTime" 
@@ -55,10 +56,6 @@ list($requirements, $requirementsMet) = Stephino_Rpg_Renderer_Ajax_Action::getRe
                         &#11045; <b><?php echo esc_html__('Stop', 'stephino-rpg');?></b>
                     </span>
                 </button>
-                <div 
-                    data-effect="sound"
-                    data-effect-args="queueBuilding">
-                </div>
             <?php else:?>
                 <button class="item-level-upgrade btn btn-default" data-click="buildingUpgradeDialog">
                     <span><?php echo (is_array($buildingData) ? esc_html__('Upgrade', 'stephino-rpg') : esc_html__('Build', 'stephino-rpg'));?></span>

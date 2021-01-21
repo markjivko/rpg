@@ -5,7 +5,7 @@
  * 
  * @title      Table:Ptfs
  * @desc       Holds the platformer definitions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -225,7 +225,7 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      */
     public function getAll($preDefined = false) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `" . $this->getTableName() . "`"
+            "SELECT * FROM `$this`"
             . ($preDefined ? " WHERE `" . self::COL_PTF_USER_ID . "` = '0'" : ''),
             ARRAY_A
         );
@@ -239,10 +239,14 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      * <li>Other live platformers</li>
      * </ul>
      * 
-     * @param int $userId User ID
+     * @param int     $userId      User ID
+     * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
+     * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
+     * @param int     $limitCount  (optional) Limit count; default <b>null</b>
+     * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getForUserId($userId) {
+    public function getForUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
         $result = array();
         
         // Sanitize the user ID
@@ -250,10 +254,44 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
         
         // User 0 is reserved for pre-defined platformers
         if ($userId > 0) {
+            // Sanitize the order column
+            if (null !== $orderBy) {
+                $columnsList = array_filter(
+                    (new ReflectionClass($this))->getConstants(),
+                    function($constantName) {
+                        return preg_match('%^COL_%', $constantName);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+                if (!in_array($orderBy, $columnsList)) {
+                    $orderBy = null;
+                }
+                $orderAsc = !!$orderAsc;
+            }
+
+            // Sanitize the limit
+            if (null !== $limitCount) {
+                $limitCount = abs((int) $limitCount);
+            }
+            if (null !== $limitOffset) {
+                $limitOffset = abs((int) $limitOffset);
+            }
+            
+            // Get the rows
             $result = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `" . $this->getTableName() . "`"
-                . " WHERE `" . self::COL_PTF_USER_ID . "` = '$userId'"
-                . " OR `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'",
+                "SELECT * FROM `$this`"
+                . " WHERE ("
+                    . " `" . self::COL_PTF_USER_ID . "` = '$userId'"
+                    . " OR `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'"
+                . " )"
+                . (null !== $orderBy
+                    ? " ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
+                    : ''
+                )
+                . (null !== $limitCount
+                    ? " LIMIT " . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
+                    : ''
+                ),
                 ARRAY_A
             );
         }
@@ -262,12 +300,49 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     }
     
     /**
-     * Get all the platformers this user has authored
+     * Get all the platformers this user can play (count):<ul>
+     * <li>Own platformers (live or private)</li>
+     * <li>Other live platformers</li>
+     * </ul>
      * 
      * @param int $userId User ID
+     * @return int Number of platformers
+     */
+    public function getCountForUserId($userId) {
+        $result = 0;
+        
+        // Sanitize the user ID
+        $userId = abs((int) $userId);
+        if ($userId > 0) {
+            $dbRow = $this->getDb()->getWpDb()->get_row(
+                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
+                . " WHERE ("
+                    . " `" . self::COL_PTF_USER_ID  . "` = '$userId'"
+                    . " OR `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'"
+                . " )", 
+                ARRAY_A
+            );
+
+            // Valid result
+            if (is_array($dbRow) && isset($dbRow['count'])) {
+                $result = intval($dbRow['count']);
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Get all the platformers this user has authored
+     * 
+     * @param int     $userId      User ID
+     * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
+     * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
+     * @param int     $limitCount  (optional) Limit count; default <b>null</b>
+     * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getByUserId($userId) {
+    public function getByUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
         $result = array();
         
         // Sanitize the user ID
@@ -275,14 +350,73 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
         
         // User 0 is reserved for pre-defined platformers
         if ($userId > 0) {
+            // Sanitize the order column
+            if (null !== $orderBy) {
+                $columnsList = array_filter(
+                    (new ReflectionClass($this))->getConstants(),
+                    function($constantName) {
+                        return preg_match('%^COL_%', $constantName);
+                    },
+                    ARRAY_FILTER_USE_KEY
+                );
+                if (!in_array($orderBy, $columnsList)) {
+                    $orderBy = null;
+                }
+                $orderAsc = !!$orderAsc;
+            }
+
+            // Sanitize the limit
+            if (null !== $limitCount) {
+                $limitCount = abs((int) $limitCount);
+            }
+            if (null !== $limitOffset) {
+                $limitOffset = abs((int) $limitOffset);
+            }
+            
+            // Get the rows
             $result = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `" . $this->getTableName() . "`"
-                . " WHERE `" . self::COL_PTF_USER_ID . "` = '$userId'",
+                "SELECT * FROM `$this`"
+                . " WHERE `" . self::COL_PTF_USER_ID . "` = '$userId'"
+                . (null !== $orderBy
+                    ? " ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
+                    : ''
+                )
+                . (null !== $limitCount
+                    ? " LIMIT " . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
+                    : ''
+                ),
                 ARRAY_A
             );
         }
         
         return is_array($result) ? $result : array();
+    }
+    
+    /**
+     * Get all the platformers this user has authored (count)
+     * 
+     * @param int $userId User ID
+     * @return int Number of platformers
+     */
+    public function getCountByUserId($userId) {
+        $result = 0;
+        
+        // Sanitize the user ID
+        $userId = abs((int) $userId);
+        if ($userId > 0) {
+            $dbRow = $this->getDb()->getWpDb()->get_row(
+                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
+                . " WHERE `" . self::COL_PTF_USER_ID  . "` = '$userId'", 
+                ARRAY_A
+            );
+
+            // Valid result
+            if (is_array($dbRow) && isset($dbRow['count'])) {
+                $result = intval($dbRow['count']);
+            }
+        }
+        
+        return $result;
     }
 }
 

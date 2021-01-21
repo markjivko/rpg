@@ -5,7 +5,7 @@
  * 
  * @title      Game Data Caching
  * @desc       Caching mechanism for common game data
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -101,7 +101,6 @@ class Stephino_Rpg_Cache_Game {
             update_option(Stephino_Rpg::OPTION_CACHE, json_encode($this->_data));
         }
         
-        // Method chaining
         return $this;
     }
 }

@@ -4,7 +4,7 @@
  * 
  * @title      User Cities dialog
  * @desc       Template for the user Cities list
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt

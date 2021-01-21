@@ -5,7 +5,7 @@
  * 
  * @title      Modifier
  * @desc       Holds the configuration for a single "Modifier" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -119,7 +119,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
     
@@ -143,7 +142,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectMetricSatisfaction($satisfaction) {
         $this->_effectMetricSatisfaction = (null === $satisfaction ? null : intval($satisfaction));
 
-        // Method chaining
         return $this;
     }
     
@@ -167,7 +165,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectMetricStorage($effectMetricStorage) {
         $this->_effectMetricStorage = (null === $effectMetricStorage ? null : intval($effectMetricStorage));
 
-        // Method chaining
         return $this;
     }
 
@@ -191,7 +188,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectMetricPopulation($effectMetricPopulation) {
         $this->_effectMetricPopulation = (null === $effectMetricPopulation ? null : intval($effectMetricPopulation));
 
-        // Method chaining
         return $this;
     }
 
@@ -215,7 +211,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceGold($effectResourceGold) {
         $this->_effectResourceGold = (null === $effectResourceGold ? null : intval($effectResourceGold));
 
-        // Method chaining
         return $this;
     }
     
@@ -239,7 +234,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceResearch($effectResourceResearch) {
         $this->_effectResourceResearch = (null === $effectResourceResearch ? null : intval($effectResourceResearch));
 
-        // Method chaining
         return $this;
     }
 
@@ -263,7 +257,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceGem($effectResourceGem) {
         $this->_effectResourceGem = (null === $effectResourceGem ? null : intval($effectResourceGem));
 
-        // Method chaining
         return $this;
     }
 
@@ -287,7 +280,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceAlpha($effectResourceAlpha) {
         $this->_effectResourceAlpha = (null === $effectResourceAlpha ? null : intval($effectResourceAlpha));
 
-        // Method chaining
         return $this;
     }
 
@@ -311,7 +303,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceBeta($effectResourceBeta) {
         $this->_effectResourceBeta = (null === $effectResourceBeta ? null : intval($effectResourceBeta));
 
-        // Method chaining
         return $this;
     }
 
@@ -335,7 +326,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceGamma($effectResourceGamma) {
         $this->_effectResourceGamma = (null === $effectResourceGamma ? null : intval($effectResourceGamma));
 
-        // Method chaining
         return $this;
     }
 
@@ -359,7 +349,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceExtra1($effectResourceExtra1) {
         $this->_effectResourceExtra1 = (null === $effectResourceExtra1 ? null : intval($effectResourceExtra1));
 
-        // Method chaining
         return $this;
     }
 
@@ -383,7 +372,6 @@ class Stephino_Rpg_Config_Modifier extends Stephino_Rpg_Config_Item_Single {
     public function setEffectResourceExtra2($effectResourceExtra2) {
         $this->_effectResourceExtra2 = (null === $effectResourceExtra2 ? null : intval($effectResourceExtra2));
 
-        // Method chaining
         return $this;
     }
 }

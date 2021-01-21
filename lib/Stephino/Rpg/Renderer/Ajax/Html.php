@@ -5,7 +5,7 @@
  * 
  * @title      HTML Renderer
  * @desc       Create the HTML pages
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -405,7 +405,6 @@ class Stephino_Rpg_Renderer_Ajax_Html {
             require $templatePath;
         }
         
-        // All done
         return ob_get_clean();
     }
 }

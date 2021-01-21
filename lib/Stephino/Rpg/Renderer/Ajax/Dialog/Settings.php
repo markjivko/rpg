@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Settings
  * @desc       Settings dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -18,7 +18,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     // Dialog templates
     const TEMPLATE_INFO           = 'settings/settings-info';
     const TEMPLATE_RESOURCES      = 'settings/settings-resources';
-    const TEMPLATE_CREDITS        = 'settings/settings-credits';
+    const TEMPLATE_ABOUT          = 'settings/settings-about';
+    const TEMPLATE_ANNOUNCEMENT   = 'settings/settings-announcement';
     const TEMPLATE_DELETE_ACCOUNT = 'settings/settings-delete-account';
     
     /**
@@ -133,8 +134,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
         
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_RESOURCES);
-        
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Resources', 'stephino-rpg'),
@@ -152,8 +151,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
         
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
-        
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Settings', 'stephino-rpg'),
@@ -167,8 +164,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     public static function ajaxDeleteAccount() {
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_DELETE_ACCOUNT);
-        
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Delete Account', 'stephino-rpg'),
@@ -177,19 +172,72 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     }
     
     /**
-     * Show the credits dialog
+     * Show the About dialog
      */
-    public static function ajaxCredits() {
-        // Get the credits HTML
-        $credits = Stephino_Rpg_Credits::html();
+    public static function ajaxAbout() {
+        // Store the changelog flag
+        $changeLogFlag = false;
+        if (Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_CHL_READ)) {
+            Stephino_Rpg_Cache_User::getInstance()->setValue(
+                Stephino_Rpg_Cache_User::KEY_CHL_READ, 
+                Stephino_Rpg::PLUGIN_VERSION
+            );
+            $changeLogFlag = true;
+        }
+        
+        // Get the HTMLs
+        $about = Stephino_Rpg_About::html(true);
         
         // Show the dialog
-        require self::dialogTemplatePath(self::TEMPLATE_CREDITS);
-        
-        // All done
+        require self::dialogTemplatePath(self::TEMPLATE_ABOUT);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE => __('Credits', 'stephino-rpg'),
+                self::RESULT_TITLE => __('About', 'stephino-rpg') . ' Stephino RPG',
+            )
+        );
+    }
+    
+    /**
+     * Show the announcement (if available) and mark it as read
+     */
+    public static function ajaxAnnouncement() {
+        // Get the announcement
+        $result = Stephino_Rpg_Db::get()->modelAnnouncement()->get(true);
+        
+        do {
+            // Valid result that has not expired
+            if (is_array($result) && $result[3] >= 0) {
+                // Authenticated user
+                if (Stephino_Rpg_TimeLapse::get()->userId()) {
+                    // Have not read this announcement yet
+                    if ($result[0] != Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
+                        // Mark it as read so it only pops-up once
+                        Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_ANN_READ, $result[0]);
+                        
+                        // Store the title
+                        $title = esc_html($result[1]);
+                        
+                        // Store the paragraphs
+                        $paragraphs = preg_replace(
+                            '%<p\b%i', 
+                            '<p data-effect="typewriter"', 
+                            $result[2]
+                        );
+                        break;
+                    }
+                }
+            }
+            
+            // Nothing to show
+            $title = __('Announcements', 'stephino-rpg');
+            $paragraphs = __('No announcements', 'stephino-rpg');
+        } while(false);
+        
+        // Show the dialog
+        require self::dialogTemplatePath(self::TEMPLATE_ANNOUNCEMENT);
+        return Stephino_Rpg_Renderer_Ajax::wrap(
+            array(
+                self::RESULT_TITLE => $title,
             )
         );
     }

@@ -4,7 +4,7 @@
  * 
  * @title      Time-Lapse::Queues
  * @desc       Manage the queues time-lapse
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -112,8 +112,8 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                                 $buildingMessageData
                             );
                             
-                            Stephino_Rpg_Log::info('Queue - Economy: Building');
-                            Stephino_Rpg_Log::debug($buildingMessageData);
+                            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Queue - Economy: Building');
+                            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($buildingMessageData);
                             
                             // Earned points
                             $earnedPoints += ($newBuildingLevel * Stephino_Rpg_Config::get()->core()->getScoreQueueBuilding());
@@ -134,8 +134,8 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                             $dataRow
                         );
                         
-                        Stephino_Rpg_Log::info('Queue - Diplomacy: Premium modifier expired');
-                        Stephino_Rpg_Log::debug($dataRow);
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Queue - Diplomacy: Premium modifier expired');
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($dataRow);
                         
                         // Mark row for deletion
                         $dataRow[self::MAGIC_KEY_DELETE] = true;
@@ -194,8 +194,8 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                                 }
                             }
                             
-                            Stephino_Rpg_Log::info('Queue - Research: Complete');
-                            Stephino_Rpg_Log::debug($supportResearchMessageData);
+                            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Queue - Research: Complete');
+                            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($supportResearchMessageData);
                             
                             $earnedPoints += ($newResearchFieldLevel * Stephino_Rpg_Config::get()->core()->getScoreQueueResearch());
                         }
@@ -288,12 +288,12 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                                     );
                                     
                                     // Log the details
-                                    Stephino_Rpg_Log::info('Queue - Economy: ' . (
+                                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Queue - Economy: ' . (
                                         Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT == $dataRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE] 
                                             ? 'Unit' 
                                             : 'Ship'
                                     ));
-                                    Stephino_Rpg_Log::debug($entitiesMessageData);
+                                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($entitiesMessageData);
                                 }
                             }
                         }

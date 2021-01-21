@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Transport
  * @desc       Transport dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -28,7 +28,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
      * Show the transport preparation dialog
      * 
      * @param array $data Data containing <ul>
-     *     <li><b>commonArgs</b> array((int) Destination City ID]</li>
+     * <li><b>commonArgs</b> array((int) City ID)</li>
      * </ul>
      * @throws Exception
      */
@@ -57,7 +57,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_PREPARE);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Prepare transport', 'stephino-rpg'),
@@ -137,7 +136,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_REVIEW);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Review transport', 'stephino-rpg'),

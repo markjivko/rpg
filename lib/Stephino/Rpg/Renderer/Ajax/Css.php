@@ -5,7 +5,7 @@
  * 
  * @title      CSS Animations Renderer - delivered through AJAX
  * @desc       Creates CSS animations
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -105,6 +105,7 @@ class Stephino_Rpg_Renderer_Ajax_Css {
         $year = date('Y');
         
         // Prepare the ID
+        $view = ucfirst($view);
         $cssId = $view . (null !== $identifier ? '::' . $identifier : '');
         
         // Prepare the header
@@ -124,7 +125,6 @@ class Stephino_Rpg_Renderer_Ajax_Css {
 [anim]{will-change:transform,opacity,z-index;position:absolute;overflow:hidden;}[anim]>div{will-change:transform,top;position:absolute;}.no-anim [anim],.no-anim [anim]>div{display:none;-webkit-animation:none;animation:none;}
 CSS;
 
-        // All done
         return strlen($result) ? ($cssHeader . $result . PHP_EOL . PHP_EOL . '/*EOF*/') : null;
     }
     
@@ -234,7 +234,6 @@ CSS;
             );
         }
         
-        // All done
         return $result;
     }
 
@@ -296,7 +295,6 @@ CSS;
             $result[$islandData->getId()] = $islandRules;
         }
 
-        // All done
         return $result;
     }
 
@@ -350,7 +348,6 @@ CSS;
             $result[$configCity->getId()] = $cityRules;
         }
 
-        // All done
         return $result;
     }
 
@@ -668,7 +665,6 @@ CSS;
             }
         }
         
-        // All done
         return implode(' ', $result);
     }
     

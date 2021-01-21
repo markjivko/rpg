@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Building
  * @desc       Building dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -179,7 +179,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
 
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE           => $buildingConfig->getName(),
@@ -314,7 +313,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_MARKET);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE           => 'Trade resources',
@@ -359,7 +357,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_UPGRADE);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE           => $buildingConfig->getName() . ' - ' . (!is_array($buildingData) ? 'Build' : 'Upgrade'),
@@ -403,7 +400,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_UPGRADE_CANCEL);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE           => $buildingConfig->getName() . ' - Cancel Upgrade',

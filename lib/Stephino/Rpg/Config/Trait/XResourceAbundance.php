@@ -4,7 +4,7 @@
  * 
  * @title     Extra resource abundance
  * @desc      Define override for extra resources abundance
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -44,7 +44,6 @@ trait Stephino_Rpg_Config_Trait_XResourceAbundance {
     public function setResourceExtra1Abundant($abundant) {
         $this->_resourceExtra1Abundant = (boolean) $abundant;
 
-        // Method chaining
         return $this;
     }
 
@@ -66,7 +65,6 @@ trait Stephino_Rpg_Config_Trait_XResourceAbundance {
     public function setResourceExtra2Abundant($abundance) {
         $this->_resourceExtra2Abundant = (boolean) $abundance;
 
-        // Method chaining
         return $this;
     }
 }

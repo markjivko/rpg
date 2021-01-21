@@ -5,7 +5,7 @@
  * 
  * @title      Initializer
  * @desc       Initialization sequences for world and player
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -94,7 +94,7 @@ class Stephino_Rpg_Task_Initializer {
                 
                 // Fully initialized the human account
                 if (null === $robotId) {
-                    Stephino_Rpg_Log::debug('Player #' . $userId . ' init: skipped');
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug('Player #' . $userId . ' init: skipped');
                     $result = $userId;
                     break;
                 }
@@ -109,7 +109,7 @@ class Stephino_Rpg_Task_Initializer {
             $logPrefix = (null === $robotId ? ('Player #' . $userId) : ('Robot #' . $robotId)) . ' ';
             
             // Log the robot ID
-            Stephino_Rpg_Log::info($logPrefix . ' init: start');
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($logPrefix . ' init: start');
             
             try {
                 // Spawn new islands for human players only
@@ -158,7 +158,7 @@ class Stephino_Rpg_Task_Initializer {
                 
                 // Initialized the user
                 $result = $userId;
-                Stephino_Rpg_Log::info($logPrefix . ' init: finish');
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($logPrefix . ' init: finish');
                 
                 // Store the event
                 if (null === $robotId) {
@@ -169,15 +169,14 @@ class Stephino_Rpg_Task_Initializer {
                 $db->modelUsers()->delete($userId);
                 
                 // Log the error
-                Stephino_Rpg_Log::warning($logPrefix . ' init: failure');
-                Stephino_Rpg_Log::warning($exc->getMessage(), $exc->getFile(), $exc->getLine());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($logPrefix . ' init: failure');
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage(), $exc->getFile(), $exc->getLine());
                 
                 // Rethrow the exception
                 throw $exc;
             }
         } while(false);
         
-        // All done
         return $result;
     }
     

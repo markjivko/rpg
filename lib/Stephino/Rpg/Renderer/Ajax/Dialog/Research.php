@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Research
  * @desc       Research dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -92,7 +92,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Research extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => $researchAreaConfig->getName(),

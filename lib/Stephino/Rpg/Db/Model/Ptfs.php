@@ -4,7 +4,7 @@
  * 
  * @title     Model:Platformers
  * @desc      Platformers Model
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -20,7 +20,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     /**
      * Tile: side length in pixels
      */
-    const TILE_SIDE           = 64;
+    const TILE_SIDE = 64;
     
     /**
      * Tile set: width in tiles
@@ -30,7 +30,12 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     /**
      * Tile set: height in tiles
      */
-    const TILE_SET_VERTICAL   = 4;
+    const TILE_SET_VERTICAL = 4;
+    
+    /**
+     * Pagination: items per page
+     */
+    const PAGINATION_ITEMS_PER_PAGE = 8;
     
     // Platformer definition
     const PTF_DEF_NAME    = 'name';
@@ -100,69 +105,100 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     }
     
     /**
-     * Mark the game as started of finished, updating the corresponding fields in both <b>tablePtf</b> and <b>tablePtfPlays</b>
+     * Mark the game as started of finished, updating the corresponding fields; must be used in Time-Lapse mode
      * 
-     * @param int     $ptfId    Platformer Id
-     * @param int     $userId   Player Id
-     * @param boolean $ptfStart (optional) Start/Finish; default <b>true</b>
-     * @param boolean $ptfWon   (optional) When finishing a game, mark it as a win; default <b>false</b>
+     * @param int     $ptfId         Platformer Id
+     * @param boolean $ptfStart      (optional) Start/Finish; default <b>true</b>
+     * @param boolean $ptfWon        (optional) When finishing a game, mark it as a win; default <b>false</b>
      * @throws Exception
      */
-    public function play($ptfId, $userId, $ptfStart = true, $ptfWon = false) {
-        if (is_array($ptfRow = $this->getDb()->tablePtfs()->getById($ptfId))) {
-            $currentTime = time();
-            
-            // Get the plays row
-            $ptfPlaysRow = $this->getDb()->tablePtfPlays()->getByUserAndPtf($userId, $ptfId);
-            
-            // User stats
-            if (!is_array($ptfPlaysRow) && !$ptfStart) {
-                throw new Exception(__('Cannot finish this game', 'stephino-rpg'));
-            }
-            
-            if (is_array($ptfPlaysRow)) {
-                // Update the existing play
-                $ptfPlaysUpdate = $ptfStart
-                    ? array(
-                        Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_STARTED      => $ptfPlaysRow[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_STARTED] + 1,
-                        Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_STARTED_TIME => $currentTime,
-                    )
-                    : array(
-                        Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_FINISHED => $ptfPlaysRow[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_FINISHED] + 1,
-                    );
+    public function play($ptfId, $ptfStart = true, $ptfWon = false) {
+        if (Stephino_Rpg_TimeLapse::get()->userId()) {
+            if (is_array($ptfRow = $this->getDb()->tablePtfs()->getById($ptfId))) {
+                // Get the user cache
+                $userCache = Stephino_Rpg_Cache_User::getInstance()->getData();
                 
-                // Mark the victory
-                if (!$ptfStart && $ptfWon) {
-                    $ptfPlaysUpdate[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_WON] = $ptfPlaysRow[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_WON] + 1;
-                    $ptfPlaysUpdate[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_WON_TIME] = $currentTime;
+                // Get the PTF data
+                $ptfData = isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA])
+                    ? (
+                        is_array($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA]) 
+                            ? $userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA] 
+                            : array()
+                    )
+                    : array();
+                
+                // Get the PTF time
+                $ptfTime = isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME])
+                    ? abs((int) $userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME])
+                    : 0;
+                
+                // Time to reset
+                if (Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours() > 0) {
+                    $currentTime = time();
+                    if (($currentTime - $ptfTime) >= Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours() * 3600) {
+                        $ptfData = array();
+                        $ptfTime = $currentTime;
+                    }
                 }
                 
-                // Update the play
-                $this->getDb()->tablePtfPlays()->updateById(
-                    $ptfPlaysUpdate, 
-                    $ptfPlaysRow[Stephino_Rpg_Db_Table_PtfPlays::COL_ID]
-                );
-            } else {
-                // Start a new play
-                $this->getDb()->tablePtfPlays()->create($ptfId, $userId, $currentTime);
+                // Never played the game
+                if (!isset($ptfData[$ptfId])) {
+                    if(!$ptfStart) {
+                        throw new Exception(__('Cannot finish this game', 'stephino-rpg'));
+                    }
+                    
+                    // Start a new play
+                    $ptfData[$ptfId] = Stephino_Rpg_Cache_User::PTF_DATA_STARTED;
+                } else {
+                    // Mark only if not already successful
+                    if (!$ptfStart && Stephino_Rpg_Cache_User::PTF_DATA_WON != $ptfData[$ptfId]) {
+                        $ptfData[$ptfId] = $ptfWon
+                            ? Stephino_Rpg_Cache_User::PTF_DATA_WON
+                            : Stephino_Rpg_Cache_User::PTF_DATA_LOST;
+                    }
+                }
+                
+                // Update the PTF cache
+                Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_PTF_DATA, $ptfData);
+                if (!isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME]) 
+                    || $ptfTime != $userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME]) {
+                    Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_PTF_TIME, $ptfTime);
+                }
+                
+                // Prepare the user update
+                if (!$ptfStart) {
+                    $userData = Stephino_Rpg_TimeLapse::get()->userData();
+                    // Update the user
+                    $userUpdate = array(
+                        Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED => $userData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED] + 1
+                    );
+                    
+                    // Mark the victory
+                    if (!$ptfStart && $ptfWon) {
+                        $userUpdate[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON] = $userData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON] + 1;
+                    }
+                    
+                    // Update the user stats
+                    $this->getDb()->tableUsers()->updateById($userUpdate, Stephino_Rpg_TimeLapse::get()->userId());
+                }
+
+                // Update the platformer
+                $ptfUpdate = $ptfStart
+                    ? array(
+                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED] + 1,
+                    )
+                    : array(
+                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED] + 1,
+                    );
+
+                // Mark the victory
+                if (!$ptfStart && $ptfWon) {
+                    $ptfUpdate[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] = $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] + 1;
+                }
+
+                // Update the PTF stats
+                $this->getDb()->tablePtfs()->updateById($ptfUpdate, $ptfId);
             }
-            
-            // Update the platformer
-            $ptfUpdate = $ptfStart
-                ? array(
-                    Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED] + 1,
-                )
-                : array(
-                    Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED] + 1,
-                );
-            
-            // Mark the victory
-            if (!$ptfStart && $ptfWon) {
-                $ptfUpdate[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] = $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] + 1;
-            }
-            
-            // Update the play
-            $this->getDb()->tablePtfs()->updateById($ptfUpdate, $ptfId);
         }
     }
     
@@ -331,7 +367,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 $preDefPlatformersData = @json_decode(file_get_contents($ptfsDataPath), true);
             }
             if (!is_array($preDefPlatformersData)) {
-                Stephino_Rpg_Log::warning(Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json file is not a valid associative array');
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json file is not a valid associative array');
                 break;
             }
             
@@ -349,7 +385,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                         @json_decode(file_get_contents($preDefPtfPath), true)
                     );
                 } catch (Exception $exc) {
-                    Stephino_Rpg_Log::warning($exc->getMessage() . ' (#' . intval($preDefPtfId) . ')');
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage() . ' (#' . intval($preDefPtfId) . ')');
                     unset($preDefPlatformersData[$preDefPtfId]);
                 }
             }
@@ -668,35 +704,138 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     }
     
     /**
+     * Get the list of available categories
+     * 
+     * @return string[]
+     */
+    public function getCategories() {
+        return array(
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_MODIFIED_TIME => __('Date', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED      => __('Popularity', 'stephino-rpg'),
+        );
+    }
+    
+    /**
      * Get all the platformers this user has access to (own or public platformers) supplemented with the following columns:<ul>
      * <li>self::PTF_EXTRA_PREVIEW => <b>(int[])</b> Top-left square tile set used for preview</li>
      * <li>self::PTF_EXTRA_REWARD  => <b>(int)</b> Reward in gems for finishing this platformer</li>
      * </ul>
      * 
-     * @param int $userId User ID
+     * @param int     $userId      User ID
+     * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
+     * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
+     * @param int     $limitCount  (optional) Limit count; default <b>null</b>
+     * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getForUserId($userId) {
+    public function getForUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
+        // Validate the category
+        if (null !== $orderBy) {
+            if (!in_array($orderBy, array_keys($this->getCategories()))) {
+                $orderBy = null;
+            }
+        }
+        
+        return $this->_supplementRows(
+            $this->getDb()->tablePtfs()->getForUserId($userId, $orderBy, $orderAsc, $limitCount, $limitOffset),
+            $userId
+        );
+    }
+    
+    /**
+     * Get all the platformers this user has created supplemented with the following columns:<ul>
+     * <li>self::PTF_EXTRA_PREVIEW => <b>(int[])</b> Top-left square tile set used for preview</li>
+     * <li>self::PTF_EXTRA_REWARD  => <b>(int)</b> Reward in gems for finishing this platformer</li>
+     * </ul>
+     * 
+     * @param int     $userId      User ID
+     * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
+     * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
+     * @param int     $limitCount  (optional) Limit count; default <b>null</b>
+     * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
+     * @return array List of platformers; array may be empty
+     */
+    public function getByUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
+        // Validate the category
+        if (null !== $orderBy) {
+            if (!in_array($orderBy, array_keys($this->getCategories()))) {
+                $orderBy = null;
+            }
+        }
+        
+        return $this->_supplementRows(
+            $this->getDb()->tablePtfs()->getByUserId($userId, $orderBy, $orderAsc, $limitCount, $limitOffset),
+            $userId
+        );
+    }
+    
+    /**
+     * Get a PTF row supplemented with the following columns:<ul>
+     * <li>self::PTF_EXTRA_PREVIEW => <b>(int[])</b> Top-left square tile set used for preview</li>
+     * <li>self::PTF_EXTRA_REWARD  => <b>(int)</b> Reward in gems for finishing this platformer</li>
+     * </ul>
+     * 
+     * @param int $ptfId  Platformer ID
+     * @param int $userId User ID - required to calculate reward
+     * @return array|null
+     */
+    public function getById($ptfId, $userId) {
+        $ptfRows = $this->_supplementRows(
+            array(
+                $this->getDb()->tablePtfs()->getById($ptfId)
+            ), 
+            $userId
+        );
+        
+        return count($ptfRows) ? current($ptfRows) : null;
+    }
+    
+    /**
+     * Supplement the rows with the following columns:<ul>
+     * <li>self::PTF_EXTRA_PREVIEW => <b>(int[])</b> Top-left square tile set used for preview</li>
+     * <li>self::PTF_EXTRA_REWARD  => <b>(int)</b> Reward in gems for finishing this platformer</li>
+     * </ul>
+     * 
+     * @param array $ptfsList Platformer DB Rows
+     * @param int   $userId   User ID
+     * @return array
+     */
+    protected function _supplementRows($ptfsList, $userId) {
         // Get the platformers win times
         $ptfsWon = array();
-        foreach($this->getDb()->tablePtfPlays()->getByUserId($userId) as $ptfPlayRow) {
-            $ptfWonTime = (int) $ptfPlayRow[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_WON_TIME];
-            if ($ptfWonTime > 0) {
-                $ptfId = (int) $ptfPlayRow[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_PTF_ID];
-                $ptfsWon[$ptfId] = $ptfWonTime;
+        
+        // Reward is available
+        if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
+            // Get the user data
+            $userData = $this->getDb()->tableUsers()->getById($userId, true);
+
+            // Get the cache
+            $userCache = is_array($userData) && isset($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS]) 
+                ? json_decode($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS], true) 
+                : array();
+            if (!is_array($userCache)) {
+                $userCache = array();
+            }
+
+            // Store the games that were won
+            if (isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA])
+                && is_array($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA])
+                && isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME])) {
+                foreach ($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA] as $ptfId => $ptfStatus) {
+                    if (Stephino_Rpg_Cache_User::PTF_DATA_WON == $ptfStatus) {
+                        $ptfsWon[(int) $ptfId] = (int) $userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME];
+                    }
+                }
             }
         }
         
         // Prepare the current timestamp
         $currentTime = time();
-        
-        // Get the platformers list
-        $ptfsList = $this->getDb()->tablePtfs()->getForUserId($userId);
-        
+
         // Prepare the available rewards
         foreach ($ptfsList as $dbKey => &$ptfRow) {
             // Prepare the tile set
-            if (!is_array($tileSet = $this->getTileSet($ptfRow, true, true))) {
+            if (!is_array($ptfRow) || !is_array($tileSet = $this->getTileSet($ptfRow, true, true))) {
                 unset($ptfsList[$dbKey]);
                 continue;
             }
@@ -706,18 +845,20 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             
             // Prepare the reward
             $ptfRow[self::PTF_EXTRA_REWARD] = 0;
-            
-            // Get the platformer ID
-            $ptfId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];
-            
-            // Reward reset
-            $resetSeconds = 3600 * Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours();
-            
-            // First time or enough time has passed
-            if (!isset($ptfsWon[$ptfId]) || ($resetSeconds > 0 && $currentTime - $ptfsWon[$ptfId] >= $resetSeconds)) {
-                $ptfRow[self::PTF_EXTRA_REWARD] = Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer();
+            if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
+                // Get the platformer ID
+                $ptfId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];
+
+                // Reward reset
+                $resetSeconds = 3600 * Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours();
+
+                // First time or enough time has passed
+                if (!isset($ptfsWon[$ptfId]) || ($resetSeconds > 0 && $currentTime - $ptfsWon[$ptfId] >= $resetSeconds)) {
+                    $ptfRow[self::PTF_EXTRA_REWARD] = Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer();
+                }
             }
         }
+        
         return $ptfsList;
     }
     
@@ -731,25 +872,33 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     public function getRewards($userId, $ptfId) {
         $result = array(0,0);
         
-        // Prepare the current timestamp
-        $currentTime = time();
+        // Get the user data
+        $userData = $this->getDb()->tableUsers()->getById($userId, true);
         
-        // Get the play entrt
-        if (is_array($ptfPlay = $this->getDb()->tablePtfPlays()->getByUserAndPtf($userId, $ptfId))) {
-            // Get the win time
-            $ptfWon = (int) $ptfPlay[Stephino_Rpg_Db_Table_PtfPlays::COL_PTF_PLAY_WON_TIME];
-
-            // Reward reset
-            $resetSeconds = 3600 * Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours();
-
-            // First time or enough time has passed
-            if (0 === $ptfWon || ($resetSeconds > 0 && $currentTime - $ptfWon >= $resetSeconds)) {
+        // Get the cache
+        $userCache = is_array($userData) && isset($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS]) 
+            ? json_decode($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS], true) 
+            : array();
+        if (!is_array($userCache)) {
+            $userCache = array();
+        }
+        
+        // Store the games that were won
+        if (isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA])
+            && is_array($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA])
+            && isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME])) {
+            // Get the played games data
+            $ptfData = $userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA];
+            
+            // This game was not won before
+            if (!isset($ptfData[$ptfId]) || Stephino_Rpg_Cache_User::PTF_DATA_WON != $ptfData[$ptfId]) {
                 $result = array(
                     Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer(),
                     Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor(),
                 );
             }
         }
+
         return $result;
     }
 }

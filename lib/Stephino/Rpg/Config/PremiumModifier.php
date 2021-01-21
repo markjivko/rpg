@@ -5,7 +5,7 @@
  * 
  * @title      Premium Modifier
  * @desc       Holds the configuration for a single "Premium Modifier" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -132,7 +132,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -155,7 +154,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
 
@@ -184,7 +182,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_duration = 1;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -230,7 +227,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_maxQueueBuildings = null;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -258,7 +254,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_maxQueueEntities = null;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -286,7 +281,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_maxQueueResearchFields = null;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -315,7 +309,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_timeContractionBuildings = null;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -344,7 +337,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_timeContractionEntities = null;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -373,7 +365,6 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
             $this->_timeContractionResearchFields = null;
         }
         
-        // Method chaining
         return $this;
     }
 }

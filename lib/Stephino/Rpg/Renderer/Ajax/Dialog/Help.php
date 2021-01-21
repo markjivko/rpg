@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Help
  * @desc       Help dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -53,7 +53,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_MAIN);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Codex', 'stephino-rpg'),
@@ -97,7 +96,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
         // Show the content
         require self::dialogTemplatePath(self::TEMPLATE_MAIN_PREFIX . '-' . $itemType);
         
-        // All done
         Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(

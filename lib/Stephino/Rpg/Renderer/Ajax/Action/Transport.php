@@ -5,7 +5,7 @@
  * 
  * @title      Action::Transport
  * @desc       Transport actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -137,10 +137,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Transport extends Stephino_Rpg_Renderer_
         }
         
         // Reserve resources for transport
-        Stephino_Rpg_Renderer_Ajax_Action::spend(
-            Stephino_Rpg_Renderer_Ajax_Action::getResourceData($transportResourcesInfo),
-            $originCityInfo
-        );
+        self::spend(self::getResourceData($transportResourcesInfo), $originCityInfo);
         
         // Create the convoy
         $result = Stephino_Rpg_Db::get()->modelConvoys()->createTransport(
@@ -151,7 +148,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Transport extends Stephino_Rpg_Renderer_
             $transportResourcesInfo
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($result);
     }
 }

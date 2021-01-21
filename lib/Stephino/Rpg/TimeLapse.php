@@ -4,7 +4,7 @@
  * 
  * @title      Time-Lapse
  * @desc       Calculate queues, convoys and resources for the given user
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -152,7 +152,6 @@ class Stephino_Rpg_TimeLapse {
             self::$_instances[$key]->_init();
         }
         
-        // All done
         return self::$_instances[$key];
     }
     
@@ -259,7 +258,6 @@ class Stephino_Rpg_TimeLapse {
             $this->_threads[] = array($wpUserId, $robotId, $forced);
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -298,7 +296,7 @@ class Stephino_Rpg_TimeLapse {
                     $worker->step($checkPointTime, $checkPointDelta);
                     
                     // Log the result
-                    Stephino_Rpg_Log::debug(
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug(
                         'TL-CP U' . $userId . ' (' . ($checkPointKey + 1) . '/' . count($checkPointList) . '): ' 
                         . get_class($worker) . ' (' . $checkPointTime . ', ' . $checkPointDelta . ') in ' 
                         . (microtime(true) - $logWorkerStart)
@@ -334,7 +332,7 @@ class Stephino_Rpg_TimeLapse {
                 $worker->save();
                 
                 // Log the result
-                Stephino_Rpg_Log::info('TL-SV: ' . get_class($worker) . ' in ' . (microtime(true) - $logWorkerStart));
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('TL-SV: ' . get_class($worker) . ' in ' . (microtime(true) - $logWorkerStart));
             }
             
             // New threads were registered (by the Convoys worker)

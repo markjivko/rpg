@@ -5,7 +5,7 @@
  * 
  * @title      Time-Lapse::Convoys
  * @desc       Manage the convoys time-lapse
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -294,8 +294,8 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                                 );
                                 break;
                         }
-                        Stephino_Rpg_Log::info($dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TYPE] . ': ' . self::ACTION_RETURN);
-                        Stephino_Rpg_Log::debug($payloadArray, $dataRow);
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TYPE] . ': ' . self::ACTION_RETURN);
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($payloadArray, $dataRow);
                         
                         // Delete the convoy
                         $dataRow[self::MAGIC_KEY_DELETE] = true;
@@ -478,7 +478,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                 // All went well
                 $messageDetails = array($newCityId, $newCityConfig->getId());
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::warning($exc->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
             }
         } while(false);
         
@@ -747,7 +747,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                             $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] 
                         );
                     } catch (Exception $exc) {
-                        Stephino_Rpg_Log::warning($exc->getMessage());
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
                     }
 
                     // This entity does not return
@@ -1241,7 +1241,6 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
             }
         }
         
-        // All done
         return $finalConvoyPayload;
     }
     
@@ -1414,8 +1413,8 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
         }
         
         // Log the details
-        Stephino_Rpg_Log::info('Attack: ' . $attackStatus);
-        Stephino_Rpg_Log::debug($attackerPayload, $dataRow);
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Attack: ' . $attackStatus);
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($attackerPayload, $dataRow);
     }
     
     /**

@@ -5,7 +5,7 @@
  * 
  * @title      Tutorial
  * @desc       Holds the configuration for a single "Tutorial" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -159,7 +159,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -183,7 +182,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
 
@@ -212,7 +210,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
         // Store it
         $this->_tutorialView = $tutorialView;
 
-        // Method chaining
         return $this;
     }
 
@@ -236,7 +233,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setTutorialTarget($tutorialTarget) {
         $this->_tutorialTarget = (null === $tutorialTarget ? null : trim($tutorialTarget));
 
-        // Method chaining
         return $this;
     }
     
@@ -258,7 +254,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setTutorialTargetClick($clickable) {
         $this->_tutorialTargetClick = !!$clickable;
         
-        // Method chaining
         return $this;
     }
 
@@ -284,7 +279,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setTutorialTargetWaitForElement($tutorialTargetWaitForElement) {
         $this->_tutorialTargetWaitForElement = (null === $tutorialTargetWaitForElement ? null : trim($tutorialTargetWaitForElement));
 
-        // Method chaining
         return $this;
     }
 
@@ -306,7 +300,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setTutorialCanSkip($enabled) {
         $this->_tutorialCanSkip = (boolean) $enabled;
 
-        // Method chaining
         return $this;
     }
     
@@ -331,7 +324,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setTutorialIsCheckPoint($enabled) {
         $this->_tutorialIsCheckPoint = (boolean) $enabled;
 
-        // Method chaining
         return $this;
     }
     
@@ -354,7 +346,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
     public function setTutorialRewardOnSkip($enabled) {
         $this->_tutorialRewardOnSkip = (boolean) $enabled;
 
-        // Method chaining
         return $this;
     }
 
@@ -384,7 +375,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardGold = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -414,7 +404,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardResearch = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -444,7 +433,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardGem = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -474,7 +462,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardAlpha = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -504,7 +491,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardBeta = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -534,7 +520,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardGamma = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -564,7 +549,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardExtra1 = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -594,7 +578,6 @@ class Stephino_Rpg_Config_Tutorial extends Stephino_Rpg_Config_Item_Single {
             $this->_tutorialCheckPointRewardExtra2 = 0;
         }
         
-        // Method chaining
         return $this;
     }
 

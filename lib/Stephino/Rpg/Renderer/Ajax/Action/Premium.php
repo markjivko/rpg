@@ -5,7 +5,7 @@
  * 
  * @title      Action::Premium
  * @desc       Premium actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -116,7 +116,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Aj
                 );
         }
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($redirectUrl);
     }
     
@@ -251,7 +250,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Aj
             Stephino_Rpg_Renderer_Ajax_Dialog_Premium::TEMPLATE_MODIFIERS_DETAILS
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(true);
     }
     

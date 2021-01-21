@@ -5,7 +5,7 @@
  * 
  * @title      Island
  * @desc       Holds the configuration for a single "Island" item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -146,7 +146,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
     public function setName($name) {
         $this->_name = (null === $name ? null : Stephino_Rpg_Utils_Lingo::cleanup($name));
 
-        // Method chaining
         return $this;
     }
 
@@ -170,7 +169,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
     public function setDescription($description) {
         $this->_description = (null === $description ? null : Stephino_Rpg_Utils_Lingo::cleanup($description));
 
-        // Method chaining
         return $this;
     }
     
@@ -207,7 +205,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
             $this->_islandWidth = 25;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -244,7 +241,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
             $this->_islandHeight = 25;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -269,7 +265,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
         // Store the value
         $this->_statueSlot = $this->_sanitizeSlot($statueSlot);
 
-        // Method chaining
         return $this;
     }
     
@@ -294,7 +289,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
         // Store the value
         $this->_citySlots = $this->_sanitizeSlots($citySlots);
 
-        // Method chaining
         return $this;
     }
     
@@ -318,7 +312,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
         // Store the value
         $this->_animationSlots = $this->_sanitizeSlots($animationSlots, true);
 
-        // Method chaining
         return $this;
     }
     
@@ -342,7 +335,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_islandAnimations = $this->_sanitizeAnimations($animations);
         
-        // Method chaining
         return $this;
     }
     
@@ -367,7 +359,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_vacantLotAnimations = $this->_sanitizeAnimations($animations);
         
-        // Method chaining
         return $this;
     }
     
@@ -392,7 +383,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
         // Set the animations
         $this->_worldAnimations = $this->_sanitizeAnimations($animations);
         
-        // Method chaining
         return $this;
     }
     
@@ -426,7 +416,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
             $this->_resourceExtra1Abundance = 100;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -460,7 +449,6 @@ class Stephino_Rpg_Config_Island extends Stephino_Rpg_Config_Item_Single {
             $this->_resourceExtra2Abundance = 100;
         }
         
-        // Method chaining
         return $this;
     }
     

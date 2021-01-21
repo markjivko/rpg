@@ -4,7 +4,7 @@
  * 
  * @title     Model:Cities
  * @desc      Cities Model
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -76,7 +76,6 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
             
         } while(false);
         
-        // All done
         return $cityName;  
     }
     
@@ -243,11 +242,10 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
                 // Create the building
                 $this->getDb()->modelBuildings()->create($cityId, $buildingConfig->getId());
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::warning($exc->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
             }
         }
         
-        // All done
         return array($cityId, $configCityObject);
     }
     
@@ -274,7 +272,6 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
             $this->getDb()->tableIslands()->markAsFull($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID], false);
         }
         
-        // All done
         return $result;
     }
     
@@ -321,7 +318,6 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
             }
         }
         
-        // All done
         return $result;
     }
     
@@ -453,6 +449,46 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Could not update resource', 'stephino-rpg'));
         }
         return $resourceValue;
+    }
+    
+    /**
+     * Get the number of cities that occupy an island by ID
+     * 
+     * @param int[] $islandIds Island DB IDs
+     * @return int Associative array of Island DB ID => Number of cities
+     */
+    public function getCountByIslands($islandIds) {
+        $result = array();
+        
+        // Perform the search
+        if (is_array($islandIds)) {
+            // Sanitize the island IDs
+            $sanitizedIslandIds = array_unique(
+                array_filter(
+                    array_map('intval', $islandIds), 
+                    function($islandId) {
+                        return $islandId > 0;
+                    }
+                )
+            );
+
+            if (count($sanitizedIslandIds)) {
+                // Initialize the result
+                foreach ($sanitizedIslandIds as $islandId) {
+                    $result[$islandId] = 0;
+                }
+
+                // Get the cities rows
+                $cities = $this->getDb()->tableCities()->getByIslands($sanitizedIslandIds);
+
+                // Group
+                foreach ($cities as $dbRow) {
+                    $result[(int) $dbRow[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID]]++;
+                }
+            }
+        }
+        
+        return $result;
     }
     
     /**

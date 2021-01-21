@@ -4,7 +4,7 @@
  * 
  * @title     Item costs
  * @desc      Define item costs
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -113,7 +113,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costTime = 1;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -134,7 +133,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
     public function setCostTimePolynomial($costTimePolynomial) {
         $this->_costTimePolynomial = $this->_sanitizePoly($costTimePolynomial);
 
-        // Method chaining
         return $this;
     }
     
@@ -162,7 +160,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costGold = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -190,7 +187,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costResearch = 0;
         }
         
-        // Method chaining
         return $this;
     }
     
@@ -218,7 +214,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costGem = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -246,7 +241,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costAlpha = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -274,7 +268,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costBeta = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -302,7 +295,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costGamma = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -330,7 +322,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costResourceExtra1 = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -358,7 +349,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
             $this->_costResourceExtra2 = 0;
         }
         
-        // Method chaining
         return $this;
     }
 
@@ -379,7 +369,6 @@ trait Stephino_Rpg_Config_Trait_Cost {
     public function setCostPolynomial($costPolynomial) {
         $this->_costPolynomial = $this->_sanitizePoly($costPolynomial);
 
-        // Method chaining
         return $this;
     }
 

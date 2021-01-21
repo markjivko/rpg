@@ -5,7 +5,7 @@
  * 
  * @title      Action::Settings
  * @desc       Settings actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -109,7 +109,11 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
                 // Validate the length
                 if (strlen($dataValue) > (Stephino_Rpg_WordPress::USER_META_NICKNAME === $dataKey 
                     ? self::MAX_LENGTH_USER_NAME : self::MAX_LENGTH_USER_DESC)) {
-                    throw new Exception((Stephino_Rpg_WordPress::USER_META_NICKNAME === $dataKey ? 'Nickname' : 'Biography') . ' is too long');
+                    throw new Exception(
+                        Stephino_Rpg_WordPress::USER_META_NICKNAME === $dataKey 
+                            ? __('Nickname is too long', 'stephino-rpg')
+                            : __('Biography is too long', 'stephino-rpg')
+                    );
                 }
                 
                 // Prepare the result
@@ -142,7 +146,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
             throw new Exception(__('Unknown setting', 'stephino-rpg'));
         }
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($dataValue);
     }
     
@@ -318,7 +321,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
             $methodArguments
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap($result);
     }
     
@@ -336,9 +338,9 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         // Prepare the queue data
         $queuesData = null;
         if ($cityId > 0) {
-            $queuesData = Stephino_Rpg_Renderer_Ajax_Action::getBuildingQueue($cityId, true);
+            $queuesData = self::getBuildingQueue($cityId, true);
         }
-        
+
         // Wrap the result
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(

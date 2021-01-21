@@ -5,7 +5,7 @@
  * 
  * @title      Time-Lapse::Resources
  * @desc       Manage the resources time-lapse
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -52,7 +52,7 @@ class Stephino_Rpg_TimeLapse_Resources extends Stephino_Rpg_TimeLapse_Abstract {
                 );
                 
                 // Log the call count
-                Stephino_Rpg_Log::debug(
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug(
                     'TL-CP: ' . __CLASS__ . '::[' . count($productionIntervals) . ' steps, ~' 
                     . Stephino_Rpg_Config::get()->core()->getCronInterval() . ' min./step, first ' 
                     . Stephino_Rpg_Config::get()->core()->getCronAccuracy() . ' hours]'

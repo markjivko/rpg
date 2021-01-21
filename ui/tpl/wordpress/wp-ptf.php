@@ -4,7 +4,7 @@
  * 
  * @title      Platformer template
  * @desc       Template for the in-game platformer
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -35,13 +35,21 @@ if (null !== $gameTileMap = Stephino_Rpg_Db::get()->modelPtfs()->getTileMap($gam
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="theme-color" content="#222222" />
         <meta name="author" content="Mark Jivko" />
-        <meta name="copyright" content="(c) 2020, Stephino" />
+        <meta name="copyright" content="(c) 2021, Stephino" />
         <meta name="generator" content="<?php echo Stephino_Rpg::PLUGIN_SLUG;?>" />
         <meta name="version" content="<?php echo Stephino_Rpg::PLUGIN_VERSION;?>" />
         <meta name="description" content="<?php echo esc_html__('The first-ever RPG developed for WordPress', 'stephino-rpg');?>" />
     </head>
-    <body data-id="<?php echo $gameId;?>" data-version="<?php echo $gameVersion;?>" data-plugin-version="<?php echo Stephino_Rpg::PLUGIN_VERSION;?>">
-        <div data-role="score"></div>
+    <body oncontextmenu="return false;" data-id="<?php echo $gameId;?>" data-version="<?php echo $gameVersion;?>" data-plugin-version="<?php echo Stephino_Rpg::PLUGIN_VERSION;?>">
+        <div class="panel">
+            <div data-role="score"></div>
+            <div data-role="mobile-toggle"></div>
+            <div data-role="full-screen"></div>
+        </div>
+        <div data-btn="w"></div>
+        <div data-btn="a"></div>
+        <div data-btn="s"></div>
+        <div data-btn="d"></div>
         <div id="stephino-rpg-ptf">
             <div class="not-found">
                 <?php echo esc_html__('Game not found', 'stephino-rpg');?>

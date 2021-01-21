@@ -5,7 +5,7 @@
  * 
  * @title      Grid info
  * @desc       Get the grid info for available views
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -21,11 +21,14 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
     const CELL_DATA_QUEUE         = 'queue';
     const CELL_CONFIG_ID          = 'id';
     const CELL_CONFIG_NAME        = 'name';
+    const CELL_CONFIG_LEVEL       = 'level';
+    const CELL_CONFIG_ICON        = 'icon';
     const CELL_DATA_X             = 'x';
     const CELL_DATA_Y             = 'y';
     const CELL_DATA_DATA          = 'data';
     const CELL_DATA_CONFIG_ID     = 'configId';
     const CELL_DATA_ANIMATIONS    = 'anim';
+    const CELL_DATA_CITIES        = '_cities';
     const CELL_DATA_CITY_SLOTS    = '_citySlots';
     const CELL_DATA_ISLAND_W      = '_islandWidth';
     const CELL_DATA_ISLAND_H      = '_islandHeight';
@@ -83,7 +86,7 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
         
         // Get the islands around this point
         $cellGrid = Stephino_Rpg_Db::get()->tableIslands()->getIslands($coordX, $coordY, $radius, $excludedIds);
-
+        
         // Valid list of islands found
         if (is_array($cellGrid) && count($cellGrid)) {
             // Prepare our island IDs
@@ -96,6 +99,16 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                     }
                 }
             }
+            
+            // Get the number of cities on each island
+            $islandCities = Stephino_Rpg_Db::get()->modelCities()->getCountByIslands(
+                array_map(
+                    function($islandData) {
+                        return (int) $islandData[Stephino_Rpg_Db_Table_Islands::COL_ID];
+                    }, 
+                    $cellGrid
+                )
+            );
 
             // Parse the data
             foreach ($cellGrid as $key => &$islandData) {
@@ -118,11 +131,12 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                                 );
                                 
                                 // Store the config data
-                                $islandData[self::CELL_DATA_CITY_SLOTS] = @json_decode($configIsland->getCitySlots(), true);
+                                $islandData[self::CELL_DATA_CITY_SLOTS]    = @json_decode($configIsland->getCitySlots(), true);
+                                $islandData[self::CELL_DATA_CITIES]        = $islandCities[$islandData[Stephino_Rpg_Db_Table_Islands::COL_ID]];
                                 $islandData[self::CELL_DATA_ISLAND_STATUE] = $coords;
                                 $islandData[self::CELL_DATA_ISLAND_W]      = $configIsland->getIslandWidth();
                                 $islandData[self::CELL_DATA_ISLAND_H]      = $configIsland->getIslandHeight();
-
+                                
                                 // Store the available animations
                                 $animationsArray = json_decode($configIsland->getWorldAnimations(), true);
                                 if (!is_array($animationsArray)) {
@@ -151,7 +165,6 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
             }
         }
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_GRID => $cellGrid,
@@ -240,7 +253,7 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
             $statueSlot = implode(',', json_decode($configIsland->getStatueSlot(), true));
         }
         
-        // Prepare the currentuser data
+        // Prepare the current user data
         $userData = null;
         
         // Valid data stored for this user
@@ -265,11 +278,12 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                 $currentSlot = $item[0] . ',' . $item[1];
                 
                 // Is this a statue slot?
-                if ($currentSlot == $statueSlot) {
+                if ($statueSlot === $currentSlot) {
                     $cellData[self::CELL_DATA_TYPE] = self::CELL_DATA_TYPE_STATUE;
                     $cellData[self::CELL_DATA_DATA] = array(
-                        self::CELL_CONFIG_ID   => $configIslandStatue->getId(),
-                        self::CELL_CONFIG_NAME => $configIslandStatue->getName(),
+                        self::CELL_CONFIG_ID    => $configIslandStatue->getId(),
+                        self::CELL_CONFIG_NAME  => $configIslandStatue->getName(),
+                        self::CELL_CONFIG_LEVEL => $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_STATUE_LEVEL],
                     );
                     
                     // Get the island animations array
@@ -310,11 +324,23 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                                     Stephino_Rpg_Config_Cities::KEY,
                                     $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID],
                                     $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL]
-                                )
+                                ),
+                                self::CELL_CONFIG_LEVEL => $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL],
                             );
 
                             // This is my city!
                             $cellData[self::CELL_DATA_CITY_OWN] = (null !== $userData && ($userData[Stephino_Rpg_Db_Table_Users::COL_ID] == $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID]));
+                            
+                            // Get the city owner information
+                            $cityOwner = $cellData[self::CELL_DATA_CITY_OWN]
+                                ? $userData
+                                : Stephino_Rpg_Db::get()->tableUsers()->getById($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID]);
+                            
+                            // Store the icon
+                            $cellData[self::CELL_DATA_DATA][self::CELL_CONFIG_ICON] = is_array($cityOwner)
+                                && $cityOwner[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID] > 0
+                                    ? get_avatar_url($cityOwner[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 256)
+                                    : null;
                             
                             // Get the configuration ID
                             if (null !== $configCity = Stephino_Rpg_Config::get()->cities()->getById($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID])) {
@@ -360,7 +386,6 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
             )
         );
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_ISLAND_CONFIG => array(
@@ -553,7 +578,6 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
             )
         );
             
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 Stephino_Rpg_Renderer_Ajax_Action_City::CELL_CONFIG_CITY_BKG => Stephino_Rpg_Utils_Media::getClosestBackgroundId(

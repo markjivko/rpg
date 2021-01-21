@@ -4,7 +4,7 @@
  * 
  * @title     Model:Messages
  * @desc      Messages Model
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -111,7 +111,7 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
             // Load the template
             require Stephino_Rpg_TimeLapse::getTemplatePath(Stephino_Rpg_TimeLapse::TEMPLATE_DIPLOMACY);
         } catch (Exception $ex) {
-            Stephino_Rpg_Log::warning($ex->getMessage());
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
         }
 
         // Override the content with our template
@@ -157,7 +157,7 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
             // Load the template
             require Stephino_Rpg_TimeLapse::getTemplatePath($notifTemplate);
         } catch (Exception $ex) {
-            Stephino_Rpg_Log::warning($ex->getMessage());
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
         }
 
         // Get the notification text
@@ -170,7 +170,7 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
                 // Load the template
                 require Stephino_Rpg_TimeLapse::getTemplatePath(Stephino_Rpg_TimeLapse::TEMPLATE_DIPLOMACY);
             } catch (Exception $ex) {
-                Stephino_Rpg_Log::warning($ex->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
             }
 
             // Override the content with our template

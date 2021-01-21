@@ -4,7 +4,7 @@
  * 
  * @title      WordPress integration
  * @desc       Handle the plugin's WordPress actions/hooks
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -249,15 +249,25 @@ class Stephino_Rpg_WordPress {
              * Embedded game
              */
             $gameRender = function() {
-                return '<div data-role="stephino-rpg-embed" style="position: relative; overflow: hidden;">'
-                    . '<svg viewBox="0 0 1920 1000" style="display: block; width: 100%; position: relative; z-index: 0;"></svg>'
+                return '<div data-role="stephino-rpg-embed" style="position:relative;overflow:hidden;">'
+                    . '<svg viewBox="0 0 1920 1000" style="display:block;width:100%;position:relative;z-index:0;"></svg>'
                     . sprintf(
                         '<%1$s src="%2$s" allowfullscreen="true" referrerpolicy="same-origin" style="%3$s"></%1$s>',
-                        'iframe', 
-                        esc_attr(Stephino_Rpg_Utils_Media::getAdminUrl(true, false)),
-                        'position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; z-index: 1; background: #23282d;'
+                            'iframe', 
+                            esc_attr(Stephino_Rpg_Utils_Media::getAdminUrl(true, false)),
+                            'position:absolute;top:0;left:0;width:100%;height:100%;border:none;z-index:1;background:#23282d;'
                     )
-                    . '<a href="' . esc_attr(Stephino_Rpg::PLUGIN_URL_WORDPRESS) . '" rel="external" style="position: absolute; z-index: 0;">WordPress Game Stephino RPG</a>'
+                    . (
+                        Stephino_Rpg_Config::get()->core()->getShowWpLink()
+                            ? sprintf(
+                                '<%1$s href="%2$s" rel="external" style="%3$s">%4$s</%1$s>',
+                                    'a', 
+                                    esc_attr(Stephino_Rpg::PLUGIN_URL_WORDPRESS),
+                                    'position:absolute;z-index:0;',
+                                    esc_html('WordPress Game - Stephino RPG')
+                            )
+                            : ''
+                    )
                 . '</div>';
             };
 

@@ -4,7 +4,7 @@
  * 
  * @title     Utils:Lingo
  * @desc      Language utils
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -44,7 +44,6 @@ class Stephino_Rpg_Utils_Lingo {
                 ) . self::escape($cityDbRow[Stephino_Rpg_Db_Table_Cities::COL_CITY_NAME]);
         }
         
-        // All done
         return $result;
     }
     

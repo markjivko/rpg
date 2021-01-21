@@ -4,7 +4,7 @@
  * 
  * @title      Entity recruitment dialog
  * @desc       Template for recruiting entities
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -27,8 +27,9 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
     </div>
 </div>
 <div class="framed">
-    <div data-role="totalCost">
+    <div data-role="totalEffect">
         <?php 
+            // Prepare the cost template
             $costTitle = Stephino_Rpg_Config_Units::KEY == $entityKey 
                 ? esc_html__('Recruitment cost', 'stephino-rpg') 
                 : esc_html__('Construction cost', 'stephino-rpg');
@@ -37,16 +38,33 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
             require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
                 Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_COSTS
             );
+            
+            // Get the entity production data
+            $productionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionData(
+                $entityConfig,
+                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
+                $entityCount
+            );
+            if (count($productionData)) {
+                $productionTitle = __('Garrison effect', 'stephino-rpg');
+                require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                    Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_PRODUCTION
+                );
+            }
+            
+            // Show the military points
+            require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_ENTITY_MILITARY
+            );
         ?>
     </div>
-</div>
-<?php 
-    require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
-        Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_REQUIREMENTS
-    );
-?>
-<?php if ($requirementsMet):?>
-    <div class="framed">
+    <?php 
+        require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+            Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_REQUIREMENTS
+        );
+    ?>
+    <?php if ($requirementsMet):?>
         <?php if (min($affordList) > 0):?>
             <div class="row no-gutters">
                 <input 
@@ -54,7 +72,7 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
                     min="1"
                     max="<?php echo min($affordList);?>"
                     value="1"
-                    data-change="entityCostPreview"
+                    data-change="entityQueuePreview"
                     data-change-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
                     data-preview="true"
                     data-preview-label="/ <?php echo Stephino_Rpg_Utils_Lingo::isuFormat(min($affordList));?>"
@@ -75,5 +93,5 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
                 <span class="badge badge-warning"><?php echo esc_html__('Not enough resources', 'stephino-rpg');?></span>
             </div>
         <?php endif; ?>
-    </div>
-<?php endif;?>
+    <?php endif;?>
+</div>

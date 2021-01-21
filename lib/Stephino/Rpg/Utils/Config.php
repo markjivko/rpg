@@ -4,7 +4,7 @@
  * 
  * @title     Utils:Config
  * @desc      Configuration utils
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -290,7 +290,6 @@ class Stephino_Rpg_Utils_Config {
             }
         }
         
-        // All done
         return $unlockMaxLevel;
     }
     
@@ -766,7 +765,7 @@ class Stephino_Rpg_Utils_Config {
                     }
                 }
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::warning($exc->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
             }
         }
         

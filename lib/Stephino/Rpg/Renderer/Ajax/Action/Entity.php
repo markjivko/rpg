@@ -5,7 +5,7 @@
  * 
  * @title      Action::Entity
  * @desc       Entity actions
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -19,7 +19,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
     const REQUEST_ENTITY_QUEUE     = 'entityQueue';
     
     /**
-     * Get the updated total cost table
+     * Queue/dequeue effect preview
      * 
      * @param array $data Data containing <ul>
      * <li><b>cityId</b> (int) City ID</li>
@@ -27,7 +27,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
      * <li><b>entityConfigId</b> (int) Entity configuration ID</li>
      * </ul>
      */
-    public static function ajaxCostPreview($data) {
+    public static function ajaxQueuePreview($data) {
         // Get the entity key
         $entityKey = isset($data[self::REQUEST_ENTITY_KEY]) ? trim($data[self::REQUEST_ENTITY_KEY]) : null;
         
@@ -37,46 +37,70 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
         // Queue/dequeue the entity
         $entityQueue = isset($data[self::REQUEST_ENTITY_QUEUE]) ? !!$data[self::REQUEST_ENTITY_QUEUE] : true;
         
-        /* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
-        list(
-            $entityData, 
-            $entityConfig, 
-            $cityData, 
-            $buildingData, 
-            $queueData, 
-            $costData
-        ) = self::getEntityInfo(
-            isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null, 
-            self::getEntityType($entityKey), 
-            isset($data[self::REQUEST_ENTITY_CONFIG_ID]) ? intval($data[self::REQUEST_ENTITY_CONFIG_ID]) : null,
-            $entityCount
-        );
-        
-        if ($entityQueue) {
-            // Prepare the recruitment time in seconds
-            $costTime = Stephino_Rpg_Db::get()->modelEntities()->getRecruitTime(
+        if ($entityCount > 0) {
+            /* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
+            list(
+                $entityData, 
                 $entityConfig, 
-                $entityCount, 
-                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL]
+                $cityData, 
+                $buildingData, 
+                $queueData, 
+                $costData
+            ) = self::getEntityInfo(
+                isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null, 
+                self::getEntityType($entityKey), 
+                isset($data[self::REQUEST_ENTITY_CONFIG_ID]) ? intval($data[self::REQUEST_ENTITY_CONFIG_ID]) : null,
+                $entityCount
             );
 
-            // Prepare the time contraction
-            $costTimeContraction = Stephino_Rpg_Renderer_Ajax_Action::getTimeContraction($entityConfig);
-        
-            // Set the title
-            $costTitle = $entityConfig instanceof Stephino_Rpg_Config_Unit 
-                ? __('Recruitment cost', 'stephino-rpg') 
-                : __('Construction cost', 'stephino-rpg');
-        } else {
-            $costTitle = __('Refund', 'stephino-rpg');
-            $costRefundMode = true;
-            $costRefundPercent = 100;
+            if ($entityQueue) {
+                // Prepare the recruitment time in seconds
+                $costTime = Stephino_Rpg_Db::get()->modelEntities()->getRecruitTime(
+                    $entityConfig, 
+                    $entityCount, 
+                    $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL]
+                );
+
+                // Prepare the time contraction
+                $costTimeContraction = self::getTimeContraction($entityConfig);
+
+                // Set the title
+                $costTitle = $entityConfig instanceof Stephino_Rpg_Config_Unit 
+                    ? __('Recruitment cost', 'stephino-rpg') 
+                    : __('Construction cost', 'stephino-rpg');
+            } else {
+                $costTitle = __('Refund', 'stephino-rpg');
+                $costRefundMode = true;
+                $costRefundPercent = 100;
+            }
+
+            // Load the table
+            require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_COSTS
+            );
+
+            // Show garrison effect in recruit mode
+            if ($entityQueue) {
+                // Get the entity production data
+                $productionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionData(
+                    $entityConfig,
+                    $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                    $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
+                    $entityCount
+                );
+                if (count($productionData)) {
+                    $productionTitle = __('Garrison effect', 'stephino-rpg');
+                    require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                        Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_PRODUCTION
+                    );
+                }
+                
+                // Show the military points
+                require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                    Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_ENTITY_MILITARY
+                );
+            }
         }
-        
-        // Load the table
-        require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
-            Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_COSTS
-        );
         
         // Create the construction queue
         return Stephino_Rpg_Renderer_Ajax::wrap(
@@ -92,6 +116,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
      * <li><b>cityId</b> (int) City ID</li>
      * <li><b>entityKey</b> (string) Entity Type</li>
      * <li><b>entityConfigId</b> (int) Entity configuration ID</li>
+     * <li><b>entityQueue</b> (boolean) Entity queue/dequeue action</li>
      * </ul>
      */
     public static function ajaxQueue($data) {
@@ -147,7 +172,12 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
                 $entityCount = $entityCountMax;
             }
             if ($entityCount <= 0) {
-                throw new Exception(__('No entities to dequeue', 'stephino-rpg'));
+                throw new Exception(
+                    sprintf(
+                        __('%s: No entities left in the queue', 'stephino-rpg'),
+                        $entityConfig->getName()
+                    )
+                );
             }
             
             // Dequeue entity
@@ -176,6 +206,67 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
         return Stephino_Rpg_Renderer_Ajax::wrap(
             $result,
             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]
+        );
+    }
+    
+    /**
+     * Disband effect preview
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>cityId</b> (int) City ID</li>
+     * <li><b>entityKey</b> (string) Entity Type</li>
+     * <li><b>entityConfigId</b> (int) Entity configuration ID</li>
+     * </ul>
+     */
+    public static function ajaxDisbandPreview($data) {
+        // Get the entity key
+        $entityKey = isset($data[self::REQUEST_ENTITY_KEY]) ? trim($data[self::REQUEST_ENTITY_KEY]) : null;
+        
+        // Get the count
+        $entityCount = isset($data[self::REQUEST_ENTITY_COUNT]) ? abs((int) $data[self::REQUEST_ENTITY_COUNT]) : 0;
+        
+        if ($entityCount > 0) {
+            /* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
+            list(
+                $entityData, 
+                $entityConfig, 
+                $cityData, 
+                $buildingData, 
+                $queueData, 
+                $costData
+            ) = self::getEntityInfo(
+                isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null, 
+                self::getEntityType($entityKey), 
+                isset($data[self::REQUEST_ENTITY_CONFIG_ID]) ? intval($data[self::REQUEST_ENTITY_CONFIG_ID]) : null,
+                $entityCount
+            );
+
+            // Get the entity production data
+            $productionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionData(
+                $entityConfig,
+                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
+                $entityCount
+            );
+            if (count($productionData)) {
+                $productionRefundMode = true;
+                $productionTitle = __('Garrison effect', 'stephino-rpg');
+                require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                    Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_PRODUCTION
+                );
+            }
+            
+            // Show the military points
+            $entityDisbandMode = true;
+            require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_ENTITY_MILITARY
+            );
+        }
+        
+        // Create the construction queue
+        return Stephino_Rpg_Renderer_Ajax::wrap(
+            true,
+            $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID]
         );
     }
     
@@ -211,7 +302,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
         if (!$entityConfig->getDisbandable()) {
             throw new Exception(
                 sprintf(
-                    __('Cannot disband "%s"', 'stephino-rpg'),
+                    __('%s: Cannot disband', 'stephino-rpg'),
                     $entityConfig->getName()
                 )
             );
@@ -221,7 +312,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
         if ($entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] < $entityCount) {
             throw new Exception(
                 sprintf(
-                    __('Not enough "%s" left to disband', 'stephino-rpg'),
+                    __('%s: No entities left', 'stephino-rpg'),
                     $entityConfig->getName()
                 )
             );

@@ -5,7 +5,7 @@
  * 
  * @title      Table:Users
  * @desc       Holds the users information
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -130,6 +130,20 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     const COL_USER_BATTLE_VICTORIES = 'user_battle_victories';
     
     /**
+     * PTF: Games played
+     * 
+     * @var int
+     */
+    const COL_USER_PTF_PLAYED = 'user_ptf_played';
+    
+    /**
+     * PTF: Games won
+     * 
+     * @var int
+     */
+    const COL_USER_PTF_WON = 'user_ptf_won';
+    
+    /**
      * Current Game User data
      * 
      * @var array|null
@@ -150,6 +164,8 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     `" . self::COL_USER_BATTLE_VICTORIES . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_BATTLE_DRAWS . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_BATTLE_DEFEATS . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+    `" . self::COL_USER_PTF_PLAYED . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
+    `" . self::COL_USER_PTF_WON . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_RESOURCE_GOLD . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_RESOURCE_RESEARCH . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_RESOURCE_GEM . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
@@ -185,7 +201,6 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
             )
         );
 
-        // All done
         return false === $insertResult ? null : $this->getDb()->getWpDb()->insert_id;
     }
     
@@ -327,9 +342,11 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
      * @return int
      */
     public function getPlace($userScore) {
-        $userScore = abs((int) $userScore);
+        // Prepare the result
+        $result = 1;
         
-        // Get the message count
+        // Sanitize the user score
+        $userScore = abs((int) $userScore);
         $dbRow = $this->getDb()->getWpDb()->get_row(
             "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
             . " WHERE ("
@@ -339,13 +356,11 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
             ARRAY_A
         );
         
-        // Prepare the result
-        $result = 1;
-        
         // Valid result
         if (is_array($dbRow) && isset($dbRow['count'])) {
             $result = intval($dbRow['count']) + 1;
         }
+        
         return $result;
     }
     
@@ -379,10 +394,11 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
      * @return int
      */
     public function getActive($timestamp) {
+        // Prepare the result
+        $result = 0;
+        
         // Sanitize the timestamp
         $timeStamp = abs((int) $timestamp);
-        
-        // Get the message count
         $dbRow = $this->getDb()->getWpDb()->get_row(
             "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
             . " WHERE ("
@@ -392,13 +408,11 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
             ARRAY_A
         );
         
-        // Prepare the result
-        $result = 0;
-        
         // Valid result
         if (is_array($dbRow) && isset($dbRow['count'])) {
             $result = intval($dbRow['count']);
         }
+        
         return $result;
     }
     
@@ -469,7 +483,6 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
             $this->_userData = null;
         } while(false);
         
-        // All done
         return $result;
     }
 
@@ -492,7 +505,6 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
             $result = array();
         }
         
-        // All done
         return $result;
     }
     

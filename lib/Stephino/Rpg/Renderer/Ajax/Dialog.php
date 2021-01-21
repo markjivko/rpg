@@ -5,7 +5,7 @@
  * 
  * @title      Dialogs Renderer - delivered through AJAX
  * @desc       Creates Dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -14,8 +14,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog {
     
     // Common templates
     const TEMPLATE_COMMON_COSTS            = 'common/common-costs';
+    const TEMPLATE_COMMON_ENTITY_MILITARY  = 'common/common-entity-military';
+    const TEMPLATE_COMMON_PAGINATION       = 'common/common-pagination';
     const TEMPLATE_COMMON_PRODUCTION       = 'common/common-production';
-    const TEMPLATE_COMMON_PRODUCTION_TABLE = 'common/common-production-table';
     const TEMPLATE_COMMON_REQUIREMENTS     = 'common/common-requirements';
     
     // Common request keys

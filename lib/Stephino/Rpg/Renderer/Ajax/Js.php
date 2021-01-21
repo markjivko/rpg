@@ -5,7 +5,7 @@
  * 
  * @title      JS Renderer - delivered through AJAX
  * @desc       Creates CSS animations
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -58,8 +58,9 @@ class Stephino_Rpg_Renderer_Ajax_Js {
             ? 'Progressive Web App (SSL needed)'
             : 'Game UI';
         $description = Stephino_Rpg_Renderer_Ajax::VIEW_PWA == $view
-            ? 'Detect offline mode, reduce server load by 95%, improve UX over slower networks'
+            ? 'Detect offline mode and reduce server load'
             : 'Handle CRUD operations and other interactions';
+        $view = ucfirst($view);
         
         // Prepare the header
         $jsHeader = <<<"JS"
@@ -77,7 +78,6 @@ class Stephino_Rpg_Renderer_Ajax_Js {
  */
 JS;
 
-        // All done
         return strlen($result) ? ($jsHeader . PHP_EOL . $result . PHP_EOL . PHP_EOL . '/*EOF*/') : null;
     }
     

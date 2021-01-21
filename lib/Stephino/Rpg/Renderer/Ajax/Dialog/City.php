@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::City
  * @desc       City dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -17,6 +17,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
     const TEMPLATE_RENAME       = 'city/city-rename';
     const TEMPLATE_ADVISOR      = 'city/city-advisor';
     const TEMPLATE_MOVE_CAPITAL = 'city/city-move-capital';
+    const TEMPLATE_GARRISON     = 'city/city-garrison';
     const TEMPLATE_INFO         = 'city/city-info';
     const TEMPLATE_STAGES       = 'city/city-stages';
     const TEMPLATE_GOVERNMENT   = 'city/city-government';
@@ -57,7 +58,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_RENAME);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_IS_CAPITAL] 
@@ -117,7 +117,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_ADVISOR);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Information', 'stephino-rpg'),
@@ -175,12 +174,94 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_MOVE_CAPITAL);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Move metropolis', 'stephino-rpg'),
             ),
             $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID]
+        );
+    }
+    
+    /**
+     * List all entities garrisoned in a city and military buildings
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>cityId</b> (int) City ID</li>
+     * </ul>
+     * @throws Exception
+     */
+    public static function ajaxGarrison($data) {
+        // Prepare the entities list
+        $cityEntities = array();
+        
+        // Store the city ID
+        $cityId = isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null;
+        
+        // Get all city entities
+        $allCityEntities = Stephino_Rpg_Renderer_Ajax_Action::getCityEntities($cityId, null, false);
+        
+        // Entities found
+        if (null !== $allCityEntities) {
+            list($cityData, $cityEntities) = $allCityEntities;
+        } else {
+            $cityData = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);
+        }
+        
+        // Store the building levels
+        $buildingLevels = array();
+        
+        // Prepare the military buildings
+        $militaryBuildings = array();
+        if (is_array($cityData)) {
+            foreach (Stephino_Rpg_Config::get()->buildings()->getAll() as $buildingConfig) {
+                list($buildingData) = Stephino_Rpg_Renderer_Ajax_Action::getBuildingInfo(
+                    $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID], 
+                    $buildingConfig->getId()
+                );
+                
+                // Store this building's level
+                if (is_array($buildingData) && $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] > 0) {
+                    $buildingLevels[$buildingConfig->getId()] = (int) $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL];
+                }
+                
+                // Military building
+                if ($buildingConfig->getAttackPoints() > 0 || $buildingConfig->getDefensePoints() > 0) {
+                    // Building constructed
+                    if (is_array($buildingData) && $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] > 0) {
+                        // Get the production factor
+                        $prodFactor = Stephino_Rpg_Renderer_Ajax_Action::getBuildingProdFactor(
+                            Stephino_Rpg_Config::get()->cities()->getById($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID]),
+                            $buildingConfig, 
+                            $buildingData
+                        );
+
+                        // Store the building details
+                        $militaryBuildings[$buildingConfig->getId()] = array(
+                            Stephino_Rpg_Renderer_Ajax::RESULT_MIL_ATTACK => Stephino_Rpg_Utils_Config::getPolyValue(
+                                $buildingConfig->getAttackPointsPolynomial(), 
+                                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL], 
+                                $buildingConfig->getAttackPoints()
+                            ) * $prodFactor,
+                            Stephino_Rpg_Renderer_Ajax::RESULT_MIL_DEFENSE => Stephino_Rpg_Utils_Config::getPolyValue(
+                                $buildingConfig->getDefensePointsPolynomial(), 
+                                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL], 
+                                $buildingConfig->getDefensePoints()
+                            ) * $prodFactor,
+                            Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL => $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                        );
+                    }
+                }
+            }
+        }
+        
+        // Show the dialog
+        require self::dialogTemplatePath(self::TEMPLATE_GARRISON);
+        
+        return Stephino_Rpg_Renderer_Ajax::wrap(
+            array(
+                self::RESULT_TITLE => __('Garrison', 'stephino-rpg'),
+            ),
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]
         );
     }
     
@@ -216,7 +297,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_WORKFORCE);
         
-        // All done
         Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
@@ -258,7 +338,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_STAGES);
         
-        // All done
         Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
@@ -310,7 +389,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE          => Stephino_Rpg_Utils_Lingo::getCityName($cityData),
@@ -347,7 +425,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_GOVERNMENT);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => Stephino_Rpg_Config::get()->core()->getConfigGovernmentsName(),
@@ -406,7 +483,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_QUEUES);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Queues', 'stephino-rpg'),

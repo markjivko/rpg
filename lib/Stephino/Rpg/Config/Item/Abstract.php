@@ -5,7 +5,7 @@
  * 
  * @title      Configuration Item
  * @desc       Common configuration item
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -105,7 +105,6 @@ abstract class Stephino_Rpg_Config_Item_Abstract {
             }
         }
 
-        // All done
         return $result;
     }
 
@@ -122,7 +121,6 @@ abstract class Stephino_Rpg_Config_Item_Abstract {
             $value = $value->getId();
         }
 
-        // All done
         return is_numeric($value) || is_string($value) || is_bool($value);
     }
     
@@ -278,7 +276,6 @@ abstract class Stephino_Rpg_Config_Item_Abstract {
             }
         }
         
-        // All done
         return array(
             self::DEF_KEY_CLASS  => preg_replace('%^Stephino_Rpg_%', '', $reflectionClass->getName()),
             self::DEF_KEY_TYPE   => $classType,

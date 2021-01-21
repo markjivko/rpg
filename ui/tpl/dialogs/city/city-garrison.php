@@ -4,13 +4,14 @@
  * 
  * @title      Entity list dialog
  * @desc       Template for garrisoned entities
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
+/* @var $buildingLevels int[] */
 /* @var $cityData array|null */
 /* @var $cityEntities array|null */
 $totalAttack = 0;
@@ -23,11 +24,14 @@ $totalDefense = 0;
                 ? Stephino_Rpg_Config_Units::KEY
                 : Stephino_Rpg_Config_Ships::KEY;
         
+            // Store the entity count
+            $entityCount = (int) $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];
+        
             // Prepare the military capabiliies
-            $entityAttackPoints = $entityConfig->getCivilian() ? 0 : $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] * (
+            $entityAttackPoints = $entityConfig->getCivilian() ? 0 : $entityCount * (
                 $entityConfig->getDamage() * $entityConfig->getAmmo()
             );
-            $entityDefensePoints = $entityConfig->getCivilian() ? 0 : $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] * (
+            $entityDefensePoints = $entityConfig->getCivilian() ? 0 : $entityCount * (
                 $entityConfig->getArmour() * $entityConfig->getAgility()
             );
             
@@ -36,10 +40,10 @@ $totalDefense = 0;
             $totalDefense += $entityDefensePoints;
     ?>
     <div class="framed">
-        <div class="col-12 row align-items-center m-0">
+        <div class="row align-items-center">
             <div class="col-12 col-lg-3 text-center"
                 data-role="entity" 
-                data-entity-count="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];?>"
+                data-entity-count="<?php echo $entityCount;?>"
                 data-entity-type="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE];?>"
                 data-entity-config="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID];?>" >
                 <div 
@@ -53,38 +57,68 @@ $totalDefense = 0;
                         data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
                         <?php echo $entityConfig->getName(true);?>
                     </span>
-                    <span class="label" data-html="true" title="&times; <?php echo number_format($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]);?>">
+                    <span class="label" data-html="true" title="&times; <?php echo number_format($entityCount);?>">
                         <span>
-                            &times; <b><?php echo Stephino_Rpg_Utils_Lingo::isuFormat($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]);?></b>
+                            &times; <b><?php echo Stephino_Rpg_Utils_Lingo::isuFormat($entityCount);?></b>
                         </span>
                     </span>
                 </div>
             </div>
-            <div class="col-12 col-lg-9 row">
-                <div class="col-12 col-lg-6">
-                    <div class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_MIL_ATTACK;?>"
-                        title="<?php echo number_format($entityAttackPoints);?>"
-                        data-html="true">
-                        <div class="icon"></div>
-                        <span>
-                            <?php echo Stephino_Rpg_Config::get()->core()->getMilitaryAttackName(true);?>: <b><?php
-                                echo Stephino_Rpg_Utils_Lingo::isuFormat($entityAttackPoints);
-                            ?></b>
-                        </span>
-                    </div>
+            <div class="col-12 col-lg-9 row no-gutters">
+                <?php
+                    $entityLayoutGarrison = true;
+                    require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                        Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_ENTITY_MILITARY
+                    );
+                ?>
+                <div class="col-12">
+                    <?php if ($entityConfig->getDisbandable() && $entityCount > 0):?>
+                        <button 
+                            class="btn btn-default w-100" 
+                            data-click="entityDialog" 
+                            data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DISBAND;?>">
+                            <span><?php echo esc_html__('Disband', 'stephino-rpg');?></span>
+                        </button>
+                    <?php endif;?>
+                    <button 
+                        class="btn btn-default w-100" 
+                        data-click="entityDialog" 
+                        data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_RECRUIT;?>">
+                        <?php if ($entityConfig instanceof Stephino_Rpg_Config_Unit):?>
+                            <span><?php echo esc_html__('Recruit', 'stephino-rpg');?></span>
+                        <?php else:?>
+                            <span><?php echo esc_html__('Build', 'stephino-rpg');?></span>
+                        <?php endif;?>
+                    </button>
                 </div>
-                <div class="col-12 col-lg-6">
-                    <div class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_MIL_DEFENSE;?>"
-                        title="<?php echo number_format($entityDefensePoints);?>"
-                        data-html="true">
-                        <div class="icon"></div>
-                        <span>
-                            <?php echo Stephino_Rpg_Config::get()->core()->getMilitaryDefenseName(true);?>: <b><?php
-                                echo Stephino_Rpg_Utils_Lingo::isuFormat($entityDefensePoints);
-                            ?></b>
-                        </span>
+            </div>
+            <div class="col-12">
+                <?php if ($entityCount > 0):
+                    // Get the entity building configuration ID
+                    $entityBuildingConfigId = null !== $entityConfig->getBuilding() 
+                        ? $entityConfig->getBuilding()->getId()
+                        : null;
+                
+                    // Get the entity building level
+                    $entityBuildingLevel = isset($buildingLevels[$entityBuildingConfigId])
+                        ? $buildingLevels[$entityBuildingConfigId]
+                        : 0;
+                    
+                    // Get the entity production data
+                    $productionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionData(
+                        $entityConfig,
+                        $entityBuildingLevel,
+                        $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
+                        $entityCount
+                    );
+
+                    if (count($productionData)):
+                        $productionTitle = false;
+                ?>
+                    <div class="col-12">
+                        <?php require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_PRODUCTION);?>
                     </div>
-                </div>
+                <?php endif;endif;?>
             </div>
         </div>
     </div>
@@ -123,7 +157,7 @@ $totalDefense = 0;
             $totalDefense += $militaryBuilding[Stephino_Rpg_Renderer_Ajax::RESULT_MIL_DEFENSE];
     ?>
         <div class="framed">
-            <div class="col-12 row align-items-center m-0">
+            <div class="row align-items-center">
                 <div class="col-12 col-lg-3 text-center">
                     <div 
                         class="building-entity-icon framed mt-4" 
@@ -143,7 +177,7 @@ $totalDefense = 0;
                         </span>
                     </div>
                 </div>
-                <div class="col-12 col-lg-9 row">
+                <div class="col-12 col-lg-9 row no-gutters">
                     <div class="col-12 col-lg-6">
                         <div class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_MIL_ATTACK;?>"
                             title="<?php echo number_format($militaryBuilding[Stephino_Rpg_Renderer_Ajax::RESULT_MIL_ATTACK]);?>"
@@ -168,6 +202,19 @@ $totalDefense = 0;
                             </span>
                         </div>
                     </div>
+                    <div class="col-12">
+                        <button 
+                            class="btn btn-default w-100" 
+                            data-click="buildingViewDialog" 
+                            data-click-args="<?php echo $buildingConfig->getId();?>">
+                            <span><?php 
+                                echo sprintf(
+                                    esc_html__('Visit %s', 'stephino-rpg'),
+                                    Stephino_Rpg_Config::get()->core()->getConfigBuildingName(true)
+                                );
+                            ?></span>
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -175,7 +222,7 @@ $totalDefense = 0;
 <?php endif;?>
 <h5><span><?php echo esc_html__('Total military capabilities', 'stephino-rpg');?></span></h5>
 <div class="framed">
-    <div class="col-12 row align-items-center m-0">
+    <div class="row align-items-center">
         <div class="col-12 col-lg-6">
             <div class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_MIL_ATTACK;?>"
                 title="<?php echo number_format($totalAttack);?>"

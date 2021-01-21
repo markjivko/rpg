@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Premium
  * @desc       Premium dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -33,7 +33,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Premium extends Stephino_Rpg_Renderer_Aj
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_PACKAGES);
         
-        // All done
         Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(array(
             self::RESULT_TITLE => '&#11088; ' . __('Packages', 'stephino-rpg'),
@@ -70,7 +69,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Premium extends Stephino_Rpg_Renderer_Aj
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_MODIFIERS);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(array(
             self::RESULT_TITLE => '&#11088; ' . __('Modifiers', 'stephino-rpg'),
         ));

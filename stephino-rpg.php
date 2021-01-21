@@ -6,8 +6,8 @@
  * Plugin Name: Stephino RPG
  * Description: Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on WordPress
  * Author:      Mark Jivko
- * Author URI:  https://mors.fun
- * Version:     0.2.9
+ * Author URI:  https://stephino.com
+ * Version:     0.3.0
  * Text Domain: stephino-rpg
  * Domain Path: /languages
  * License:     GPL v3+

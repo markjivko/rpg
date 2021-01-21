@@ -5,7 +5,7 @@
  * 
  * @title      RPG
  * @desc       Entry points handler
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -22,13 +22,13 @@ class Stephino_Rpg {
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.2.9';
+    const PLUGIN_VERSION          = '0.3.0';
     
     // Pro Plugin minimum compatible version
     const PLUGIN_VERSION_PRO      = '0.1.7';
     
     // DataBase version
-    const PLUGIN_VERSION_DATABASE = '0.2.1';
+    const PLUGIN_VERSION_DATABASE = '0.2.2';
     
     // Firebase version
     const PLUGIN_VERSION_FIREBASE = '7.22.1';
@@ -135,7 +135,7 @@ class Stephino_Rpg {
                 self::PLUGIN_DEMO 
                 || (
                     isset($_SERVER) && is_array($_SERVER) && isset($_SERVER['HTTP_HOST'])
-                    && false !== strpos($_SERVER['HTTP_HOST'], 'mors.fun')
+                    && false !== strpos($_SERVER['HTTP_HOST'], 'stephino.com')
                 )
             );
         }

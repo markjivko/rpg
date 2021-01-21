@@ -5,7 +5,7 @@
  * 
  * @title      Database Handler
  * @desc       Handle Database objects
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -19,7 +19,6 @@ class Stephino_Rpg_Db {
         Stephino_Rpg_Db_Table_Users::class,
         Stephino_Rpg_Db_Table_Messages::class,
         Stephino_Rpg_Db_Table_Ptfs::class,
-        Stephino_Rpg_Db_Table_PtfPlays::class,
         Stephino_Rpg_Db_Table_Convoys::class,
         Stephino_Rpg_Db_Table_Queues::class,
         Stephino_Rpg_Db_Table_Islands::class,
@@ -127,7 +126,6 @@ class Stephino_Rpg_Db {
             self::$_instances[$key] = new self($wpUserId, is_int($robotId) ? intval($robotId) : null);
         }
         
-        // All done
         return self::$_instances[$key];
     }
 
@@ -298,15 +296,6 @@ class Stephino_Rpg_Db {
      */
     public function tablePtfs() {
         return $this->_tableInstances[Stephino_Rpg_Db_Table_Ptfs::NAME];
-    }
-
-    /**
-     * The "Platformer Plays" table
-     * 
-     * @return Stephino_Rpg_Db_Table_PtfPlays
-     */
-    public function tablePtfPlays() {
-        return $this->_tableInstances[Stephino_Rpg_Db_Table_PtfPlays::NAME];
     }
 
     /**

@@ -4,7 +4,7 @@
  * 
  * @title     Item labels
  * @desc      Item labels - used in Stephino_Rpg_Config_Core
- * @copyright (c) 2020, Stephino
+ * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
  * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -327,7 +327,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceGoldName($goldName) {
         $this->_resourceGoldName = Stephino_Rpg_Utils_Lingo::cleanup($goldName);
 
-        // Method chaining
         return $this;
     }
 
@@ -349,7 +348,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceGoldDescription($goldDescription) {
         $this->_resourceGoldDescription = Stephino_Rpg_Utils_Lingo::cleanup($goldDescription);
 
-        // Method chaining
         return $this;
     }
     
@@ -373,7 +371,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceGemName($gemName) {
         $this->_resourceGemName = Stephino_Rpg_Utils_Lingo::cleanup($gemName);
 
-        // Method chaining
         return $this;
     }
 
@@ -395,7 +392,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceGemDescription($gemDescription) {
         $this->_resourceGemDescription = Stephino_Rpg_Utils_Lingo::cleanup($gemDescription);
 
-        // Method chaining
         return $this;
     }
 
@@ -419,7 +415,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceResearchName($resourceResearchName) {
         $this->_resourceResearchName = Stephino_Rpg_Utils_Lingo::cleanup($resourceResearchName);
 
-        // Method chaining
         return $this;
     }
 
@@ -441,7 +436,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceResearchDescription($resourceResearchDescription) {
         $this->_resourceResearchDescription = Stephino_Rpg_Utils_Lingo::cleanup($resourceResearchDescription);
 
-        // Method chaining
         return $this;
     }
 
@@ -465,7 +459,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceAlphaName($alphaName) {
         $this->_resourceAlphaName = Stephino_Rpg_Utils_Lingo::cleanup($alphaName);
 
-        // Method chaining
         return $this;
     }
 
@@ -487,7 +480,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceAlphaDescription($alphaDescription) {
         $this->_resourceAlphaDescription = Stephino_Rpg_Utils_Lingo::cleanup($alphaDescription);
 
-        // Method chaining
         return $this;
     }
 
@@ -511,7 +503,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceBetaName($betaName) {
         $this->_resourceBetaName = Stephino_Rpg_Utils_Lingo::cleanup($betaName);
 
-        // Method chaining
         return $this;
     }
 
@@ -533,7 +524,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceBetaDescription($betaDescription) {
         $this->_resourceBetaDescription = Stephino_Rpg_Utils_Lingo::cleanup($betaDescription);
 
-        // Method chaining
         return $this;
     }
 
@@ -557,7 +547,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceGammaName($gammaName) {
         $this->_resourceGammaName = Stephino_Rpg_Utils_Lingo::cleanup($gammaName);
 
-        // Method chaining
         return $this;
     }
 
@@ -579,7 +568,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceGammaDescription($gammaDescription) {
         $this->_resourceGammaDescription = Stephino_Rpg_Utils_Lingo::cleanup($gammaDescription);
 
-        // Method chaining
         return $this;
     }
 
@@ -603,7 +591,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceExtra1Name($extra1Name) {
         $this->_resourceExtra1Name = Stephino_Rpg_Utils_Lingo::cleanup($extra1Name);
 
-        // Method chaining
         return $this;
     }
 
@@ -625,7 +612,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceExtra1Description($extra1Description) {
         $this->_resourceExtra1Description = Stephino_Rpg_Utils_Lingo::cleanup($extra1Description);
 
-        // Method chaining
         return $this;
     }
 
@@ -649,7 +635,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceExtra2Name($extra2Name) {
         $this->_resourceExtra2Name = Stephino_Rpg_Utils_Lingo::cleanup($extra2Name);
 
-        // Method chaining
         return $this;
     }
 
@@ -671,7 +656,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setResourceExtra2Description($extra2Description) {
         $this->_resourceExtra2Description = Stephino_Rpg_Utils_Lingo::cleanup($extra2Description);
 
-        // Method chaining
         return $this;
     }
     
@@ -695,7 +679,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMetricPopulationName($populationName) {
         $this->_metricPopulationName = Stephino_Rpg_Utils_Lingo::cleanup($populationName);
 
-        // Method chaining
         return $this;
     }
 
@@ -717,7 +700,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMetricPopulationDescription($populationDescription) {
         $this->_metricPopulationDescription = Stephino_Rpg_Utils_Lingo::cleanup($populationDescription);
 
-        // Method chaining
         return $this;
     }
     
@@ -741,7 +723,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMetricSatisfactionName($satisfactionName) {
         $this->_metricSatisfactionName = Stephino_Rpg_Utils_Lingo::cleanup($satisfactionName);
 
-        // Method chaining
         return $this;
     }
 
@@ -763,7 +744,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMetricSatisfactionDescription($satisfactionDescription) {
         $this->_metricSatisfactionDescription = Stephino_Rpg_Utils_Lingo::cleanup($satisfactionDescription);
 
-        // Method chaining
         return $this;
     }
     
@@ -787,7 +767,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMetricStorageName($storageName) {
         $this->_metricStorageName = Stephino_Rpg_Utils_Lingo::cleanup($storageName);
 
-        // Method chaining
         return $this;
     }
 
@@ -809,7 +788,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMetricStorageDescription($storageDescription) {
         $this->_metricStorageDescription = Stephino_Rpg_Utils_Lingo::cleanup($storageDescription);
 
-        // Method chaining
         return $this;
     }
     
@@ -833,7 +811,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMilitaryAttackName($attackName) {
         $this->_militaryAttackName = Stephino_Rpg_Utils_Lingo::cleanup($attackName);
 
-        // Method chaining
         return $this;
     }
     
@@ -857,7 +834,6 @@ trait Stephino_Rpg_Config_Trait_Labels {
     public function setMilitaryDefenseName($defense) {
         $this->_militaryDefenseName = Stephino_Rpg_Utils_Lingo::cleanup($defense);
 
-        // Method chaining
         return $this;
     }
     

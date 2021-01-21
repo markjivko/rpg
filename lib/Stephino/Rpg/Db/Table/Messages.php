@@ -5,7 +5,7 @@
  * 
  * @title      Table:Messages
  * @desc       Holds the messages
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
@@ -301,23 +301,27 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return int Number
      */
     public function getRecentCount($senderUserId) {
-        // Get the message count
-        $dbRow = $this->getDb()->getWpDb()->get_row(
-            "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_FROM . "` = '" . intval($senderUserId) . "'"
-                . " AND `" . self::COL_MESSAGE_TIME . "` >= '" . (time() - 86400) . "'"
-            . " )",
-            ARRAY_A
-        );
+        $result = 0;
         
-        // Valid result
-        if (is_array($dbRow) && isset($dbRow['count'])) {
-            return intval($dbRow['count']);
+        // Sanitize the user ID
+        $senderUserId = abs((int) $senderUserId);
+        if ($senderUserId) {
+            $dbRow = $this->getDb()->getWpDb()->get_row(
+                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
+                . " WHERE ("
+                    . " `" . self::COL_MESSAGE_FROM . "` = '$senderUserId'"
+                    . " AND `" . self::COL_MESSAGE_TIME . "` >= '" . (time() - 86400) . "'"
+                . " )",
+                ARRAY_A
+            );
+
+            // Valid result
+            if (is_array($dbRow) && isset($dbRow['count'])) {
+                $result = intval($dbRow['count']);
+            }
         }
         
-        // Something went wrong
-        return 0;
+        return $result;
     }
     
     /**

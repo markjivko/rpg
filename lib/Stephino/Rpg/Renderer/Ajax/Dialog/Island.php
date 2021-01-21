@@ -5,7 +5,7 @@
  * 
  * @title      Dialog::Island
  * @desc       Island dialogs
- * @copyright  (c) 2020, Stephino
+ * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    ThemeWarlock
  * @since      TW 1.0
@@ -49,7 +49,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Aja
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_NAME],
@@ -88,7 +87,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Aja
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_UPGRADE);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Upgrade', 'stephino-rpg'),
@@ -143,7 +141,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Aja
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_COLONIZE_PREPARE);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Vacant slot', 'stephino-rpg'),
@@ -201,7 +198,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Aja
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_COLONIZE_REVIEW);
         
-        // All done
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Colonize', 'stephino-rpg'),
