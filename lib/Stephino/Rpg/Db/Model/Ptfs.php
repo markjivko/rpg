@@ -69,8 +69,12 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         // Prepare the platformer name
-        $ptfName = $this->getDb()->modelIslands()->generateName(mt_rand(-100, 100), mt_rand(-100, 100));
-        if (strlen($ptfName) < 3 || $ptfName > 64) {
+        $ptfName = $this->getDb()->modelIslands()->generateName(
+            mt_rand(-100, 100), 
+            mt_rand(-100, 100),
+            false
+        );
+        if (strlen($ptfName) < 3 || strlen($ptfName) > 64) {
             $ptfName = md5(mt_rand(1, 999));
         }
         
@@ -367,15 +371,18 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 $preDefPlatformersData = @json_decode(file_get_contents($ptfsDataPath), true);
             }
             if (!is_array($preDefPlatformersData)) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json file is not a valid associative array');
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json file is not a valid associative array'
+                );
                 break;
             }
             
             // Clean-up the platformers data
             foreach ($preDefPlatformersData as $preDefPtfId => $preDefPtfDef) {
                 try {
+                    $preDefPtfId = abs((int) $preDefPtfId);
                     // No definition found
-                    if (!is_file($preDefPtfPath = STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '/' . intval($preDefPtfId) . '.json')) {
+                    if (!is_file($preDefPtfPath = STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '/' . $preDefPtfId . '.json')) {
                         throw new Exception('JSON data file missing');
                     }
                     
@@ -385,7 +392,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                         @json_decode(file_get_contents($preDefPtfPath), true)
                     );
                 } catch (Exception $exc) {
-                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage() . ' (#' . intval($preDefPtfId) . ')');
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                        $exc->getMessage() . ' (#' . $preDefPtfId . ')'
+                    );
                     unset($preDefPlatformersData[$preDefPtfId]);
                 }
             }
@@ -452,31 +461,25 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             }
             
             // Execute the queries
-            if (count($dbInserts)) {
-                if (null !== $multiInsertQuery = Stephino_Rpg_Utils_Db::getMultiInsert(
-                    $dbInserts, 
-                    $this->getDb()->tablePtfs()->getTableName()
-                )) {
-                    $this->getDb()->getWpDb()->query($multiInsertQuery);
-                }
+            if (count($dbInserts) && null !== $multiInsertQuery = Stephino_Rpg_Utils_Db::getMultiInsert(
+                $dbInserts, 
+                $this->getDb()->tablePtfs()->getTableName()
+            )) {
+                $this->getDb()->getWpDb()->query($multiInsertQuery);
             }
-            if (count($dbUpdates)) {
-                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                    $dbUpdates, 
-                    $this->getDb()->tablePtfs()->getTableName(), 
-                    Stephino_Rpg_Db_Table_Ptfs::COL_ID
-                )) {
-                    $this->getDb()->getWpDb()->query($multiUpdateQuery);
-                }
+            if (count($dbUpdates) && null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
+                $dbUpdates, 
+                $this->getDb()->tablePtfs()->getTableName(), 
+                Stephino_Rpg_Db_Table_Ptfs::COL_ID
+            )) {
+                $this->getDb()->getWpDb()->query($multiUpdateQuery);
             }
-            if (count($dbDeletes)) {
-                if (null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::getMultiDelete(
-                    $dbDeletes, 
-                    $this->getDb()->tablePtfs()->getTableName(), 
-                    Stephino_Rpg_Db_Table_Ptfs::COL_ID
-                )) {
-                    $this->getDb()->getWpDb()->query($multiDeleteQuery);
-                }
+            if (count($dbDeletes) && null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::getMultiDelete(
+                $dbDeletes, 
+                $this->getDb()->tablePtfs()->getTableName(), 
+                Stephino_Rpg_Db_Table_Ptfs::COL_ID
+            )) {
+                $this->getDb()->getWpDb()->query($multiDeleteQuery);
             }
         } while(false);
     }

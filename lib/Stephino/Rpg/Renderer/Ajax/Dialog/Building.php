@@ -201,6 +201,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
      * @throws Exception
      */
     public static function ajaxTrade($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         // Get the building information
         /* @var $buildingConfig Stephino_Rpg_Config_Building */
         list($buildingData, $buildingConfig, $cityData) = Stephino_Rpg_Renderer_Ajax_Action::getBuildingInfo(
@@ -307,12 +309,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
             }
         }
         
-        // Large sized modal
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
-        
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_MARKET);
-        
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE           => 'Trade resources',

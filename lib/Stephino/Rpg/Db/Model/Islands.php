@@ -21,11 +21,12 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
      * Generate an island name based on the coordinates.<br/>
      * Each name is unique. Cardinal points, Greek letters and Roman numerals are used.
      * 
-     * @param int $coordX X coordinate
-     * @param int $coordY Y coordinate
+     * @param int     $coordX    X coordinate
+     * @param int     $coordY    Y coordinate
+     * @param boolean $useGeoTag (optional) Use Geo tag (ex. NE); default <b>true</b>
      * @return string
      */
-    public function generateName($coordX, $coordY) {
+    public function generateName($coordX, $coordY, $useGeoTag = true) {
         // Prepare the Geo Tag
         $geoTag = ($coordY >= 0 ? 'N' : 'S') . ($coordX <= 0 ? 'W' : 'E');
         if (0 == $coordX) {
@@ -102,7 +103,7 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
         } while(false);
         
         // Final island name
-        return "$geoTag $islandIdentifier";
+        return $useGeoTag ? "$geoTag $islandIdentifier" : $islandIdentifier;
     }
     
     /**

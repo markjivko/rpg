@@ -11,22 +11,20 @@
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
-/* @var $userData array|null */
+/* @var $leaderBoard array */
 /* @var $userPlace int */
-/* @var $userIsMvp boolean */
-/* @var $mvpList array */
 /* @var $currentTime int */
 ?>
 <div class="col-12 framed p-4">
-    <?php if (null === $mvpList):?>
+    <?php if (null === $leaderBoard):?>
         <?php echo esc_html__('The leader board did not initialize correctly, please try again', 'stephino-rpg');?>
     <?php else:?>
-    <table class="table table-hover table-striped table-responsive-sm">
+    <table class="table table-hover table-responsive-sm">
         <thead>
             <tr>
-                <th>#</th>
-                <th><?php echo esc_html__('Nickname', 'stephino-rpg');?></th>
-                <th>
+                <th width="50">#</th>
+                <th width="200"><?php echo esc_html__('Nickname', 'stephino-rpg');?></th>
+                <th width="150">
                     <span 
                         data-effect="help"
                         data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_SCORE;?>">
@@ -34,67 +32,58 @@
                     </span>
                 </th>
                 <th><?php echo esc_html__('Battles', 'stephino-rpg');?></th>
+                <?php if (Stephino_Rpg_Config::get()->core()->getPtfEnabled()):?>
+                    <th><?php echo esc_html__('Game arena', 'stephino-rpg');?></th>
+                <?php endif;?>
                 <th><?php echo esc_html__('Online', 'stephino-rpg');?></th>
             </tr>
         </thead>
         <tbody>
-            <?php $mvpPlace = 1; foreach ($mvpList as $mvpUserData): ?>
-            <tr <?php if ($userIsMvp && $mvpPlace == $userPlace):?>class="framed active"<?php endif;?>
-                data-click="userViewProfile"
-                data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($mvpUserData[Stephino_Rpg_Db_Table_Users::COL_ID]);?>">
-                <th><?php echo $mvpPlace;?></td>
-                <td><?php echo Stephino_Rpg_Utils_Lingo::getUserName($mvpUserData);?></td>
-                <td>
-                    <span data-role="score" title="<?php echo number_format($mvpUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>">
-                        <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($mvpUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>
-                    </span>
-                </td>
-                <td>
-                    <span class="tb-v" title="<?php echo esc_attr__('Victories', 'stephino-rpg');?>">
-                        <?php echo $mvpUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_VICTORIES];?>
-                    </span> /
-                    <span class="tb-w" title="<?php echo esc_attr__('Draws', 'stephino-rpg');?>">
-                        <?php echo $mvpUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS];?>
-                    </span> /
-                    <span class="tb-d" title="<?php echo esc_attr__('Defeats', 'stephino-rpg');?>">
-                        <?php echo $mvpUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DEFEATS];?>
-                    </span>
-                </td>
-                <td>
-                    <?php if ($currentTime - $mvpUserData[Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK_AJAX] <= 900):?>
-                        <span class="badge badge-success">&#x2713;</span>
-                    <?php else:?>
-                        <span class="badge">&#x2716;</span>
-                    <?php endif;?>
-                </td>
-            </tr>
-            <?php $mvpPlace++; endforeach;?>
-            <?php if (!$userIsMvp):?>
-            <tr><td colspan="5" class="text-center">...</td></tr>
-            <tr class="font-weight-bold"
-                data-click="userViewProfile"
-                data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($userData[Stephino_Rpg_Db_Table_Users::COL_ID]);?>">
-                <th><?php echo number_format($userPlace);?></td>
-                <td><?php echo Stephino_Rpg_Utils_Lingo::getUserName($userData);?></td>
-                <td>
-                    <span data-role="score" title="<?php echo number_format($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>">
-                        <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>
-                    </span>
-                </td>
-                <td>
-                    <span class="tb-v" title="<?php echo esc_attr__('Victories', 'stephino-rpg');?>">
-                        <?php echo $userData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_VICTORIES];?>
-                    </span> /
-                    <span class="tb-w" title="<?php echo esc_attr__('Draws', 'stephino-rpg');?>">
-                        <?php echo $userData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS];?>
-                    </span> /
-                    <span class="tb-d" title="<?php echo esc_attr__('Defeats', 'stephino-rpg');?>">
-                        <?php echo $userData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DEFEATS];?>
-                    </span>
-                </td>
-                <td><span class="badge badge-success">&#x2713;</span></td>
-            </tr>
-            <?php endif;?>
+            <?php foreach ($leaderBoard as $lbKey => $lbUserData): ?>
+                <?php if (null === $lbUserData):?>
+                    <tr><td colspan="<?php echo (Stephino_Rpg_Config::get()->core()->getPtfEnabled() ? 6 : 5);?>" class="text-center">...</td></tr>
+                <?php else:?>
+                    <tr <?php if ($lbKey + 1 === $userPlace):?>class="framed active"<?php endif;?>
+                        data-click="userViewProfile"
+                        data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($lbUserData[Stephino_Rpg_Db_Table_Users::COL_ID]);?>">
+                        <th width="50"><?php echo $lbKey + 1;?></td>
+                        <td width="200" class="td-ellipsis"><?php echo Stephino_Rpg_Utils_Lingo::getUserName($lbUserData);?></td>
+                        <td width="150">
+                            <span data-role="score" title="<?php echo number_format($lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>">
+                                <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>
+                            </span>
+                        </td>
+                        <td>
+                            <span class="tb-v" title="<?php echo esc_attr__('Victories', 'stephino-rpg');?>">
+                                <?php echo $lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_VICTORIES];?>
+                            </span> /
+                            <span class="tb-w" title="<?php echo esc_attr__('Draws', 'stephino-rpg');?>">
+                                <?php echo $lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS];?>
+                            </span> /
+                            <span class="tb-d" title="<?php echo esc_attr__('Defeats', 'stephino-rpg');?>">
+                                <?php echo $lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DEFEATS];?>
+                            </span>
+                        </td>
+                        <?php if (Stephino_Rpg_Config::get()->core()->getPtfEnabled()):?>
+                            <td>
+                                <span data-html="true" title="<?php echo esc_attr__('Times won', 'stephino-rpg');?>">
+                                    &#x1f3c6; <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON]);?>
+                                </span> /
+                                <span data-html="true" title="<?php echo esc_html__('Times played', 'stephino-rpg');?>">
+                                    &#x1f3c1; <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED]);?>
+                                </span>
+                            </td>
+                        <?php endif;?>
+                        <td>
+                            <?php if ($currentTime - $lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK_AJAX] <= 900):?>
+                                <span class="badge badge-success">&#x2713;</span>
+                            <?php else:?>
+                                <span class="badge">&#x2716;</span>
+                            <?php endif;?>
+                        </td>
+                    </tr>
+                <?php endif;?>
+            <?php endforeach;?>
         </tbody>
     </table>
     <?php endif;?>

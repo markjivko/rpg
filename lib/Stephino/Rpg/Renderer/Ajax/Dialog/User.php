@@ -13,14 +13,15 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_Dialog {
 
     // Dialog templates
-    const TEMPLATE_INFO            = 'user/user-info';
-    const TEMPLATE_TRADE           = 'user/user-trade';
-    const TEMPLATE_CITIES          = 'user/user-cities';
-    const TEMPLATE_LEADER_BOARD    = 'user/user-leader-board';
-    const TEMPLATE_ARENA_LIST      = 'user/user-arena-list';
-    const TEMPLATE_ARENA_LIST_PAGE = 'user/user-arena-list-page';
-    const TEMPLATE_ARENA_PLAY      = 'user/user-arena-play';
-    const TEMPLATE_ARENA_EDIT      = 'user/user-arena-edit';
+    const TEMPLATE_INFO               = 'user/user-info';
+    const TEMPLATE_TRADE              = 'user/user-trade';
+    const TEMPLATE_CITIES             = 'user/user-cities';
+    const TEMPLATE_LEADER_BOARD       = 'user/user-leader-board';
+    const TEMPLATE_ARENA_LIST         = 'user/user-arena-list';
+    const TEMPLATE_ARENA_LIST_PAGE    = 'user/user-arena-list-page';
+    const TEMPLATE_ARENA_PLAY         = 'user/user-arena-play';
+    const TEMPLATE_ARENA_PLAY_DETAILS = 'user/user-arena-play-details';
+    const TEMPLATE_ARENA_EDIT         = 'user/user-arena-edit';
     
     // Request keys
     const REQUEST_USER_ID         = 'userId';
@@ -246,9 +247,12 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxArenaList($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
         }
+        
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }
@@ -273,10 +277,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             }
         }
 
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_LIST);
-        
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => $authorId > 0
@@ -295,47 +296,28 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxArenaPlay($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
         }
+        
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }
         
-        // Get the current user ID
-        $userId = Stephino_Rpg_TimeLapse::get()->userId();
-        
         // Get the platformer ID
         $ptfId = abs((int) current($commonArgs));
         
-        // Invalid platformer
-        if (!is_array($ptfRow = Stephino_Rpg_Db::get()->modelPtfs()->getById($ptfId, $userId))) {
-            throw new Exception(__('Game not found', 'stephino-rpg'));
-        }
+        // Start the game
+        list($ptfRow, $ptfOwn, $authorId, $authorName) = Stephino_Rpg_Renderer_Ajax_Action_User::ajaxPtfStarted(
+            array(
+                Stephino_Rpg_Renderer_Ajax_Action_User::REQUEST_PTF_ID => $ptfId
+            ),
+            false
+        );
         
-        // Validate the tiles
-        if (!is_array(Stephino_Rpg_Db::get()->modelPtfs()->getTileSet($ptfRow))) {
-            throw new Exception(__('Invalid game', 'stephino-rpg'));
-        }
-        
-        // Mark the start of the play
-        Stephino_Rpg_Db::get()->modelPtfs()->play($ptfId);
-            
-        // Get the next platformer ID
-        $nextPtfId = Stephino_Rpg_Db::get()->modelPtfs()->getNextId($userId, $ptfId);
-        
-        // This is my platformer
-        $ptfOwn = ($userId === (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]);
-        
-        // Get the author name
-        $authorId = (int)$ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
-        $authorName = $authorId > 0 
-            ? Stephino_Rpg_Utils_Lingo::getUserName(Stephino_Rpg_Db::get()->tableUsers()->getById($authorId))
-            : null;
-        
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_PLAY);
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Playing', 'stephino-rpg') . ': ' . esc_html($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME]),
@@ -352,9 +334,12 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxArenaEdit($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
         }
+        
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }
@@ -387,9 +372,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Get the compressed tile set (always a JSON as pre-defined platformers cannot be edited)
         $tileSetC = @json_decode($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT], true);
         
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_EDIT);
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Game Creator', 'stephino-rpg'),
@@ -406,6 +389,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxCities($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }
@@ -461,10 +446,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // This is my empire
         $myEmpire = (Stephino_Rpg_TimeLapse::get()->userId() == $userId);
         
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_CITIES);
-        
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => Stephino_Rpg_Config::get()->core()->getConfigCitiesName(true) . ': ' . esc_html($userName),
@@ -476,6 +458,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * Leader board
      */
     public static function ajaxLeaderBoard() {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         // Prepare the user data
         $userData = null;
         if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
@@ -488,32 +472,31 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Get the top players
-        $mvpList = Stephino_Rpg_Db::get()->tableUsers()->getMVP(50);
+        $leaderBoard = Stephino_Rpg_Db::get()->tableUsers()->getMVP(50);
         
         // Is this user in list?
-        $userIsMvp = false;
         $userPlace = null;
-        if (is_array($mvpList)) {
-            foreach ($mvpList as $mvpKey => $mvpUser) {
+        if (is_array($leaderBoard)) {
+            foreach ($leaderBoard as $mvpKey => $mvpUser) {
                 if ($mvpUser[Stephino_Rpg_Db_Table_Users::COL_ID] == $userData[Stephino_Rpg_Db_Table_Users::COL_ID]) {
-                    $userIsMvp = true;
                     $userPlace = $mvpKey + 1;
                     break;
                 }
             }
+            
+            // Outside the list
+            if (null === $userPlace) {
+                $userPlace = Stephino_Rpg_Db::get()->tableUsers()->getPlace(
+                    $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]
+                );
+                $leaderBoard[] = null;
+                $leaderBoard[$userPlace - 1] = $userData;
+            }
         }
         
-        // Get the current user's place if not on podium
-        if (null === $userPlace) {
-            $userPlace = Stephino_Rpg_Db::get()->tableUsers()->getPlace(
-                $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]
-            );
-        }
-        
-        // Store the current time for online status
+        // Store the current time for online status check
         $currentTime = time();
         
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_LEADER_BOARD);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(

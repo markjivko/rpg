@@ -27,7 +27,6 @@
                 );
             ?></pre>
             <pre><?php echo $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT];?></pre>
-            <hr/>
         </li>
     <?php endforeach; ?>
 </ul>

@@ -274,6 +274,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxWorkforce($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         // Prepare the city ID
         $cityId = isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null;
         
@@ -294,10 +296,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('Workers are not needed', 'stephino-rpg'));
         }
         
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_WORKFORCE);
-        
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Workforce', 'stephino-rpg'),
@@ -315,6 +314,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxStages($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }
@@ -335,10 +336,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('No stages to unlock', 'stephino-rpg'));
         }
         
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_STAGES);
-        
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Progress', 'stephino-rpg'),

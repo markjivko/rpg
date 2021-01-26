@@ -176,9 +176,14 @@ class Stephino_Rpg_Db {
 
         // Not in uninstall mode
         if (!defined('WP_UNINSTALL_PLUGIN')) {
-            // Need an update
-            if (Stephino_Rpg::PLUGIN_VERSION_DATABASE 
-                != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_DB_VERSION, '')) {
+            // DataBase structure update
+            if (Stephino_Rpg::PLUGIN_VERSION_DATABASE != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION_DB, '')) {
+                // Store the database update flag
+                Stephino_Rpg_Cache_Game::getInstance()->setValue(
+                    Stephino_Rpg_Cache_Game::KEY_VERSION_DB, 
+                    Stephino_Rpg::PLUGIN_VERSION_DATABASE
+                );
+                
                 // Get the Upgrade tool
                 require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
@@ -193,24 +198,28 @@ class Stephino_Rpg_Db {
 
                 // Update the DataBase structure
                 dbDelta($queries);
-                
-                // Store the update flag
-                Stephino_Rpg_Cache_Game::getInstance()->setValue(
-                    Stephino_Rpg_Cache_Game::KEY_DB_VERSION, 
-                    Stephino_Rpg::PLUGIN_VERSION_DATABASE
-                );
             }
             
-            // Populate / update the platformer pre-defined levels
-            $ptfMd5 = md5_file(STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json');
-            if ($ptfMd5 != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_PTF_VERSION, '')) {
-                $this->modelPtfs()->reload();
-                
-                // Store the new PTF version
+            // Game update
+            if (Stephino_Rpg::PLUGIN_VERSION != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION, '')) {
+                // Store the game update flag
                 Stephino_Rpg_Cache_Game::getInstance()->setValue(
-                    Stephino_Rpg_Cache_Game::KEY_PTF_VERSION, 
-                    $ptfMd5
+                    Stephino_Rpg_Cache_Game::KEY_VERSION, 
+                    Stephino_Rpg::PLUGIN_VERSION
                 );
+                
+                // Update the platformer pre-defined levels
+                $ptfMd5 = md5_file(STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json');
+                if ($ptfMd5 != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, '')) {
+                    // Store the new PTF version
+                    Stephino_Rpg_Cache_Game::getInstance()->setValue(
+                        Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, 
+                        $ptfMd5
+                    );
+                    
+                    // Reload the model
+                    $this->modelPtfs()->reload();
+                }
             }
         }
     }

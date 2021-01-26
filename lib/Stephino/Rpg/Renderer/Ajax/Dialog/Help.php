@@ -70,6 +70,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxItem($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         // Get the item type and ID
         $itemType = isset($data[self::REQUEST_ITEM_TYPE]) ? $data[self::REQUEST_ITEM_TYPE] : null;
         $itemId = isset($data[self::REQUEST_ITEM_ID]) ? trim($data[self::REQUEST_ITEM_ID]) : null;
@@ -93,10 +95,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('Invalid help item ID', 'stephino-rpg'));
         }
         
-        // Show the content
         require self::dialogTemplatePath(self::TEMPLATE_MAIN_PREFIX . '-' . $itemType);
-        
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Item', 'stephino-rpg') . ' ' . $itemType . ' #' . $itemId,

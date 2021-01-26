@@ -104,6 +104,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Aja
      * @throws Exception
      */
     public static function ajaxColonizePrepare($data) {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_SMALL);
+        
         // Prepare the island ID
         $islandId = isset($data[self::REQUEST_ISLAND_ID]) ? intval($data[self::REQUEST_ISLAND_ID]) : null;
         $islandSlot = isset($data[self::REQUEST_ISLAND_SLOT]) ? intval($data[self::REQUEST_ISLAND_SLOT]) : null;
@@ -128,9 +130,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Aja
                 self::REQUEST_COMMON_ARGS => array($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]),
             ));
         }
-        
-        // Small modal
-        Stephino_Rpg_Renderer_Ajax::setModalSize(false);
         
         // Prepare the city icon bkg URL
         $islandIconUrl = Stephino_Rpg_Utils_Media::getCommonBackgroundUrl(

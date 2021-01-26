@@ -2,11 +2,10 @@
 Contributors: stephino
 Plugin link: https://stephino.com
 Donate link: https://gum.co/stephino-rpg
-Tags: rpg, mmorpg, platformer, game, games, pwa, browser, strategy, fun, chrome
+Tags: rpg, fun, arcade, game, games, platformer, pwa, strategy, mmorpg
 Requires at least: 5.0
 Tested up to: 5.6
 Stable tag: trunk
-Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 
@@ -125,15 +124,29 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 1. Create and upgrade buildings, gather and trade resources, recruit units, ships and more
 2. Colonize empty slots, attack other users, send spies, prepare transport convoys and more
 3. Perform research activities and uncover the hidden secrets of your species
-4. Earn gems by designing and playing platformer games in the Game arena
+4. Earn gems by designing and playing platformer games in the game arena
 5. Use **Alt+Ctrl+C** to enable the in-game console and perform administrative tasks
 6. (PRO) Customize all game objects and even monetize your game with PayPal micro-transactions!
 
 == Changelog ==
 
+= [0.3.1] 2021-01-26 =
+* Enhancements
+  * Added **6** new levels!
+  * Platformer games can now be enjoyed in uninterrupted full-screen mode
+  * Improved platformer games UI on mobile devices
+  * Added game arena statistics to leader board
+  * Improved pre-defined platformers reload method
+* Bug fixes
+  * Fixed important bug related to DB migration
+  * Fixed UI issues on mobile devices
+* Additional changes
+  * Removed `.po` files
+  * Total score increases with game arena victories (new configuration item)
+
 = [0.3.0] 2021-01-21 =
 * Enhancements
-  * Games Arena: sorting, pagination, author page, rewards and more
+  * Games arena: sorting, pagination, author page, rewards and more
   * Action buttons to Queues/Garrison dialogs
   * Building level indicator and upgrade arrows in city view
   * City level and statue level indicators to island view
@@ -186,7 +199,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 
 = [0.2.6] 2020-11-24 =
 * Enhancements
-  * Introducing the Game arena
+  * Introducing the game arena
   * Custom Log In text for the PRO version
   * More i18n work
   * Improved performance related to Robot Crons

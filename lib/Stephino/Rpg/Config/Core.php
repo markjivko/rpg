@@ -261,6 +261,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int
      */
     protected $_scoreQueueResearch = 90;
+
+    /**
+     * Points earned for winning platformer levels
+     * 
+     * @var int
+     */
+    protected $_scorePtf = 5;
     
     /**
      * Islands Initial Count
@@ -1142,6 +1149,38 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         }
         if ($this->_scoreQueueResearch > 5000) {
             $this->_scoreQueueResearch = 5000;
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Points earned for winning platformer levels along with the platformer reward
+     *
+     * @depends ptfEnabled
+     * @default 5
+     * @ref -5000,5000
+     * @return int Platformer Points
+     */
+    public function getScorePtf() {
+        return null === $this->_scorePtf ? 5 : $this->_scorePtf;
+    }
+    
+    /**
+     * Set the "Score PTF" parameter
+     * 
+     * @param int $scorePtf Score
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setScorePtf($scorePtf) {
+        $this->_scorePtf = (null === $scorePtf ? 5 : intval($scorePtf));
+
+        // Minimum and maximum
+        if ($this->_scorePtf < -5000) {
+            $this->_scorePtf = -5000;
+        }
+        if ($this->_scorePtf > 5000) {
+            $this->_scorePtf = 5000;
         }
 
         return $this;

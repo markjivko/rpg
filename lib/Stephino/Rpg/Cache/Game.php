@@ -13,8 +13,9 @@
 class Stephino_Rpg_Cache_Game {
 
     // Cache keys
-    const KEY_DB_VERSION             = 'db_version';
-    const KEY_PTF_VERSION            = 'ptf_version';
+    const KEY_VERSION_DB             = 'version_db';
+    const KEY_VERSION_PTF            = 'version_ptf';
+    const KEY_VERSION                = 'version';
     const KEY_WORLD_INIT             = 'world_init';
     const KEY_ANIMATIONS             = 'animations';
     const KEY_ANIMATIONS_LAST_CHANGE = 'animations_last_change';
@@ -98,7 +99,11 @@ class Stephino_Rpg_Cache_Game {
             $this->_data[$cacheKey] = $value;
             
             // Update the option
-            update_option(Stephino_Rpg::OPTION_CACHE, json_encode($this->_data));
+            update_option(
+                Stephino_Rpg::OPTION_CACHE, 
+                json_encode($this->_data),
+                true
+            );
         }
         
         return $this;

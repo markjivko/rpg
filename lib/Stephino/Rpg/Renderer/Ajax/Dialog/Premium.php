@@ -23,6 +23,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Premium extends Stephino_Rpg_Renderer_Aj
      * @throws Exception
      */
     public static function ajaxPackageList() {
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        
         if (!count(Stephino_Rpg_Config::get()->premiumPackages()->getAll())) {
             throw new Exception(__('No premium packages available', 'stephino-rpg'));
         }
@@ -30,10 +32,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Premium extends Stephino_Rpg_Renderer_Aj
         // Get the user data
         $userData = Stephino_Rpg_TimeLapse::get()->userData();
         
-        // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_PACKAGES);
-        
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
         return Stephino_Rpg_Renderer_Ajax::wrap(array(
             self::RESULT_TITLE => '&#11088; ' . __('Packages', 'stephino-rpg'),
         ));

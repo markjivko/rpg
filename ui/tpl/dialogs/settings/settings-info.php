@@ -120,6 +120,9 @@
         <button class="btn btn-info w-100" data-click="helpDialog" data-click-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,0">
             <span><?php echo esc_html__('Help', 'stephino-rpg');?></span>
         </button>
+        <button class="btn btn-info w-100" data-click="dialog" data-click-args="dialogSettingsAbout">
+            <span><?php echo esc_html__('About', 'stephino-rpg');?></span>
+        </button>
         <?php if (strlen(Stephino_Rpg::PLUGIN_URL_DISCORD)):?>
             <a class="btn btn-info w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_DISCORD);?>">
                 <span><?php echo esc_html__('Feedback', 'stephino-rpg');?></span>
@@ -127,9 +130,6 @@
         <?php endif;?>
         <button class="btn btn-info w-100" data-click="userViewProfile" data-click-args="<?php echo Stephino_Rpg_TimeLapse::get()->userId();?>">
             <span><?php echo esc_html__('Profile', 'stephino-rpg');?></span>
-        </button>
-        <button class="btn btn-info w-100" data-click="dialog" data-click-args="dialogSettingsAbout">
-            <span><?php echo esc_html__('About', 'stephino-rpg');?></span>
         </button>
         <button class="btn btn-info w-100" data-click="settingsLogOut">
             <span><?php echo esc_html__('Log Out', 'stephino-rpg');?></span>

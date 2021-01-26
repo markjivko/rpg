@@ -125,7 +125,7 @@ class Stephino_Rpg_Renderer_Ajax_Css {
 [anim]{will-change:transform,opacity,z-index;position:absolute;overflow:hidden;}[anim]>div{will-change:transform,top;position:absolute;}.no-anim [anim],.no-anim [anim]>div{display:none;-webkit-animation:none;animation:none;}
 CSS;
 
-        return strlen($result) ? ($cssHeader . $result . PHP_EOL . PHP_EOL . '/*EOF*/') : null;
+        return strlen($result) ? ($cssHeader . $result) : null;
     }
     
     /**

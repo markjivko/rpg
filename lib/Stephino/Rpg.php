@@ -22,7 +22,7 @@ class Stephino_Rpg {
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.3.0';
+    const PLUGIN_VERSION          = '0.3.1';
     
     // Pro Plugin minimum compatible version
     const PLUGIN_VERSION_PRO      = '0.1.7';

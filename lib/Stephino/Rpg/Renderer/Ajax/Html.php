@@ -239,6 +239,12 @@ class Stephino_Rpg_Renderer_Ajax_Html {
         wp_enqueue_script('jquery');
         
         if (Stephino_Rpg_Renderer_Ajax::VIEW_PTF == $viewName) {
+            wp_enqueue_style(
+                Stephino_Rpg::PLUGIN_SLUG,
+                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/css/bootstrap.css',
+                array(), 
+                Stephino_Rpg::PLUGIN_VERSION
+            );
             wp_enqueue_script(
                 Stephino_Rpg::PLUGIN_SLUG,
                 Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/js/phaser.js',

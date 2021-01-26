@@ -16,8 +16,15 @@ $gameId = abs((int) Stephino_Rpg_Utils_Sanitizer::getViewData());
 $gameVersion = 1;
 
 // Check the game exists
+$nextGameId = null;
 if (null !== $gameTileMap = Stephino_Rpg_Db::get()->modelPtfs()->getTileMap($gameId)) {
     $gameVersion = $gameTileMap['version'];
+    
+    // Get the current user ID
+    $userId = Stephino_Rpg_TimeLapse::get()->userId();
+
+    // Get the next platformer ID
+    $nextGameId = Stephino_Rpg_Db::get()->modelPtfs()->getNextId($userId, $gameId);
 } else {
     $gameId = 0;
 }
@@ -54,6 +61,37 @@ if (null !== $gameTileMap = Stephino_Rpg_Db::get()->modelPtfs()->getTileMap($gam
             <div class="not-found">
                 <?php echo esc_html__('Game not found', 'stephino-rpg');?>
             </div>
+        </div>
+        <div class="framed active row" data-role="ptf-popup">
+            <span class="col-12">
+                <span class="success">
+                    <h4><?php echo esc_html__('Congratulations!', 'stephino-rpg');?></h4>
+                    <div class="ptf-reward text-center mb-2 d-none">
+                        <span class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_RES_GEM;?>">
+                        <div class="icon"></div>
+                            <span>
+                                <?php echo esc_html__('You have earned', 'stephino-rpg');?> <span class="value"></span> 
+                                <b><?php echo Stephino_Rpg_Config::get()->core()->getResourceGemName(true);?></b>
+                            </span>
+                        </span>
+                    </div>
+                </span>
+                <span class="failure">
+                    <h4><?php echo esc_html__('Game over', 'stephino-rpg');?></h4>
+                </span>
+            </span>
+            <span class="col">
+                <button class="btn btn-info w-100" data-role="ptf-refresh">
+                    <span><?php echo esc_html__('Play again', 'stephino-rpg');?></span>
+                </button>
+            </span>
+            <?php if (null !== $nextGameId):?>
+                <span class="col">
+                    <button class="btn btn-warning w-100" data-role="ptf-next" data-id="<?php echo $nextGameId;?>">
+                        <span><?php echo esc_html__('Next game', 'stephino-rpg');?></span>
+                    </button>
+                </span>
+            <?php endif;?>
         </div>
     </body>
 </html>

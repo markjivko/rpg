@@ -116,6 +116,50 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
     }
     
     /**
+     * Delete a platformer game
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>self::REQUEST_PTF_ID</b> (int) Platformer ID</li>
+     * </ul>
+     * @throws Exception
+     */
+    public static function ajaxPtfDelete($data) {
+        if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
+            throw new Exception(__('The arena is not available', 'stephino-rpg'));
+        }
+        
+        // Get the current user ID
+        $userId = Stephino_Rpg_TimeLapse::get()->userId();
+        
+        // Get the platformer ID
+        $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
+        
+        // Invalid platformer
+        if (!is_array($ptfRow = Stephino_Rpg_Db::get()->modelPtfs()->getById($ptfId, $userId))) {
+            throw new Exception(__('Game not found', 'stephino-rpg'));
+        }
+        
+        // Validate the tiles
+        if (!is_array(Stephino_Rpg_Db::get()->modelPtfs()->getTileSet($ptfRow))) {
+            throw new Exception(__('Invalid game', 'stephino-rpg'));
+        }
+        
+        // This is my platformer
+        $ptfOwn = ($userId === (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]);
+        
+        // Get the author name
+        $authorId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
+        
+        // Can we delete this?
+        $canDelete = (0 !== $authorId && (is_super_admin() || $ptfOwn));
+        if (!$canDelete) {
+            throw new Exception(__('You cannot delete this game', 'stephino-rpg'));
+        }
+        
+        return Stephino_Rpg_Db::get()->tablePtfs()->deleteById($ptfId);
+    }
+    
+    /**
      * Save a platformer data
      * 
      * @param array $data Data containing <ul>
@@ -206,6 +250,67 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         if (false === $result) {
             throw new Exception(__('Could not update game. Please try again later.', 'stephino-rpg'));
         }
+        return $result;
+    }
+    
+    /**
+     * Mark the start of a platformer game; optionally, echo the current game's details fragment
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>self::REQUEST_PTF_ID</b> (int) Platformer ID</li>
+     * </ul>
+     * @param boolean $showFragment (optional) Echo the game page details fragment; default <b>true</b>
+     * @throws Exception
+     * @return int|array Platformer ID if <b>$showFragment</b>, array of <ul>
+     * <li>(array) ptfRow</li>
+     * <li>(boolean) ptfOwn</li>
+     * <li>(int) authorId</li>
+     * <li>(string) authorName</li>
+     * </ul> otherwise
+     */
+    public static function ajaxPtfStarted($data, $showFragment = true) {
+        if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
+            throw new Exception(__('The arena is not available', 'stephino-rpg'));
+        }
+        
+        // Get the current user ID
+        $userId = Stephino_Rpg_TimeLapse::get()->userId();
+        
+        // Get the platformer ID
+        $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
+        
+        // Invalid platformer
+        if (!is_array($ptfRow = Stephino_Rpg_Db::get()->modelPtfs()->getById($ptfId, $userId))) {
+            throw new Exception(__('Game not found', 'stephino-rpg'));
+        }
+        
+        // Validate the tiles
+        if (!is_array(Stephino_Rpg_Db::get()->modelPtfs()->getTileSet($ptfRow))) {
+            throw new Exception(__('Invalid game', 'stephino-rpg'));
+        }
+        
+        // This is my platformer
+        $ptfOwn = ($userId === (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]);
+        
+        // Get the author name
+        $authorId = (int)$ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
+        $authorName = $authorId > 0 
+            ? Stephino_Rpg_Utils_Lingo::getUserName(Stephino_Rpg_Db::get()->tableUsers()->getById($authorId))
+            : null;
+        
+        // Show the game arena details fragment
+        if ($showFragment) {
+            require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                Stephino_Rpg_Renderer_Ajax_Dialog_User::TEMPLATE_ARENA_PLAY_DETAILS
+            );
+        }
+        
+        // Mark the start of the game
+        Stephino_Rpg_Db::get()->modelPtfs()->play($ptfId);
+        return $showFragment 
+            ? $ptfId 
+            // Pass along information needed in the fragment details to the parent
+            : array($ptfRow, $ptfOwn, $authorId, $authorName);
     }
     
     /**
@@ -215,6 +320,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
      * <li><b>self::REQUEST_PTF_ID</b> (int) Platformer ID</li>
      * <li><b>self::REQUEST_PTF_WON</b> (boolean) Platformer Won</li>
      * </ul>
+     * @throws Exception
      */
     public static function ajaxPtfFinished($data) {
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
@@ -225,7 +331,8 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         $playerReward = 0;
         
         // Get the current user ID
-        $playerId = Stephino_Rpg_TimeLapse::get()->userId();
+        $userData = Stephino_Rpg_TimeLapse::get()->userData();
+        $playerId = (int) $userData[Stephino_Rpg_Db_Table_Users::COL_ID];
         
         // Get the platformer ID
         $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
@@ -256,6 +363,18 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             
             // Author royalties
             Stephino_Rpg_Db::get()->modelPtfs()->reward($authorId, $authorReward, $ptfId, $playerId);
+            
+            // Total score
+            if (0 != Stephino_Rpg_Config::get()->core()->getScorePtf()) {
+                Stephino_Rpg_Db::get()->tableUsers()->updateById(
+                    array(
+                        Stephino_Rpg_Db_Table_Users::COL_USER_SCORE => 
+                            $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE] 
+                            + Stephino_Rpg_Config::get()->core()->getScorePtf()
+                    ), 
+                    $playerId
+                );
+            }
         }
         
         // Mark the Finish

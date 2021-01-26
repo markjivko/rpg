@@ -40,6 +40,11 @@ class Stephino_Rpg_Renderer_Ajax {
     const FILE_PTF_MAIN = 'ptf-main';
     const FILE_PTF_LIST = 'ptf-list';
     
+    // Modal sizes
+    const MODAL_SIZE_LARGE  = true;
+    const MODAL_SIZE_NORMAL = null;
+    const MODAL_SIZE_SMALL  = false;
+    
     /**
      * Available AJAX controllers
      * 
@@ -258,10 +263,10 @@ class Stephino_Rpg_Renderer_Ajax {
     }
     
     /**
-     * Set the dialog size<ul>
-     *     <li><b>false</b> for "md"</li>
-     *     <li><b>null</b> for normal</li>
-     *     <li><b>true</b> for "xl"</li>
+     * Set the modal size<ul>
+     *     <li><b>self::MODAL_SIZE_SMALL</b> for "md"</li>
+     *     <li><b>self::MODAL_SIZE_NORMAL</b> for normal</li>
+     *     <li><b>self::MODAL_SIZE_LARGE</b> for "xl"</li>
      * </ul>
      * 
      * @param boolean|null $modalSize Dialog size flag

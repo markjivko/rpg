@@ -283,6 +283,17 @@
                 ?>
             </li>
         <?php endif;?>
+        <?php if ($configObject->getPtfEnabled() && 0 != $configObject->getScorePtf()):?>
+            <li>
+                <?php 
+                    echo sprintf(
+                        esc_html__('%s for each game arena victory', 'stephino-rpg'),
+                        '<b>' . ($configObject->getScorePtf() > 0 ? '+' : '') . $configObject->getScorePtf() . '</b> '
+                            . _n('point', 'points', $configObject->getScorePtf(), 'stephino-rpg')
+                    );
+                ?>
+            </li>
+        <?php endif;?>
     </ul>
 </div>
 <?php if ($configObject->getPtfEnabled()):?>
@@ -291,52 +302,52 @@
     <ul>
         <li><?php echo esc_html__('Objective: collect all the gems then pass through the gate', 'stephino-rpg');?></li>
         <li>
-    <?php 
-        if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
-            echo sprintf(
-                esc_html__('Win to get %s', 'stephino-rpg'),
-                '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
-            );
-        }
-    ?>
+            <?php 
+                if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
+                    echo sprintf(
+                        esc_html__('Win to get %s', 'stephino-rpg'),
+                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
+                    );
+                }
+            ?>
         </li>
         <li>
-    <?php 
-        if (Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor()) {
-            echo sprintf(
-                esc_html__('Earn %s each time a game you created is won', 'stephino-rpg'),
-                '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
-            );
-        }
-    ?>
+            <?php 
+                if (Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor()) {
+                    echo sprintf(
+                        esc_html__('Earn %s each time a game you created is won', 'stephino-rpg'),
+                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
+                    );
+                }
+            ?>
         </li>
         <li>
-    <?php 
-        if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() || Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor()) {
-            echo sprintf(
-                esc_html__('Rewards reset after %s', 'stephino-rpg'),
-                '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours() . '</b> ' 
-                    . esc_html(_n('hour', 'hours', Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours(), 'stephino-rpg'))
-            );
-        } else {
-            echo esc_html__('Engage with other users by creating and playing games', 'stephino-rpg');
-        }
-    ?>
+            <?php 
+                if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() || Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor()) {
+                    echo sprintf(
+                        esc_html__('Rewards reset after %s', 'stephino-rpg'),
+                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours() . '</b> ' 
+                            . esc_html(_n('hour', 'hours', Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours(), 'stephino-rpg'))
+                    );
+                } else {
+                    echo esc_html__('Engage with other users by creating and playing games', 'stephino-rpg');
+                }
+            ?>
         </li>
         <li>
-    <?php 
-        if (Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0) {
-            echo sprintf(
-                esc_html__('Each player can create a maximum of %s', 'stephino-rpg'),
-                '<b>' . Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() . '</b> ' 
-                    . esc_html(_n('game', 'games', Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit(), 'stephino-rpg'))
-            );
-        } else {
-            echo esc_html__('Each player can create an unlimited number of games', 'stephino-rpg');
-        }
-    ?>
-            </li>
-        </ul>
+            <?php 
+                if (Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0) {
+                    echo sprintf(
+                        esc_html__('Each player can create a maximum of %s', 'stephino-rpg'),
+                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() . '</b> ' 
+                            . esc_html(_n('game', 'games', Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit(), 'stephino-rpg'))
+                    );
+                } else {
+                    echo esc_html__('Each player can create an unlimited number of games', 'stephino-rpg');
+                }
+            ?>
+        </li>
+    </ul>
 </div>
 <?php endif;?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_RULES == $itemId ? 'framed active' : '');?>">

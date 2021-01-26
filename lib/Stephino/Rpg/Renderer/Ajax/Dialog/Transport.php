@@ -74,7 +74,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
      * </ul>
      */
     public static function ajaxReview($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(true);
+        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
         
         // Origin city info
         $originCityId = isset($data[self::REQUEST_FROM_CITY_ID]) ? intval($data[self::REQUEST_FROM_CITY_ID]) : null;
@@ -135,7 +135,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
         
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_REVIEW);
-        
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => __('Review transport', 'stephino-rpg'),
