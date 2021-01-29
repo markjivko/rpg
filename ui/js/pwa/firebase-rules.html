@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Stephino RPG Chat - Firebase integration</title>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/png" href="http://plugins.svn.wordpress.org/stephino-rpg/trunk/ui/img/icon.png" />
+        <link href="http://fonts.googleapis.com/css?family=Roboto" rel="stylesheet" type="text/css">
+        <meta http-equiv="x-ua-compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, shrink-to-fit=no" />
+        <meta name="mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="theme-color" content="#e0d3a5" />
+        <meta name="author" content="Mark Jivko" />
+        <meta name="copyright" content="(c) {config.authorYear}, {config.authorName}" />
+        <meta name="generator" content="stephino-rpg" />
+        <style type="text/css">
+            html, body {margin: 0; padding: 0;}
+            body {
+                background: #f1f2f3;
+                position: relative;
+                display: -webkit-box;
+                display: -webkit-flex;
+                display: -ms-flexbox;
+                display: flex;
+                -webkit-box-pack: center;
+                -webkit-justify-content: center;
+                    -ms-flex-pack: center;
+                        justify-content: center;
+                -webkit-box-align: center;
+                -webkit-align-items: center;
+                    -ms-flex-align: center;
+                        align-items: center;
+                height: 100%;
+                width: 100%;
+                font-family: Roboto;
+            }
+            .content {
+                background-color: #ffffff;
+                border-radius: 10px;
+                padding: 5vh;
+                width: 50%;
+                overflow: hidden;
+                font-size: 2.5vh;
+                color: #333;
+                margin: 5vh;
+            }
+            iframe {
+                border: none;
+                width: 100%;
+                height: 300px;
+                border-radius: 5px;
+                margin: 10px 0;
+                background: #f1f2f3;
+            }
+            a {
+                text-decoration: none;
+                color: #FF9900;
+                font-weight: bold;
+            }
+            .logo {
+                margin: 0 auto 5vh;
+                width: 20vh;
+                height: 20vh;
+                background: url("http://plugins.svn.wordpress.org/stephino-rpg/trunk/themes/default/img/ui/512.png") no-repeat 0 0 transparent;
+                background-size: 100%;
+            }
+            .signature {
+                float: right;
+                display: inline-block;
+                width: 150px;
+                height: 50px;
+                background: url("http://plugins.svn.wordpress.org/stephino-rpg/trunk/ui/img/signature.png") no-repeat 0% 50% transparent;
+                background-size: 150px 50px;
+                vertical-align: middle;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="content">
+            <div class="logo"></div>
+            Follow these steps to get the chat working:
+            <ol>
+                <li>Go to your <a href="https://console.firebase.google.com/" target="_blank">&#x1F525; Firebase Dashboard</a></li>
+                <li><b>Create</b> or <b>Select</b> your project</li>
+                <li>Go to <b>Build &gt; Realtime Database</b> and <b>Create Database</b> if you haven't already</li>
+                <li>Copy the <b>&#128279; Database URL</b> back to the corresponding Game Mechanics field</li>
+                <li>Go to <b>Build &gt; Authentication &gt; Get Started</b> to generate your Web API Key if you haven't already; no need to select a sign-in method</li>
+                <li>Go to <b>&#x2699; &gt; Project Settings</b></li>
+                <li>Copy the <b>Project ID</b> and <b>Web API Key</b> back to the corresponding Game Mechanics fields</li>
+                <li>Go to <b>Build &gt; Realtime Database &gt; Rules</b></li>
+            </ol>
+            Set the rules <a href="https://plugins.svn.wordpress.org/stephino-rpg/trunk/ui/js/pwa/firebase-rules.json">as follows</a>:<br/>
+            <iframe src="./firebase-rules.json"></iframe><br/>
+            You should see your conversations appear in the <b>Build &gt; Realtime Database &gt; Data</b> tab.
+            <br/><br/><br/>
+            Have fun!
+            <a target="_blank" href="https://twitter.com/markjivko"><span class="signature"></span></a>
+        </div>
+    </body>
+</html>
