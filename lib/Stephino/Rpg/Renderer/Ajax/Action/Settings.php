@@ -136,7 +136,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
                 }
                 
                 // Update the user settings
-                $result = Stephino_Rpg_Cache_User::getInstance()->setValue($dataKey, $dataValue);
+                $result = Stephino_Rpg_Cache_User::get()->write($dataKey, $dataValue)->commit();
                 break;
             
         }

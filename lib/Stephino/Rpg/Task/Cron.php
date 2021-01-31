@@ -49,7 +49,11 @@ class Stephino_Rpg_Task_Cron {
             }
 
             // Get x random robots
-            if (is_array($robotRows = Stephino_Rpg_Db::get()->tableUsers()->getRandomRobots())) {
+            $robotRows = Stephino_Rpg_Db::get()->tableUsers()->getRandom(
+                Stephino_Rpg_Config::get()->core()->getRobotTimeLapsesPerRequest(),
+                true
+            );
+            if (is_array($robotRows)) {
                 foreach ($robotRows as $robotRow) {
                     // Get ther robot id
                     $robotId = intval($robotRow[Stephino_Rpg_Db_Table_Users::COL_ID]);
@@ -77,9 +81,10 @@ class Stephino_Rpg_Task_Cron {
     /**
      * Run the current player time-lapse
      * 
-     * @param boolean $ajaxOrigin (optional) The task originated from an AJAX request; default <b>true</b>
+     * @param boolean $ajaxOrigin   (optional) The task originated from an AJAX request; default <b>false</b>
+     * @param boolean $dialogOrigin (optional) The task originated from an AJAX Dialog request; default <b>false</b>
      */
-    public static function player($ajaxOrigin = true) {
+    public static function player($ajaxOrigin = false, $dialogOrigin = false) {
         // Initalize the World
         Stephino_Rpg_Task_Initializer::initWorld();
         
@@ -89,7 +94,7 @@ class Stephino_Rpg_Task_Cron {
             Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Cron - Player: id = ' . $userId);
                     
             // Run the time-lapse for the current player
-            Stephino_Rpg_TimeLapse::get()->run($ajaxOrigin);
+            Stephino_Rpg_TimeLapse::get()->run($ajaxOrigin, $dialogOrigin);
         }
     }
     

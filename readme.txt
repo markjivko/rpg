@@ -13,8 +13,6 @@ Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first 
 
 == Description ==
 
-[youtube https://youtu.be/6d_Yx_WmHBo]
-
 This is a browser-based multi-player strategy role-playing game you and your friends can enjoy anytime!
 
 The main goal is to expand your empire and complete research activities in order to uncover the history of your species.
@@ -22,9 +20,6 @@ The main goal is to expand your empire and complete research activities in order
 You can form cities, attack other players, send resources between your cities, complete research activities and use premium modifiers to boost your gameplay.
 
 Create your own platformer mini-games and play games created by others to earn rewards.
-
-= A product of passion =
-If you want to learn more about why this project exists, I invite you to watch [this YouTube video](https://youtu.be/6d_Yx_WmHBo).
 
 = Demo and Support =
 You can [access the Demo](https://stephino.com) by simply logging in with a Google or Twitter account.
@@ -36,14 +31,23 @@ Real-time support and feedback are available on [Discord](https://discord.gg/32g
 = Play with AI =
 You can play this game by yourself or against robots or other players.
 
-Starting with version 0.1.2, robots can perform the following tasks:
+Starting with version `0.1.2`, robots can perform the following tasks:
 
  * Create Buildings according to the Building Advisor
  * Randomly upgrade existing Buildings
  * Perform Research activities
  * Assign workers to Buildings
 
-Robots do not have military capabilities for now so it's a great time to attack them!
+Starting with version `0.3.2`, robots have military capabilities:
+
+ * Queue military units and ships
+ * Estimate the best time for attack
+ * Systematically attack players
+
+You can control the robot military activity with the following configuration items:
+
+ * **Aggression**: low/medium/high
+ * **Fervor**: between 5 and 100; the higher the number, the more active robots are
 
 = Platformer =
 Design your own platformer mini-levels and play games created by others to earn gems!
@@ -54,14 +58,14 @@ It functions as a progressive web application, handling offline mode and file re
 
 = Optimized CPU usage =
 Since cron tasks cannot be used in WordPress, resource gathering and other actions are computed on-demand.
-The algorithm was optimized to minimize DataBase interactions and provide a seamless real-time experience for all users.
+The algorithm was optimized to minimize database interactions and provide a seamless real-time experience for all players.
 
 = Optimized bandwidth =
 In order to deliver the best possible experience to your players, game assets are automatically stored in the browser **cache storage** using a service worker.
 This way there are no redundant requests made to your server, resulting in a snappy experience for your players and lower bandwidth usage.
 Image sprites are used to reduce the number of requests to your server further and all image files have been compressed.
 
-= Game Mechanics (PRO) =
+= Game Mechanics  =
 Everything is customizable, from the game name and description to what each game object does.
 For example, you can change how fast resources are gathered by altering **polynomials**. 
 Available polynomials and their multiplicative inverses:
@@ -76,7 +80,7 @@ Future versions will include the ability to install game "themes", plugins that 
 = Admin Console =
 As an admin, you have complete control over your game.
 Just press **Alt+Ctrl+C** to toggle the console and type **help** to list all available commands.
-You can add resources to users, change building levels, fast-forward the game and more.
+You can add resources to players, change building levels, fast-forward the game and more.
 New abilities will be added from time to time.
 
 = Microtransactions (PRO) =
@@ -101,7 +105,7 @@ You can enable microtransactions using PayPal and start monetizing your game.
 1. You should see the 'Play Mors' menu item
 2. The game is now installed and playable. Enjoy!
 
-You can optionally enable new users registration from 'Settings > General > Membership'.
+You can optionally enable new players registration from 'Settings > General > Membership'.
 
 == Frequently Asked Questions ==
 
@@ -114,7 +118,7 @@ For more information and real-time support from other players, please head on to
 
 = How do I embed this? =
 You can use either the **[stephino-rpg]** shortcode or the **Stephino RPG** Gutenberg block anywhere you want.
-Unauthenticated users will be greeted with a login page.
+Unauthenticated players will be greeted with a login page.
 
 = Where is the music? =
 Since there is a 10MB upload limit on WordPress.org, the music and other assets such as video files and other effects have been moved to the PRO plugin.
@@ -122,13 +126,31 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 == Screenshots ==
 
 1. Create and upgrade buildings, gather and trade resources, recruit units, ships and more
-2. Colonize empty slots, attack other users, send spies, prepare transport convoys and more
+2. Colonize empty slots, attack other players, send spies, prepare transport convoys and more
 3. Perform research activities and uncover the hidden secrets of your species
-4. Earn gems by designing and playing platformer games in the game arena
-5. Use **Alt+Ctrl+C** to enable the in-game console and perform administrative tasks
-6. (PRO) Customize all game objects and even monetize your game with PayPal micro-transactions!
+4. Use **Alt+Ctrl+C** to enable the in-game console and perform administrative tasks
+5. Customize all game objects and even monetize your game with PayPal micro-transactions (PRO)!
+6. Earn gems by designing and playing platformer mini-games in the game arena
 
 == Changelog ==
+
+= [0.3.2] 2021-01-31 =
+* Enhancements
+  * **Free Game Mechanics** editing for all!
+  * Robots can now create military entities, **attack** on their own and **fight back**
+  * Significant improvements in performance
+  * Added 3 new platformer levels
+* Bug fixes
+  * Fixed Firebase Chat Integration; new configuration item
+  * Fixed performance issues related to `dbUpdate`
+* Additional changes
+  * Added Firebase "Getting Started" help page to configuration
+  * Added messages pagination; new configuration item
+  * Added full-screen button to log-in form
+  * Changed full-screen button behavior: no more redirects
+  * Added leader board size configuration item
+  * Improved default configuration values for some entities and buildings
+  * `Platformer Author Limit` set to **0** now disables game authorship by players
 
 = [0.3.1] 2021-01-26 =
 * Enhancements
@@ -157,7 +179,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 * Additional changes
   * Improved multi-update SQL helper
   * Improved Changelog announcement
-  * Announcements are marked as read on user action
+  * Announcements are marked as read on player action
   * Moved garrison effect to garrison dialog
   * Removed the `stephino_rpg_ptf_plays` DB table
 
@@ -200,7 +222,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 = [0.2.6] 2020-11-24 =
 * Enhancements
   * Introducing the game arena
-  * Custom Log In text for the PRO version
+  * Custom Log In text
   * More i18n work
   * Improved performance related to Robot Crons
 * Bug fixes
@@ -227,7 +249,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
   * Added in-game Leader Board
   * Added Config option for showing the "Reload" button on mobile devices
   * More i18n work
-  * Added cities list in user profile
+  * Added cities list in player profile
 * Additional changes
   * Added 2 new icons
   * Code clean-up
@@ -247,7 +269,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
   * Improved Log In interface layout
   * Integrated with "Nextend Social Login"
   * Improved Log Out utility
-  * Automatically log in users after registration (for our game only)
+  * Automatically log in players after registration (for our game only)
 
 = [0.2.1] 2020-10-13 =
 * Enhancements
@@ -290,7 +312,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 * Enhancements
   * i18n for the game configuration strings
   * Improved readability on the default game configuration
-  * Added minimum version requirement for the Pro plugin
+  * Added minimum version requirement for the PRO plugin
 * Additional changes
   * Custom game cursors
 
@@ -319,7 +341,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 
 = [0.1.3] 2020-09-08 =
 * Enhancements
-  * Improved the *Dashboard* active users tracking accuracy whilst maintaining GDPR compliance
+  * Improved the *Dashboard* active players tracking accuracy whilst maintaining GDPR compliance
   * Added the *Announcement* tool, allowing you to communicate important news to your players
 * Bug Fixes
   * Tutorial arrow orientation
@@ -329,7 +351,7 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 = [0.1.2] 2020-09-01 =
 * Enhancements
   * The robots are alive! They can now create and upgrade buildings, assign workers and perform research activities
-  * Added the *Dashboard* where you can check your transactions, active users, total users, online users and revenue
+  * Added the *Dashboard* where you can check your transactions, active players, total players, online players and revenue
 * Bug Fixes
   * Fixed timelapse update procedure warning
 * Additional changes

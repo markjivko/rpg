@@ -283,73 +283,153 @@
                 ?>
             </li>
         <?php endif;?>
-        <?php if ($configObject->getPtfEnabled() && 0 != $configObject->getScorePtf()):?>
+        <?php if ($configObject->getPtfEnabled() && 0 != $configObject->getPtfScore()):?>
             <li>
                 <?php 
                     echo sprintf(
                         esc_html__('%s for each game arena victory', 'stephino-rpg'),
-                        '<b>' . ($configObject->getScorePtf() > 0 ? '+' : '') . $configObject->getScorePtf() . '</b> '
-                            . _n('point', 'points', $configObject->getScorePtf(), 'stephino-rpg')
+                        '<b>' . ($configObject->getPtfScore() > 0 ? '+' : '') . $configObject->getPtfScore() . '</b> '
+                            . _n('point', 'points', $configObject->getPtfScore(), 'stephino-rpg')
                     );
                 ?>
             </li>
         <?php endif;?>
     </ul>
 </div>
-<?php if ($configObject->getPtfEnabled()):?>
+<?php 
+    if ($configObject->getPtfEnabled()):
+        // Platformer has a reward
+        $ptfHasRewad = (
+            // Player reward
+            $configObject->getPtfRewardPlayer() > 0
+            || (
+                // Author reward
+                $configObject->getPtfAuthorLimit() > 0
+                && $configObject->getPtfRewardAuthor() > 0
+            )
+        );
+?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game arena', 'stephino-rpg');?></span></h6>
     <ul>
         <li><?php echo esc_html__('Objective: collect all the gems then pass through the gate', 'stephino-rpg');?></li>
-        <li>
-            <?php 
-                if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
+        <?php if ($configObject->getPtfRewardPlayer() > 0):?>
+            <li>
+                <?php 
                     echo sprintf(
                         esc_html__('Win to get %s', 'stephino-rpg'),
-                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
+                        '<b>' . $configObject->getPtfRewardPlayer() . '</b> ' . $configObject->getResourceGemName(true)
                     );
-                }
-            ?>
-        </li>
-        <li>
-            <?php 
-                if (Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor()) {
-                    echo sprintf(
-                        esc_html__('Earn %s each time a game you created is won', 'stephino-rpg'),
-                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor() . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
-                    );
-                }
-            ?>
-        </li>
-        <li>
-            <?php 
-                if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() || Stephino_Rpg_Config::get()->core()->getPtfRewardAuthor()) {
-                    echo sprintf(
-                        esc_html__('Rewards reset after %s', 'stephino-rpg'),
-                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours() . '</b> ' 
-                            . esc_html(_n('hour', 'hours', Stephino_Rpg_Config::get()->core()->getPtfRewardResetHours(), 'stephino-rpg'))
-                    );
-                } else {
-                    echo esc_html__('Engage with other users by creating and playing games', 'stephino-rpg');
-                }
-            ?>
-        </li>
-        <li>
-            <?php 
-                if (Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0) {
+                ?>
+            </li>
+        <?php endif;?>
+        <?php if ($configObject->getPtfAuthorLimit() > 0):?>
+            <?php if ($configObject->getPtfRewardAuthor() > 0):?>
+                <li>
+                    <?php 
+                        echo sprintf(
+                            esc_html__('Earn %s each time a game you created is won', 'stephino-rpg'),
+                            '<b>' . $configObject->getPtfRewardAuthor() . '</b> ' . $configObject->getResourceGemName(true)
+                        );
+                    ?>
+                </li>
+            <?php endif;?>
+            <li>
+                <?php 
                     echo sprintf(
                         esc_html__('Each player can create a maximum of %s', 'stephino-rpg'),
-                        '<b>' . Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() . '</b> ' 
-                            . esc_html(_n('game', 'games', Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit(), 'stephino-rpg'))
+                        '<b>' . $configObject->getPtfAuthorLimit() . '</b> ' 
+                            . esc_html(_n('game', 'games', $configObject->getPtfAuthorLimit(), 'stephino-rpg'))
                     );
-                } else {
-                    echo esc_html__('Each player can create an unlimited number of games', 'stephino-rpg');
-                }
-            ?>
-        </li>
+                ?>
+            </li>
+        <?php endif;?>
+        <?php if ($ptfHasRewad):?>
+            <li>
+                <?php 
+                    if ($configObject->getPtfRewardResetHours() > 0) {
+                        echo sprintf(
+                            esc_html__('Rewards reset after %s', 'stephino-rpg'),
+                            '<b>' . $configObject->getPtfRewardResetHours() . '</b> ' 
+                                . esc_html(_n('hour', 'hours', $configObject->getPtfRewardResetHours(), 'stephino-rpg'))
+                        );
+                    } else {
+                        echo esc_html__('Rewards are earned only once', 'stephino-rpg');
+                    }
+                ?>
+            </li>
+        <?php endif;?>
     </ul>
 </div>
 <?php endif;?>
+<div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_ROBOTS == $itemId ? 'framed active' : '');?>">
+    <h6 class="heading"><span><?php echo esc_html__('Robots', 'stephino-rpg');?></span></h6>
+    <ul>
+        <?php if ($configObject->getRobotTimeLapsesPerRequest() > 0):?>
+            <li>
+                <?php
+                    if ($configObject->getInitialRobotsPerUser() > 0) {
+                        echo sprintf(
+                            esc_html__('%s new %s are spawned for each player', 'stephino-rpg'),
+                            '<b>' . $configObject->getInitialRobotsPerUser() . '</b>',
+                            _n('robot', 'robots', $configObject->getInitialRobotsPerUser(), 'stephino-rpg')
+                        );
+                    } else {
+                        echo esc_html__('No new robots are spawned with new players', 'stephino-rpg');
+                    }
+                ?>
+            </li>
+            <li>
+                <?php 
+                    echo sprintf(
+                        esc_html__('Robots wait for %s between attacks', 'stephino-rpg'),
+                        '<b>' . $configObject->getRobotsTimeout() . '</b> ' 
+                            . esc_html(_n('hour', 'hours', $configObject->getRobotsTimeout(), 'stephino-rpg'))
+                    );
+                ?>
+            </li>
+            <li>
+                <?php echo esc_html__('Robots aggression', 'stephino-rpg');?>: 
+                <b><?php 
+                    switch ($configObject->getRobotsAggression()) {
+                        case Stephino_Rpg_Config_Core::ROBOT_AGG_LOW:
+                            echo __('Low', 'stephino-rpg');
+                            break;
+
+                        case Stephino_Rpg_Config_Core::ROBOT_AGG_MEDIUM:
+                            echo __('Medium', 'stephino-rpg');
+                            break;
+
+                        case Stephino_Rpg_Config_Core::ROBOT_AGG_HIGH:
+                            echo __('High', 'stephino-rpg');
+                            break;
+
+                    }
+                ?></b> - <?php 
+                    switch ($configObject->getRobotsAggression()) {
+                        case Stephino_Rpg_Config_Core::ROBOT_AGG_LOW:
+                            echo __('do not fight back, do not initiate attacks', 'stephino-rpg');
+                            break;
+
+                        case Stephino_Rpg_Config_Core::ROBOT_AGG_MEDIUM:
+                            echo __('fight back, do not initiate attacks', 'stephino-rpg');
+                            break;
+
+                        case Stephino_Rpg_Config_Core::ROBOT_AGG_HIGH:
+                            echo __('initiate attacks', 'stephino-rpg');
+                            break;
+
+                    }
+                ?>
+            </li>
+            <li>
+                <?php echo esc_html__('Robots fervor', 'stephino-rpg');?>: <b><?php echo $configObject->getRobotsFervor();?>%</b>
+            </li>
+        <?php else:?>
+            <li><?php echo esc_html__('Robots are disabled', 'stephino-rpg');?></li>
+        <?php endif;?>
+    </ul>
+</div>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_RULES == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game rules', 'stephino-rpg');?></span></h6>
     <ul>
@@ -471,19 +551,6 @@
                         esc_html__('No new %s are created with new players', 'stephino-rpg'),
                         $configObject->getConfigIslandsName()
                     );
-                }
-            ?>
-        </li>
-        <li>
-            <?php
-                if ($configObject->getInitialRobotsPerUser() > 0) {
-                    echo sprintf(
-                        esc_html__('%s new %s are spawned for each player', 'stephino-rpg'),
-                        '<b>' . $configObject->getInitialRobotsPerUser() . '</b>',
-                        _n('robot', 'robots', $configObject->getInitialRobotsPerUser(), 'stephino-rpg')
-                    );
-                } else {
-                    echo esc_html__('No new robots are spawned with new players', 'stephino-rpg');
                 }
             ?>
         </li>

@@ -22,7 +22,14 @@
         ?></h5>
     </div>
 <?php else:?>
-    <?php foreach ($ptfsList as $ptfRow):?>
+    <?php 
+        foreach ($ptfsList as $ptfRow):
+            // Get the author name
+            $authorId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
+            $authorName = $authorId > 0 
+                ? Stephino_Rpg_Utils_Lingo::getUserName(Stephino_Rpg_Db::get()->tableUsers()->getById($authorId))
+                : null;
+    ?>
         <div class="col-6 col-md-4 col-lg-3" data-click="dialog" data-click-args="dialogUserArenaPlay,<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];?>">
             <div class="ptf-card">
                 <div data-effect="ptfPreview" data-effect-args="<?php echo implode(',', $ptfRow[Stephino_Rpg_Db_Model_Ptfs::PTF_EXTRA_PREVIEW]);?>"></div>
@@ -33,6 +40,11 @@
                 <div data-role="ptf-name" title="<?php echo esc_attr($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME]);?>">
                     <?php echo Stephino_Rpg_Utils_Lingo::escape($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME]);?>
                 </div>
+                <?php if (null !== $authorName):?>
+                    <div data-role="ptf-author">
+                        <?php echo esc_html__('by', 'stephino-rpg');?> <b><?php echo Stephino_Rpg_Utils_Lingo::escape($authorName);?></b>
+                    </div>
+                <?php endif;?>
                 <div data-role="ptf-won" title="<?php echo esc_attr__('Win rate', 'stephino-rpg');?>">
                     <?php 
                         $ptfSuccessRate = $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED] > 0

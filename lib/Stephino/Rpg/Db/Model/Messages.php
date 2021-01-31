@@ -16,7 +16,7 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
      * Messages Model Name
      */
     const NAME = 'messages';
-
+    
     /**
      * Perform pruning tasks<ul>
      *     <li>Delete messages older than core.messageMaxAge for ALL players</li>
@@ -99,7 +99,7 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
             }
         
             // Get the recent messages count
-            if ($this->getDb()->tableMessages()->getRecentCount($senderId) >= Stephino_Rpg_Config::get()->core()->getMessageDailyLimit()) {
+            if ($this->getDb()->tableMessages()->getCountRecent($senderId) >= Stephino_Rpg_Config::get()->core()->getMessageDailyLimit()) {
                 throw new Exception(__('Daily message limit reached', 'stephino-rpg'));
             }
         }

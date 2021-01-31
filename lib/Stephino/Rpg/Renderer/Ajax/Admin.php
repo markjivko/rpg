@@ -105,7 +105,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
         if (!is_super_admin()) {
             throw new Exception(__('You do not have permission to export the game configuration', 'stephino-rpg'));
         }
-        return Stephino_Rpg_Config::export();
+        return Stephino_Rpg_Config::export(false, true);
     }
     
     /**
@@ -144,10 +144,6 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
     public static function ajaxAdminSetConfig($data) {
         if (!is_super_admin()) {
             throw new Exception(__('(DEMO) You are free to experiment but your changes will not be saved', 'stephino-rpg'));
-        }
-        
-        if (!Stephino_Rpg::get()->isPro()) {
-            throw new Exception(__('You need to unlock the game to save your changes', 'stephino-rpg'));
         }
         
         // Get the data

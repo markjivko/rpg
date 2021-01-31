@@ -25,14 +25,21 @@ class Stephino_Rpg_WordPress {
             global $pagenow;
 
             do {
-                // Never run the robots cron in the Game area
-                if ('admin.php' === $pagenow && Stephino_Rpg::PLUGIN_SLUG === Stephino_Rpg_Utils_Sanitizer::getPage()) {
+                // Only on our AJAX thread
+                if ('admin-ajax.php' !== $pagenow 
+                    || !isset($_REQUEST) 
+                    || !isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]) 
+                    || !isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_ACTION])
+                    || Stephino_Rpg::PLUGIN_VARNAME != $_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_ACTION]) {
                     break;
-                } 
+                }
                 
-                // Public pages (authenticated or guest)
-                if (!is_admin() && !Stephino_Rpg::PLUGIN_CRON_PUBLIC) {
-                    break;
+                // Ignore dialogs and admin pages
+                if (isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
+                    $callMethod = preg_replace('%\W+%', '', trim($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]));
+                    if (preg_match('%^dialog\w+%i', $callMethod)) {
+                        break;
+                    }
                 }
 
                 // Run the time-lapse for robots
@@ -113,7 +120,7 @@ class Stephino_Rpg_WordPress {
                     'id'    => Stephino_Rpg::PLUGIN_SLUG,
                     'title' => '<img class="ab-icon" style="margin-top: 2px;" src="' . Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.svg"/>' 
                         . esc_html__('Play', 'stephino-rpg') . ' <span>' . esc_html(Stephino_Rpg_Utils_Lingo::getGameName()) . '</span>',
-                    'href'  => Stephino_Rpg_Utils_Media::getAdminUrl(),
+                    'href'  => Stephino_Rpg_Utils_Media::getAdminUrl(!is_user_logged_in()),
                 ));
 
                 if (is_super_admin()) {
@@ -128,7 +135,7 @@ class Stephino_Rpg_WordPress {
                     // Game Mechanics
                     $wp_admin_bar->add_node(array(
                         'id'     => Stephino_Rpg::PLUGIN_SLUG . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS,
-                        'title'  => esc_html__('Game Mechanics', 'stephino-rpg') . (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;'),
+                        'title'  => esc_html__('Game Mechanics', 'stephino-rpg'),
                         'href'   => Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS,
                         'parent' => Stephino_Rpg::PLUGIN_SLUG,
                     ));
@@ -363,7 +370,7 @@ class Stephino_Rpg_WordPress {
         add_submenu_page(
             Stephino_Rpg::PLUGIN_SLUG, 
             Stephino_Rpg_Utils_Lingo::getGameName() . ' - ' . esc_html__('Game Mechanics', 'stephino-rpg'),
-            esc_html__('Game Mechanics', 'stephino-rpg') . (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;'),
+            esc_html__('Game Mechanics', 'stephino-rpg'),
             Stephino_Rpg::get()->isDemo() ? 'read' : 'activate_plugins', // Subscriber OR Admin
             Stephino_Rpg::PLUGIN_SLUG . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS, 
             array(Stephino_Rpg_Renderer::class, Stephino_Rpg_Renderer::INTERFACE_HTML)

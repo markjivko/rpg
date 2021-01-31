@@ -60,8 +60,14 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Invalid author ID', 'stephino-rpg'));
         }
         
-        // Total platformers limit
-        if (Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0) {
+        // Player authorship limits
+        if (!is_super_admin()) {
+            // Not allowed to create mini-games
+            if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
+                throw new Exception(__('You cannot create games', 'stephino-rpg'));
+            }
+
+            // Total platformers limit
             $authorPlatformers = Stephino_Rpg_Db::get()->tablePtfs()->getByUserId($userId);
             if (count($authorPlatformers) >= Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 throw new Exception(__('You cannot create more games', 'stephino-rpg'));
@@ -120,7 +126,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         if (Stephino_Rpg_TimeLapse::get()->userId()) {
             if (is_array($ptfRow = $this->getDb()->tablePtfs()->getById($ptfId))) {
                 // Get the user cache
-                $userCache = Stephino_Rpg_Cache_User::getInstance()->getData();
+                $userCache = Stephino_Rpg_Cache_User::get()->data();
                 
                 // Get the PTF data
                 $ptfData = isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_DATA])
@@ -163,11 +169,12 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 }
                 
                 // Update the PTF cache
-                Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_PTF_DATA, $ptfData);
+                Stephino_Rpg_Cache_User::get()->write(Stephino_Rpg_Cache_User::KEY_PTF_DATA, $ptfData);
                 if (!isset($userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME]) 
                     || $ptfTime != $userCache[Stephino_Rpg_Cache_User::KEY_PTF_TIME]) {
-                    Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_PTF_TIME, $ptfTime);
+                    Stephino_Rpg_Cache_User::get()->write(Stephino_Rpg_Cache_User::KEY_PTF_TIME, $ptfTime);
                 }
+                Stephino_Rpg_Cache_User::get()->commit();
                 
                 // Prepare the user update
                 if (!$ptfStart) {
@@ -362,6 +369,8 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     /**
      * Store/update the references to pre-defined platformers in the database<br/>
      * Performs multi-updates, multi-inserts and multi-deletes as necessary
+     * 
+     * Callable only once per thread
      */
     public function reload() {
         do {
@@ -467,6 +476,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             )) {
                 $this->getDb()->getWpDb()->query($multiInsertQuery);
             }
+            
             if (count($dbUpdates) && null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
                 $dbUpdates, 
                 $this->getDb()->tablePtfs()->getTableName(), 
@@ -474,6 +484,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             )) {
                 $this->getDb()->getWpDb()->query($multiUpdateQuery);
             }
+            
             if (count($dbDeletes) && null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::getMultiDelete(
                 $dbDeletes, 
                 $this->getDb()->tablePtfs()->getTableName(), 
@@ -481,6 +492,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             )) {
                 $this->getDb()->getWpDb()->query($multiDeleteQuery);
             }
+            
         } while(false);
     }
     
@@ -713,8 +725,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
      */
     public function getCategories() {
         return array(
-            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_MODIFIED_TIME => __('Date', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID       => __('Creator', 'stephino-rpg'),
             Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED      => __('Popularity', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_MODIFIED_TIME => __('Date', 'stephino-rpg'),
         );
     }
     

@@ -106,6 +106,13 @@ class Stephino_Rpg_Db {
     protected static $_instances = array();
     
     /**
+     * Database initialized
+     * 
+     * @var boolean
+     */
+    protected static $_init = false;
+    
+    /**
      * Get a DataBase instance
      * 
      * @param int|null $robotId  (optional) The direct Game User ID belongs to a robot 
@@ -124,6 +131,57 @@ class Stephino_Rpg_Db {
         // Add to cache
         if (!isset(self::$_instances[$key])) {
             self::$_instances[$key] = new self($wpUserId, is_int($robotId) ? intval($robotId) : null);
+        }
+        
+        // Single-thread initialization
+        if (!self::$_init) {
+            self::$_init = true;
+            
+            // Not in uninstall mode
+            if (!defined('WP_UNINSTALL_PLUGIN')) {
+                // DataBase structure update
+                if (Stephino_Rpg::PLUGIN_VERSION_DATABASE != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION_DB, '')) {
+                    Stephino_Rpg_Cache_Game::getInstance()->setValue(
+                        Stephino_Rpg_Cache_Game::KEY_VERSION_DB, 
+                        Stephino_Rpg::PLUGIN_VERSION_DATABASE
+                    );
+
+                    // Get the Upgrade tool
+                    require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
+
+                    // Prepare the queries
+                    $queries = array_filter(
+                        array_map(
+                            function(/* @var $item Stephino_Rpg_Db_Table */ $item) {
+                                return trim($item->getCreateStatement());
+                            }, self::$_instances[$key]->_tableInstances
+                        )
+                    );
+
+                    // Update the DataBase structure
+                    dbDelta($queries);
+                }
+
+                // Game update
+                if (Stephino_Rpg::PLUGIN_VERSION != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION, '')) {
+                    Stephino_Rpg_Cache_Game::getInstance()->setValue(
+                        Stephino_Rpg_Cache_Game::KEY_VERSION, 
+                        Stephino_Rpg::PLUGIN_VERSION
+                    );
+
+                    // Update the platformer pre-defined levels
+                    $ptfMd5 = md5_file(STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json');
+                    if ($ptfMd5 != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, '')) {
+                        Stephino_Rpg_Cache_Game::getInstance()->setValue(
+                            Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, 
+                            $ptfMd5
+                        );
+
+                        // Reload the model
+                        self::$_instances[$key]->modelPtfs()->reload();
+                    }
+                }
+            }
         }
         
         return self::$_instances[$key];
@@ -171,55 +229,6 @@ class Stephino_Rpg_Db {
             // Get the model KEY
             if (null !== $modelKey = constant($modelClassName . '::NAME')) {
                 $this->_modelInstances[$modelKey] = new $modelClassName($this);
-            }
-        }
-
-        // Not in uninstall mode
-        if (!defined('WP_UNINSTALL_PLUGIN')) {
-            // DataBase structure update
-            if (Stephino_Rpg::PLUGIN_VERSION_DATABASE != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION_DB, '')) {
-                // Store the database update flag
-                Stephino_Rpg_Cache_Game::getInstance()->setValue(
-                    Stephino_Rpg_Cache_Game::KEY_VERSION_DB, 
-                    Stephino_Rpg::PLUGIN_VERSION_DATABASE
-                );
-                
-                // Get the Upgrade tool
-                require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-
-                // Prepare the queries
-                $queries = array_filter(
-                    array_map(
-                        function(/* @var $item Stephino_Rpg_Db_Table */ $item) {
-                            return trim($item->getCreateStatement());
-                        }, $this->_tableInstances
-                    )
-                );
-
-                // Update the DataBase structure
-                dbDelta($queries);
-            }
-            
-            // Game update
-            if (Stephino_Rpg::PLUGIN_VERSION != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION, '')) {
-                // Store the game update flag
-                Stephino_Rpg_Cache_Game::getInstance()->setValue(
-                    Stephino_Rpg_Cache_Game::KEY_VERSION, 
-                    Stephino_Rpg::PLUGIN_VERSION
-                );
-                
-                // Update the platformer pre-defined levels
-                $ptfMd5 = md5_file(STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json');
-                if ($ptfMd5 != Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, '')) {
-                    // Store the new PTF version
-                    Stephino_Rpg_Cache_Game::getInstance()->setValue(
-                        Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, 
-                        $ptfMd5
-                    );
-                    
-                    // Reload the model
-                    $this->modelPtfs()->reload();
-                }
             }
         }
     }

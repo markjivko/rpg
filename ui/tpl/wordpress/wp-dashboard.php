@@ -22,9 +22,7 @@
         <div class="col-12 banner">
             <div class="logo"></div>
             <div class="info">Stephino RPG 
-                <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?>
-                    <?php if (!Stephino_Rpg::get()->isPro()):?><b><?php echo esc_html__('LOCKED', 'stephino-rpg');?></b><?php endif;?>
-                </span>
+                <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?></span>
                 <?php echo esc_html__('Dashboard', 'stephino-rpg');?>
             </div>
         </div>

@@ -41,19 +41,19 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
         }
         
         // Prepare the entities
-        $convoyEntities = $this->payloadFromEntities(
+        $convoyPayload = $this->payloadFromEntities(
             $convoyEntities, 
             $this->getDb()->tableEntities()->getByCity($fromCityId), 
             $fromCityId
         );
         
         // Invalid entities count
-        if (!count($convoyEntities)) {
-            throw new Exception(__('Your army has not troops', 'stephino-rpg'));
+        if (!count($convoyPayload)) {
+            throw new Exception(__('Your army has no troops', 'stephino-rpg'));
         }
         
         // Get the final travel information
-        list($travelFast, $travelDuration) = $this->getTravelInfo($fromInfo, $toInfo, $convoyEntities);
+        list($travelFast, $travelDuration) = $this->getTravelInfo($fromInfo, $toInfo, $convoyPayload);
         
         // Add the convoy
         $convoyCreateResult = $this->getDb()->tableConvoys()->create(
@@ -68,7 +68,7 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
             $travelDuration + time(),
             0,
             array(
-                Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES => $convoyEntities,
+                Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES => $convoyPayload,
             ),
             Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK
         );
@@ -572,6 +572,7 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
         // Go through the entities
         if (is_array($convoyArmy)) {
             foreach ($convoyArmy as $entitySerial => $entityCount) {
+                $entityCount = abs((int) $entityCount);
                 if ($entityCount > 0 && 2 == count($entityParts = explode('_', $entitySerial))) {
                     list($entityType, $entityConfigId) = $entityParts;
 
@@ -582,9 +583,15 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
                             if ($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID] == $fromCityId
                                 && $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE] == $entityType
                                 && $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID] == $entityConfigId
-                                // Validate the entity count
-                                && $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] >= $entityCount
                             ) {
+                                // Assign as many as we currently have
+                                if ($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] < $entityCount) {
+                                    $entityCount = (int) $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];
+                                }
+                                if ($entityCount <= 0) {
+                                    continue;
+                                }
+                                
                                 // Get the configuration object
                                 $configObject = null;
                                 switch ($entityType) {
@@ -600,7 +607,7 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
                                 // Valid configuration object
                                 if (null !== $configObject) {
                                     $convoyPayload[$entityRow[Stephino_Rpg_Db_Table_Entities::COL_ID]] = array(
-                                        Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT     => intval($entityCount),
+                                        Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT     => $entityCount,
                                         Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE      => $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE],
                                         Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID => $entityConfigId
                                     );

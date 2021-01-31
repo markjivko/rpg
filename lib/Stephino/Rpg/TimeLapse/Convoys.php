@@ -831,6 +831,25 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
      * @return array New payload
      */
     protected function _attack($dataRow, &$buildingData, &$supportEntitiesData) {
+        list(, $robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
+        if (null !== $robotId) {
+            if (!is_array($revengeList = Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_LIST, array()))) {
+                $revengeList = array();
+            }
+            
+            // Robot: I shall have my revenge!
+            $revengeList[] = (int) $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID];
+            
+            // Maximum 10 enemies
+            $revengeList = array_unique(array_slice($revengeList, 0, 10));
+            
+            // Save the enemy
+            Stephino_Rpg_Cache_User::get()->write(
+                Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_LIST, 
+                $revengeList
+            )->commit();
+        }
+        
         // Prepare the result
         $finalConvoyPayload = array(
             self::PAYLOAD_ENTITIES  => array(),

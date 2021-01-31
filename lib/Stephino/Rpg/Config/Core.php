@@ -54,9 +54,19 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     const DEFAULT_LABEL_CONFIG_RES_AREA       = 'Research Area';
     const DEFAULT_LABEL_CONFIG_RES_AREAS      = 'Research Areas';
     
-    // Robot aggression levels
+    /**
+     * Low aggression: don't fight back, don't initiate attacks
+     */
     const ROBOT_AGG_LOW    = 'low';
+    
+    /**
+     * Medium aggression: fight back, don't initiate attacks
+     */
     const ROBOT_AGG_MEDIUM = 'medium';
+    
+    /**
+     * High aggression: fight back, initiate attacks
+     */
     const ROBOT_AGG_HIGH   = 'high';
     
     /**
@@ -102,6 +112,20 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_showReloadButton = false;
     
     /**
+     * Leader board size
+     * 
+     * @var int
+     */
+    protected $_leaderBoardSize = 25;
+    
+    /**
+     * Message: Page Size
+     * 
+     * @var int
+     */
+    protected $_messagePageSize = 5;
+    
+    /**
      * Platformer Enabled
      * 
      * @var boolean
@@ -111,23 +135,23 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * Platformer Author Limit
      *
-     * @var int|null
+     * @var int
      */
-    protected $_ptfAuthorLimit = 1;
+    protected $_ptfAuthorLimit = 24;
     
     /**
      * Platformer Reward: Player
      * 
      * @var int|null
      */
-    protected $_ptfRewardGemsPlayer = 50;
+    protected $_ptfRewardPlayer = 50;
     
     /**
      * Platformer Reward: Author
      * 
      * @var int|null
      */
-    protected $_ptfRewardGemsAuthor = 20;
+    protected $_ptfRewardAuthor = 20;
     
     /**
      * Platformer Reward: Reset Time in hours
@@ -135,6 +159,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int|null
      */
     protected $_ptfRewardResetHours = 12;
+    
+    /**
+     * Points earned for winning platformer levels
+     * 
+     * @var int
+     */
+    protected $_ptfScore = 5;
     
     /**
      * Chat Room
@@ -151,54 +182,19 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_firebaseProjectId = null;
     
     /**
+     * Firebase > Database URL
+     *
+     * @var string|null
+     */
+    protected $_firebaseDatabaseUrl = null;
+    
+    /**
      * Firebase > Web API Key
      *
      * @var string|null
      */
     protected $_firebaseWebApiKey = null;
     
-    /**
-     * PayPal Client ID
-     * 
-     * @var string|null
-     */
-    protected $_payPalClientId = null;
-    
-    /**
-     * PayPal Client Secret
-     * 
-     * @var string|null
-     */
-    protected $_payPalClientSecret = null;
-    
-    /**
-     * PayPal Currency
-     * 
-     * @var string
-     */
-    protected $_payPalCurrency = Stephino_Rpg_Db_Model_Invoices::CURRENCY_USD;
-    
-    /**
-     * PayPal Sandbox mode
-     * 
-     * @var boolean
-     */
-    protected $_payPalSandbox = true;
-    
-    /**
-     * Sandbox mode
-     * 
-     * @var boolean
-     */
-    protected $_sandbox = false;
-    
-    /**
-     * Console Enabled flag
-     *
-     * @var boolean
-     */
-    protected $_consoleEnabled = false;
-
     /**
      * Message: Daily send limit
      * 
@@ -261,41 +257,55 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int
      */
     protected $_scoreQueueResearch = 90;
-
-    /**
-     * Points earned for winning platformer levels
-     * 
-     * @var int
-     */
-    protected $_scorePtf = 5;
     
     /**
-     * Islands Initial Count
+     * PayPal Client ID
      * 
-     * @var int
+     * @var string|null
      */
-    protected $_initialIslandsCount = 100;
-
-    /**
-     * Initials Islands per player
-     * 
-     * @var int
-     */
-    protected $_initialIslandsPerUser = 3;
+    protected $_payPalClientId = null;
     
     /**
-     * Initial Robots per player
+     * PayPal Client Secret
      * 
-     * @var int
+     * @var string|null
      */
-    protected $_initialRobotsPerUser = 3;
+    protected $_payPalClientSecret = null;
+    
+    /**
+     * PayPal Currency
+     * 
+     * @var string
+     */
+    protected $_payPalCurrency = Stephino_Rpg_Db_Model_Invoices::CURRENCY_USD;
+    
+    /**
+     * PayPal Sandbox mode
+     * 
+     * @var boolean
+     */
+    protected $_payPalSandbox = true;
+    
+    /**
+     * Sandbox mode
+     * 
+     * @var boolean
+     */
+    protected $_sandbox = false;
+    
+    /**
+     * Console Enabled flag
+     *
+     * @var boolean
+     */
+    protected $_consoleEnabled = false;
     
     /**
      * Robots aggression level
      *
      * @var string
      */
-    protected $_robotsAggression = self::ROBOT_AGG_LOW;
+    protected $_robotsAggression = self::ROBOT_AGG_HIGH;
     
     /**
      * Robots fervor (between 5 and 100)
@@ -303,6 +313,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int
      */
     protected $_robotsFervor = 50;
+    
+    /**
+     * Robots timeout: minimum number of hours to wait between attacks (between 1 and 168)
+     * 
+     * @var int
+     */
+    protected $_robotsTimeout = 48;
 
     /**
      * Robot time-lapses per request
@@ -340,12 +357,26 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_cronMaxAge = 90;
     
     /**
-     * Travel Time
+     * Islands Initial Count
      * 
      * @var int
      */
-    protected $_travelTime = 10;
+    protected $_initialIslandsCount = 100;
 
+    /**
+     * Initials Islands per player
+     * 
+     * @var int
+     */
+    protected $_initialIslandsPerUser = 3;
+    
+    /**
+     * Initial Robots per player
+     * 
+     * @var int
+     */
+    protected $_initialRobotsPerUser = 3;
+    
     /**
      * Player Resource Gold
      * 
@@ -366,6 +397,34 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int
      */
     protected $_initialUserResourceResearch = 0;
+    
+    /**
+     * City First Buildings
+     * 
+     * @var int[]|null Stephino_Rpg_Config_Building IDs
+     */
+    protected $_initialCityBuildings = null;
+    
+    /**
+     * Travel Time
+     * 
+     * @var int
+     */
+    protected $_travelTime = 10;
+    
+    /**
+     * Noob: City Levels Difference
+     * 
+     * @var int
+     */
+    protected $_noobLevels = 5;
+    
+    /**
+     * Noob: Age
+     * 
+     * @var int
+     */
+    protected $_noobAge = 7;
 
     /**
      * Gem To Gold ratio
@@ -394,7 +453,21 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int|null Stephino_Rpg_Config_Building ID
      */
     protected $_marketBuildingId = null;
-
+    
+    /**
+     * Market: Polynomial
+     * 
+     * @var string|null
+     */
+    protected $_marketPolynomial = null;
+        
+    /**
+     * Market: Gain
+     * 
+     * @var string|null
+     */
+    protected $_marketGain = 10;
+    
     /**
      * Market: Resource Alpha to Gold ratio
      * 
@@ -431,32 +504,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_marketResourceExtra2 = 0;
     
     /**
-     * Market: Polynomial
-     * 
-     * @var string|null
-     */
-    protected $_marketPolynomial = null;
-    
-    /**
-     * Market: Gain
-     * 
-     * @var string|null
-     */
-    protected $_marketGain = 10;
-    
-    /**
      * Main building
      * 
      * @var int|null Stephino_Rpg_Config_Building ID
      */
     protected $_mainBuildingId = null;
-    
-    /**
-     * City First Buildings
-     * 
-     * @var int[]|null Stephino_Rpg_Config_Building IDs
-     */
-    protected $_initialCityBuildings = null;
 
     /**
      * Metropolis Satisfaction Boost
@@ -659,6 +711,68 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
+     * Number of players to show in the leader board
+     * 
+     * @default 25
+     * @ref 5,500
+     * @return int Leader board size
+     */
+    public function getLeaderBoardSize() {
+        return null === $this->_leaderBoardSize ? 25 : $this->_leaderBoardSize;
+    }
+    
+    /**
+     * Set the "Leader Board Size" parameter
+     * 
+     * @param int $leaderBoardSize Leader Board Size
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setLeaderBoardSize($leaderBoardSize) {
+        $this->_leaderBoardSize = (null === $leaderBoardSize ? 25 : intval($leaderBoardSize));
+
+        // Minimum and maximum
+        if ($this->_leaderBoardSize < 5) {
+            $this->_leaderBoardSize = 5;
+        }
+        if ($this->_leaderBoardSize > 500) {
+            $this->_leaderBoardSize = 500;
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Number of message to display per page
+     * 
+     * @default 5
+     * @ref 3,50
+     * @return int Messages: Page Size
+     */
+    public function getMessagePageSize() {
+        return null === $this->_messagePageSize ? 5 : $this->_messagePageSize;
+    }
+    
+    /**
+     * Set the "Message Page Size" parameter
+     * 
+     * @param int|null $messagePageSize Message page size
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setMessagePageSize($messagePageSize) {
+        $this->_messagePageSize = (null === $messagePageSize ? 5 : intval($messagePageSize));
+        
+        // Minimum and maximum
+        if ($this->_messagePageSize < 3) {
+            $this->_messagePageSize = 3;
+        }
+        if ($this->_messagePageSize > 50) {
+            $this->_messagePageSize = 50;
+        }
+        
+        return $this;
+    }
+    
+    /**
      * Enable platformer mini-games, allowing users to earn rewards by playing and designing their own levels
      * 
      * @section User Content
@@ -682,16 +796,17 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * The maximum number of games a user can create<br/>
-     * <b>0</b> means no limit
+     * The maximum number of games a player can create<br/>
+     * <b>0</b> means players cannot add new mini-games<br/>
+     * Does not affect admins
      * 
      * @depends ptfEnabled
-     * @default 1
+     * @default 24
      * @ref 0
      * @return int Platformer Author Limit
      */
     public function getPtfAuthorLimit() {
-        return (null === $this->_ptfAuthorLimit ? 1 : $this->_ptfAuthorLimit);
+        return (null === $this->_ptfAuthorLimit ? 24 : $this->_ptfAuthorLimit);
     }
     
     /**
@@ -701,7 +816,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setPtfAuthorLimit($ptfAuthorLimit) {
-        $this->_ptfAuthorLimit = (null === $ptfAuthorLimit ? 1 : intval($ptfAuthorLimit));
+        $this->_ptfAuthorLimit = (null === $ptfAuthorLimit ? 24 : intval($ptfAuthorLimit));
         
         // Minimum and maximum
         if ($this->_ptfAuthorLimit < 0) {
@@ -721,7 +836,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return int Platformer Reward: Player
      */
     public function getPtfRewardPlayer() {
-        return (null === $this->_ptfRewardGemsPlayer ? 50 : $this->_ptfRewardGemsPlayer);
+        return (null === $this->_ptfRewardPlayer ? 50 : $this->_ptfRewardPlayer);
     }
     
     /**
@@ -731,11 +846,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setPtfRewardPlayer($ptfRewardGems) {
-        $this->_ptfRewardGemsPlayer = (null === $ptfRewardGems ? 50 : intval($ptfRewardGems));
+        $this->_ptfRewardPlayer = (null === $ptfRewardGems ? 50 : intval($ptfRewardGems));
         
         // Minimum and maximum
-        if ($this->_ptfRewardGemsPlayer < 0) {
-            $this->_ptfRewardGemsPlayer = 0;
+        if ($this->_ptfRewardPlayer < 0) {
+            $this->_ptfRewardPlayer = 0;
         }
         
         return $this;
@@ -751,7 +866,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return int Platformer Reward: Author
      */
     public function getPtfRewardAuthor() {
-        return (null === $this->_ptfRewardGemsAuthor ? 20 : $this->_ptfRewardGemsAuthor);
+        return (null === $this->_ptfRewardAuthor ? 20 : $this->_ptfRewardAuthor);
     }
     
     /**
@@ -761,11 +876,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setPtfRewardAuthor($ptfRewardGems) {
-        $this->_ptfRewardGemsAuthor = (null === $ptfRewardGems ? 20 : intval($ptfRewardGems));
+        $this->_ptfRewardAuthor = (null === $ptfRewardGems ? 20 : intval($ptfRewardGems));
         
         // Minimum and maximum
-        if ($this->_ptfRewardGemsAuthor < 0) {
-            $this->_ptfRewardGemsAuthor = 0;
+        if ($this->_ptfRewardAuthor < 0) {
+            $this->_ptfRewardAuthor = 0;
         }
         
         return $this;
@@ -805,8 +920,40 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Enable the chat room so users can interact in real-time<br/>
-     * The chat room uses the <b>Realtime Database</b> feature of <b>Google Firebase</b>
+     * Points earned for winning platformer levels along with the platformer reward
+     *
+     * @depends ptfEnabled
+     * @default 5
+     * @ref -5000,5000
+     * @return int Platformer Points
+     */
+    public function getPtfScore() {
+        return null === $this->_ptfScore ? 5 : $this->_ptfScore;
+    }
+    
+    /**
+     * Set the "PTF Score" parameter
+     * 
+     * @param int $ptfScore Score
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setPtfScore($ptfScore) {
+        $this->_ptfScore = (null === $ptfScore ? 5 : intval($ptfScore));
+
+        // Minimum and maximum
+        if ($this->_ptfScore < -5000) {
+            $this->_ptfScore = -5000;
+        }
+        if ($this->_ptfScore > 5000) {
+            $this->_ptfScore = 5000;
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.2&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
      * @return boolean Chat Room
      */
@@ -827,12 +974,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Get the Firebase project ID and Web API Key from <a class="info" href="https://console.firebase.google.com/" target="_blank">here</a><br/>
-     * You can use these <a class="info" href="https://plugins.trac.wordpress.org/browser/stephino-rpg/trunk/ui/js/pwa/firebase-rules.json" target="_blank">Realtime Database Rules</a> to get started
+     * Firebase Project ID for your chat room
      * 
      * @depends chatRoom
      * @sensitive true
-     * @return string|null Chat Room: Firebase Project ID
+     * @return string|null Chat Room: Project ID
      */
     public function getFirebaseProjectId() {
         return $this->_firebaseProjectId;
@@ -851,11 +997,34 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
+     * Firebase Database URL for your chat room
+     * 
+     * @depends chatRoom
+     * @sensitive true
+     * @return string|null Chat Room: Database URL
+     */
+    public function getFirebaseDatabaseUrl() {
+        return $this->_firebaseDatabaseUrl;
+    }
+    
+    /**
+     * Set the "Firebase Database URL" parameter
+     * 
+     * @param string|null $databaseUrl Firebase Database URL
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setFirebaseDatabaseUrl($databaseUrl) {
+        $this->_firebaseDatabaseUrl = Stephino_Rpg_Utils_Lingo::cleanup($databaseUrl);
+
+        return $this;
+    }
+    
+    /**
      * Firebase Web API Key for your chat room
      * 
      * @depends chatRoom
      * @sensitive true
-     * @return string|null Chat Room: Firebase API Key
+     * @return string|null Chat Room: Web API Key
      */
     public function getFirebaseWebApiKey() {
         return $this->_firebaseWebApiKey;
@@ -1155,38 +1324,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Points earned for winning platformer levels along with the platformer reward
-     *
-     * @depends ptfEnabled
-     * @default 5
-     * @ref -5000,5000
-     * @return int Platformer Points
-     */
-    public function getScorePtf() {
-        return null === $this->_scorePtf ? 5 : $this->_scorePtf;
-    }
-    
-    /**
-     * Set the "Score PTF" parameter
-     * 
-     * @param int $scorePtf Score
-     * @return Stephino_Rpg_Config_Core
-     */
-    public function setScorePtf($scorePtf) {
-        $this->_scorePtf = (null === $scorePtf ? 5 : intval($scorePtf));
-
-        // Minimum and maximum
-        if ($this->_scorePtf < -5000) {
-            $this->_scorePtf = -5000;
-        }
-        if ($this->_scorePtf > 5000) {
-            $this->_scorePtf = 5000;
-        }
-
-        return $this;
-    }
-    
-    /**
      * Get the client ID and secret from <a class="info" href="https://developer.paypal.com/developer/applications/" target="_blank">here</a><br/>
      * Omitting the client ID or secret means that premium packages can only be acquired with <b>{x}</b>
      * 
@@ -1340,8 +1477,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      *     <li><b>high</b>: fight back, initiate attacks</li>
      * </ul>
      * 
-     * <br/><span class="info">(coming soon)</span>
-     * 
      * @section Artificial Intelligence
      * @opt low,medium,high
      * @return string Robots aggression
@@ -1359,7 +1494,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     public function setRobotsAggression($aggression) {
         // Validate the aggression level
         if (!in_array($aggression, array(self::ROBOT_AGG_LOW, self::ROBOT_AGG_MEDIUM, self::ROBOT_AGG_HIGH))) {
-            $aggression = self::ROBOT_AGG_LOW;
+            $aggression = self::ROBOT_AGG_HIGH;
         }
         
         // Store it
@@ -1394,6 +1529,37 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         }
         if ($this->_robotsFervor > 100) {
             $this->_robotsFervor = 100;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Set the minium number of hours to wait between attacks
+     * 
+     * @default 48
+     * @ref 1,168
+     * @return int Robots timeout
+     */
+    public function getRobotsTimeout() {
+        return null === $this->_robotsTimeout ? 48 : $this->_robotsTimeout;
+    }
+    
+    /**
+     * Set the "Robots Timeout" parameter
+     * 
+     * @param int $robotsTimeout Robots Timeout
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setRobotsTimeout($robotsTimeout) {
+        $this->_robotsTimeout = intval($robotsTimeout);
+        
+        // Minimum and maximum
+        if ($this->_robotsTimeout < 1) {
+            $this->_robotsTimeout = 1;
+        }
+        if ($this->_robotsTimeout > 168) {
+            $this->_robotsTimeout = 168;
         }
         
         return $this;
@@ -1826,6 +1992,68 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         }
         if ($this->_travelTime > 86400) {
             $this->_travelTime = 86400;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * You cannot attack cities that are smaller than yours by this much
+     * 
+     * @default 5
+     * @ref 1,25
+     * @return int Noob: City Levels Difference
+     */
+    public function getNoobLevels() {
+        return null === $this->_noobLevels ? 5 : $this->_noobLevels;
+    }
+    
+    /**
+     * Set the "Noob Levels" parameter
+     * 
+     * @param int $noobAge Noob Levels
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setNoobLevels($noobLevels) {
+        $this->_noobLevels = (null === $noobLevels ? 5 : intval($noobLevels));
+        
+        // Minimum and maximum
+        if ($this->_noobLevels < 1) {
+            $this->_noobLevels = 1;
+        }
+        if ($this->_noobLevels > 25) {
+            $this->_noobLevels = 25;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * You cannot attack players that are younger than this number of days
+     * 
+     * @default 7
+     * @ref 1,90
+     * @return int Noob: Player Account Age
+     */
+    public function getNoobAge() {
+        return null === $this->_noobAge ? 7 : $this->_noobAge;
+    }
+    
+    /**
+     * Set the "Noob Age" parameter
+     * 
+     * @param int $noobAge Noob Age
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setNoobAge($noobAge) {
+        $this->_noobAge = (null === $noobAge ? 7 : intval($noobAge));
+        
+        // Minimum and maximum
+        if ($this->_noobAge < 1) {
+            $this->_noobAge = 1;
+        }
+        if ($this->_noobAge > 90) {
+            $this->_noobAge = 90;
         }
         
         return $this;

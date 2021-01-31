@@ -16,6 +16,7 @@ class Stephino_Rpg_Renderer_Ajax {
     const METHOD_PREFIX         = 'ajax';
     const CALL_VERSION          = 'ver';
     const CALL_METHOD           = 'method';
+    const CALL_ACTION           = 'action';
     const CALL_DATA             = 'data';
     const CALL_CONFIG_ID        = 'configId';
     const CALL_VIEW             = 'view';
@@ -471,7 +472,7 @@ class Stephino_Rpg_Renderer_Ajax {
                 // Authenticated user
                 if (Stephino_Rpg_TimeLapse::get()->userId()) {
                     // Have not read this announcement yet
-                    if ($result[0] != Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
+                    if ($result[0] != Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
                         break;
                     }
                 }
@@ -491,7 +492,7 @@ class Stephino_Rpg_Renderer_Ajax {
      */
     protected static function _getChangelog() {
         return Stephino_Rpg_Config::get()->core()->getShowAbout() 
-            && Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_CHL_READ);
+            && Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_CHL_READ);
     }
     
     /**
@@ -571,7 +572,7 @@ class Stephino_Rpg_Renderer_Ajax {
         );
         
         // Get the current user data
-        $userCache = Stephino_Rpg_Cache_User::getInstance()->getData();
+        $userCache = Stephino_Rpg_Cache_User::get()->data();
         foreach ($userCache as $cacheKey => $cacheValue) {
             if (isset($result[$cacheKey])) {
                 $result[$cacheKey] = intval($cacheValue);

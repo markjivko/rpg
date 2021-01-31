@@ -365,12 +365,12 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             Stephino_Rpg_Db::get()->modelPtfs()->reward($authorId, $authorReward, $ptfId, $playerId);
             
             // Total score
-            if (0 != Stephino_Rpg_Config::get()->core()->getScorePtf()) {
+            if (0 != Stephino_Rpg_Config::get()->core()->getPtfScore()) {
                 Stephino_Rpg_Db::get()->tableUsers()->updateById(
                     array(
                         Stephino_Rpg_Db_Table_Users::COL_USER_SCORE => 
                             $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE] 
-                            + Stephino_Rpg_Config::get()->core()->getScorePtf()
+                            + Stephino_Rpg_Config::get()->core()->getPtfScore()
                     ), 
                     $playerId
                 );

@@ -762,8 +762,8 @@ class Stephino_Rpg_Renderer_Ajax_Action {
      * Get item requirements, checking them against the time-lapse data for the provided city
      * 
      * @param Stephino_Rpg_Config_Trait_Requirement $configObject    Configuration object that supports requirements
-     * @param int                                     $cityId          (optional) City ID to validate the requirements against; default <b>null</b> - used for user-level resources
-     * @param boolean                                 $exceptionOnFail (optional) Whether to throw an exception on fail; default <b>false</b>
+     * @param int                                   $cityId          (optional) City ID to validate the requirements against; default <b>null</b> - used for user-level resources
+     * @param boolean                               $exceptionOnFail (optional) Whether to throw an exception on fail; default <b>false</b>
      * @return array|null Numeric array with 2 values:
      * <ul>
      *     <li>
@@ -893,6 +893,224 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         }
         
         return array($requirementsData, $requirementsMet);
+    }
+    
+    /**
+     * Get the most effective military entity available with the lowest maintenance
+     * 
+     * @param int $cityId City ID
+     * @return array|null Numeric array with 2 values:
+     * <ul>
+     *     <li>(Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship) Entity Configuration Object</li>
+     *     <li>(int) Positive integer: entities afforded by both upfront cost and maintenance</li>
+     *     <li>(array) Cost data</li>
+     * </ul> or NULL if none found
+     */
+    public static function getEntityMVP($cityId) {
+        $result = null;
+        
+        // Prepare the entity and production data
+        $mvpEntity     = null;
+        $mvpProduction = null;
+        $mvpBuilding   = null;
+
+        // Get the available military entities configs
+        $entityConfigs = array_filter(
+            self::getEntityConfigs(Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK),
+            function($entityConfig) use($cityId) {
+                list(, $requirementsMet) = self::getRequirements($entityConfig, $cityId);
+                return $requirementsMet;
+            }
+        );
+        
+        do {
+            // No entities available
+            if (!count($entityConfigs)) {
+                break;
+            }
+            
+            // Store least costly
+            $leastCostlyValue = null;
+            
+            // Go through the entities
+            foreach ($entityConfigs as /*@var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship*/$entityConfig) {
+                // Use the cached time-lapse resources (avoids an extra, unnecessary DB query)
+                $parentBuildingData = null;
+                if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
+                    foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData() as $dbRow) {
+                        // Found our city
+                        if ($cityId == $dbRow[Stephino_Rpg_Db_Table_Cities::COL_ID]) {
+                            // Found the parent building
+                            if (null !== $entityConfig->getBuilding() && $entityConfig->getBuilding()->getId() == $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID]) {
+                                $parentBuildingData = $dbRow;
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                // Get the production data
+                $productionData = self::getProductionData(
+                    $entityConfig,
+                    null === $parentBuildingData ? 0 : $parentBuildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                    $parentBuildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_ISLAND_ID]
+                );
+
+                // First result is enough
+                if (1 === count($entityConfigs)) {
+                    $mvpEntity     = $entityConfig;
+                    $mvpProduction = $productionData;
+                    $mvpBuilding   = $parentBuildingData;
+                    break;
+                } 
+                
+                // Prepare the total value
+                $productionValue = isset($productionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD])
+                    ? floatval($productionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD][1])
+                    : 0;
+
+                // Gems > Gold
+                if (isset($productionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM])) {
+                    $gemToGoldRatio = Stephino_Rpg_Config::get()->core()->getGemToGoldRatio() > 0
+                        ? Stephino_Rpg_Config::get()->core()->getGemToGoldRatio()
+                        : 1;
+                    $productionValue += floatval($productionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM][1]) * $gemToGoldRatio;
+                }
+                
+                // Research Points > Gold
+                if (isset($productionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH])) {
+                    $researchToGoldRatio = (Stephino_Rpg_Config::get()->core()->getGemToGoldRatio() > 0
+                        ? Stephino_Rpg_Config::get()->core()->getGemToGoldRatio()
+                        : 1
+                    ) / (Stephino_Rpg_Config::get()->core()->getGemToResearchRatio() > 0
+                        ? Stephino_Rpg_Config::get()->core()->getGemToResearchRatio()
+                        : 1
+                    );
+                    $productionValue += floatval($productionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH][1]) * $researchToGoldRatio;
+                }
+                
+                // City Resources > Gold
+                foreach (array(
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_ALPHA,
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_BETA,
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_GAMMA,
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_1,
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_2,
+                ) as $resourceName) {
+                    if (isset($productionData[$resourceName])) {
+                        $resourceToGoldRatio = 1;
+                        switch ($resourceName) {
+                            case Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_ALPHA:
+                                $resourceToGoldRatio = Stephino_Rpg_Config::get()->core()->getMarketResourceAlpha();
+                                break;
+                        }
+                        if ($resourceToGoldRatio <= 0) {
+                            $resourceToGoldRatio = 1;
+                        }
+                        $productionValue += floatval($productionData[$resourceName][1]) * $resourceToGoldRatio;
+                    }
+                }
+                
+                // Get the military caps
+                $entityMilitaryCaps = (
+                    $entityConfig->getAgility() * $entityConfig->getArmour()
+                    + $entityConfig->getAmmo() * $entityConfig->getDamage()
+                );
+                if ($entityMilitaryCaps < 1) {
+                    $entityMilitaryCaps = 1;
+                }
+                
+                // Adjust the production value with the military capabilities
+                $productionValue /= $entityMilitaryCaps;
+                
+                // Most affordable upkeep
+                if (null === $leastCostlyValue || $productionValue > $leastCostlyValue) {
+                    $leastCostlyValue = $productionValue;
+                    $mvpEntity        = $entityConfig;
+                    $mvpProduction    = $productionData;
+                    $mvpBuilding      = $parentBuildingData;
+                }
+            }
+        } while(false);
+        
+        // Number of entities afforded (maintenance)
+        if (null !== $mvpProduction) {
+            $affordList = array();
+            foreach ($mvpProduction as $resName => $prodData) {
+                $affordCount = 10;
+                
+                if ($prodData[1] < 0) {
+                    $metricInfo = Stephino_Rpg_Renderer_Ajax_Action::getModifierEffectInfo($resName, $cityId);
+
+                    // Prepare the total metric
+                    $cityTotal = 0;
+                    if (count($metricInfo)) {
+                        foreach($metricInfo as $bdSatData) {
+                            foreach($bdSatData as $bdSatValue) {
+                                $cityTotal += $bdSatValue[0];
+                            }
+                        }
+                    }
+                    
+                    // Total production
+                    if ($cityTotal > 0) {
+                        $affordCount = intval(floor($cityTotal / 2 / abs($prodData[1])));
+                    }
+                }
+                
+                $affordList[] = $affordCount;
+                if ($affordCount <= 0) {
+                    break;
+                }
+            }
+            
+            // Store the entities we afford considering maintenance costs
+            $affordMaintenance = min($affordList);
+            
+            if ($affordMaintenance > 0) {
+                // Prepare the resources
+                $resources = Stephino_Rpg_Renderer_Ajax::getResources($cityId);
+
+                // Prepare the cost data (per entity)
+                $costData = Stephino_Rpg_Renderer_Ajax_Action::getCostData(
+                    $mvpEntity,
+                    null === $mvpBuilding ? 0 : $mvpBuilding[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] - 1,
+                    true
+                );
+
+                // Go through the costs
+                $affordList = array();
+                if (count($costData)) {
+                    foreach ($costData as list(, $unitValue, $unitAjaxKey)) {
+                        if ($unitValue > 0) {
+                            $affordList[$unitAjaxKey] = intval($resources[$unitAjaxKey][0] / $unitValue);
+                        }
+                    }
+                } else {
+                    // 10 at a time for priceless units
+                    $affordList = array(10);
+                }
+
+                // Store the entities we afford considering upfront cost
+                $affordCost = min($affordList);
+
+                // We afford at least one
+                if ($affordCost > 0) {
+                    $mvpEntityCount = min($affordCost, $affordMaintenance);
+                    
+                    $mvpCostData = Stephino_Rpg_Renderer_Ajax_Action::getCostData(
+                        $mvpEntity,
+                        null === $mvpBuilding ? 0 : $mvpBuilding[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] - 1,
+                        true,
+                        $mvpEntityCount
+                    );
+                    
+                    $result = array($mvpEntity, $mvpEntityCount, $mvpCostData);
+                }
+            }
+        }
+        
+        return $result;
     }
     
     /**

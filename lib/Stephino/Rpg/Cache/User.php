@@ -27,8 +27,14 @@ class Stephino_Rpg_Cache_User {
     const KEY_VOL_BKG    = 'vol_bkg';
     const KEY_VOL_CELLS  = 'vol_cells';
     const KEY_VOL_EVENTS = 'vol_events';
+    
+    // Platformer
     const KEY_PTF_DATA   = 'ptf_data';
     const KEY_PTF_TIME   = 'ptf_time';
+    
+    // Robot attack revenge list and last attack time
+    const KEY_ROBOT_ATT_LIST = 'att_list';
+    const KEY_ROBOT_ATT_TIME = 'att_time';
     
     /**
      * Platformer game started 
@@ -74,14 +80,40 @@ class Stephino_Rpg_Cache_User {
     protected $_allowedKeys = array();
     
     /**
-     * Get the cache instance
+     * Values changed
+     * 
+     * @var boolean
+     */
+    protected $_changed = false;
+    
+    /**
+     * Get the user cache instance, time-lapse workspace dependant
      * 
      * @return Stephino_Rpg_Cache_User
      */
-    public static function getInstance() {
+    public static function get() {
         if (null === self::$_instance) {
             self::$_instance = new self();
         }
+        
+        // Get the current workspace user ID
+        $userId = Stephino_Rpg_TimeLapse::get()->userId();
+        
+        // Re-initialize
+        if (self::$_instance->_userId != $userId) {
+            self::$_instance->_userId  = $userId;
+            self::$_instance->_data    = array();
+            self::$_instance->_changed = false;
+
+            // Initialize the local data storage
+            if (self::$_instance->_userId) {
+                list($wpUserId, $robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
+                self::$_instance->_data = Stephino_Rpg_Db::get($robotId, $wpUserId)
+                    ->tableUsers()
+                    ->getGameSettings();
+            }
+        }
+        
         return self::$_instance;
     }
     
@@ -89,14 +121,6 @@ class Stephino_Rpg_Cache_User {
      * Transient caching
      */
     protected function __construct() {
-        // Current user ID
-        $this->_userId = Stephino_Rpg_TimeLapse::get()->userId();
-        
-        // Initialize the local data storage
-        if ($this->_userId) {
-            $this->_data = Stephino_Rpg_Db::get()->tableUsers()->getGameSettings();
-        }
-        
         // Prepare the allowed keys
         $classReflection = new ReflectionClass($this);
         foreach ($classReflection->getConstants() as $constantName => $constantValue) {
@@ -111,7 +135,7 @@ class Stephino_Rpg_Cache_User {
      * 
      * @return array
      */
-    public function getData() {
+    public function data() {
         return $this->_data;
     }
     
@@ -122,34 +146,49 @@ class Stephino_Rpg_Cache_User {
      * @param mixed  $default  (optional) Default value to return in case cache not set; default <b>null</b>
      * @return mixed|null Cached value or the default on error
      */
-    public function getValue($cacheKey, $default = null) {
-        return (
-            in_array($cacheKey, $this->_allowedKeys) && isset($this->_data[$cacheKey]) 
-                ? $this->_data[$cacheKey] 
-                : $default
-        );
+    public function read($cacheKey, $default = null) {
+        return in_array($cacheKey, $this->_allowedKeys) && isset($this->_data[$cacheKey]) 
+            ? $this->_data[$cacheKey] 
+            : $default;
     }
     
     /**
-     * Store a value in cache
+     * Store a value in cache; must call "commit" to save the changed values to the database
      * 
      * @param string $cacheKey   Cache key
      * @param mixed  $cacheValue Value to store
-     * @return boolean
+     * @return Stephino_Rpg_Cache_User
      */
-    public function setValue($cacheKey, $cacheValue) {
-        // Prepare the result
-        $result = false;
-        
+    public function write($cacheKey, $cacheValue) {
         // Valid key
         if (in_array($cacheKey, $this->_allowedKeys)) {
-            // Store the local value
             $this->_data[$cacheKey] = $cacheValue;
+            $this->_changed = true;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Commit the changed values to the database; must be called after "write"
+     * 
+     * @return boolean
+     */
+    public function commit() {
+        $result = false;
+        
+        // Settings changed
+        if ($this->_changed && $this->_userId) {
+            list($wpUserId, $robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
             
-            // Update the option
-            if ($this->_userId) {
-                $result = Stephino_Rpg_Db::get()->tableUsers()->setGameSettings($this->_data, $this->_userId);
-            }
+            $result = Stephino_Rpg_Db::get($robotId, $wpUserId)
+                ->tableUsers()
+                ->setGameSettings(
+                    $this->_data, 
+                    $this->_userId
+                );
+            
+            $this->_changed = false;
         }
         
         return $result;

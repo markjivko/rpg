@@ -250,17 +250,18 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     }
     
     /**
-     * Get a list of random robots; optimized for large tables
+     * Get a list of random users; optimized for large tables
      * 
-     * @param int $count (optional) Robot count, must be a positive integer; default <b>config.core.robotTimeLapsesPerRequest</b>
+     * @param int     $count     Result count, must be a positive integer
+     * @param boolean $getRobots (optional) Get robot accounts; default <b>false</b>
      * @return array|null Array of rows or Null on error
      */
-    public function getRandomRobots($count = null) {
+    public function getRandom($count, $getRobots = false) {
         // Prepare the result
         $result = null;
         
-        // Set the default or sanitize the input
-        $count = (null === $count ? Stephino_Rpg_Config::get()->core()->getRobotTimeLapsesPerRequest() : intval($count));
+        // Sanitize the input
+        $count = abs((int) $count);
         
         // Get the resouts
         if ($count > 0) {
@@ -304,20 +305,20 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
                 );
                 
                 // Get the result
-                $robotRows = $this->getDb()->getWpDb()->get_results(
+                $dbRows = $this->getDb()->getWpDb()->get_results(
                     "SELECT * FROM `$this`"
-                    . " WHERE `" . self::COL_USER_WP_ID . "` IS null"
-                        . " AND `" . self::COL_ID . "` IN ( " . $userIdsList . " )",
+                    . " WHERE `" . self::COL_USER_WP_ID . "` IS " . ($getRobots ? '' : 'NOT ') . 'null'
+                    . " AND `" . self::COL_ID . "` IN ( " . $userIdsList . " )",
                     ARRAY_A
                 );
                 
                 // Local shuffling is much faster than MySQL's "ORDER BY RAND()"
-                if (is_array($robotRows) && count($robotRows)) {
+                if (is_array($dbRows) && count($dbRows)) {
                     // Pre-shuffling the user IDs does not work as MySQL returns the results in order
-                    shuffle($robotRows);
+                    shuffle($dbRows);
                     
                     // Implement the "LIMIT" locally
-                    $result = array_slice($robotRows, 0, $count, false);
+                    $result = array_slice($dbRows, 0, $count, false);
                 }
             }
         }
@@ -370,7 +371,7 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
      * @param int $limit Limit
      * @return array|null
      */
-    public function getMVP($limit = 1000) {
+    public function getMVP($limit = 100) {
         $limit = abs((int) $limit);
         
         // Get the result

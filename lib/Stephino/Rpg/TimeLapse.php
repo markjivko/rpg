@@ -264,9 +264,10 @@ class Stephino_Rpg_TimeLapse {
     /**
      * Run the available tools
      * 
-     * @param boolean $ajaxOrigin (optional) The time-lapse procedure was initiated by an AJAX call; default <b>false</b>
+     * @param boolean $ajaxOrigin   (optional) The time-lapse procedure was initiated by an AJAX call; default <b>false</b>
+     * @param boolean $dialogOrigin (optional) The time-lapse procedure was initiated by an AJAX Dialog call; default <b>false</b>
      */
-    public function run($ajaxOrigin = false) {
+    public function run($ajaxOrigin = false, $dialogOrigin = false) {
         // No workers - a bad User ID was provided
         if (!count($this->_workers)) {
             return;
@@ -320,47 +321,50 @@ class Stephino_Rpg_TimeLapse {
                 $currentTick
             );
             
-            // Perform robot actions
-            list($wpUserId, $robotId, $forced) = self::getWorkspace();
-            null !== $robotId && Stephino_Rpg_Task_Robot::get()->run();
-            
-            // Save the changed rows back to the DB
-            foreach ($this->_workers as $worker) {
-                $logWorkerStart = microtime(true);
-                
-                // DB Update
-                $worker->save();
-                
-                // Log the result
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('TL-SV: ' . get_class($worker) . ' in ' . (microtime(true) - $logWorkerStart));
-            }
-            
-            // New threads were registered (by the Convoys worker)
-            if (count($this->_threads)) {
-                // Go through the other threads
-                foreach ($this->_threads as $otherWorkspace) {
-                    // Validate the new workspace format
-                    if (!is_array($otherWorkspace) || 3 != count($otherWorkspace)) {
-                        continue;
-                    }
-                    
-                    // Get the new workspace arguments
-                    list($otherWpUserId, $otherRobotId, $otherForced) = $otherWorkspace;
-                    
-                    // Same as the current workspace, avoid an infinite loop
-                    if ($otherWpUserId == $wpUserId && $otherRobotId == $robotId && $otherForced == $forced) {
-                        continue;
-                    }
-                    
-                    // Set up the new workspace
-                    self::setWorkspace($otherWpUserId, $otherRobotId, $otherForced);
+            // Dialogs are read-only
+            if (!$dialogOrigin) {
+                // Perform robot actions
+                list($wpUserId, $robotId, $forced) = self::getWorkspace();
+                null !== $robotId && Stephino_Rpg_Task_Robot::get()->run();
 
-                    // Run the tasks for this different user
-                    self::get()->run();
+                // Save the changed rows back to the DB
+                foreach ($this->_workers as $worker) {
+                    $logWorkerStart = microtime(true);
+
+                    // DB Update
+                    $worker->save();
+
+                    // Log the result
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('TL-SV: ' . get_class($worker) . ' in ' . (microtime(true) - $logWorkerStart));
                 }
 
-                // Set the current workspace back
-                self::setWorkspace($wpUserId, $robotId, $forced);
+                // New threads were registered
+                if (count($this->_threads)) {
+                    // Go through the other threads
+                    foreach ($this->_threads as $otherWorkspace) {
+                        // Validate the new workspace format
+                        if (!is_array($otherWorkspace) || 3 != count($otherWorkspace)) {
+                            continue;
+                        }
+
+                        // Get the new workspace arguments
+                        list($otherWpUserId, $otherRobotId, $otherForced) = $otherWorkspace;
+
+                        // Same as the current workspace, avoid an infinite loop
+                        if ($otherWpUserId == $wpUserId && $otherRobotId == $robotId && $otherForced == $forced) {
+                            continue;
+                        }
+
+                        // Set up the new workspace
+                        self::setWorkspace($otherWpUserId, $otherRobotId, $otherForced);
+
+                        // Run the tasks for this different user
+                        self::get()->run();
+                    }
+
+                    // Set the current workspace back
+                    self::setWorkspace($wpUserId, $robotId, $forced);
+                }
             }
         }
     }

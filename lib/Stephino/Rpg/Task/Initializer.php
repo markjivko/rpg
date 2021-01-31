@@ -94,7 +94,6 @@ class Stephino_Rpg_Task_Initializer {
                 
                 // Fully initialized the human account
                 if (null === $robotId) {
-                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug('Player #' . $userId . ' init: skipped');
                     $result = $userId;
                     break;
                 }

@@ -199,13 +199,18 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             : null;
         $arenaPageOrder = isset($data[self::REQUEST_ARENA_ORDER]) 
             ? !!$data[self::REQUEST_ARENA_ORDER] 
-            : null;
+            : false;
         $arenaPageNumber = isset($data[self::REQUEST_ARENA_PAGE]) 
             ? abs((int) $data[self::REQUEST_ARENA_PAGE])
             : 1;
         $arenaAuthorId = isset($data[self::REQUEST_ARENA_AUTHOR_ID]) 
             ? abs((int) $data[self::REQUEST_ARENA_AUTHOR_ID])
             : 0;
+        
+        // Reverse ordering
+        if (Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID === $arenaPageCategory) {
+            $arenaPageOrder = !$arenaPageOrder;
+        }
         
         // Pagination data
         $pagination = (new Stephino_Rpg_Utils_Pagination(
@@ -270,10 +275,15 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         
         // The user can create new platformers
         $userCanCreate = true;
-        if (Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0) {
-            if (Stephino_Rpg_Db::get()->tablePtfs()->getCountByUserId($userId) 
-                >= Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
+        
+        // Player authorship limits
+        if (!is_super_admin()) {
+            if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 $userCanCreate = false;
+            } else {
+                if (Stephino_Rpg_Db::get()->tablePtfs()->getCountByUserId($userId) >= Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
+                    $userCanCreate = false;
+                }
             }
         }
 
@@ -472,7 +482,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Get the top players
-        $leaderBoard = Stephino_Rpg_Db::get()->tableUsers()->getMVP(50);
+        $leaderBoard = Stephino_Rpg_Db::get()->tableUsers()->getMVP(
+            Stephino_Rpg_Config::get()->core()->getLeaderBoardSize()
+        );
         
         // Is this user in list?
         $userPlace = null;

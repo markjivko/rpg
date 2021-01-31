@@ -89,7 +89,7 @@ class Stephino_Rpg_Renderer {
                 // The admin should be able to edit the config no matter what
                 if (!preg_match('%^admin%i', $callMethod)) {
                     // Using time-lapse workers to fetch DB data from local memory instead of performing new SELECT queries
-                    Stephino_Rpg_Task_Cron::player();
+                    Stephino_Rpg_Task_Cron::player(true, !!preg_match('%^dialog\w+%i', $callMethod));
                 }
             }
 

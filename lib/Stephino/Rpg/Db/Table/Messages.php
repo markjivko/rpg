@@ -300,7 +300,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @param int $senderUserId Sender User ID
      * @return int Number
      */
-    public function getRecentCount($senderUserId) {
+    public function getCountRecent($senderUserId) {
         $result = 0;
         
         // Sanitize the user ID
@@ -330,16 +330,28 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * 
      * @param int    $userId      Recipient user ID
      * @param string $messageType Message type
+     * @param int    $limitCount  (optional) Limit count; default <b>null</b>
+     * @param int    $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array
      */
-    public function getAllByType($userId, $messageType) {
+    public function getByType($userId, $messageType, $limitCount = null, $limitOffset = null) {
+        $result = array();
+        
         // Sanitize the message type
         if (!in_array($messageType, self::MESSAGE_TYPES)) {
             $messageType = self::MESSAGE_TYPE_DIPLOMACY;
         }
         
+        // Sanitize the limit
+        if (null !== $limitCount) {
+            $limitCount = abs((int) $limitCount);
+        }
+        if (null !== $limitOffset) {
+            $limitOffset = abs((int) $limitOffset);
+        }
+        
         // Get the list of unread messages
-        return $this->getDb()->getWpDb()->get_results(
+        $result = $this->getDb()->getWpDb()->get_results(
             "SELECT"
                 . " `" . self::COL_ID . "`,"
                 . " `" . self::COL_MESSAGE_FROM . "`,"
@@ -352,9 +364,51 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
                 . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
                 . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'"
             . " )"
-            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC",
+            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC"
+            . (null !== $limitCount
+                ? " LIMIT " . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
+                : ''
+            ),
             ARRAY_A
         );
+        
+        return is_array($result) ? $result : array();
+    }
+    
+    /**
+     * Get all the messages this user has received (count)
+     * 
+     * @param int    $userId      User ID
+     * @param string $messageType Message type
+     * @return int Number of messages by type
+     */
+    public function getCountByType($userId, $messageType) {
+        $result = 0;
+        
+        // Sanitize the message type
+        if (!in_array($messageType, self::MESSAGE_TYPES)) {
+            $messageType = self::MESSAGE_TYPE_DIPLOMACY;
+        }
+        
+        // Sanitize the user ID
+        $userId = abs((int) $userId);
+        if ($userId > 0) {
+            $dbRow = $this->getDb()->getWpDb()->get_row(
+                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
+                . " WHERE ("
+                    . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+                    . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'"
+                . " )", 
+                ARRAY_A
+            );
+
+            // Valid result
+            if (is_array($dbRow) && isset($dbRow['count'])) {
+                $result = intval($dbRow['count']);
+            }
+        }
+        
+        return $result;
     }
     
     /**

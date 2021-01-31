@@ -187,22 +187,59 @@ class Stephino_Rpg_Config {
      * @throws Exception
      */
     public static function save() {
-        if (!Stephino_Rpg::get()->isPro()) {
-            throw new Exception('You need to unlock the game to save your changes');
+        // Validate the requirements tree
+        Stephino_Rpg_Utils_Config::getUnlockStages();
+        
+        // Validate the dependencies
+        foreach(self::get()->all() as $configSet) {
+            if ($configSet instanceof Stephino_Rpg_Config_Item_Collection) {
+                foreach($configSet->getAll() as $configSetItem) {
+                    /* @var $configSetItem Stephino_Rpg_Config_Trait_Requirement */
+                    if ($configSetItem instanceof Stephino_Rpg_Config_Item_Single
+                        && in_array(Stephino_Rpg_Config_Trait_Requirement::class, class_uses($configSetItem))) {
+                        switch (true) {
+                            case $configSetItem instanceof Stephino_Rpg_Config_ResearchField:
+                                if (null === $configSetItem->getResearchArea()) {
+                                    throw new Exception('Dependency: Research Field #' . $configSetItem->getId() . ' missing Research Area');
+                                }
+                                break;
+                                
+                            case $configSetItem instanceof Stephino_Rpg_Config_ResearchArea:
+                                if (null !== $configSetItem->getRequiredResearchField()
+                                    && null !== $configSetItem->getRequiredResearchField()->getResearchArea()
+                                    && $configSetItem->getRequiredResearchField()->getResearchArea()->getId() == $configSetItem->getId()
+                                    ) {
+                                    throw new Exception('Dependency: infinite recursion on [<b>Research Area #' . $configSetItem->getId() . ' › Research Field #' . $configSetItem->getRequiredResearchField()->getId() . '</b>]');
+                                }
+                            case $configSetItem instanceof Stephino_Rpg_Config_Unit:
+                            case $configSetItem instanceof Stephino_Rpg_Config_Ship:
+                                if (null === $configSetItem->getBuilding()) {
+                                    // Prepare the item name
+                                    $itemName = ucwords(preg_replace('%([A-Z])%', ' $1', constant(get_class($configSetItem) . '::KEY')));
+                                    
+                                    // Stop here
+                                    throw new Exception('Dependency: ' . $itemName . ' #' . $configSetItem->getId() . ' missing Building');
+                                }
+                                break;
+                        }
+                    }
+                }
+            }
         }
         
-        // WARNING! Without properly managing object dependencies the game will break
-        Stephino_Rpg_Pro_Config::get()->save();
+        // Save
+        update_option(Stephino_Rpg::OPTION_CONFIG, self::export());
     }
     
     /**
      * Reset the game configuration
      */
     public static function reset() {
-        if (!Stephino_Rpg::get()->isPro()) {
-            throw new Exception('You need to unlock the game to reset the game settings');
-        }
-        Stephino_Rpg_Pro_Config::get()->reset(self::get()->_data);
+        // Force a re-initialization, using the default theme
+        self::get()->init(true);
+        
+        // Save the data
+        update_option(Stephino_Rpg::OPTION_CONFIG, self::export());
     }
 
     /**
@@ -440,31 +477,45 @@ class Stephino_Rpg_Config {
      * Stephino_Rpg_Config
      */
     protected function __construct() {
-        do {
-            // Pro Plugin Detected
-            if (Stephino_Rpg::get()->isPro()) {
-                Stephino_Rpg_Pro_Config::get()->init($this->_data);
-                break;
-            }
-            
-            // Get the default configuration
-            $configDefault = self::getDefault();
-            
-            // Initialize the values
-            foreach (self::CONFIG_ITEMS as $configItemClass) {
-                // Get the configuration item key
-                $configItemKey = call_user_func(array($configItemClass, 'key'));
+        $this->init();
+    }
+    
+    /**
+     * Initialize the data objects
+     * 
+     * @param &array  $dataSet Data Set
+     * @param boolean $reset   (optional) Reset the configuration to the default values; default <b>false</b>
+     */
+    public function init($reset = false) {
+        // Get the saved options
+        $configContents = $reset
+            ? ''
+            : get_option(Stephino_Rpg::OPTION_CONFIG, '');
 
-                // Properly defined
-                if (false !== $configItemKey) {
-                    $this->_data[$configItemKey] = new $configItemClass(
-                        isset($configDefault[$configItemKey]) 
-                            ? $configDefault[$configItemKey] 
-                            : null
-                    );
-                }
+        // Convert to an array
+        $configData = strlen($configContents) 
+            ? json_decode($configContents, true) 
+            : self::getDefault();
+        
+        // Invalid format
+        if (!is_array($configData)) {
+            $configData = array();
+        }
+        
+        // Initialize the values
+        foreach (self::CONFIG_ITEMS as $configItemClass) {
+            // Get the configuration item key
+            $configItemKey = call_user_func(array($configItemClass, 'key'));
+            
+            // Properly defined
+            if (false !== $configItemKey) {
+                $this->_data[$configItemKey] = new $configItemClass(
+                    isset($configData[$configItemKey]) 
+                        ? $configData[$configItemKey] 
+                        : null
+                );
             }
-        } while(false);
+        }
     }
     
     /**

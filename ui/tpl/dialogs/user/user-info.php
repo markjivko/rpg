@@ -16,6 +16,15 @@
 /* @var $userStats array[] */
 ?>
 <div class="row align-items-center justify-content-center mt-2">
+    <?php if (!is_numeric($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+        <div class="col-12 text-right">
+            <span 
+                data-effect="help"
+                data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_ROBOTS;?>">
+                <?php echo esc_html__('About robots', 'stephino-rpg');?>
+            </span>
+        </div>
+    <?php endif;?>
     <div class="col-6 col-lg-4">
         <div class="user-icon-frame">
             <?php if (is_numeric($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>

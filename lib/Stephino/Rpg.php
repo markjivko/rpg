@@ -22,7 +22,7 @@ class Stephino_Rpg {
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.3.1';
+    const PLUGIN_VERSION          = '0.3.2';
     
     // Pro Plugin minimum compatible version
     const PLUGIN_VERSION_PRO      = '0.1.7';
@@ -45,8 +45,11 @@ class Stephino_Rpg {
     // Demo Mode
     const PLUGIN_DEMO             = false;
     
-    // Plugin option keys
+    // Plugin cache key
     const OPTION_CACHE            = 'stephino_rpg_cache';
+    
+    // Plugin configuration key
+    const OPTION_CONFIG           = 'stephino_rpg_config';
     
     /**
      * Singleton instance of Stephino_Rpg

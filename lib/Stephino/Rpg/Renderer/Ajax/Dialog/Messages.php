@@ -19,6 +19,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
     // Request keys
     const REQUEST_MESSAGE_ID   = 'messageId';
     const REQUEST_MESSAGE_TYPE = 'messageType';
+    const REQUEST_MESSAGE_PAGE = 'messagePage';
     
     /**
      * Message list
@@ -40,12 +41,11 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
         if (!in_array($messageType, Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPES)) {
             $messageType = Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY;
         }
-
-        // Get the message data
-        $messageData = Stephino_Rpg_Db::get()->tableMessages()->getAllByType(
-            Stephino_Rpg_TimeLapse::get()->userId(),
-            $messageType
-        );
+        
+        // Prepare the page number
+        $messagePageNumber = isset($data[self::REQUEST_MESSAGE_PAGE]) 
+            ? abs((int) $data[self::REQUEST_MESSAGE_PAGE])
+            : 1;
 
         // Prepare the title the title
         $dialogTitle = __('Messages', 'stephino-rpg');
@@ -67,9 +67,26 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
                 break;
         }
         
+        // Pagination data
+        $pagination = (new Stephino_Rpg_Utils_Pagination(
+            Stephino_Rpg_Db::get()->tableMessages()->getCountByType(
+                Stephino_Rpg_TimeLapse::get()->userId(),
+                $messageType
+            ),
+            Stephino_Rpg_Config::get()->core()->getMessagePageSize(),
+            $messagePageNumber
+        ))->setAction('messageList');
+        
+        // Get the message data
+        $messageData = Stephino_Rpg_Db::get()->tableMessages()->getByType(
+            Stephino_Rpg_TimeLapse::get()->userId(),
+            $messageType,
+            $pagination->getSqlLimitCount(),
+            $pagination->getSqlLimitOffset()
+        );
+        
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_LIST);
-        
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
                 self::RESULT_TITLE => $dialogTitle,

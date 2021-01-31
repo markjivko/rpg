@@ -46,7 +46,7 @@ class Stephino_Rpg_Renderer_Html {
             array(
                 'error_ajax' => esc_html__('Please try again later', 'stephino-rpg'),
             )
-        );              
+        );
         
         // Gather the stats
         Stephino_Rpg_Db::get()->modelStatistics()->gather();
@@ -63,6 +63,11 @@ class Stephino_Rpg_Renderer_Html {
         foreach (array('jquery', 'jquery-ui-draggable', 'jquery-ui-droppable') as $scriptName) {
             wp_enqueue_script($scriptName);
         }
+        
+        // Thickbox
+        add_thickbox();
+        
+        // Stephino RPG functionality
         self::_enqueueScripts(
             array('bootstrap', 'wp-options'), 
             array('wp-options'),

@@ -3,12 +3,15 @@
     "2": {"name":"Leap of faith","version":1,"width":26,"height":25},
     "3": {"name":"Gold rush","version":1,"width":52,"height":15},
     "4": {"name":"Not there","version":1,"width":40,"height":56},
-    "5": {"name":"Maze","version":2,"width":26,"height":22},
+    "5": {"name":"Basement","version":1,"width":26,"height":22},
     "6": {"name":"The stairs","version":1,"width":26,"height":15},
     "7": {"name":"Shallow well","version":1,"width":26,"height":50},
     "8": {"name":"Flappy maze","version":1,"width":60,"height":15},
     "9": {"name":"Hurry up","version":1,"width":90,"height":15},
     "10": {"name":"Fear of heights","version":1,"width":26,"height":60},
     "11": {"name":"Ricardo","version":1,"width":210,"height":15},
-    "12": {"name":"A-maze-ing","version":1,"width":41,"height":40}
+    "12": {"name":"A-maze-ing","version":1,"width":41,"height":40},
+    "13": {"name":"Side quest","version":1,"width":26,"height":50},
+    "14": {"name":"Gold Mine","version":1,"width":65,"height":65},
+    "15": {"name":"Ladders","version":1,"width":26,"height":15}
 }

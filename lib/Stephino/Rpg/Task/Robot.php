@@ -27,6 +27,13 @@ class Stephino_Rpg_Task_Robot {
     protected $_db = null;
     
     /**
+     * Robot ID
+     * 
+     * @var int
+     */
+    protected $_robotId = null;
+    
+    /**
      * Store the log tag
      * 
      * @var string
@@ -61,16 +68,16 @@ class Stephino_Rpg_Task_Robot {
             }
             
             // Get the current user information
-            list($wpUserId, $robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
+            list($wpUserId, $this->_robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
 
             // Ignore human players
-            if (null === $robotId) {
+            if (null === $this->_robotId) {
                 break;
             }
             
             // Store the credentials
-            $this->_db = Stephino_Rpg_Db::get($robotId, $wpUserId);
-            $this->_logTag = '<Robot #' . $robotId . '> ';
+            $this->_db = Stephino_Rpg_Db::get($this->_robotId, $wpUserId);
+            $this->_logTag = '<Robot #' . $this->_robotId . '> ';
             
             // Fervor
             if (mt_rand(1, 100) > Stephino_Rpg_Config::get()->core()->getRobotsFervor()) {
@@ -78,11 +85,17 @@ class Stephino_Rpg_Task_Robot {
                 break;
             }
             
+            // Queue military entities
+            $this->_queueEntities();
+            
             // Queue Research Fields and Buildings
             $this->_queueAdvisor();
             
             // Assign Workers to Buildings
             $this->_queueWorkers();
+            
+            // Attack other players
+            $this->_militaryAttack();
         } while(false);
     }
     
@@ -165,7 +178,7 @@ class Stephino_Rpg_Task_Robot {
                         $this->_spend($costData, $cityData);
                         
                         // Queue the building
-                        Stephino_Rpg_Db::get()->modelQueues()->queueBuilding(
+                        $this->_db->modelQueues()->queueBuilding(
                             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
                             $unlockObject->getId()
                         );
@@ -180,7 +193,7 @@ class Stephino_Rpg_Task_Robot {
                         $this->_spend($costData, $cityData);
                         
                         // Queue the research field
-                        Stephino_Rpg_Db::get()->modelQueues()->queueResearchField(
+                        $this->_db->modelQueues()->queueResearchField(
                             $cityData[Stephino_Rpg_Db_Table_Users::COL_ID],
                             $unlockObject->getId()
                         );
@@ -217,7 +230,7 @@ class Stephino_Rpg_Task_Robot {
                         $this->_spend($costData, $cityData);
 
                         // Queue the building
-                        Stephino_Rpg_Db::get()->modelQueues()->queueBuilding(
+                        $this->_db->modelQueues()->queueBuilding(
                             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
                             $buildingConfig->getId()
                         );
@@ -226,6 +239,80 @@ class Stephino_Rpg_Task_Robot {
                 } catch (Exception $exc) {}
             }
         }
+    }
+    
+    /**
+     * Queues military entities, prioritizing lower upkeep
+     * Upkeep must not be greater than 50% of total production
+     */
+    protected function _queueEntities() {
+        // Military vs Economy stance
+        $recruitProbability = 0;
+        switch (Stephino_Rpg_Config::get()->core()->getRobotsAggression()) {
+            case Stephino_Rpg_Config_Core::ROBOT_AGG_HIGH:
+                $recruitProbability = 75;
+                break;
+            
+            case Stephino_Rpg_Config_Core::ROBOT_AGG_MEDIUM:
+                $recruitProbability = 25;
+                break;
+            
+            case Stephino_Rpg_Config_Core::ROBOT_AGG_LOW:
+                $recruitProbability = 5;
+                break;
+        }
+        
+        do {
+            // Don't recruit yet
+            if (mt_rand(1, 100) > $recruitProbability) {
+                break;
+            }
+            
+            // Get user data (first city)
+            $cityData = current(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData());
+            
+            // Entities queued
+            $queuedEntities = false;
+            foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Queues::KEY)->getData() as $queueData) {
+                if (Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT == $queueData[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE]
+                    || Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_SHIP == $queueData[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE]) {
+                    $queuedEntities = true;
+                    break;
+                }
+            }
+            
+            // Don't overlap with other entity queues
+            if ($queuedEntities) {
+                break;
+            }
+            
+            // Get the most powerful military entity with lowest upkeep
+            if (null === $entityMvp = Stephino_Rpg_Renderer_Ajax_Action::getEntityMVP(
+                (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]
+            )) {
+                break;
+            }
+            
+            // Get the entity information
+            list($entityConfig, $entityCount, $costData) = $entityMvp;
+            try {
+                // Spend resources for 1 x (block cost for $entityCount)
+                $this->_spend($costData, $cityData, 1);
+
+                // Enqueue entity
+                $this->_db->modelQueues()->queueEntity(
+                    $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID], 
+                    $entityConfig instanceof Stephino_Rpg_Config_Unit
+                        ? Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_UNIT
+                        : Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_SHIP,
+                    $entityConfig->getId(), 
+                    $entityCount
+                );
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                    "{$this->_logTag} Queued military entity: {$entityCount} x {$entityConfig->getName()}"
+                );
+            } catch (Exception $exc) {}
+        } while(false);
     }
     
     /**
@@ -300,6 +387,148 @@ class Stephino_Rpg_Task_Robot {
                 Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Assigned {$buildingWorkers} / {$buildingWorkersMax} workers to building #{$buildingId}");
             }
         }
+    }
+    
+    /**
+     * Attack other players
+     */
+    protected function _militaryAttack() {
+        do {
+            // Low: Never attack
+            if (Stephino_Rpg_Config_Core::ROBOT_AGG_LOW === Stephino_Rpg_Config::get()->core()->getRobotsAggression()) {
+                break;
+            }
+            
+            // Store the current time
+            $currentTime = time();
+            
+            // Don't attack too often
+            if ($currentTime - Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_TIME, 0) 
+                < 3600 * Stephino_Rpg_Config::get()->core()->getRobotsTimeout()) {
+                break;
+            }
+            
+            // Get the revenge list
+            if (!is_array($revengeList = Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_LIST, array()))) {
+                $revengeList = array();
+            }
+            
+            // Medium: only fight back
+            if (Stephino_Rpg_Config_Core::ROBOT_AGG_MEDIUM === Stephino_Rpg_Config::get()->core()->getRobotsAggression() 
+                && !count($revengeList)) {
+                break;
+            }
+            
+            // Get user data (first city)
+            $cityData = current(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData());
+
+            // Store the attacking city ID
+            $cityId = (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID];
+                
+            // Prepare the defending city ID
+            $defCityId = null;
+            
+            // Valid revenge list
+            if (count($revengeList)) {
+                shuffle($revengeList);
+
+                // Get the first city
+                $defCityId = (int) array_shift($revengeList);
+                
+                // Forgive and forget
+                Stephino_Rpg_Cache_User::get()->write(
+                    Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_LIST, 
+                    $revengeList
+                );
+            } else {
+                // High: Initiate attacks on random players
+                if (is_array($randomPlayers = $this->_db->tableUsers()->getRandom(3))) {
+                    // Get the first player from the list
+                    $defUserRow = current($randomPlayers);
+                    
+                    // Get the player's cities
+                    $playerCities = $this->_db->tableCities()->getByUser(
+                        (int) $defUserRow[Stephino_Rpg_Db_Table_Users::COL_ID]
+                    );
+                    
+                    // Find a suitable city to attack
+                    if (is_array($playerCities)) {
+                        // Get a random city
+                        shuffle($playerCities);
+                        foreach ($playerCities as $defCityRow) {
+                            // Check city level, not too low, not too high
+                            $defCityLevel = (int) $defCityRow[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL];
+                            $attCityLevel = (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL];
+                            
+                            // Mark the city for attack; protect noob cities forever
+                            if ($attCityLevel - $defCityLevel <= Stephino_Rpg_Config::get()->core()->getNoobLevels()) {
+                                $defCityId = (int) $defCityRow[Stephino_Rpg_Db_Table_Cities::COL_ID];
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Found our target
+            if (null !== $defCityId && $defCityId >= 1) {
+                // Prepare the army payload
+                $attackArmy = array();
+                $totalAttack = 0;
+                
+                // Prepare our troops
+                if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Support_Entities::KEY)->getData())) {
+                    foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Support_Entities::KEY)->getData() as $entityRow) {
+                        if ($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID] == $cityId) {
+                            /* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
+                            $entityConfig = Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_UNIT == $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE]
+                                ? Stephino_Rpg_Config::get()->units()->getById($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID])
+                                : Stephino_Rpg_Config::get()->ships()->getById($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]);
+
+                            // Only count valid entity configs
+                            if (null !== $entityConfig) {
+                                // Prepare the payload key
+                                $entityKey = $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE] 
+                                    . '_' . $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID];
+
+                                // Store the entity
+                                $attackArmy[$entityKey] = (int) $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];
+                                
+                                // Store the attack points
+                                $totalAttack += $attackArmy[$entityKey] * $entityConfig->getAmmo() * $entityConfig->getDamage();
+                            }
+                        }
+                    }
+                }
+
+                // Get the new convoy ID
+                if (count($attackArmy) && $totalAttack > 0) {
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                        "{$this->_logTag} Attacking city {$defCityId} with {$totalAttack} attack points"
+                    );
+                        
+                    try {
+                        $this->_db->modelConvoys()->createAttack(
+                            $cityId, 
+                            $defCityId, 
+                            $attackArmy
+                        );
+                        
+                        Stephino_Rpg_Cache_User::get()->write(
+                            Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_TIME, 
+                            $currentTime
+                        );
+                    } catch (Exception $exc) {
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                            "{$this->_logTag} Attacking city {$defCityId}: " . $exc->getMessage() 
+                        );
+                    }
+                }
+            }
+            
+            // Commit the changes, if any
+            Stephino_Rpg_Cache_User::get()->commit();
+        } while(false);
     }
     
     /**

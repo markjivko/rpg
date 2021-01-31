@@ -42,7 +42,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
         // Get the user ID
         if (null === $userId = Stephino_Rpg_TimeLapse::get()->userId()) {
             // Initialize the player
-            Stephino_Rpg_Task_Cron::player(false);
+            Stephino_Rpg_Task_Cron::player();
             
             // Re-initialize the time-lapse data
             $userId = Stephino_Rpg_TimeLapse::get(true)->userId();
@@ -269,6 +269,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
             );
             if (Stephino_Rpg_Config::get()->core()->getChatroom()
                 && strlen(Stephino_Rpg_Config::get()->core()->getFirebaseProjectId())
+                && strlen(Stephino_Rpg_Config::get()->core()->getFirebaseDatabaseUrl())
                 && strlen(Stephino_Rpg_Config::get()->core()->getFirebaseWebApiKey())) {
 
                 // Get the user information
@@ -279,9 +280,10 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                     // Store the credentials
                     $gameChatData = array(
                         Stephino_Rpg_Config::get()->core()->getFirebaseProjectId(),
+                        Stephino_Rpg_Config::get()->core()->getFirebaseDatabaseUrl(),
                         Stephino_Rpg_Config::get()->core()->getFirebaseWebApiKey(),
-                        $userInfo[Stephino_Rpg_Db_Table_Users::COL_ID],
-                        Stephino_Rpg_Utils_Lingo::getUserName($userInfo)
+                        (int) $userInfo[Stephino_Rpg_Db_Table_Users::COL_ID],
+                        Stephino_Rpg_Utils_Lingo::getUserName($userInfo),
                     );
 
                     // Include the necessary components

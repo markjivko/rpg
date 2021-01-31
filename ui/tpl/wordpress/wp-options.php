@@ -39,7 +39,6 @@
             <div class="info">Stephino RPG 
                 <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?>
                     <?php if (Stephino_Rpg::get()->isDemo() && !is_super_admin()):?><b>DEMO</b><?php endif;?>
-                    <?php if (!Stephino_Rpg::get()->isPro()):?><b><?php echo esc_html__('LOCKED', 'stephino-rpg');?></b><?php endif;?>
                 </span>
                 <?php echo esc_html__('Game Mechanics', 'stephino-rpg');?>
                 <?php if (!Stephino_Rpg::get()->isPro() && strlen(Stephino_Rpg::PLUGIN_URL_PRO)):?>

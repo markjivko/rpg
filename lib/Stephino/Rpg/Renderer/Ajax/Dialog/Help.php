@@ -31,6 +31,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
     // Core sections (to be highlighted with ajax calls)
     const CORE_SECTION_RULES        = 'rules';
     const CORE_SECTION_SCORE        = 'score';
+    const CORE_SECTION_ROBOTS       = 'robots';
     const CORE_SECTION_GAME_ARENA   = 'game-arena';
     const CORE_SECTION_CONSOLE      = 'console';
     const CORE_SECTION_GAME_RES     = 'game-res';

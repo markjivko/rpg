@@ -177,11 +177,11 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     public static function ajaxAbout() {
         // Store the changelog flag
         $changeLogFlag = false;
-        if (Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_CHL_READ)) {
-            Stephino_Rpg_Cache_User::getInstance()->setValue(
+        if (Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_CHL_READ)) {
+            Stephino_Rpg_Cache_User::get()->write(
                 Stephino_Rpg_Cache_User::KEY_CHL_READ, 
                 Stephino_Rpg::PLUGIN_VERSION
-            );
+            )->commit();
             $changeLogFlag = true;
         }
         
@@ -210,9 +210,12 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
                 // Authenticated user
                 if (Stephino_Rpg_TimeLapse::get()->userId()) {
                     // Have not read this announcement yet
-                    if ($result[0] != Stephino_Rpg_Cache_User::getInstance()->getValue(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
+                    if ($result[0] != Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
                         // Mark it as read so it only pops-up once
-                        Stephino_Rpg_Cache_User::getInstance()->setValue(Stephino_Rpg_Cache_User::KEY_ANN_READ, $result[0]);
+                        Stephino_Rpg_Cache_User::get()->write(
+                            Stephino_Rpg_Cache_User::KEY_ANN_READ, 
+                            $result[0]
+                        )->commit();
                         
                         // Store the title
                         $title = esc_html($result[1]);

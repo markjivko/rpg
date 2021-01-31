@@ -44,6 +44,13 @@
                 <div class="col-12" data-role="message-content"></div>
             </div>
         <?php endforeach;?>
+        <div class="col-12 text-center">
+            <?php 
+                require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                    Stephino_Rpg_Renderer_Ajax_Dialog::TEMPLATE_COMMON_PAGINATION
+                );
+            ?>
+        </div>
     </div>
 <?php else:?>
     <div class="col-12 text-center framed">
