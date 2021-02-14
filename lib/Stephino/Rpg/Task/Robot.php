@@ -182,7 +182,6 @@ class Stephino_Rpg_Task_Robot {
                             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
                             $unlockObject->getId()
                         );
-                        
                         Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued building: {$unlockObject->getName()}");
                     } 
                     
@@ -199,7 +198,11 @@ class Stephino_Rpg_Task_Robot {
                         );
                         Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued research field: {$unlockObject->getName()}");
                     }
-                } catch (Exception $exc) {}
+                } catch (Exception $exc) {
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                        "Task_Robot._queueAdvisor, " . get_class($unlockObject) . " ({$unlockObject->getId()}): {$exc->getMessage()}"
+                    );
+                }
             }
         } else {
             if (count($queuedBuildings) < Stephino_Rpg_Config::get()->core()->getMaxQueueBuildings()) {
@@ -214,10 +217,12 @@ class Stephino_Rpg_Task_Robot {
                         );
                     }
                 }
+                
+                // Get a random building
                 shuffle($buildingAvailable);
-
+                list($buildingConfigId, $buildingLevel) = current($buildingAvailable);
+                
                 try {
-                    list($buildingConfigId, $buildingLevel) = current($buildingAvailable);
                     if (null !== $buildingConfig = Stephino_Rpg_Config::get()->buildings()->getById($buildingConfigId)) {
                         // Prepare the cost data
                         $costData = Stephino_Rpg_Renderer_Ajax_Action::getCostData(
@@ -236,7 +241,11 @@ class Stephino_Rpg_Task_Robot {
                         );
                         Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued random building: {$buildingConfig->getName()}");
                     }
-                } catch (Exception $exc) {}
+                } catch (Exception $exc) {
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                        "Task_Robot._queueAdvisor, Building ($buildingConfigId): {$exc->getMessage()}"
+                    );
+                }
             }
         }
     }
@@ -295,6 +304,12 @@ class Stephino_Rpg_Task_Robot {
             
             // Get the entity information
             list($entityConfig, $entityCount, $costData) = $entityMvp;
+            
+            // Prepare the entity type
+            $entityType = $entityConfig instanceof Stephino_Rpg_Config_Unit
+                ? Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_UNIT
+                : Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_SHIP;
+            
             try {
                 // Spend resources for 1 x (block cost for $entityCount)
                 $this->_spend($costData, $cityData, 1);
@@ -302,16 +317,18 @@ class Stephino_Rpg_Task_Robot {
                 // Enqueue entity
                 $this->_db->modelQueues()->queueEntity(
                     $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID], 
-                    $entityConfig instanceof Stephino_Rpg_Config_Unit
-                        ? Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_UNIT
-                        : Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_SHIP,
+                    $entityType,
                     $entityConfig->getId(), 
                     $entityCount
                 );
                 Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
                     "{$this->_logTag} Queued military entity: {$entityCount} x {$entityConfig->getName()}"
                 );
-            } catch (Exception $exc) {}
+            } catch (Exception $exc) {
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    "Task_Robot._queueEntities, Entity/$entityType ({$entityConfig->getId()}) x {$entityCount}: {$exc->getMessage()}"
+                );
+            }
         } while(false);
     }
     
@@ -520,7 +537,7 @@ class Stephino_Rpg_Task_Robot {
                         );
                     } catch (Exception $exc) {
                         Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                            "{$this->_logTag} Attacking city {$defCityId}: " . $exc->getMessage() 
+                            "Task_Robot._militaryAttack, from city #$cityId to city #$defCityId: {$exc->getMessage()}"
                         );
                     }
                 }

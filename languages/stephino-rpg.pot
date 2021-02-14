@@ -1,13 +1,13 @@
 # Copyright (c) 2021 Stephino
 # 
-# Yevgeny Yevtushenko | Poetry is like a bird, it ignores all frontiers.
+# Stephen Covey | There are three constants in life... change, choice and principles.
 # 
 # Distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Stephino Rpg v.0.3.2\n"
-"POT-Creation-Date: 2021-01-31 12:49:41+00:00\n"
-"PO-Revision-Date: 2021-01-31 12:49:41+00:00\n"
+"Project-Id-Version: Stephino Rpg v.0.3.3\n"
+"POT-Creation-Date: 2021-02-14 15:11:19+00:00\n"
+"PO-Revision-Date: 2021-02-14 15:11:19+00:00\n"
 "Last-Translator: Stephino\n"
 "Language-Team: Stephino\n"
 "MIME-Version: 1.0\n"
@@ -16,6 +16,16 @@ msgstr ""
 "Report-Msgid-Bugs-To: https://stephino.com/\n"
 "X-Generator: stephino-rpg\n"
 "Plural-Forms: nplurals=NUMBER; plural=EXPRESSION;\n"
+
+#: lib/Stephino/Rpg/Config.php:253 lib/Stephino/Rpg/Renderer/Ajax/Admin.php:150
+#@ stephino-rpg
+msgid "You need to unlock the game to save your changes"
+msgstr ""
+
+#: lib/Stephino/Rpg/Config.php:265
+#@ stephino-rpg
+msgid "You need to unlock the game to reset the game settings"
+msgstr ""
 
 #: lib/Stephino/Rpg/Db/Model/Announcement.php:80
 #@ stephino-rpg
@@ -48,8 +58,8 @@ msgstr ""
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:34
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:54
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:133
-#: lib/Stephino/Rpg/Db/Model/Cities.php:346
-#: lib/Stephino/Rpg/Db/Model/Cities.php:424
+#: lib/Stephino/Rpg/Db/Model/Cities.php:348
+#: lib/Stephino/Rpg/Db/Model/Cities.php:426
 #: lib/Stephino/Rpg/Db/Model/Convoys.php:329
 #: lib/Stephino/Rpg/Db/Model/Convoys.php:498
 #: lib/Stephino/Rpg/Db/Model/Entities.php:71
@@ -73,7 +83,7 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:52
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:95
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:157
-#: lib/Stephino/Rpg/Task/Initializer.php:134
+#: lib/Stephino/Rpg/Task/Initializer.php:140
 #, php-format
 #@ stephino-rpg
 msgid "Invalid configuration (%s)"
@@ -82,8 +92,8 @@ msgstr ""
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:44
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:143
 #: lib/Stephino/Rpg/Db/Model/Cities.php:142
-#: lib/Stephino/Rpg/Db/Model/Cities.php:336
-#: lib/Stephino/Rpg/Db/Model/Cities.php:402
+#: lib/Stephino/Rpg/Db/Model/Cities.php:338
+#: lib/Stephino/Rpg/Db/Model/Cities.php:404
 #: lib/Stephino/Rpg/Db/Model/Entities.php:38
 #: lib/Stephino/Rpg/Db/Model/Queues.php:117
 #: lib/Stephino/Rpg/Db/Model/Queues.php:319
@@ -140,19 +150,19 @@ msgstr ""
 msgid "Lot already occupied"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Cities.php:359
+#: lib/Stephino/Rpg/Db/Model/Cities.php:361
 #: lib/Stephino/Rpg/Db/Model/ResearchFields.php:76
 #, php-format
 #@ stephino-rpg
 msgid "Could not update (%s)"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Cities.php:392
+#: lib/Stephino/Rpg/Db/Model/Cities.php:394
 #@ stephino-rpg
 msgid "Invalid resource name"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Cities.php:449
+#: lib/Stephino/Rpg/Db/Model/Cities.php:451
 #@ stephino-rpg
 msgid "Could not update resource"
 msgstr ""
@@ -308,47 +318,47 @@ msgstr ""
 msgid "Could not update name (%s)"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:71
+#: lib/Stephino/Rpg/Db/Model/Messages.php:74
 #@ stephino-rpg
 msgid "You cannot contact yourself"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:76
+#: lib/Stephino/Rpg/Db/Model/Messages.php:79
 #@ stephino-rpg
 msgid "Message subject missing"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:79
+#: lib/Stephino/Rpg/Db/Model/Messages.php:82
 #@ stephino-rpg
 msgid "Message content missing"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:84
+#: lib/Stephino/Rpg/Db/Model/Messages.php:87
 #@ stephino-rpg
 msgid "Recipient not found"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:89
+#: lib/Stephino/Rpg/Db/Model/Messages.php:92
 #@ stephino-rpg
 msgid "You cannot contact robots"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:98
+#: lib/Stephino/Rpg/Db/Model/Messages.php:101
 #@ stephino-rpg
 msgid "Sender not found"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:103
+#: lib/Stephino/Rpg/Db/Model/Messages.php:106
 #@ stephino-rpg
 msgid "Daily message limit reached"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:142
+#: lib/Stephino/Rpg/Db/Model/Messages.php:147
 #@ stephino-rpg
 msgid "Invalid notification template"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Messages.php:151
+#: lib/Stephino/Rpg/Db/Model/Messages.php:156
 #@ stephino-rpg
 msgid "Invalid notification recipient ID"
 msgstr ""
@@ -421,69 +431,127 @@ msgstr ""
 msgid "Invalid tile set size (%d instead of %d)"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:507
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:510
 #@ stephino-rpg
 msgid "Void"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:508
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:511
 #@ stephino-rpg
 msgid "An empty tile"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:511
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:514
 #@ stephino-rpg
 msgid "Pipe"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:512
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:515
 #@ stephino-rpg
 msgid "A solid structure to stand on"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:515 themes/default/i18n.php:29
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:518 themes/default/i18n.php:29
 #@ stephino-rpg
 msgid "Crystal"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:516
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:519
 #@ stephino-rpg
 msgid "A rare item that must be collected to open the gate"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:519
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:522
 #@ stephino-rpg
 msgid "Bomb"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:520
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:523
 #@ stephino-rpg
 msgid "Instant death"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:523
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:526
 #@ stephino-rpg
 msgid "Gate"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:524
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:527
 #@ stephino-rpg
 msgid "Escape the current level with your loot"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:728
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:770
 #@ stephino-rpg
 msgid "Creator"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:729
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:771
 #@ stephino-rpg
 msgid "Popularity"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Ptfs.php:730 ui/tpl/wordpress/wp-dashboard.php:140
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:772 ui/tpl/wordpress/wp-dashboard.php:140
 #@ stephino-rpg
 msgid "Date"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:784
+#@ stephino-rpg
+msgid "Pending"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:785
+#@ stephino-rpg
+msgid "Approved"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:786
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:788
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:790
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:792
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:794
+#@ stephino-rpg
+msgid "Rejected"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:787
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:789 ui/tpl/wordpress/wp-dashboard.php:83
+#@ stephino-rpg
+msgid "Title"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:787
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:791
+#@ stephino-rpg
+msgid "Spam"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:789
+#@ stephino-rpg
+msgid "Invalid"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:791
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:793
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:795 ui/tpl/wordpress/wp-dashboard.php:92
+#@ stephino-rpg
+msgid "Content"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:793
+#@ stephino-rpg
+msgid "Too easy"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:795
+#@ stephino-rpg
+msgid "Impossible"
+msgstr ""
+
+#: lib/Stephino/Rpg/Db/Model/Ptfs.php:796
+#@ stephino-rpg
+msgid "Suspended"
 msgstr ""
 
 #: lib/Stephino/Rpg/Db/Model/Queues.php:41
@@ -511,7 +579,7 @@ msgid "Invalid User or Item ID"
 msgstr ""
 
 #: lib/Stephino/Rpg/Db/Model/Queues.php:494
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:65
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:67
 #@ stephino-rpg
 msgid "Invalid quantity"
 msgstr ""
@@ -540,7 +608,7 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:41
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:91
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:217
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:391
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:394
 #, php-format
 #@ stephino-rpg
 msgid "Not found (%s)"
@@ -560,7 +628,7 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:149
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:225
 #: ui/tpl/dialogs/city/city-advisor.php:65
-#: ui/tpl/dialogs/city/city-workforce.php:86
+#: ui/tpl/dialogs/city/city-workforce.php:90
 #@ stephino-rpg
 msgid "Under construction"
 msgstr ""
@@ -575,7 +643,7 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:173
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:103
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Premium.php:137
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:204
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:387
 #: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:413
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:235
 #@ stephino-rpg
@@ -583,8 +651,8 @@ msgid "Invalid request"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Building.php:167
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:55
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:126
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:57
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:132
 #@ stephino-rpg
 msgid "Invalid trade type"
 msgstr ""
@@ -634,9 +702,9 @@ msgid "Too many workers assigned to \"%s\""
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:172
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:83
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:85
 #: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3053
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:144
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:150
 #, php-format
 #@ stephino-rpg
 msgid "Insufficient resources (%s)"
@@ -820,87 +888,98 @@ msgstr ""
 msgid "Research maximum reached"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:42
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:43
 #@ stephino-rpg
 msgid "Passwords must be at least 6 characters long"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:50
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:51
 #@ stephino-rpg
 msgid "You are logged out"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:62
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:63
 #@ stephino-rpg
 msgid "Password updated successfully"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:78
 #@ stephino-rpg
-msgid "Setting key missing"
+msgid "Language missing"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:84
 #@ stephino-rpg
+msgid "Language not defined"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:113
+#@ stephino-rpg
+msgid "Setting key missing"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:119
+#@ stephino-rpg
 msgid "Setting value missing"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:95
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:130
 #@ stephino-rpg
 msgid "Invalid user"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:106
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:141
 #@ stephino-rpg
 msgid "Nickname is mandatory"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:114
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:149
 #@ stephino-rpg
 msgid "Nickname is too long"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:115
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:150
 #@ stephino-rpg
 msgid "Biography is too long"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:135
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:170
 #@ stephino-rpg
 msgid "Invalid volume specified. Expected [0, 100]"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:146
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:181
 #@ stephino-rpg
 msgid "Unknown setting"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:163
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:198
+#: lib/Stephino/Rpg/Renderer.php:84
 #@ stephino-rpg
 msgid "Insufficient privileges"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:171
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:206
 #@ stephino-rpg
 msgid "Console not enabled from Game Mechanics"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:179
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:214
 #@ stephino-rpg
 msgid "No command given"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:221
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:256
 #@ stephino-rpg
 msgid "Invalid number of arguments"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:235
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:270
 #@ stephino-rpg
 msgid "Commands are read-only for non-admins"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:311
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Settings.php:346
 #, php-format
 #@ stephino-rpg
 msgid "Command not found, try %s"
@@ -957,74 +1036,130 @@ msgstr ""
 msgid "Tutorial reward"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:60
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:62
 #@ stephino-rpg
 msgid "Trading is disabled"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:76
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:137
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:190
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:267
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:427
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:481
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:78
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:143
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:196
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:278
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:464
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:518
 #@ stephino-rpg
 msgid "User not initialized"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:128
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:177
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:273
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:327
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:179
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:258
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:312
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:350
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:130
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:165
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:247
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:350
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:461
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:523
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:185
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:269
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:328
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:377
 #@ stephino-rpg
 msgid "The arena is not available"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:139
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:193
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:284
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:352
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:374
-#: ui/tpl/wordpress/wp-ptf.php:62
-#@ stephino-rpg
-msgid "Game not found"
-msgstr ""
-
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:144
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:289
-#@ stephino-rpg
-msgid "Invalid game"
-msgstr ""
-
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:156
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:135
 #@ stephino-rpg
 msgid "You cannot delete this game"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:188
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:347
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:143
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:179
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:261
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:366
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:543
 #@ stephino-rpg
 msgid "Invalid game ID"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:198
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:379
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:148
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:184
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:271
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:371
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:472
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:548
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:406
+#: ui/tpl/wordpress/wp-ptf.php:66
+#@ stephino-rpg
+msgid "Game not found"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:174
+#@ stephino-rpg
+msgid "Invalid rating"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:231
+#, php-format
+#@ stephino-rpg
+msgid "Rated %s"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:232
+#@ stephino-rpg
+msgid "star"
+msgid_plural "stars"
+msgstr[0] ""
+msgstr[1] ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:252
+#@ stephino-rpg
+msgid "You cannot review this game"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:266
+#@ stephino-rpg
+msgid "Invalid review"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:295
+#@ stephino-rpg
+msgid "Could not review game. Please try again later."
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:320
+#@ stephino-rpg
+msgid "Your game was reviewed"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:321
+#@ stephino-rpg
+msgid "Your game is under review"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:358
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:389
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:52
+#@ stephino-rpg
+msgid "Your game arena publisher account was suspended"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:381
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:416
 #@ stephino-rpg
 msgid "You cannot edit this game"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:212
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:395
 #@ stephino-rpg
 msgid "Invalid game visibility"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:251
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:439
 #@ stephino-rpg
 msgid "Could not update game. Please try again later."
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:477
+#@ stephino-rpg
+msgid "Invalid game"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action.php:820
@@ -1044,7 +1179,7 @@ msgid "Invalid entity type"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action.php:2035
-#: ui/tpl/dialogs/building/building-info-metrics.php:230
+#: ui/tpl/dialogs/building/building-info-metrics.php:233
 #: ui/tpl/dialogs/settings/settings-resources.php:131
 #@ stephino-rpg
 msgid "entity"
@@ -1096,7 +1231,7 @@ msgstr ""
 msgid "(DEMO) You are free to experiment but your changes will not be saved"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:151
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:155
 #@ stephino-rpg
 msgid "Invalid configuration object"
 msgstr ""
@@ -1220,22 +1355,22 @@ msgstr ""
 msgid "Dequeue"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:59
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:60
 #@ stephino-rpg
 msgid "Codex"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:86
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:87
 #@ stephino-rpg
 msgid "Invalid help item type"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:96
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:97
 #@ stephino-rpg
 msgid "Invalid help item ID"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:102
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Help.php:103
 #@ stephino-rpg
 msgid "Item"
 msgstr ""
@@ -1247,7 +1382,7 @@ msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:92
 #: ui/tpl/dialogs/building/building-info.php:61
-#: ui/tpl/dialogs/building/building-upgrade.php:56
+#: ui/tpl/dialogs/building/building-upgrade.php:53
 #: ui/tpl/dialogs/city/city-advisor.php:69
 #: ui/tpl/dialogs/island/island-info.php:46
 #: ui/tpl/dialogs/island/island-upgrade.php:39
@@ -1272,39 +1407,39 @@ msgstr ""
 msgid "Colonize"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:51
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:55
 #: ui/tpl/wordpress/wp-game.php:129
 #@ stephino-rpg
 msgid "Messages"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:54
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:346
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:58
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:347
 #@ stephino-rpg
 msgid "Diplomacy"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:58
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:348 themes/default/i18n.php:146
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:62
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:349 themes/default/i18n.php:146
 #@ stephino-rpg
 msgid "Military"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:62
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:347 themes/default/i18n.php:144
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:66
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:348 themes/default/i18n.php:144
 #@ stephino-rpg
 msgid "Economy"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:66
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:349
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:70
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:350
 #: ui/tpl/dialogs/city/city-advisor.php:78
-#: ui/tpl/dialogs/research/research-info.php:192
+#: ui/tpl/dialogs/research/research-info.php:193
 #@ stephino-rpg
 msgid "Research"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:118
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Messages.php:122
 #: ui/tpl/dialogs/messages/messages-read.php:28
 #@ stephino-rpg
 msgid "Message not found"
@@ -1331,40 +1466,46 @@ msgstr ""
 msgid "Modifiers"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:126
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:127
 #@ stephino-rpg
 msgid "Resources not initialized"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:139
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:140
 #@ stephino-rpg
 msgid "Resources"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:156
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:157
 #: themes/default/i18n.php:249 ui/tpl/wordpress/wp-game.php:77
 #: ui/tpl/wordpress/wp-game.php:93
 #@ stephino-rpg
 msgid "Settings"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:169
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:170
 #@ stephino-rpg
 msgid "Delete Account"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:195
-#: ui/tpl/dialogs/settings/settings-info.php:119
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:196
+#: ui/tpl/dialogs/settings/settings-info.php:121
 #@ stephino-rpg
 msgid "About"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:235
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:209
+#: ui/tpl/dialogs/settings/settings-info.php:125
+#@ stephino-rpg
+msgid "Language"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:249
 #@ stephino-rpg
 msgid "Announcements"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:236
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Settings.php:250
 #@ stephino-rpg
 msgid "No announcements"
 msgstr ""
@@ -1399,81 +1540,83 @@ msgstr ""
 msgid "Review transport"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:48
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:411
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:51
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:448
 #@ stephino-rpg
 msgid "User ID is mandatory"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:56
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:419
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:59
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:456
 #@ stephino-rpg
 msgid "User not found"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:71
-#: ui/tpl/dialogs/user/user-arena-play-details.php:91
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:74
+#: ui/tpl/dialogs/user/user-arena-play-details.php:158
 #@ stephino-rpg
 msgid "Created"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:77
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:80
 #@ stephino-rpg
 msgid "Won"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:83
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:86
 #@ stephino-rpg
 msgid "Played"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:92
-#: ui/tpl/dialogs/settings/settings-info.php:139
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:98
+#: ui/tpl/dialogs/settings/settings-info.php:160
 #@ stephino-rpg
 msgid "Profile"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:154
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:160
 #, php-format
 #@ stephino-rpg
 msgid "Buying %s is not allowed"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:164
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:170
 #@ stephino-rpg
 msgid "Trading"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:294
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:310
 #@ stephino-rpg
 msgid "Author page"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:295
-#: ui/tpl/dialogs/help/help-content-core.php:313
-#: ui/tpl/dialogs/user/user-info.php:98
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:311
+#: ui/tpl/dialogs/help/help-content-core.php:40
+#: ui/tpl/dialogs/help/help-content-core.php:45
+#: ui/tpl/dialogs/help/help-content-core.php:335
+#: ui/tpl/dialogs/user/user-info.php:108
 #: ui/tpl/dialogs/user/user-leader-board.php:36
 #: ui/tpl/wordpress/wp-game.php:120
 #@ stephino-rpg
 msgid "Game arena"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:333
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:360
 #@ stephino-rpg
 msgid "Playing"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:368
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:400
 #@ stephino-rpg
 msgid "Could not create a new game"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:388
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:425
 #@ stephino-rpg
 msgid "Game Creator"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:515
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:552
 #: ui/tpl/wordpress/wp-dashboard.php:58 ui/tpl/wordpress/wp-game.php:122
 #@ stephino-rpg
 msgid "Leader board"
@@ -1489,171 +1632,171 @@ msgstr ""
 msgid "You can only visit our own empire"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:332
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:333
 #@ stephino-rpg
 msgid "Updated workers"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:333
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:334
 #@ stephino-rpg
 msgid "Request timed out. Please try again later."
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:334
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:335
 #@ stephino-rpg
 msgid "No Internet"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:335
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:336
 #@ stephino-rpg
 msgid "Please check your Internet connection and try again!"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:336
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:337
 #, php-format
 #@ stephino-rpg
 msgid "Type \"%s\" to list all available commands"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:337
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:338
 #@ stephino-rpg
 msgid "Type a command and press Enter"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:338
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:339
 #@ stephino-rpg
 msgid "Type and press Enter"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:339 ui/tpl/wordpress/wp-game.php:127
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:340 ui/tpl/wordpress/wp-game.php:127
 #@ stephino-rpg
 msgid "Chat Room"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:340
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:341
 #@ stephino-rpg
 msgid "Welcome to our chat room!"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:341
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:342
 #, php-format
 #@ stephino-rpg
 msgid "For more features and feedback, please visit %s"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:342
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:343
 #@ stephino-rpg
 msgid "Validating payment..."
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:343
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:344
 #@ stephino-rpg
 msgid "Preparing payment..."
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:344
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:345
 #@ stephino-rpg
 msgid "App installed successfully!"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:345
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:346
 #@ stephino-rpg
 msgid "Step"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:350
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:351
 #@ stephino-rpg
 msgid "Close message"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:351
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:352
 #@ stephino-rpg
 msgid "Previous"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:352 ui/tpl/wordpress/wp-game.php:186
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:353 ui/tpl/wordpress/wp-game.php:186
 #@ stephino-rpg
 msgid "Next"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:353
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:354
 #@ stephino-rpg
 msgid "Sorry to see you go!"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:354
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:355
 #, php-format
 #@ stephino-rpg
 msgid "Please type \"%s\" to continue. This action is permanent and irreversible!"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:355
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:356
 #@ stephino-rpg
 msgid "See you soon!"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:356 ui/tpl/wordpress/wp-game.php:45
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:357 ui/tpl/wordpress/wp-game.php:45
 #: ui/tpl/wordpress/wp-options.php:17
 #@ stephino-rpg
 msgid "Loading..."
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:357
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:358
 #@ stephino-rpg
 msgid "Error"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:358
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:359
 #@ stephino-rpg
 msgid "Constant"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:359
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:360
 #@ stephino-rpg
 msgid "No change"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:360
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:361
 #@ stephino-rpg
 msgid "Linear"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:361
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:362
 #@ stephino-rpg
 msgid "Linear multiplicative inverse"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:362
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:363
 #@ stephino-rpg
 msgid "Quadratic"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:363
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:364
 #@ stephino-rpg
 msgid "Quadratic multiplicative inverse"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:364
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:365
 #@ stephino-rpg
 msgid "Exponential"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:365
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:366
 #@ stephino-rpg
 msgid "Exponential multiplicative inverse"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:379
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:380
 #@ stephino-rpg
 msgid "Internet connection lost"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:383
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:384
 #@ stephino-rpg
 msgid "Retrying in 3 seconds..."
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:400 ui/tpl/wordpress/wp-game.php:44
+#: lib/Stephino/Rpg/Renderer/Ajax/Html.php:401 ui/tpl/wordpress/wp-game.php:44
 #@ stephino-rpg
 msgid "Offline"
 msgstr ""
@@ -1663,12 +1806,27 @@ msgstr ""
 msgid "Please try again later"
 msgstr ""
 
-#: lib/Stephino/Rpg/Task/Initializer.php:103
+#: lib/Stephino/Rpg/Renderer.php:74
+#@ stephino-rpg
+msgid "Invalid method specified"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer.php:79
+#@ stephino-rpg
+msgid "You have logged out. Please refresh and try again"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer.php:122
+#@ stephino-rpg
+msgid "Method not implemented"
+msgstr ""
+
+#: lib/Stephino/Rpg/Task/Initializer.php:109
 #@ stephino-rpg
 msgid "Could not create a new user"
 msgstr ""
 
-#: lib/Stephino/Rpg/Task/Robot.php:577
+#: lib/Stephino/Rpg/Task/Robot.php:594
 #, php-format
 #@ stephino-rpg
 msgid "More %s needed"
@@ -1791,24 +1949,58 @@ msgstr ""
 msgid "Discovery"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:122 lib/Stephino/Rpg/WordPress.php:352
+#: lib/Stephino/Rpg/Utils/Config.php:378
+#, php-format
+#@ stephino-rpg
+msgid "Requirements: %s does not allow multiple upgrades"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Config.php:408
+#, php-format
+#@ stephino-rpg
+msgid "Requirements: infinite recursion on %s"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Config.php:477
+#@ stephino-rpg
+msgid "Requirements: all models are unreachable"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Config.php:589
+#, php-format
+#@ stephino-rpg
+msgid "Requirements: %s are unreachable"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Lingo.php:86
+#@ stephino-rpg
+msgid "Unknown"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Lingo.php:96 ui/tpl/dialogs/user/user-info.php:26
+#@ stephino-rpg
+msgid "Robot"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Lingo.php:178 ui/tpl/wordpress/wp-options.php:62
+#@ stephino-rpg
+msgid "Translations"
+msgstr ""
+
+#: lib/Stephino/Rpg/Utils/Media.php:126
+#@ stephino-rpg
+msgid "Free"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress.php:122 lib/Stephino/Rpg/WordPress.php:376
 #@ stephino-rpg
 msgid "Play"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:130 lib/Stephino/Rpg/WordPress.php:362
-#: lib/Stephino/Rpg/WordPress.php:363 ui/tpl/wordpress/wp-dashboard.php:26
+#: lib/Stephino/Rpg/WordPress.php:130 lib/Stephino/Rpg/WordPress.php:385
+#: lib/Stephino/Rpg/WordPress.php:386 ui/tpl/wordpress/wp-dashboard.php:26
 #@ stephino-rpg
 msgid "Dashboard"
-msgstr ""
-
-#: lib/Stephino/Rpg/WordPress.php:138 lib/Stephino/Rpg/WordPress.php:372
-#: lib/Stephino/Rpg/WordPress.php:373
-#: ui/tpl/dialogs/settings/settings-info.php:162
-#: ui/tpl/dialogs/settings/settings-info.php:167
-#: ui/tpl/wordpress/wp-options.php:43
-#@ stephino-rpg
-msgid "Game Mechanics"
 msgstr ""
 
 #: lib/Stephino/Rpg/WordPress.php:162
@@ -1818,20 +2010,20 @@ msgid "Upgrade Pro to version %s"
 msgstr ""
 
 #: lib/Stephino/Rpg/WordPress.php:163
-#: ui/tpl/dialogs/settings/settings-info.php:199
-#: ui/tpl/dialogs/settings/settings-info.php:211
+#: ui/tpl/dialogs/settings/settings-info.php:220
+#: ui/tpl/dialogs/settings/settings-info.php:232
 #: ui/tpl/wordpress/wp-dashboard.php:124 ui/tpl/wordpress/wp-notice.php:49
 #: ui/tpl/wordpress/wp-options.php:45
 #@ stephino-rpg
 msgid "Unlock Game"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:203
+#: lib/Stephino/Rpg/WordPress.php:204
 #@ stephino-rpg
 msgid "Log In"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:204
+#: lib/Stephino/Rpg/WordPress.php:205
 #@ stephino-rpg
 msgid "or"
 msgstr ""
@@ -3052,16 +3244,6 @@ msgstr ""
 msgid "Live the life of a king!"
 msgstr ""
 
-#: themes/default/i18n.php:279
-#@ stephino-rpg
-msgid "Pro"
-msgstr ""
-
-#: themes/default/i18n.php:280
-#@ stephino-rpg
-msgid "The best value for our most valuable players!"
-msgstr ""
-
 #: ui/tpl/dialogs/attack/attack-prepare-empty.php:20
 #@ stephino-rpg
 msgid "Prepare an attack with:"
@@ -3136,9 +3318,9 @@ msgstr ""
 
 #: ui/tpl/dialogs/attack/attack-review.php:107
 #: ui/tpl/dialogs/building/building-upgrade-cancel.php:52
-#: ui/tpl/dialogs/building/building-upgrade.php:46
+#: ui/tpl/dialogs/building/building-upgrade.php:43
 #: ui/tpl/dialogs/city/city-move-capital.php:30
-#: ui/tpl/dialogs/city/city-workforce.php:144
+#: ui/tpl/dialogs/city/city-workforce.php:148
 #: ui/tpl/dialogs/island/island-upgrade.php:30
 #@ stephino-rpg
 msgid "Go Back"
@@ -3255,7 +3437,7 @@ msgstr ""
 
 #: ui/tpl/dialogs/building/building-info-entities.php:245
 #: ui/tpl/dialogs/building/building-info.php:61
-#: ui/tpl/dialogs/building/building-upgrade.php:56
+#: ui/tpl/dialogs/building/building-upgrade.php:53
 #: ui/tpl/dialogs/city/city-advisor.php:68
 #: ui/tpl/dialogs/city/city-garrison.php:90
 #: ui/tpl/dialogs/entity/entity-recruit.php:88
@@ -3288,55 +3470,55 @@ msgid "%s of %s by base level"
 msgstr ""
 
 #: ui/tpl/dialogs/building/building-info-metrics.php:180
-#: ui/tpl/dialogs/building/building-info-metrics.php:269
+#: ui/tpl/dialogs/building/building-info-metrics.php:272
 #@ stephino-rpg
 msgid "Growth factor"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:216
+#: ui/tpl/dialogs/building/building-info-metrics.php:219
 #: ui/tpl/dialogs/settings/settings-resources.php:117
 #@ stephino-rpg
 msgid "from"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:224
+#: ui/tpl/dialogs/building/building-info-metrics.php:227
 #: ui/tpl/dialogs/settings/settings-resources.php:125
 #@ stephino-rpg
 msgid "workforce"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:249
+#: ui/tpl/dialogs/building/building-info-metrics.php:252
 #@ stephino-rpg
 msgid "Metropolis bonus"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:278
+#: ui/tpl/dialogs/building/building-info-metrics.php:281
 #@ stephino-rpg
 msgid "Minimum reached: values under 0 are ignored"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:284
+#: ui/tpl/dialogs/building/building-info-metrics.php:287
 #@ stephino-rpg
 msgid "Maximum reached: migration stopped"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:287
+#: ui/tpl/dialogs/building/building-info-metrics.php:290
 #@ stephino-rpg
 msgid "Maximum reached: migration stopped and production at full capacity"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:292
+#: ui/tpl/dialogs/building/building-info-metrics.php:295
 #, php-format
 #@ stephino-rpg
 msgid "Fix %s to prevent further %s loss"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:301
+#: ui/tpl/dialogs/building/building-info-metrics.php:304
 #@ stephino-rpg
 msgid "Maximum reached: expansion stopped"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-metrics.php:305
+#: ui/tpl/dialogs/building/building-info-metrics.php:308
 #: ui/tpl/dialogs/settings/settings-resources.php:183
 #@ stephino-rpg
 msgid "TOTAL"
@@ -3345,7 +3527,7 @@ msgstr ""
 #: ui/tpl/dialogs/building/building-info-research-areas.php:68
 #: ui/tpl/dialogs/city/city-government.php:51
 #: ui/tpl/dialogs/help/fragment/help-fragment-description.php:41
-#: ui/tpl/dialogs/research/research-info.php:103
+#: ui/tpl/dialogs/research/research-info.php:104
 #@ stephino-rpg
 msgid "no details available"
 msgstr ""
@@ -3363,7 +3545,7 @@ msgstr ""
 #: ui/tpl/dialogs/help/help-content-islandStatues.php:28
 #: ui/tpl/dialogs/help/help-content-researchFields.php:34
 #: ui/tpl/dialogs/island/island-info.php:39
-#: ui/tpl/dialogs/research/research-info.php:75
+#: ui/tpl/dialogs/research/research-info.php:76
 #: ui/tpl/dialogs/user/user-cities.php:25
 #@ stephino-rpg
 msgid "Level"
@@ -3398,7 +3580,7 @@ msgid "Dependant on population, %s of %s by base level"
 msgstr ""
 
 #: ui/tpl/dialogs/building/building-market.php:31
-#: ui/tpl/dialogs/building/building-market.php:140
+#: ui/tpl/dialogs/building/building-market.php:149
 #, php-format
 #@ stephino-rpg
 msgid "Buy resources with %s"
@@ -3418,14 +3600,20 @@ msgstr ""
 msgid "Buy"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-market.php:111
+#: ui/tpl/dialogs/building/building-market.php:104
+#, php-format
+#@ stephino-rpg
+msgid "Maximum %s reached"
+msgstr ""
+
+#: ui/tpl/dialogs/building/building-market.php:120
 #, php-format
 #@ stephino-rpg
 msgid "Available %s"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-market.php:157
-#: ui/tpl/dialogs/building/building-market.php:205
+#: ui/tpl/dialogs/building/building-market.php:166
+#: ui/tpl/dialogs/building/building-market.php:214
 #, php-format
 #@ stephino-rpg
 msgid "Sell resources for %s"
@@ -3452,13 +3640,13 @@ msgstr ""
 msgid "Stop Upgrade"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-upgrade.php:22
+#: ui/tpl/dialogs/building/building-upgrade.php:24
 #, php-format
 #@ stephino-rpg
 msgid "Build costs for level %s"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-upgrade.php:23
+#: ui/tpl/dialogs/building/building-upgrade.php:25
 #: ui/tpl/dialogs/island/island-upgrade.php:19
 #, php-format
 #@ stephino-rpg
@@ -3471,7 +3659,7 @@ msgid "Metropolis"
 msgstr ""
 
 #: ui/tpl/dialogs/city/city-advisor.php:36
-#: ui/tpl/dialogs/city/city-workforce.php:81
+#: ui/tpl/dialogs/city/city-workforce.php:85
 #: ui/tpl/dialogs/common/common-requirements.php:63
 #: ui/tpl/dialogs/common/common-requirements.php:83
 #: ui/tpl/dialogs/help/fragment/help-fragment-requirements.php:26
@@ -3588,7 +3776,7 @@ msgid "Entities"
 msgstr ""
 
 #: ui/tpl/dialogs/city/city-queues.php:200
-#: ui/tpl/dialogs/research/research-info.php:180
+#: ui/tpl/dialogs/research/research-info.php:181
 #@ stephino-rpg
 msgid "Cancel"
 msgstr ""
@@ -3608,12 +3796,12 @@ msgstr ""
 msgid "Assign workers"
 msgstr ""
 
-#: ui/tpl/dialogs/city/city-workforce.php:110
+#: ui/tpl/dialogs/city/city-workforce.php:114
 #@ stephino-rpg
 msgid "There is no need for workers yet"
 msgstr ""
 
-#: ui/tpl/dialogs/city/city-workforce.php:121
+#: ui/tpl/dialogs/city/city-workforce.php:125
 #@ stephino-rpg
 msgid "Assigned workers"
 msgstr ""
@@ -3710,25 +3898,25 @@ msgstr ""
 msgid "Spy from %s to %s"
 msgstr ""
 
-#: ui/tpl/dialogs/convoy/convoy-list.php:95
+#: ui/tpl/dialogs/convoy/convoy-list.php:100
 #, php-format
 #@ stephino-rpg
 msgid "Colonizer from %s to vacant lot on %s"
 msgstr ""
 
-#: ui/tpl/dialogs/convoy/convoy-list.php:112
+#: ui/tpl/dialogs/convoy/convoy-list.php:117
 #, php-format
 #@ stephino-rpg
 msgid "Convoy returning to %s from %s"
 msgstr ""
 
-#: ui/tpl/dialogs/convoy/convoy-list.php:113
+#: ui/tpl/dialogs/convoy/convoy-list.php:118
 #, php-format
 #@ stephino-rpg
 msgid "Convoy from %s to %s"
 msgstr ""
 
-#: ui/tpl/dialogs/convoy/convoy-list.php:156
+#: ui/tpl/dialogs/convoy/convoy-list.php:161
 #@ stephino-rpg
 msgid "You have no active convoys"
 msgstr ""
@@ -3813,8 +4001,8 @@ msgid "at level %s"
 msgstr ""
 
 #: ui/tpl/dialogs/help/help-content-buildings.php:44
-#: ui/tpl/dialogs/help/help-content-core.php:456
-#: ui/tpl/dialogs/help/help-content-core.php:475
+#: ui/tpl/dialogs/help/help-content-core.php:487
+#: ui/tpl/dialogs/help/help-content-core.php:506
 #@ stephino-rpg
 msgid "main"
 msgstr ""
@@ -3939,155 +4127,186 @@ msgstr ""
 
 #: ui/tpl/dialogs/help/help-content-core.php:29
 #@ stephino-rpg
+msgid "Game Masters"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:32
+#@ stephino-rpg
+msgid "You are a Game Master"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:34
+#@ stephino-rpg
+msgid "Decide the rules of the game, as they are presented here"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:35
+#@ stephino-rpg
+msgid "Control all game resources, including the flow of time"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:40
+#@ stephino-rpg
+msgid "Review all games"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:45
+#@ stephino-rpg
+msgid "Edit and delete any game created by players"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:51
+#@ stephino-rpg
 msgid "Common resources"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:33
+#: ui/tpl/dialogs/help/help-content-core.php:55
 #, php-format
 #@ stephino-rpg
 msgid "These resources are generated by and accessible to: %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:75
+#: ui/tpl/dialogs/help/help-content-core.php:97
 #, php-format
 #@ stephino-rpg
 msgid "%s: resources"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:82
+#: ui/tpl/dialogs/help/help-content-core.php:104
 #, php-format
 #@ stephino-rpg
 msgid "These resources are generated and stored in: %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:147
+#: ui/tpl/dialogs/help/help-content-core.php:169
 #, php-format
 #@ stephino-rpg
 msgid "%s: metrics"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:155
+#: ui/tpl/dialogs/help/help-content-core.php:177
 #, php-format
 #@ stephino-rpg
 msgid "%s: these metrics are not affected by workers"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:196
+#: ui/tpl/dialogs/help/help-content-core.php:218
 #@ stephino-rpg
 msgid "Game console"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:201
+#: ui/tpl/dialogs/help/help-content-core.php:223
 #, php-format
 #@ stephino-rpg
 msgid "You can toggle the game console visibility with %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:207
+#: ui/tpl/dialogs/help/help-content-core.php:229
 #@ stephino-rpg
 msgid "The console allows you a fine level of control over the game"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:213
-#: ui/tpl/dialogs/user/user-info.php:38
+#: ui/tpl/dialogs/help/help-content-core.php:235
+#: ui/tpl/dialogs/user/user-info.php:48
 #: ui/tpl/dialogs/user/user-leader-board.php:31
 #@ stephino-rpg
 msgid "Total score"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:215
+#: ui/tpl/dialogs/help/help-content-core.php:237
 #@ stephino-rpg
 msgid "Your total score is calculated as follows:"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:222
-#: ui/tpl/dialogs/help/help-content-core.php:245
+#: ui/tpl/dialogs/help/help-content-core.php:244
+#: ui/tpl/dialogs/help/help-content-core.php:267
 #, php-format
 #@ stephino-rpg
 msgid "%s for each upgrade (%s) multiplied by level"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:224
-#: ui/tpl/dialogs/help/help-content-core.php:236
-#: ui/tpl/dialogs/help/help-content-core.php:247
-#: ui/tpl/dialogs/help/help-content-core.php:259
-#: ui/tpl/dialogs/help/help-content-core.php:270
+#: ui/tpl/dialogs/help/help-content-core.php:246
+#: ui/tpl/dialogs/help/help-content-core.php:258
+#: ui/tpl/dialogs/help/help-content-core.php:269
 #: ui/tpl/dialogs/help/help-content-core.php:281
 #: ui/tpl/dialogs/help/help-content-core.php:292
+#: ui/tpl/dialogs/help/help-content-core.php:303
+#: ui/tpl/dialogs/help/help-content-core.php:314
 #@ stephino-rpg
 msgid "point"
 msgid_plural "points"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:234
+#: ui/tpl/dialogs/help/help-content-core.php:256
 #, php-format
 #@ stephino-rpg
 msgid "%s for each entity recruited"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:257
+#: ui/tpl/dialogs/help/help-content-core.php:279
 #, php-format
 #@ stephino-rpg
 msgid "%s for each defeat"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:268
+#: ui/tpl/dialogs/help/help-content-core.php:290
 #, php-format
 #@ stephino-rpg
 msgid "%s for each draw"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:279
+#: ui/tpl/dialogs/help/help-content-core.php:301
 #, php-format
 #@ stephino-rpg
 msgid "%s for each victory"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:290
+#: ui/tpl/dialogs/help/help-content-core.php:312
 #, php-format
 #@ stephino-rpg
 msgid "%s for each game arena victory"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:315
+#: ui/tpl/dialogs/help/help-content-core.php:337
 #@ stephino-rpg
 msgid "Objective: collect all the gems then pass through the gate"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:320
+#: ui/tpl/dialogs/help/help-content-core.php:342
 #, php-format
 #@ stephino-rpg
 msgid "Win to get %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:331
+#: ui/tpl/dialogs/help/help-content-core.php:353
 #, php-format
 #@ stephino-rpg
 msgid "Earn %s each time a game you created is won"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:340
+#: ui/tpl/dialogs/help/help-content-core.php:362
 #, php-format
 #@ stephino-rpg
 msgid "Each player can create a maximum of %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:342
+#: ui/tpl/dialogs/help/help-content-core.php:364
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:47
 #@ stephino-rpg
 msgid "game"
 msgid_plural "games"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:352
+#: ui/tpl/dialogs/help/help-content-core.php:374
 #, php-format
 #@ stephino-rpg
 msgid "Rewards reset after %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:354
-#: ui/tpl/dialogs/help/help-content-core.php:387
+#: ui/tpl/dialogs/help/help-content-core.php:376
+#: ui/tpl/dialogs/help/help-content-core.php:418
 #: ui/tpl/dialogs/premium/premium-modifiers-details.php:59
 #: ui/tpl/timelapse/notification/notif-premium-modifier.php:31
 #@ stephino-rpg
@@ -4096,86 +4315,102 @@ msgid_plural "hours"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:357
+#: ui/tpl/dialogs/help/help-content-core.php:379
 #@ stephino-rpg
 msgid "Rewards are earned only once"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:366
+#: ui/tpl/dialogs/help/help-content-core.php:384
+#@ stephino-rpg
+msgid "Players are not allowed to delete games"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:388
+#, php-format
+#@ stephino-rpg
+msgid "Players are not allowed to edit or create games after %s strikes (suspended games)"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:391
+#@ stephino-rpg
+msgid "Players are not allowed to edit or create new games after one of their games gets suspended"
+msgstr ""
+
+#: ui/tpl/dialogs/help/help-content-core.php:397
 #@ stephino-rpg
 msgid "Robots"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:373
+#: ui/tpl/dialogs/help/help-content-core.php:404
 #, php-format
 #@ stephino-rpg
 msgid "%s new %s are spawned for each player"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:375
+#: ui/tpl/dialogs/help/help-content-core.php:406
 #@ stephino-rpg
 msgid "robot"
 msgid_plural "robots"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:378
+#: ui/tpl/dialogs/help/help-content-core.php:409
 #@ stephino-rpg
 msgid "No new robots are spawned with new players"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:385
+#: ui/tpl/dialogs/help/help-content-core.php:416
 #, php-format
 #@ stephino-rpg
 msgid "Robots wait for %s between attacks"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:392
+#: ui/tpl/dialogs/help/help-content-core.php:423
 #@ stephino-rpg
 msgid "Robots aggression"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:396
+#: ui/tpl/dialogs/help/help-content-core.php:427
 #@ stephino-rpg
 msgid "Low"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:400
+#: ui/tpl/dialogs/help/help-content-core.php:431
 #@ stephino-rpg
 msgid "Medium"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:404
+#: ui/tpl/dialogs/help/help-content-core.php:435
 #@ stephino-rpg
 msgid "High"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:411
+#: ui/tpl/dialogs/help/help-content-core.php:442
 #@ stephino-rpg
 msgid "do not fight back, do not initiate attacks"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:415
+#: ui/tpl/dialogs/help/help-content-core.php:446
 #@ stephino-rpg
 msgid "fight back, do not initiate attacks"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:419
+#: ui/tpl/dialogs/help/help-content-core.php:450
 #@ stephino-rpg
-msgid "initiate attacks"
+msgid "fight back, initiate attacks"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:426
+#: ui/tpl/dialogs/help/help-content-core.php:457
 #@ stephino-rpg
 msgid "Robots fervor"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:429
+#: ui/tpl/dialogs/help/help-content-core.php:460
 #@ stephino-rpg
 msgid "Robots are disabled"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:434
+#: ui/tpl/dialogs/help/help-content-core.php:465
 #: ui/tpl/dialogs/help/help-content-governments.php:53
 #: ui/tpl/dialogs/help/help-content-islandStatues.php:49
 #: ui/tpl/dialogs/help/help-content-researchAreas.php:29
@@ -4183,54 +4418,54 @@ msgstr ""
 msgid "Game rules"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:436
+#: ui/tpl/dialogs/help/help-content-core.php:467
 #@ stephino-rpg
 msgid "Resource gathering may require workers"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:442
+#: ui/tpl/dialogs/help/help-content-core.php:473
 #, php-format
 #@ stephino-rpg
 msgid "%s: when newly founded, they get the following %s:"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:467
+#: ui/tpl/dialogs/help/help-content-core.php:498
 #, php-format
 #@ stephino-rpg
 msgid "%s: Initialized with a level 1 %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:483
+#: ui/tpl/dialogs/help/help-content-core.php:514
 #@ stephino-rpg
 msgid "Contact between players is forbidden"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:486
+#: ui/tpl/dialogs/help/help-content-core.php:517
 #, php-format
 #@ stephino-rpg
 msgid "Each player can send a maximum of %s %s per day"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:488
+#: ui/tpl/dialogs/help/help-content-core.php:519
 #@ stephino-rpg
 msgid "message"
 msgid_plural "messages"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:496
+#: ui/tpl/dialogs/help/help-content-core.php:527
 #, php-format
 #@ stephino-rpg
 msgid "Your inbox can hold a maximum of %s messages"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:504
+#: ui/tpl/dialogs/help/help-content-core.php:535
 #, php-format
 #@ stephino-rpg
 msgid "Messages are automatically deleted after %s %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:506
+#: ui/tpl/dialogs/help/help-content-core.php:537
 #: ui/tpl/timelapse/timelapse-diplomacy.php:64
 #: ui/tpl/wordpress/wp-dashboard.php:99
 #@ stephino-rpg
@@ -4239,118 +4474,118 @@ msgid_plural "days"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:514
+#: ui/tpl/dialogs/help/help-content-core.php:545
 #, php-format
 #@ stephino-rpg
 msgid "The distance between %s is traveled in %s seconds"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:519
+#: ui/tpl/dialogs/help/help-content-core.php:550
 #@ stephino-rpg
 msgid "All travel is instantaneous"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:527
+#: ui/tpl/dialogs/help/help-content-core.php:558
 #, php-format
 #@ stephino-rpg
 msgid "The game world was initialized with %s %s (empty)"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:535
+#: ui/tpl/dialogs/help/help-content-core.php:566
 #, php-format
 #@ stephino-rpg
 msgid "The game world was initialized with no %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:545
+#: ui/tpl/dialogs/help/help-content-core.php:576
 #, php-format
 #@ stephino-rpg
 msgid "%s new %s are created for each player"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:551
+#: ui/tpl/dialogs/help/help-content-core.php:582
 #, php-format
 #@ stephino-rpg
 msgid "No new %s are created with new players"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:561
+#: ui/tpl/dialogs/help/help-content-core.php:592
 #, php-format
 #@ stephino-rpg
 msgid "Each player action triggers %s %s by robots"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:563
+#: ui/tpl/dialogs/help/help-content-core.php:594
 #@ stephino-rpg
 msgid "action"
 msgid_plural "actions"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:566
+#: ui/tpl/dialogs/help/help-content-core.php:597
 #@ stephino-rpg
 msgid "All robots are inactive"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:574
+#: ui/tpl/dialogs/help/help-content-core.php:605
 #, php-format
 #@ stephino-rpg
 msgid "The cool-down period between time-lapse procedures is %s seconds for each player"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:583
+#: ui/tpl/dialogs/help/help-content-core.php:614
 #, php-format
 #@ stephino-rpg
 msgid "%s needs to be higher than %s to ensure growth of our bases (%s)"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:590
+#: ui/tpl/dialogs/help/help-content-core.php:621
 #@ stephino-rpg
 msgid "The growth factor is calculated as follows"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:593
-#: ui/tpl/dialogs/help/help-content-core.php:597
-#: ui/tpl/dialogs/help/help-content-core.php:601
-#: ui/tpl/dialogs/help/help-content-core.php:605
+#: ui/tpl/dialogs/help/help-content-core.php:624
+#: ui/tpl/dialogs/help/help-content-core.php:628
+#: ui/tpl/dialogs/help/help-content-core.php:632
+#: ui/tpl/dialogs/help/help-content-core.php:636
 #@ stephino-rpg
 msgid "if"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:613
+#: ui/tpl/dialogs/help/help-content-core.php:644
 #, php-format
 #@ stephino-rpg
 msgid "Metropolises are marked with \"%s\""
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:622
+#: ui/tpl/dialogs/help/help-content-core.php:653
 #, php-format
 #@ stephino-rpg
 msgid "Metropolises get a %s boost of %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:633
+#: ui/tpl/dialogs/help/help-content-core.php:664
 #, php-format
 #@ stephino-rpg
 msgid "Players get the following resources with their first base (%s)"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:654
-#: ui/tpl/dialogs/help/help-content-core.php:665
+#: ui/tpl/dialogs/help/help-content-core.php:685
+#: ui/tpl/dialogs/help/help-content-core.php:696
 #, php-format
 #@ stephino-rpg
 msgid "Players can trade %s for %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:673
+#: ui/tpl/dialogs/help/help-content-core.php:704
 #: ui/tpl/dialogs/help/help-content-premiumModifiers.php:79
 #: ui/tpl/dialogs/premium/premium-modifiers.php:148
 #@ stephino-rpg
 msgid "Maximum queues"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:678
-#: ui/tpl/dialogs/help/help-content-core.php:687
+#: ui/tpl/dialogs/help/help-content-core.php:709
+#: ui/tpl/dialogs/help/help-content-core.php:718
 #: ui/tpl/dialogs/help/help-content-premiumModifiers.php:94
 #: ui/tpl/dialogs/help/help-content-premiumModifiers.php:107
 #: ui/tpl/dialogs/premium/premium-modifiers.php:163
@@ -4360,7 +4595,7 @@ msgstr ""
 msgid "%s - Queues per %s"
 msgstr ""
 
-#: ui/tpl/dialogs/help/help-content-core.php:696
+#: ui/tpl/dialogs/help/help-content-core.php:727
 #: ui/tpl/dialogs/help/help-content-premiumModifiers.php:120
 #: ui/tpl/dialogs/premium/premium-modifiers.php:189
 #, php-format
@@ -4659,7 +4894,7 @@ msgid "Colonize from"
 msgstr ""
 
 #: ui/tpl/dialogs/island/island-colonize-review.php:72
-#: ui/tpl/dialogs/spy/spy-review.php:86 ui/tpl/dialogs/user/user-info.php:151
+#: ui/tpl/dialogs/spy/spy-review.php:86 ui/tpl/dialogs/user/user-info.php:236
 #@ stephino-rpg
 msgid "Send"
 msgstr ""
@@ -4684,6 +4919,42 @@ msgstr ""
 #: ui/tpl/dialogs/messages/messages-list.php:57
 #@ stephino-rpg
 msgid "You have no messages"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:24
+#, php-format
+#@ stephino-rpg
+msgid "%s has received the following review: %s"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:32
+#, php-format
+#@ stephino-rpg
+msgid "%s was marked as under review by a game master"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:45
+#, php-format
+#@ stephino-rpg
+msgid "You have %s suspended %s"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:55
+#, php-format
+#@ stephino-rpg
+msgid "If you reach %s strikes you will not be able to edit or create new games"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:63
+#: ui/tpl/timelapse/notification/notif-tutorial-rewards.php:22
+#: ui/tpl/wordpress/wp-ptf.php:72
+#@ stephino-rpg
+msgid "Congratulations!"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-ptf-review.php:65
+#@ stephino-rpg
+msgid "Please correct the issue and mark your game as public when you are ready for another review"
 msgstr ""
 
 #: ui/tpl/dialogs/premium/premium-modifiers-details.php:27
@@ -4736,14 +5007,14 @@ msgid "Activate premium modifier"
 msgstr ""
 
 #: ui/tpl/dialogs/premium/premium-modifiers.php:279
-#: ui/tpl/dialogs/settings/settings-info.php:224
+#: ui/tpl/dialogs/settings/settings-info.php:245
 #@ stephino-rpg
 msgid "Install this WordPress plugin for free and host your own game!"
 msgstr ""
 
 #: ui/tpl/dialogs/premium/premium-modifiers.php:282
-#: ui/tpl/dialogs/settings/settings-info.php:223
-#: ui/tpl/dialogs/settings/settings-info.php:229
+#: ui/tpl/dialogs/settings/settings-info.php:244
+#: ui/tpl/dialogs/settings/settings-info.php:250
 #@ stephino-rpg
 msgid "Free Install"
 msgstr ""
@@ -4759,37 +5030,37 @@ msgstr ""
 msgid "Coming soon..."
 msgstr ""
 
-#: ui/tpl/dialogs/research/research-info.php:77
-#: ui/tpl/dialogs/research/research-info.php:88
+#: ui/tpl/dialogs/research/research-info.php:78
+#: ui/tpl/dialogs/research/research-info.php:89
 #@ stephino-rpg
 msgid "Done"
 msgstr ""
 
-#: ui/tpl/dialogs/research/research-info.php:114
-#: ui/tpl/dialogs/research/research-info.php:130
+#: ui/tpl/dialogs/research/research-info.php:115
+#: ui/tpl/dialogs/research/research-info.php:131
 #, php-format
 #@ stephino-rpg
 msgid "Sets %s abundance to %s for all bases"
 msgstr ""
 
-#: ui/tpl/dialogs/research/research-info.php:156
+#: ui/tpl/dialogs/research/research-info.php:157
 #@ stephino-rpg
 msgid "Research cost"
 msgstr ""
 
-#: ui/tpl/dialogs/research/research-info.php:194
+#: ui/tpl/dialogs/research/research-info.php:195
 #@ stephino-rpg
 msgid "Start"
 msgstr ""
 
-#: ui/tpl/dialogs/research/research-info.php:209
+#: ui/tpl/dialogs/research/research-info.php:210
 #, php-format
 #@ stephino-rpg
 msgid "%: none defined for this %s"
 msgstr ""
 
 #: ui/tpl/dialogs/settings/settings-about.php:24
-#: ui/tpl/dialogs/settings/settings-info.php:126
+#: ui/tpl/dialogs/settings/settings-info.php:143
 #@ stephino-rpg
 msgid "Feedback"
 msgstr ""
@@ -4873,62 +5144,72 @@ msgstr ""
 msgid "My game"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:117
-#@ stephino-rpg
-msgid "Install app"
-msgstr ""
-
-#: ui/tpl/dialogs/settings/settings-info.php:122
+#: ui/tpl/dialogs/settings/settings-info.php:118
 #@ stephino-rpg
 msgid "Help"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:134
+#: ui/tpl/dialogs/settings/settings-info.php:147
+#@ stephino-rpg
+msgid "Install app"
+msgstr ""
+
+#: ui/tpl/dialogs/settings/settings-info.php:148
+#@ stephino-rpg
+msgid "Prepare app"
+msgstr ""
+
+#: ui/tpl/dialogs/settings/settings-info.php:155
 #@ stephino-rpg
 msgid "My account"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:142
+#: ui/tpl/dialogs/settings/settings-info.php:163
 #@ stephino-rpg
 msgid "Log Out"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:146
+#: ui/tpl/dialogs/settings/settings-info.php:167
 #@ stephino-rpg
 msgid "Delete account"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:157
+#: ui/tpl/dialogs/settings/settings-info.php:178
 #@ stephino-rpg
 msgid "My rules"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:159
-#: ui/tpl/dialogs/settings/settings-info.php:181
+#: ui/tpl/dialogs/settings/settings-info.php:180
+#: ui/tpl/dialogs/settings/settings-info.php:202
 #@ stephino-rpg
 msgid "demo"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:179
+#: ui/tpl/dialogs/settings/settings-info.php:200
 #@ stephino-rpg
 msgid "Console"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:185
+#: ui/tpl/dialogs/settings/settings-info.php:206
 #, php-format
 #@ stephino-rpg
 msgid "Show the in-game console %s"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:190
+#: ui/tpl/dialogs/settings/settings-info.php:211
 #@ stephino-rpg
 msgid "Command Line Interface"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:202
+#: ui/tpl/dialogs/settings/settings-info.php:223
 #, php-format
 #@ stephino-rpg
-msgid "Buy %s to enable PayPal micro-transactions and more!"
+msgid "Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!"
+msgstr ""
+
+#: ui/tpl/dialogs/settings/settings-language.php:18
+#@ stephino-rpg
+msgid "Please select your language"
 msgstr ""
 
 #: ui/tpl/dialogs/settings/settings-resources.php:78
@@ -5068,12 +5349,14 @@ msgid "Get others to play your game by making it public"
 msgstr ""
 
 #: ui/tpl/dialogs/user/user-arena-edit.php:122
+#: ui/tpl/dialogs/user/user-arena-play-details.php:63
 #@ stephino-rpg
 msgid "Public"
 msgstr ""
 
 #: ui/tpl/dialogs/user/user-arena-edit.php:126
-#: ui/tpl/dialogs/user/user-arena-play-details.php:24
+#: ui/tpl/dialogs/user/user-arena-list-page.php:38
+#: ui/tpl/dialogs/user/user-arena-play-details.php:58
 #@ stephino-rpg
 msgid "Private"
 msgstr ""
@@ -5093,195 +5376,228 @@ msgstr ""
 msgid "There are no games available"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list-page.php:45
-#: ui/tpl/dialogs/user/user-arena-play-details.php:31
+#: ui/tpl/dialogs/user/user-arena-list-page.php:84
+#: ui/tpl/dialogs/user/user-arena-play-details.php:30
 #@ stephino-rpg
 msgid "by"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list-page.php:48
+#: ui/tpl/dialogs/user/user-arena-list-page.php:87
 #@ stephino-rpg
 msgid "Win rate"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list-page.php:62
+#: ui/tpl/dialogs/user/user-arena-list-page.php:101
 #@ stephino-rpg
 msgid "Reward available"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list.php:37
+#: ui/tpl/dialogs/user/user-arena-list.php:39
 #@ stephino-rpg
 msgid "Games by"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list.php:42
+#: ui/tpl/dialogs/user/user-arena-list.php:44
 #@ stephino-rpg
 msgid "All games"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list.php:48
+#: ui/tpl/dialogs/user/user-arena-list.php:50
 #@ stephino-rpg
 msgid "Rules"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list.php:53
+#: ui/tpl/dialogs/user/user-arena-list.php:55
 #@ stephino-rpg
 msgid "My games"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-list.php:69
+#: ui/tpl/dialogs/user/user-arena-list.php:75
 #@ stephino-rpg
 msgid "Create game"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:27
+#: ui/tpl/dialogs/user/user-arena-play-details.php:26
 #@ stephino-rpg
 msgid "Width and height"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:43
+#: ui/tpl/dialogs/user/user-arena-play-details.php:45
+#@ stephino-rpg
+msgid "rating"
+msgid_plural "ratings"
+msgstr[0] ""
+msgstr[1] ""
+
+#: ui/tpl/dialogs/user/user-arena-play-details.php:110
 #, php-format
 #@ stephino-rpg
 msgid "Started %s, finished %s"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:49
+#: ui/tpl/dialogs/user/user-arena-play-details.php:116
 #: ui/tpl/dialogs/user/user-leader-board.php:72
 #@ stephino-rpg
 msgid "Times played"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:57
+#: ui/tpl/dialogs/user/user-arena-play-details.php:124
 #, php-format
 #@ stephino-rpg
 msgid "Won %s"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:62
+#: ui/tpl/dialogs/user/user-arena-play-details.php:129
 #: ui/tpl/dialogs/user/user-leader-board.php:69
 #@ stephino-rpg
 msgid "Times won"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:74
+#: ui/tpl/dialogs/user/user-arena-play-details.php:141
 #@ stephino-rpg
 msgid "Reward"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:80
+#: ui/tpl/dialogs/user/user-arena-play-details.php:147
 #@ stephino-rpg
 msgid "None"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:93
+#: ui/tpl/dialogs/user/user-arena-play-details.php:160
 #@ stephino-rpg
 msgid "Modified"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:100
+#: ui/tpl/dialogs/user/user-arena-play-details.php:167
 #@ stephino-rpg
 msgid "Version"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:113
+#: ui/tpl/dialogs/user/user-arena-play-details.php:180
 #@ stephino-rpg
-msgid "Edit game"
+msgid "Edit"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-arena-play-details.php:123
+#: ui/tpl/dialogs/user/user-arena-play-details.php:188
 #@ stephino-rpg
-msgid "Delete game"
+msgid "Review"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:24
+#: ui/tpl/dialogs/user/user-arena-play-details.php:210
+#: ui/tpl/wordpress/wp-dashboard.php:110
 #@ stephino-rpg
-msgid "About robots"
+msgid "Delete"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:50
+#: ui/tpl/dialogs/user/user-info.php:34
+#@ stephino-rpg
+msgid "Game Master"
+msgstr ""
+
+#: ui/tpl/dialogs/user/user-info.php:60
 #@ stephino-rpg
 msgid "victory"
 msgid_plural "victories"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/user/user-info.php:55
+#: ui/tpl/dialogs/user/user-info.php:65
 #@ stephino-rpg
 msgid "draw"
 msgid_plural "draws"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/user/user-info.php:60
+#: ui/tpl/dialogs/user/user-info.php:70
 #@ stephino-rpg
 msgid "defeat"
 msgid_plural "defeats"
 msgstr[0] ""
 msgstr[1] ""
 
-#: ui/tpl/dialogs/user/user-info.php:115
+#: ui/tpl/dialogs/user/user-info.php:125
 #@ stephino-rpg
 msgid "View games"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:126
+#: ui/tpl/dialogs/user/user-info.php:134
+#@ stephino-rpg
+msgid "Extra info"
+msgstr ""
+
+#: ui/tpl/dialogs/user/user-info.php:145
+#@ stephino-rpg
+msgid "Joined"
+msgstr ""
+
+#: ui/tpl/dialogs/user/user-info.php:152
+#@ stephino-rpg
+msgid "Last active"
+msgstr ""
+
+#: ui/tpl/dialogs/user/user-info.php:185
+#@ stephino-rpg
+msgid "Tutorial level"
+msgstr ""
+
+#: ui/tpl/dialogs/user/user-info.php:211
 #@ stephino-rpg
 msgid "Contact"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:129
+#: ui/tpl/dialogs/user/user-info.php:214
 #@ stephino-rpg
 msgid "Message sent"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:136
+#: ui/tpl/dialogs/user/user-info.php:221
 #@ stephino-rpg
 msgid "Subject"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:137 ui/tpl/dialogs/user/user-info.php:144
+#: ui/tpl/dialogs/user/user-info.php:222 ui/tpl/dialogs/user/user-info.php:229
 #, php-format
 #@ stephino-rpg
 msgid "max. %d characters"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:143
+#: ui/tpl/dialogs/user/user-info.php:228
 #@ stephino-rpg
 msgid "Message"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:165
+#: ui/tpl/dialogs/user/user-info.php:250
 #: ui/tpl/dialogs/user/user-leader-board.php:26
 #@ stephino-rpg
 msgid "Nickname"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:166
+#: ui/tpl/dialogs/user/user-info.php:251
 #@ stephino-rpg
 msgid "Choose a nickname (no spaces)"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:185
+#: ui/tpl/dialogs/user/user-info.php:270
 #@ stephino-rpg
 msgid "Bio"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:186
+#: ui/tpl/dialogs/user/user-info.php:271
 #@ stephino-rpg
 msgid "Describe yourself (optional)"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:211
+#: ui/tpl/dialogs/user/user-info.php:296
 #@ stephino-rpg
 msgid "Password"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:212
+#: ui/tpl/dialogs/user/user-info.php:297
 #@ stephino-rpg
 msgid "Set a new password for your account"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:224
+#: ui/tpl/dialogs/user/user-info.php:309
 #@ stephino-rpg
 msgid "Change password"
 msgstr ""
@@ -5355,15 +5671,9 @@ msgid "%s has won your game, %s"
 msgstr ""
 
 #: ui/tpl/timelapse/notification/notif-ptf-author-reward.php:36
-#: ui/tpl/wordpress/wp-ptf.php:73
+#: ui/tpl/wordpress/wp-ptf.php:77
 #@ stephino-rpg
 msgid "You have earned"
-msgstr ""
-
-#: ui/tpl/timelapse/notification/notif-tutorial-rewards.php:22
-#: ui/tpl/wordpress/wp-ptf.php:68
-#@ stephino-rpg
-msgid "Congratulations!"
 msgstr ""
 
 #: ui/tpl/timelapse/notification/notif-tutorial-rewards.php:29
@@ -5400,7 +5710,7 @@ msgstr ""
 msgid "Unknown diplomatic action"
 msgstr ""
 
-#: ui/tpl/timelapse/timelapse-diplomacy.php:108
+#: ui/tpl/timelapse/timelapse-diplomacy.php:110
 #@ stephino-rpg
 msgid "Message from"
 msgstr ""
@@ -5596,19 +5906,9 @@ msgstr ""
 msgid "Announcement"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-dashboard.php:83
-#@ stephino-rpg
-msgid "Title"
-msgstr ""
-
 #: ui/tpl/wordpress/wp-dashboard.php:89
 #@ stephino-rpg
 msgid "Announcement title"
-msgstr ""
-
-#: ui/tpl/wordpress/wp-dashboard.php:92
-#@ stephino-rpg
-msgid "Content"
 msgstr ""
 
 #: ui/tpl/wordpress/wp-dashboard.php:92
@@ -5624,11 +5924,6 @@ msgstr ""
 #: ui/tpl/wordpress/wp-dashboard.php:103
 #@ stephino-rpg
 msgid "Announce"
-msgstr ""
-
-#: ui/tpl/wordpress/wp-dashboard.php:110
-#@ stephino-rpg
-msgid "Delete"
 msgstr ""
 
 #: ui/tpl/wordpress/wp-dashboard.php:119
@@ -5661,7 +5956,7 @@ msgstr ""
 msgid "Status"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-game.php:31 ui/tpl/wordpress/wp-ptf.php:48
+#: ui/tpl/wordpress/wp-game.php:31 ui/tpl/wordpress/wp-ptf.php:52
 #@ stephino-rpg
 msgid "The first-ever RPG developed for WordPress"
 msgstr ""
@@ -5694,7 +5989,7 @@ msgstr ""
 #: ui/tpl/wordpress/wp-notice.php:44
 #, php-format
 #@ stephino-rpg
-msgid "Buy %s version %s to enable PayPal micro-transactions and more!"
+msgid "Buy %s version %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!"
 msgstr ""
 
 #: ui/tpl/wordpress/wp-notice.php:52
@@ -5702,17 +5997,17 @@ msgstr ""
 msgid "Dismiss"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-ptf.php:80
+#: ui/tpl/wordpress/wp-ptf.php:84
 #@ stephino-rpg
 msgid "Game over"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-ptf.php:85
+#: ui/tpl/wordpress/wp-ptf.php:99
 #@ stephino-rpg
 msgid "Play again"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-ptf.php:91
+#: ui/tpl/wordpress/wp-ptf.php:105
 #@ stephino-rpg
 msgid "Next game"
 msgstr ""

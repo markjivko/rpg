@@ -31,9 +31,10 @@
         "consoleEnabled": true,
         "robotsAggression": "high",
         "robotsFervor": 50,
+        "robotsTimeout": 48,
         "robotTimeLapsesPerRequest": 4,
         "timeLapseCooldown": 10,
-        "cronInterval": 3,
+        "cronInterval": 5,
         "cronAccuracy": 12,
         "cronMaxAge": 90,
         "initialIslandsCount": 1,
@@ -46,6 +47,8 @@
             "1": 1
         },
         "travelTime": 30,
+        "noobLevels": 5,
+        "noobAge": 7,
         "gemToGoldRatio": 100,
         "gemToResearchRatio": 50,
         "marketEnabled": true,
@@ -272,7 +275,7 @@
             "id": 1,
             "costGold": 100,
             "costResearch": 50,
-            "costPolynomial": "{\"func\":\"q\",\"args\":{\"a\":1.8,\"b\":1.5,\"c\":0}}"
+            "costPolynomial": "{\"func\":\"q\",\"args\":{\"a\":100,\"b\":50,\"c\":0}}"
         },
         "2": {
             "name": "Crystal Artifact",
@@ -282,7 +285,7 @@
             "id": 2,
             "costGold": 100,
             "costResearch": 50,
-            "costPolynomial": "{\"func\":\"q\",\"args\":{\"a\":1.8,\"b\":1.5,\"c\":0}}"
+            "costPolynomial": "{\"func\":\"q\",\"args\":{\"a\":100,\"b\":50,\"c\":0}}"
         },
         "3": {
             "name": "Sulphur Factory",
@@ -292,7 +295,7 @@
             "id": 3,
             "costGold": 100,
             "costResearch": 50,
-            "costPolynomial": "{\"func\":\"q\",\"args\":{\"a\":1.8,\"b\":1.5,\"c\":0}}"
+            "costPolynomial": "{\"func\":\"q\",\"args\":{\"a\":100,\"b\":50,\"c\":0}}"
         }
     },
     "cities": {
@@ -1484,7 +1487,7 @@
         "1": {
             "name": "Government: Anarchy",
             "effectMetricSatisfaction": 10,
-            "effectMetricPopulation": 50,
+            "effectMetricPopulation": 1,
             "effectResourceGold": -10,
             "id": 1
         },
@@ -1498,7 +1501,6 @@
         "3": {
             "name": "Government: Theocracy",
             "effectMetricSatisfaction": 10,
-            "effectMetricPopulation": 10,
             "effectResourceGold": -10,
             "effectResourceResearch": -10,
             "id": 3
@@ -1507,7 +1509,6 @@
             "name": "Government: Democracy",
             "effectMetricSatisfaction": 15,
             "effectMetricStorage": 75,
-            "effectMetricPopulation": 20,
             "effectResourceGold": -15,
             "id": 4
         },
@@ -1515,7 +1516,6 @@
             "name": "Government: Technocracy",
             "effectMetricSatisfaction": 20,
             "effectMetricStorage": 100,
-            "effectMetricPopulation": 50,
             "effectResourceGold": -10,
             "effectResourceResearch": -10,
             "effectResourceAlpha": 5,
@@ -1542,7 +1542,7 @@
             "name": "Building: Parliament",
             "effectMetricSatisfaction": 5,
             "effectMetricStorage": 250,
-            "effectMetricPopulation": 25,
+            "effectMetricPopulation": 1,
             "effectResourceGold": 400,
             "effectResourceAlpha": 25,
             "effectResourceBeta": 25,
@@ -1568,26 +1568,24 @@
         "12": {
             "name": "Building: Palace",
             "effectMetricSatisfaction": -10,
-            "effectMetricPopulation": 2500,
+            "effectMetricPopulation": 2,
             "effectResourceGold": 25000,
             "id": 12
         },
         "13": {
             "name": "Building: Museum",
-            "effectMetricSatisfaction": 4000,
+            "effectMetricSatisfaction": 100,
             "effectResourceGold": -500,
             "id": 13
         },
         "14": {
             "name": "Building: Shipyard",
-            "effectMetricPopulation": 5,
             "effectResourceGold": -2,
             "effectResourceAlpha": -2,
             "id": 14
         },
         "15": {
             "name": "Building: Barracks",
-            "effectMetricPopulation": 200,
             "effectResourceGold": -500,
             "effectResourceGamma": -100,
             "id": 15
@@ -1611,8 +1609,8 @@
         },
         "19": {
             "name": "Building: Stock Market",
-            "effectMetricSatisfaction": 5000,
-            "effectMetricPopulation": 500,
+            "effectMetricSatisfaction": 50,
+            "effectMetricPopulation": 1,
             "effectResourceGold": 200000,
             "id": 19
         },
@@ -1948,8 +1946,8 @@
             "description": "A small package of diamonds",
             "gem": 1500,
             "costFiat": 2,
-            "costGold": 5000000,
-            "costResearch": 0,
+            "costGold": 0,
+            "costResearch": 5000000,
             "id": 1
         },
         "2": {
@@ -1957,8 +1955,8 @@
             "description": "Give your empire the explosive growth it deserves",
             "gem": 4500,
             "costFiat": 5,
-            "costGold": 12500000,
-            "costResearch": 0,
+            "costGold": 0,
+            "costResearch": 12500000,
             "id": 2
         },
         "3": {
@@ -1966,18 +1964,9 @@
             "description": "Live the life of a king!",
             "gem": 25000,
             "costFiat": 20,
-            "costGold": 50000000,
-            "costResearch": 0,
+            "costGold": 0,
+            "costResearch": 50000000,
             "id": 3
-        },
-        "4": {
-            "name": "Pro",
-            "description": "The best value for our most valuable players!",
-            "gem": 1000000,
-            "costFiat": 0,
-            "costGold": 1750000000,
-            "costResearch": 875000000,
-            "id": 4
         }
     }
 }

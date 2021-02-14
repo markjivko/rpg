@@ -419,7 +419,7 @@ class Stephino_Rpg_Renderer_Console {
             
             // Store the entity
             $attackArmy[$entityKey] = $entityCount;
-        } while(true);
+        } while (true);
         
         // Get the new convoy ID
         $newConvoyId = Stephino_Rpg_Db::get()->modelConvoys()->createAttack($attCityId, $defCityId, $attackArmy);

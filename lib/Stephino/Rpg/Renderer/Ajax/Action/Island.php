@@ -122,14 +122,19 @@ class Stephino_Rpg_Renderer_Ajax_Action_Island extends Stephino_Rpg_Renderer_Aja
         // Spend the resources
         self::spend($costData);
         
+        // Prepare the new level
+        $islandStatueLevel = (int) $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_STATUE_LEVEL] + 1;
+        
         // Prepare the result
         $result = Stephino_Rpg_Db::get()->modelIslands()->setStatueLevel(
             $islandId,
-            $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_STATUE_LEVEL] + 1
+            $islandStatueLevel
         );
         
         return Stephino_Rpg_Renderer_Ajax::wrap(
-            $result
+            $result 
+                ? $islandStatueLevel 
+                : (int) $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_STATUE_LEVEL]
         );
     }
 }

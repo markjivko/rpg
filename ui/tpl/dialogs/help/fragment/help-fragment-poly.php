@@ -33,7 +33,7 @@ if (isset($polynomialBase) && null !== $polynomialBase):
         <b>
             <span
                 data-effect="poly"
-                <?php if (is_super_admin()):?>
+                <?php if (Stephino_Rpg::get()->isAdmin()):?>
                     data-html="true"
                     data-describe="true"
                 <?php endif;?>

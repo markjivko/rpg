@@ -226,8 +226,9 @@ class Stephino_Rpg_Renderer_Html {
                             'theme_url' => Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme(),
                             'game_url'  => Stephino_Rpg_Utils_Media::getAdminUrl(),
                             'game_ver'  => Stephino_Rpg_Utils_Media::getPwaVersion(false, false),
+                            'game_lang' => Stephino_Rpg_Config::lang(),
                             'app_name'  => Stephino_Rpg_Utils_Lingo::getGameName(),
-                            'is_admin'  => is_super_admin(),
+                            'is_admin'  => Stephino_Rpg::get()->isAdmin(),
                             'is_demo'   => Stephino_Rpg::get()->isDemo(),
                             'is_pro'    => Stephino_Rpg::get()->isPro(),
                             'i18n'      => $i18nStrings

@@ -48,7 +48,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     const PTF_EXTRA_PREVIEW = 'ptf_x_preview';
     
     /**
-     * Create a platformer with this author
+     * Create a platformer with this author; checks the author limit
      * 
      * @param int $userId User ID
      * @return int|null New Ptf ID or Null on error
@@ -61,7 +61,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         // Player authorship limits
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             // Not allowed to create mini-games
             if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 throw new Exception(__('You cannot create games', 'stephino-rpg'));
@@ -117,9 +117,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     /**
      * Mark the game as started of finished, updating the corresponding fields; must be used in Time-Lapse mode
      * 
-     * @param int     $ptfId         Platformer Id
-     * @param boolean $ptfStart      (optional) Start/Finish; default <b>true</b>
-     * @param boolean $ptfWon        (optional) When finishing a game, mark it as a win; default <b>false</b>
+     * @param int     $ptfId    Platformer Id
+     * @param boolean $ptfStart (optional) Start/Finish; default <b>true</b>
+     * @param boolean $ptfWon   (optional) When finishing a game, mark it as a win; default <b>false</b>
      * @throws Exception
      */
     public function play($ptfId, $ptfStart = true, $ptfWon = false) {
@@ -237,7 +237,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                     if (null !== $ptfId && null !== $playerId) {
                         $playerId = abs((int) $playerId);
                         
-                        // Don't send royalties to yourself
+                        // Don't send author royalties to yourself
                         if ($userId === $playerId) {
                             break;
                         }
@@ -381,7 +381,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             }
             if (!is_array($preDefPlatformersData)) {
                 Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                    Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json file is not a valid associative array'
+                    "Db_Model_Ptfs.reload: " . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json file is not a valid associative array'
                 );
                 break;
             }
@@ -402,7 +402,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                     );
                 } catch (Exception $exc) {
                     Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                        $exc->getMessage() . ' (#' . $preDefPtfId . ')'
+                        "Db_Model_Ptfs.reload: {$exc->getMessage()}"
                     );
                     unset($preDefPlatformersData[$preDefPtfId]);
                 }
@@ -421,8 +421,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             $dbPreDefPtfVer = array();
             
             // Get the pre-defined platformers from the database
-            $dbPreDefPlatformers = $this->getDb()->tablePtfs()->getAll(true);
-            foreach ($dbPreDefPlatformers as $dbRow) {
+            foreach ($this->getDb()->tablePtfs()->getAll(true) as $dbRow) {
                 // Sanitize the pre-defined platformer ID
                 $dbPreDefPtfId = abs((int) $dbRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT]);
                 
@@ -453,6 +452,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                         Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CREATED_TIME  => $timestamp,
                         Stephino_Rpg_Db_Table_Ptfs::COL_PTF_MODIFIED_TIME => $timestamp,
                         Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY    => Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PUBLIC,
+                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW        => Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED,
+                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING        => 5,
+                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING_COUNT  => 1,
                     );
                 } else {
                     // Version change
@@ -464,6 +466,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                             Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VERSION       => $preDefPtfDef[self::PTF_DEF_VERSION],
                             Stephino_Rpg_Db_Table_Ptfs::COL_PTF_MODIFIED_TIME => $timestamp,
                             Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY    => Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PUBLIC,
+                            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW        => Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED,
                         );
                     }
                 }
@@ -719,6 +722,45 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     }
     
     /**
+     * Is this user suspended?
+     * 
+     * @param int     $playerId      User ID
+     * @param boolean $playerIsAdmin (optional) User is a site admin; default <b>false</b>
+     * @return boolean
+     */
+    public function playerIsSuspended($playerId, $playerIsAdmin = false) {
+        return !$playerIsAdmin 
+            && Stephino_Rpg_Db::get()->tablePtfs()->getCountSuspended($playerId) >= Stephino_Rpg_Config::get()->core()->getPtfStrikes();
+    }
+    
+    /**
+     * Can this game be edited by this user?
+     * 
+     * @param int     $playerId      User ID
+     * @param boolean $playerIsAdmin User is a site admin
+     * @param int     $ptfUserId     Game author ID; 0 for pre-defined games
+     * @param string  $ptfReview     Game review status; suspended games cannot be edited by their authors
+     * @return boolean
+     */
+    public function playerCanEdit($playerId, $playerIsAdmin, $ptfUserId, $ptfReview) {
+        $result = false;
+        
+        // User-defined game
+        if ((int) $ptfUserId > 0) {
+            // Site admin OR author of game that was not suspended
+            $result = (
+                $playerIsAdmin
+                || (
+                    (int) $playerId === (int) $ptfUserId 
+                    && Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED != $ptfReview
+                )
+            );
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Get the list of available categories
      * 
      * @return string[]
@@ -732,19 +774,53 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     }
     
     /**
+     * Get the list of allowed review values and their labels
+     * 
+     * @param string $ptfReview (optional) Get the label for the specified review key only
+     * @return string[]|string|null List of labels OR string if <b>$ptfReview</b> was specified OR null if <b>$ptfReview</b> is invalid
+     */
+    public function getReviewLabels($ptfReview = null) {
+        $data = array(
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING                     => __('Pending', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED                    => __('Approved', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_REJECTED_TITLE_SPAM         => __('Rejected', 'stephino-rpg') 
+                . ': ' . __('Title', 'stephino-rpg') . ' / ' . __('Spam', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_REJECTED_TITLE_INVALID      => __('Rejected', 'stephino-rpg') 
+                . ': ' . __('Title', 'stephino-rpg') . ' / ' . __('Invalid', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_REJECTED_CONTENT_SPAM       => __('Rejected', 'stephino-rpg') 
+                . ': ' . __('Content', 'stephino-rpg') . ' / ' . __('Spam', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_REJECTED_CONTENT_TOO_EASY   => __('Rejected', 'stephino-rpg') 
+                . ': ' . __('Content', 'stephino-rpg') . ' / ' . __('Too easy', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_REJECTED_CONTENT_IMPOSSIBLE => __('Rejected', 'stephino-rpg') 
+                . ': ' . __('Content', 'stephino-rpg') . ' / ' . __('Impossible', 'stephino-rpg'),
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED                   => __('Suspended', 'stephino-rpg'),
+        );
+        
+        // Found the label
+        if (is_string($ptfReview) && strlen($ptfReview)) {
+            $result = isset($data[$ptfReview]) ? $data[$ptfReview] : null;
+        } else {
+            $result = $data;
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Get all the platformers this user has access to (own or public platformers) supplemented with the following columns:<ul>
      * <li>self::PTF_EXTRA_PREVIEW => <b>(int[])</b> Top-left square tile set used for preview</li>
      * <li>self::PTF_EXTRA_REWARD  => <b>(int)</b> Reward in gems for finishing this platformer</li>
      * </ul>
      * 
      * @param int     $userId      User ID
+     * @param boolean $viewAll     (optional) View all results (no review filtering); default <b>true</b>
      * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
      * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
      * @param int     $limitCount  (optional) Limit count; default <b>null</b>
      * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getForUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
+    public function getForUserId($userId, $viewAll = true, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
         // Validate the category
         if (null !== $orderBy) {
             if (!in_array($orderBy, array_keys($this->getCategories()))) {
@@ -753,7 +829,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         return $this->_supplementRows(
-            $this->getDb()->tablePtfs()->getForUserId($userId, $orderBy, $orderAsc, $limitCount, $limitOffset),
+            $this->getDb()->tablePtfs()->getForUserId($userId, $viewAll, $orderBy, $orderAsc, $limitCount, $limitOffset),
             $userId
         );
     }
@@ -765,13 +841,14 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
      * </ul>
      * 
      * @param int     $userId      User ID
+     * @param boolean $viewAll     (optional) View all results (no review filtering); default <b>true</b>
      * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
      * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
      * @param int     $limitCount  (optional) Limit count; default <b>null</b>
      * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getByUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
+    public function getByUserId($userId, $viewAll = true, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
         // Validate the category
         if (null !== $orderBy) {
             if (!in_array($orderBy, array_keys($this->getCategories()))) {
@@ -780,7 +857,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         return $this->_supplementRows(
-            $this->getDb()->tablePtfs()->getByUserId($userId, $orderBy, $orderAsc, $limitCount, $limitOffset),
+            $this->getDb()->tablePtfs()->getByUserId($userId, $viewAll, $orderBy, $orderAsc, $limitCount, $limitOffset),
             $userId
         );
     }
@@ -861,7 +938,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             
             // Prepare the reward
             $ptfRow[self::PTF_EXTRA_REWARD] = 0;
-            if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer()) {
+            if (Stephino_Rpg_Config::get()->core()->getPtfRewardPlayer() && $userId != $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
                 // Get the platformer ID
                 $ptfId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];
 

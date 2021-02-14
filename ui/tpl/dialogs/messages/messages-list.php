@@ -22,7 +22,7 @@
                 <div class="col-6 col-lg-8 order-first">
                     <button 
                         class="btn w-100 <?php echo ($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ] ? 'btn-default' : 'btn-danger');?>"
-                        data-click="messageRead" 
+                        data-click="messageRead" data-click-multi="true"
                         data-click-args="<?php echo $messageType;?>,<?php echo $message[Stephino_Rpg_Db_Table_Messages::COL_ID];?>">
                         <span>
                             <?php echo Stephino_Rpg_Utils_Lingo::escape($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]);?>

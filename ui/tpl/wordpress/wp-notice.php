@@ -41,7 +41,7 @@
     <p>
         <?php 
             echo sprintf(
-                esc_html__('Buy %s version %s to enable PayPal micro-transactions and more!', 'stephino-rpg'),
+                esc_html__('Buy %s version %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!', 'stephino-rpg'),
                 '<b>Stephino RPG Pro</b>',
                 '<b>' . Stephino_Rpg::PLUGIN_VERSION_PRO . '+</b>'
             );

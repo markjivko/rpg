@@ -32,7 +32,46 @@
     ?>
         <div class="col-6 col-md-4 col-lg-3" data-click="dialog" data-click-args="dialogUserArenaPlay,<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];?>">
             <div class="ptf-card">
+                <?php if ($userId == $authorId || Stephino_Rpg::get()->isAdmin()):?>
+                    <div data-role="ptf-labels">
+                        <?php if (Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PRIVATE === $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY]): ?>
+                            <span class="badge badge-warning"><?php echo esc_html__('Private', 'stephino-rpg');?></span>
+                        <?php endif;?>
+                        <?php 
+                            if (Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PRIVATE !== $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY]
+                                && Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED !== $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]):
+                                foreach (Stephino_Rpg_Db::get()->modelPtfs()->getReviewLabels() as $reviewKey => $reviewLabel):
+                                    if ($reviewKey != $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]) {
+                                        continue;
+                                    }
+                                    $ptfReviewBadge = 'warning';
+                                    $ptfReviewPrefix = '';
+                                    switch ($reviewKey) {
+                                        case Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED:
+                                            $ptfReviewBadge = 'primary';
+                                            $ptfReviewPrefix = '&#9989;';
+                                            break;
+
+                                        case Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING:
+                                            $ptfReviewBadge = 'info';
+                                            $ptfReviewPrefix = '';
+                                            break;
+
+                                        case Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED:
+                                            $ptfReviewBadge = 'danger';
+                                            $ptfReviewPrefix = '&#x1F6AB;';
+                                            break;
+                                    }
+                        ?>
+                            <span class="badge badge-<?php echo $ptfReviewBadge;?>">
+                                <?php echo $ptfReviewPrefix;?>
+                                <?php echo $reviewLabel;?>
+                            </span>
+                        <?php endforeach; endif;?>
+                    </div>
+                <?php endif;?>
                 <div data-effect="ptfPreview" data-effect-args="<?php echo implode(',', $ptfRow[Stephino_Rpg_Db_Model_Ptfs::PTF_EXTRA_PREVIEW]);?>"></div>
+                <div data-effect="ptfStars" data-effect-args="<?php echo round($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING], 2);?>"></div>
                 <div data-role="ptf-played">
                     &#x1f3c1; <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED]);?>
                     &#x1f3c6; <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON]);?>

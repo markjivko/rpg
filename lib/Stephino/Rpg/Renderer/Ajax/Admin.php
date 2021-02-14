@@ -39,7 +39,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminGetStats($data) {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('You do not have access to the Dashboard', 'stephino-rpg'));
         }
         
@@ -58,7 +58,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminSetAnnouncement($data) {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('You do not have access to the Announcements', 'stephino-rpg'));
         }
         
@@ -82,7 +82,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminDelAnnouncement() {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('You do not have access to the Announcements', 'stephino-rpg'));
         }
         
@@ -102,7 +102,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminExportConfig() {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('You do not have permission to export the game configuration', 'stephino-rpg'));
         }
         return Stephino_Rpg_Config::export(false, true);
@@ -112,7 +112,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * Reset the game configuration to default values
      */
     public static function ajaxAdminResetConfig() {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('You do not have permission to reset the game configuration', 'stephino-rpg'));
         }
         return Stephino_Rpg_Config::reset();
@@ -124,12 +124,12 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminRestartGame() {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('You do not have permission to reset the game', 'stephino-rpg'));
         }
         
         // Remove all options (except for the PRO-level config)
-        Stephino_Rpg::get()->purge();
+        Stephino_Rpg_Cache_Game::get()->purge();
 
         // Drop all tables
         Stephino_Rpg_Db::get()->purge();
@@ -142,8 +142,12 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminSetConfig($data) {
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('(DEMO) You are free to experiment but your changes will not be saved', 'stephino-rpg'));
+        }
+
+        if (!Stephino_Rpg::get()->isPro()) {
+            throw new Exception(__('You need to unlock the game to save your changes', 'stephino-rpg'));
         }
         
         // Get the data

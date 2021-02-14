@@ -112,19 +112,19 @@ class Stephino_Rpg_Utils_Media {
         $hash = $includeHash
             ? (
                 substr(
-                    md5(
-                        Stephino_Rpg_Cache_Game::getInstance()->getValue(
-                            Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, 
-                            1
-                        )
-                    ), 
-                    0, 12
+                    md5(Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, 1)), 
+                    0, 
+                    12
                 ) . '/'
             ) 
             : '';
         
         // Final plugin version
-        return Stephino_Rpg::PLUGIN_VERSION . '/' . $hash . (Stephino_Rpg::get()->isPro() ? ('PRO' . ($includeProVersion ? '-' . Stephino_Rpg_Pro::PLUGIN_VERSION : '')) : 'Free');
+        return Stephino_Rpg::PLUGIN_VERSION . '/' . $hash . (
+            Stephino_Rpg::get()->isPro() 
+                ? ('PRO' . ($includeProVersion ? '-' . Stephino_Rpg_Pro::PLUGIN_VERSION : '')) 
+                : __('Free', 'stephino-rpg')
+        );
     }
     
     /**

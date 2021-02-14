@@ -73,7 +73,7 @@
                         $tradeMax = $tradeStorageMax;
                     }
             ?>
-                <div class="row">
+                <div class="row d-flex align-items-center">
                     <div class="col-12 col-lg-3">
                         <div class="res res-<?php echo $resAjaxKey;?>">
                             <div class="icon"></div>
@@ -83,26 +83,35 @@
                         </div>
                     </div>
                     <div class="col-12 col-lg-9">
-                        <div class="row">
-                            <input 
-                                type="range" 
-                                data-change="multiRange"
-                                data-range-parent="trade-buy"
-                                data-range-ratio="<?php echo $tradeRatio;?>"
-                                data-preview="true"
-                                data-preview-label="/ <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($tradeMax);?>"
-                                data-preview-label-title="<b><?php echo number_format($tradeMax) . '</b> ' . $resName;?>"
-                                name="<?php echo $resKey;?>" 
-                                value="0" 
-                                min="0" 
-                                max="<?php echo $tradeMax;?>" />
-                        </div>
+                        <?php if ($tradeMax > 0):?>
+                            <div class="row">
+                                <input 
+                                    type="range" 
+                                    data-change="multiRange"
+                                    data-range-parent="trade-buy"
+                                    data-range-ratio="<?php echo $tradeRatio;?>"
+                                    data-preview="true"
+                                    data-preview-label="/ <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($tradeMax);?>"
+                                    data-preview-label-title="<b><?php echo number_format($tradeMax) . '</b> ' . $resName;?>"
+                                    name="<?php echo $resKey;?>" 
+                                    value="0" 
+                                    min="0" 
+                                    max="<?php echo $tradeMax;?>" />
+                            </div>
+                        <?php else:?>
+                            <div class="text-center">
+                                <i><?php echo sprintf(
+                                    esc_html__('Maximum %s reached', 'stephino-rpg'),
+                                    Stephino_Rpg_Config::get()->core()->getMetricStorageName(true)
+                                );?></i>
+                            </div>
+                        <?php endif;?>
                     </div>
                 </div>
             <?php endforeach;?>
         </div>
         <div class="col-12">
-            <div class="row align-items-center">
+            <div class="row d-flex align-items-center">
                 <div class="col-12 col-lg-9">
                     <div 
                         data-role="gold-preview-bar"
@@ -167,7 +176,7 @@
             foreach ($resourceData as $resKey => list($resName, $resAjaxKey, $tradeRatio)):
                 $tradeMax = floor($cityData[$resKey]);
         ?>
-            <div class="row">
+            <div class="row d-flex align-items-center">
                 <div class="col-12 col-lg-3">
                     <div class="res res-<?php echo $resAjaxKey;?>">
                         <div class="icon"></div>

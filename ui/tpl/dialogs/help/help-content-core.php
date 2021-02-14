@@ -25,6 +25,28 @@
         Stephino_Rpg_Renderer_Ajax_Dialog_Help::TEMPLATE_FRAGMENT_DESCRIPTION
     );
 ?>
+<div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER == $itemId ? 'framed active' : '');?>">
+    <h6 class="heading"><span><?php echo esc_html__('Game Masters', 'stephino-rpg');?></span></h6>
+    <ul>
+        <?php if (Stephino_Rpg::get()->isDemo() || Stephino_Rpg::get()->isAdmin()):?>
+            <li><b><?php echo esc_html__('You are a Game Master', 'stephino-rpg');?></b></li>
+        <?php endif;?>
+        <li><?php echo esc_html__('Decide the rules of the game, as they are presented here', 'stephino-rpg');?></li>
+        <li><?php echo esc_html__('Control all game resources, including the flow of time', 'stephino-rpg');?></li>
+        <?php if ($configObject->getPtfEnabled()):?>
+            <li><span 
+                    data-effect="helpMenuItem"
+                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
+                    <?php echo esc_html__('Game arena', 'stephino-rpg');?></span>: <?php echo esc_html__('Review all games', 'stephino-rpg');?>
+            </li>
+            <li><span 
+                    data-effect="helpMenuItem"
+                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
+                    <?php echo esc_html__('Game arena', 'stephino-rpg');?></span>: <?php echo esc_html__('Edit and delete any game created by players', 'stephino-rpg');?>
+            </li>
+        <?php endif;?>
+    </ul>
+</div>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_RES == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Common resources', 'stephino-rpg');?></span></h6>
     <div class="col-12 text-center">
@@ -191,7 +213,7 @@
         </div>
     <?php endif;?>
 </div>
-<?php if ((Stephino_Rpg::get()->isDemo() || is_super_admin()) && $configObject->getConsoleEnabled()):?>
+<?php if ((Stephino_Rpg::get()->isDemo() || Stephino_Rpg::get()->isAdmin()) && $configObject->getConsoleEnabled()):?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game console', 'stephino-rpg');?></span></h6>
     <ul>
@@ -359,6 +381,15 @@
                 ?>
             </li>
         <?php endif;?>
+        <li><?php echo esc_html__('Players are not allowed to delete games', 'stephino-rpg');?></li>
+        <li><?php 
+            echo $configObject->getPtfStrikes() > 1
+                ? sprintf(
+                    esc_html__('Players are not allowed to edit or create games after %s strikes (suspended games)', 'stephino-rpg'),
+                    '<b>' . $configObject->getPtfStrikes() . '</b>'
+                )
+                : __('Players are not allowed to edit or create new games after one of their games gets suspended', 'stephino-rpg');
+        ?></li>
     </ul>
 </div>
 <?php endif;?>
@@ -416,7 +447,7 @@
                             break;
 
                         case Stephino_Rpg_Config_Core::ROBOT_AGG_HIGH:
-                            echo __('initiate attacks', 'stephino-rpg');
+                            echo __('fight back, initiate attacks', 'stephino-rpg');
                             break;
 
                     }
@@ -567,7 +598,7 @@
                 }
             ?>
         </li>
-        <?php if (is_super_admin()):?>
+        <?php if (Stephino_Rpg::get()->isAdmin()):?>
             <li>
                 <?php 
                     echo sprintf(

@@ -242,7 +242,9 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
                 // Create the building
                 $this->getDb()->modelBuildings()->create($cityId, $buildingConfig->getId());
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    "Db_Model_Cities.create, city #$cityId, building config #{$buildingConfig->getId()}: {$exc->getMessage()}"
+                );
             }
         }
         
@@ -527,6 +529,10 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
             // Get city info from time-lapse data store (one less query)
             $cityData = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);
         } catch (Exception $exc) {
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                "Db_Model_Cities.getName, city #$cityId: {$exc->getMessage()}"
+            );
+            
             // Get foreign city info
             $cityData = $this->getDb()->tableCities()->getById($cityId, true);
         }

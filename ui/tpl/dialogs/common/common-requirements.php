@@ -52,7 +52,7 @@
                         class="badge badge-danger"
                     <?php endif;?>>
                     <?php if ($requirements[Stephino_Rpg_Config_Building::KEY][2]):?>
-                        &#x2714;&#xFE0F;
+                        &#9989;
                     <?php endif;?>
                     <span 
                         data-effect="help"
@@ -72,7 +72,7 @@
                         class="badge badge-danger"
                     <?php endif;?>>
                     <?php if ($requirements[Stephino_Rpg_Config_ResearchField::KEY][2]):?>
-                        &#x2714;&#xFE0F;
+                        &#9989;
                     <?php endif;?>
                     <span 
                         data-effect="help"

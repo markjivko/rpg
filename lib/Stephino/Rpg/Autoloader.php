@@ -29,10 +29,11 @@ class Stephino_Rpg_Autoloader {
      * 
      * @return Stephino_Rpg_Autoloader
      */
-    public static function getInstance() {
+    public static function get() {
         if (!isset(self::$_instance)) {
             self::$_instance = new self();
         }
+        
         return self::$_instance;
     }
 
@@ -50,21 +51,14 @@ class Stephino_Rpg_Autoloader {
         @ini_set('max_input_time', self::TIME_LIMIT);
 
         // Autoloader
-        spl_autoload_register(array($this, '_findClass'));
-    }
-
-    /**
-     * Locate and include a class by name
-     * 
-     * @param string $className Class name
-     */
-    protected function _findClass($className = '') {
-        // Prepare the class path
-        $classPath = str_replace(array(' ', '\\'), '/', ucwords(str_replace('_', ' ', $className)));
-        if (file_exists($classFileName = STEPHINO_RPG_ROOT . '/lib/' . $classPath . '.php')
-            || (defined('STEPHINO_RPG_PRO_ROOT') && file_exists($classFileName = STEPHINO_RPG_ROOT . '-pro/lib/' . $classPath . '.php'))) {
-            require_once $classFileName;
-        }
+        spl_autoload_register(function ($className = '') {
+            // Prepare the class path
+            $classPath = str_replace(array(' ', '\\'), '/', ucwords(str_replace('_', ' ', $className)));
+            if (file_exists($classFileName = STEPHINO_RPG_ROOT . '/lib/' . $classPath . '.php')
+                || (defined('STEPHINO_RPG_PRO_ROOT') && file_exists($classFileName = STEPHINO_RPG_ROOT . '-pro/lib/' . $classPath . '.php'))) {
+                require_once $classFileName;
+            }
+        });
     }
 }
 

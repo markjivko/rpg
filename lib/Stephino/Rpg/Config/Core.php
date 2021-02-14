@@ -126,6 +126,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_messagePageSize = 5;
     
     /**
+     * Languages
+     * 
+     * @var string[]
+     */
+    protected $_languages = null;
+    
+    /**
      * Platformer Enabled
      * 
      * @var boolean
@@ -166,6 +173,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int
      */
     protected $_ptfScore = 5;
+    
+    /**
+     * Maximum number of suspended games per player
+     * 
+     * @var int
+     */
+    protected $_ptfStrikes = 3;
     
     /**
      * Chat Room
@@ -773,6 +787,54 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
+     * Players can choose one of these languages apart from English
+     * 
+     * @opt de_DE:Deutsche,es_ES:Español,fr_FR:Français,it_IT:Italiano,pt_BR:Português,ro_RO:Română,ru_RU:Русский
+     * @return string[] Languages
+     */
+    public function getLanguages() {
+        $result = $this->_languages;
+        if (null === $result) {
+            $result = array_filter(
+                array_keys(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS),
+                function($item) {
+                    return Stephino_Rpg_Utils_Lingo::LANG_EN != $item;
+                }
+            );
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Set the "Languages" parameter
+     * 
+     * @param int|null $languages Languages
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setLanguages($languages) {
+        // Re-initialize the languages
+        $this->_languages = array();
+        
+        if (is_array($languages)) {
+            $allowedValues = array_filter(
+                array_keys(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS),
+                function($item) {
+                    return Stephino_Rpg_Utils_Lingo::LANG_EN != $item;
+                }
+            );
+            
+            foreach ($languages as $language) {
+                if (in_array($language, $allowedValues)) {
+                    $this->_languages[] = $language;
+                }
+            }
+        }
+        
+        return $this;
+    }
+    
+    /**
      * Enable platformer mini-games, allowing users to earn rewards by playing and designing their own levels
      * 
      * @section User Content
@@ -952,8 +1014,40 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
+     * Maximum number of suspended games a player is allowed to have
+     *
+     * @depends ptfEnabled
+     * @default 3
+     * @ref 1,10
+     * @return int Strikes policy
+     */
+    public function getPtfStrikes() {
+        return null === $this->_ptfStrikes ? 3 : $this->_ptfStrikes;
+    }
+    
+    /**
+     * Set the "PTF Strikes" parameter
+     * 
+     * @param int $ptfStrikes Strikes
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setPtfStrikes($ptfStrikes) {
+        $this->_ptfStrikes = (null === $ptfStrikes ? 3 : intval($ptfStrikes));
+
+        // Minimum and maximum
+        if ($this->_ptfStrikes < 1) {
+            $this->_ptfStrikes = 1;
+        }
+        if ($this->_ptfStrikes > 10) {
+            $this->_ptfStrikes = 10;
+        }
+
+        return $this;
+    }
+    
+    /**
      * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
-     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.2&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.3&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
      * @return boolean Chat Room
      */

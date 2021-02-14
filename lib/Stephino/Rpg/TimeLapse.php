@@ -23,6 +23,7 @@ class Stephino_Rpg_TimeLapse {
     const TEMPLATE_NOTIF_PREMIUM_MODIFIER  = 'notification/notif-premium-modifier';
     const TEMPLATE_NOTIF_TUTORIAL_REWARDS  = 'notification/notif-tutorial-rewards';
     const TEMPLATE_NOTIF_PTF_AUTHOR_REWARD = 'notification/notif-ptf-author-reward';
+    
     /**
      * DataBase object
      *

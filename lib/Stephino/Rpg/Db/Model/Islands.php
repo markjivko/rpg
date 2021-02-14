@@ -220,7 +220,6 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
             );
         }
         
-        // All went well
         return array($islandId, $configIslandObject, $configIslandStatueObject);
     }
     

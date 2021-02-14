@@ -90,7 +90,12 @@ $unknownIslandLabel = sprintf(
                             $islandData = null;
                             try {
                                 list($islandData) = Stephino_Rpg_Renderer_Ajax_Action::getIslandInfo($convoyRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_ISLAND_ID]);
-                            } catch (Exception $ex) {}
+                            } catch (Exception $exc) {
+                                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                                    "tpl/dialogs/convoy/convoy-list, island #{$convoyRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_ISLAND_ID]}: {$exc->getMessage()}"
+                                );
+                            }
+                            
                             echo sprintf(
                                 esc_html__('Colonizer from %s to vacant lot on %s', 'stephino-rpg'),
                                 is_array($fromCityInfo)

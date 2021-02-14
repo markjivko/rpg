@@ -4,7 +4,7 @@ Plugin link: https://stephino.com
 Donate link: https://gum.co/stephino-rpg
 Tags: rpg, fun, arcade, game, games, platformer, pwa, strategy, mmorpg
 Requires at least: 5.0
-Tested up to: 5.6
+Tested up to: 5.7
 Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
@@ -134,9 +134,28 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 
 == Changelog ==
 
+= [0.3.3] 2021-02-14 =
+* Enhancements
+  * Player-level **language selection**
+  * Game master-level control over translations
+  * Configuration option for allowed languages (besides English)
+  * Game arena: added game ratings
+  * Game arena: implemented review process and a suspension policy
+  * Extra player information for game masters
+  * Added "Prepare app" button for the progressive app installation
+  * Prepared for WordPress v.5.7
+* Bug fixes
+  * Fixed discretization method integer overflow bug and improved performance
+  * Fixed maximum storage bug in Stock Market
+  * Fixed i18n bug
+* Additional changes
+  * All `data-click` buttons except toggles accept only 1 click
+  * Improved default configuration values (performance, premium packages, island statues and others)
+  * Added support for case-insensitive commands in the CLI
+  * Database reloads when reactivating plugin, performing `dbUpdate` and game arena bundled games updates
+
 = [0.3.2] 2021-01-31 =
 * Enhancements
-  * **Free Game Mechanics** editing for all!
   * Robots can now create military entities, **attack** on their own and **fight back**
   * Significant improvements in performance
   * Added 3 new platformer levels

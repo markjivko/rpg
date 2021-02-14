@@ -13,6 +13,11 @@
 class Stephino_Rpg_Utils_Db {
 
     /**
+     * Regular expression to sanitize table and column names
+     */
+    const REGEX_SANITIZE_NAMES = '%\W+%i';
+    
+    /**
      * MySQL Real Escape String
      * 
      * @param string $string String to escape
@@ -68,8 +73,8 @@ class Stephino_Rpg_Utils_Db {
             }
             
             // Clean-up the table name and primary key column
-            $tableName = preg_replace('%\W+%', '', $tableName);
-            $tableIdColumn = preg_replace('%\W+%', '', $tableIdColumn);
+            $tableName = preg_replace(self::REGEX_SANITIZE_NAMES, '', $tableName);
+            $tableIdColumn = preg_replace(self::REGEX_SANITIZE_NAMES, '', $tableIdColumn);
             
             // Invalid values
             if (!strlen($tableName) || !strlen($tableIdColumn)) {
@@ -92,7 +97,7 @@ class Stephino_Rpg_Utils_Db {
                 // Prepare the sets
                 $querySets = array();
                 foreach ($queryFields as $columnName => $columnValue) {
-                    $sanitName = preg_replace('%\W+%', '', $columnName);
+                    $sanitName = preg_replace(self::REGEX_SANITIZE_NAMES, '', $columnName);
                     $sanitValue = self::escape($columnValue);
                     $querySets[] = "  `$sanitName` = '$sanitValue'";
                 }
@@ -117,7 +122,7 @@ class Stephino_Rpg_Utils_Db {
                     // Go through the fields
                     foreach ($fields as $columnName => $columnValue) {
                         // Remove invalid characters
-                        if (strlen($columnName = preg_replace('%\W+%', '', $columnName))) {
+                        if (strlen($columnName = preg_replace(self::REGEX_SANITIZE_NAMES, '', $columnName))) {
                             // Initialize the switch array
                             if (!isset($columnCases[$columnName])) {
                                 $columnCases[$columnName] = array();
@@ -193,8 +198,8 @@ class Stephino_Rpg_Utils_Db {
             }
             
             // Clean-up the table name and primary key column
-            $tableName = preg_replace('%\W+%', '', $tableName);
-            $tableIdColumn = preg_replace('%\W+%', '', $tableIdColumn);
+            $tableName = preg_replace(self::REGEX_SANITIZE_NAMES, '', $tableName);
+            $tableIdColumn = preg_replace(self::REGEX_SANITIZE_NAMES, '', $tableIdColumn);
             
             // Invalid values
             if (!strlen($tableName) || !strlen($tableIdColumn)) {
@@ -253,7 +258,7 @@ class Stephino_Rpg_Utils_Db {
             }
 
             // Validate the table name
-            if (!strlen($tableName = preg_replace('%\W+%i', '', $tableName))) {
+            if (!strlen($tableName = preg_replace(self::REGEX_SANITIZE_NAMES, '', $tableName))) {
                 break;
             }
 
@@ -273,7 +278,7 @@ class Stephino_Rpg_Utils_Db {
                 if (!count($columnNames)) {
                     foreach (array_keys($row) as $columnName) {
                         // Remove unwanted characters
-                        $columnName = preg_replace('%\W+%', '', $columnName);
+                        $columnName = preg_replace(self::REGEX_SANITIZE_NAMES, '', $columnName);
 
                         // Invalid column
                         if (!strlen($columnName)) {

@@ -20,6 +20,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
     const REQUEST_VALUE    = 'value';
     const REQUEST_COMMAND  = 'command';
     const REQUEST_PASSWORD = 'password';
+    const REQUEST_LANGUAGE = 'language';
     
     // Maximum lengths
     const MAX_LENGTH_USER_NAME = 60;
@@ -60,6 +61,40 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         
         // Inform the user
         return __('Password updated successfully', 'stephino-rpg');
+    }
+    
+    /**
+     * Update player language
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>self::REQUEST_LANGUAGE</b> (string) User language</li>
+     * </ul>
+     * @throws Exception
+     */
+    public static function ajaxLanguage($data) {
+        // Sanitize the language
+        $locale = isset($data[self::REQUEST_LANGUAGE]) ? trim($data[self::REQUEST_LANGUAGE]) : null;
+        if (null === $locale || !strlen($locale)) {
+            throw new Exception(__('Language missing', 'stephino-rpg'));
+        }
+        
+        // Validate it
+        $allowedLanguages = array_keys(Stephino_Rpg_Utils_Lingo::getLanguages());
+        if (!in_array($locale, $allowedLanguages)) {
+            throw new Exception(__('Language not defined', 'stephino-rpg'));
+        }
+        
+        // Valid user
+        if (null !== $currentUser = wp_get_current_user()) {
+            // Commit to user cache
+            Stephino_Rpg_Cache_User::get()
+                ->write(Stephino_Rpg_Cache_User::KEY_LANG, $locale)
+                ->commit();
+            
+            // Change WordPress locale for this user
+            $currentUser->locale = $locale;
+            wp_update_user($currentUser);
+        }
     }
     
     /**
@@ -159,7 +194,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
      */
     public static function ajaxConsole($data) {
         // Not allowed
-        if (!Stephino_Rpg::get()->isDemo() && !is_super_admin()) {
+        if (!Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()) {
             throw new Exception(__('Insufficient privileges', 'stephino-rpg'));
         }
         
@@ -231,7 +266,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         }
         
         // Help mode for players
-        if (Stephino_Rpg::get()->isDemo() && !is_super_admin() && !preg_match($allowedMethodsRegex, $methodArguments[0])) {
+        if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin() && !preg_match($allowedMethodsRegex, $methodArguments[0])) {
             echo '<span class="badge badge-info">(DEMO) ' . esc_html__('Commands are read-only for non-admins', 'stephino-rpg') . '</span><br/>';
             array_unshift($methodArguments, 'help');
         }

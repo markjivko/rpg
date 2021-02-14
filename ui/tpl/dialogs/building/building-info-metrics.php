@@ -199,6 +199,9 @@
                                             foreach($metricInfo as $bdSatConfigKey => $bdSatData): 
                                                 foreach($bdSatData as $bdSatConfigId => $bdSatValue): 
                                                     $metricTotal += $bdSatValue[0];
+                                                    if (isset($bdSatValue[2]) && $bdSatValue[2] <= 0) {
+                                                        continue;
+                                                    }
                                         ?>
                                             <li>
                                                 <span 

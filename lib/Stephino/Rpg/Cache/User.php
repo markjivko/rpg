@@ -15,12 +15,17 @@ class Stephino_Rpg_Cache_User {
     /**
      * Announcement read
      */
-    const KEY_ANN_READ   = 'ann_read';
+    const KEY_ANN        = 'ann';
     
     /**
      * Changelog read (binds to current game version)
      */
-    const KEY_CHL_READ   = 'chl_read';
+    const KEY_CHL        = 'chl';
+    
+    /**
+     * Last selected language
+     */
+    const KEY_LANG       = 'lang';
     
     // Volumes
     const KEY_VOL_MUSIC  = 'vol_music';
@@ -31,6 +36,7 @@ class Stephino_Rpg_Cache_User {
     // Platformer
     const KEY_PTF_DATA   = 'ptf_data';
     const KEY_PTF_TIME   = 'ptf_time';
+    const KEY_PTF_RATES  = 'ptf_rates';
     
     // Robot attack revenge list and last attack time
     const KEY_ROBOT_ATT_LIST = 'att_list';

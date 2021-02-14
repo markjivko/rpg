@@ -20,6 +20,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     const TEMPLATE_RESOURCES      = 'settings/settings-resources';
     const TEMPLATE_ABOUT          = 'settings/settings-about';
     const TEMPLATE_ANNOUNCEMENT   = 'settings/settings-announcement';
+    const TEMPLATE_LANGUAGE       = 'settings/settings-language';
     const TEMPLATE_DELETE_ACCOUNT = 'settings/settings-delete-account';
     
     /**
@@ -177,9 +178,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     public static function ajaxAbout() {
         // Store the changelog flag
         $changeLogFlag = false;
-        if (Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_CHL_READ)) {
+        if (Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_CHL)) {
             Stephino_Rpg_Cache_User::get()->write(
-                Stephino_Rpg_Cache_User::KEY_CHL_READ, 
+                Stephino_Rpg_Cache_User::KEY_CHL, 
                 Stephino_Rpg::PLUGIN_VERSION
             )->commit();
             $changeLogFlag = true;
@@ -198,6 +199,19 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
     }
     
     /**
+     * Show the language selection dialog
+     */
+    public static function ajaxLanguage() {
+        // Show the dialog
+        require self::dialogTemplatePath(self::TEMPLATE_LANGUAGE);
+        return Stephino_Rpg_Renderer_Ajax::wrap(
+            array(
+                self::RESULT_TITLE => __('Language', 'stephino-rpg'),
+            )
+        );
+    }
+    
+    /**
      * Show the announcement (if available) and mark it as read
      */
     public static function ajaxAnnouncement() {
@@ -210,10 +224,10 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
                 // Authenticated user
                 if (Stephino_Rpg_TimeLapse::get()->userId()) {
                     // Have not read this announcement yet
-                    if ($result[0] != Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
+                    if ($result[0] != Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ANN)) {
                         // Mark it as read so it only pops-up once
                         Stephino_Rpg_Cache_User::get()->write(
-                            Stephino_Rpg_Cache_User::KEY_ANN_READ, 
+                            Stephino_Rpg_Cache_User::KEY_ANN, 
                             $result[0]
                         )->commit();
                         

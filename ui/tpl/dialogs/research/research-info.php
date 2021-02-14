@@ -53,6 +53,7 @@
                     <span 
                         data-effect="help"
                         data-effect-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $researchFieldConfig->getId();?>">
+                        <?php if (Stephino_Rpg::get()->isAdmin()):?>(<?php echo $researchFieldConfig->getId();?>)<?php endif;?>
                         <?php echo $researchFieldConfig->getName(true);?>
                     </span>
                 </h5>
@@ -69,7 +70,7 @@
                             <span class="label">
                                 <span>
                                     <?php if ($researchFieldMaxLevelReached):?>
-                                        &#x2714;&#xFE0F;
+                                        &#9989;
                                     <?php endif;?>
                                     <?php if ($researchFieldConfig->getLevelsEnabled()):?>
                                         <?php echo esc_html__('Level', 'stephino-rpg');?> <b><?php echo $researchFieldData[$rfId][Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_LEVEL];?></b>

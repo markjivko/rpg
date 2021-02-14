@@ -16,6 +16,8 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
     const REQUEST_TRADE_GEM      = 'tradeGem';
     const REQUEST_TRADE_TYPE     = 'tradeType';
     const REQUEST_PTF_ID         = 'ptfId';
+    const REQUEST_PTF_REVIEW     = 'ptfReview';
+    const REQUEST_PTF_RATING     = 'ptfRating';
     const REQUEST_PTF_WON        = 'ptfWon';
     const REQUEST_PTF_TILE_SET   = 'ptfTileSet';
     const REQUEST_PTF_NAME       = 'ptfName';
@@ -128,35 +130,206 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
         }
         
-        // Get the current user ID
-        $userId = Stephino_Rpg_TimeLapse::get()->userId();
+        // Only admins can delete games
+        if (!Stephino_Rpg::get()->isAdmin()) {
+            throw new Exception(__('You cannot delete this game', 'stephino-rpg'));
+        }
         
         // Get the platformer ID
         $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
         
+        // Invalid platformer ID
+        if ($ptfId <= 0) {
+            throw new Exception(__('Invalid game ID', 'stephino-rpg'));
+        }
+        
         // Invalid platformer
-        if (!is_array($ptfRow = Stephino_Rpg_Db::get()->modelPtfs()->getById($ptfId, $userId))) {
+        if (!is_array(Stephino_Rpg_Db::get()->tablePtfs()->getById($ptfId))) {
             throw new Exception(__('Game not found', 'stephino-rpg'));
         }
         
-        // Validate the tiles
-        if (!is_array(Stephino_Rpg_Db::get()->modelPtfs()->getTileSet($ptfRow))) {
-            throw new Exception(__('Invalid game', 'stephino-rpg'));
-        }
-        
-        // This is my platformer
-        $ptfOwn = ($userId === (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]);
-        
-        // Get the author name
-        $authorId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
-        
-        // Can we delete this?
-        $canDelete = (0 !== $authorId && (is_super_admin() || $ptfOwn));
-        if (!$canDelete) {
-            throw new Exception(__('You cannot delete this game', 'stephino-rpg'));
-        }
-        
         return Stephino_Rpg_Db::get()->tablePtfs()->deleteById($ptfId);
+    }
+    
+    /**
+     * Rate a platformer game
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>self::REQUEST_PTF_ID</b> (int) Platformer ID</li>
+     * <li><b>self::REQUEST_PTF_RATING</b> (int) Platformer Rating (1 to 5)</li>
+     * </ul>
+     * @throws Exception
+     */
+    public static function ajaxPtfRate($data) {
+        if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
+            throw new Exception(__('The arena is not available', 'stephino-rpg'));
+        }
+        
+        // Get the platformer ID
+        $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
+        $ptfRating = isset($data[self::REQUEST_PTF_RATING]) ? intval($data[self::REQUEST_PTF_RATING]) : 0;
+        
+        // Invalid rating
+        if ($ptfRating < 1 || $ptfRating > 5) {
+            throw new Exception(__('Invalid rating', 'stephino-rpg'));
+        }
+        
+        // Invalid platformer ID
+        if ($ptfId <= 0) {
+            throw new Exception(__('Invalid game ID', 'stephino-rpg'));
+        }
+        
+        // Invalid platformer
+        if (!is_array($ptfRow = Stephino_Rpg_Db::get()->tablePtfs()->getById($ptfId))) {
+            throw new Exception(__('Game not found', 'stephino-rpg'));
+        }
+        
+        // Get the game data
+        $ratingCount = abs((int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING_COUNT]);
+        $ratingValue = round($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING], 4);
+        
+        // Get my past ratings
+        $userRatings = Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_PTF_RATES, array());
+        if (!is_array($userRatings)) {
+            $userRatings = array();
+        }
+        
+        // Have not rated this game yet
+        if (!isset($userRatings[$ptfId])) {
+            // Prepend the rating; store a maximum of 50 values
+            $userRatings = array_slice(array($ptfId => $ptfRating) + $userRatings, 0, 50, true);
+            
+            // PTF new rating
+            $ratingValue = round(($ratingCount * $ratingValue + $ptfRating) / ($ratingCount + 1), 4);
+            $ratingCount++;
+        } else {
+            // PTF ammended rating
+            if ($ratingCount > 0) {
+                $ratingValue = round(($ratingCount * $ratingValue - $userRatings[$ptfId] + $ptfRating) / $ratingCount, 4);
+            }
+            
+            // Update the rating
+            $userRatings[$ptfId] = $ptfRating;
+        }
+        
+        // Update the cache
+        Stephino_Rpg_Cache_User::get()
+            ->write(Stephino_Rpg_Cache_User::KEY_PTF_RATES, $userRatings)
+            ->commit();
+        
+        // Update the game
+        Stephino_Rpg_Db::get()->tablePtfs()->updateById(
+            array(
+                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING       => $ratingValue,
+                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING_COUNT => $ratingCount,
+            ),
+            $ptfId
+        );
+        
+        // Message
+        echo sprintf(
+            __('Rated %s', 'stephino-rpg'),
+            '<b>' . $ptfRating . '</b> ' . _n('star', 'stars', $ptfRating, 'stephino-rpg')
+        );
+    }
+    
+    /**
+     * Review a platformer game
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>self::REQUEST_PTF_ID</b> (int) Platformer ID</li>
+     * <li><b>self::REQUEST_PTF_REVIEW</b> (string) Platformer Review Flag</li>
+     * </ul>
+     * @throws Exception
+     */
+    public static function ajaxPtfReview($data) {
+        if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
+            throw new Exception(__('The arena is not available', 'stephino-rpg'));
+        }
+        
+        // Only admins can review games
+        if (!Stephino_Rpg::get()->isAdmin()) {
+            throw new Exception(__('You cannot review this game', 'stephino-rpg'));
+        }
+        
+        // Get the platformer ID
+        $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
+        $ptfReview = isset($data[self::REQUEST_PTF_REVIEW]) ? trim($data[self::REQUEST_PTF_REVIEW]) : null;
+        
+        // Invalid platformer ID
+        if ($ptfId <= 0) {
+            throw new Exception(__('Invalid game ID', 'stephino-rpg'));
+        }
+        
+        // Invalid review
+        if (null === $ptfLabel = Stephino_Rpg_Db::get()->modelPtfs()->getReviewLabels($ptfReview)) {
+            throw new Exception(__('Invalid review', 'stephino-rpg'));
+        }
+        
+        // Invalid platformer
+        if (!is_array($ptfRow = Stephino_Rpg_Db::get()->tablePtfs()->getById($ptfId))) {
+            throw new Exception(__('Game not found', 'stephino-rpg'));
+        }
+        
+        // Prepare the visibility
+        $ptfVisibility = Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PRIVATE;
+        if (in_array($ptfReview, array(
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING,
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED,
+            Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED,
+        )) || 0 == $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
+            $ptfVisibility = Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PUBLIC;
+        }
+        
+        // Update the platformer
+        $result = Stephino_Rpg_Db::get()->tablePtfs()->updateById(
+            array(
+                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW     => $ptfReview,
+                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY => $ptfVisibility,
+            ), 
+            $ptfId
+        );
+        
+        // Could not update
+        if (false === $result) {
+            throw new Exception(__('Could not review game. Please try again later.', 'stephino-rpg'));
+        }
+        
+        // Send message to players only
+        if (0 != $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
+            try {
+                // Get the number of suspended games
+                $ptfSuspended = null;
+                if (Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED == $ptfReview) {
+                    $ptfSuspended = Stephino_Rpg_Db::get()->tablePtfs()->getCountSuspended(
+                        $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]
+                    );
+                }
+                
+                // Prepare the message content
+                ob_start();
+                require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
+                    Stephino_Rpg_Renderer_Ajax_Dialog_Messages::TEMPLATE_PTF_REVIEW
+                );
+
+                // Send the message
+                Stephino_Rpg_Db::get()->modelMessages()->send(
+                    0, 
+                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
+                    Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING != $ptfReview
+                        ? __('Your game was reviewed', 'stephino-rpg')
+                        : __('Your game is under review', 'stephino-rpg'), 
+                    ob_get_clean(),
+                    true
+                );
+            } catch (Exception $exc) {
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    "Renderer_Ajax_Action_User.ajaxPtfReview: {$exc->getMessage()}"
+                );
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -180,6 +353,11 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         // Get the current user ID
         $userId = Stephino_Rpg_TimeLapse::get()->userId();
         
+        // Account suspended
+        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg::get()->isAdmin())) {
+            throw new Exception(__('Your game arena publisher account was suspended', 'stephino-rpg'));
+        }
+        
         // Get the platformer ID
         $ptfId = isset($data[self::REQUEST_PTF_ID]) ? intval($data[self::REQUEST_PTF_ID]) : 0;
         
@@ -193,8 +371,13 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('Game not found', 'stephino-rpg'));
         }
         
-        // Confirm the author
-        if ($userId != $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
+        // Editing rights
+        if (!Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
+            $userId, 
+            Stephino_Rpg::get()->isAdmin(),
+            $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
+            $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
+        )) {
             throw new Exception(__('You cannot edit this game', 'stephino-rpg'));
         }
         
@@ -233,18 +416,23 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             true
         );
         
-        // Update the platformer
-        $result = Stephino_Rpg_Db::get()->tablePtfs()->updateById(
-            array(
-                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME       => $ptfDef[Stephino_Rpg_Db_Model_Ptfs::PTF_DEF_NAME],
-                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_WIDTH      => $ptfDef[Stephino_Rpg_Db_Model_Ptfs::PTF_DEF_WIDTH],
-                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT     => $ptfDef[Stephino_Rpg_Db_Model_Ptfs::PTF_DEF_HEIGHT],
-                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT    => json_encode($tileSetC),
-                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY => $ptfVisibility,
-                Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VERSION    => $ptfVersion,
-            ), 
-            $ptfId
+        // Prepare the update data
+        $ptfUpdateData = array(
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME       => $ptfDef[Stephino_Rpg_Db_Model_Ptfs::PTF_DEF_NAME],
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_WIDTH      => $ptfDef[Stephino_Rpg_Db_Model_Ptfs::PTF_DEF_WIDTH],
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT     => $ptfDef[Stephino_Rpg_Db_Model_Ptfs::PTF_DEF_HEIGHT],
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT    => json_encode($tileSetC),
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY => $ptfVisibility,
+            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VERSION    => $ptfVersion,
         );
+        
+        // Submit for re-review; got to here if the game was not suspended
+        if (!Stephino_Rpg::get()->isAdmin()) {
+            $ptfUpdateData[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW] = Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING;
+        }
+        
+        // Update the platformer
+        $result = Stephino_Rpg_Db::get()->tablePtfs()->updateById($ptfUpdateData, $ptfId);
         
         // Could not update
         if (false === $result) {
@@ -293,13 +481,21 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         $ptfOwn = ($userId === (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]);
         
         // Get the author name
-        $authorId = (int)$ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
+        $authorId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
         $authorName = $authorId > 0 
             ? Stephino_Rpg_Utils_Lingo::getUserName(Stephino_Rpg_Db::get()->tableUsers()->getById($authorId))
             : null;
         
         // Show the game arena details fragment
         if ($showFragment) {
+            // Editing rights
+            $ptfEditable = Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
+                $userId, 
+                Stephino_Rpg::get()->isAdmin(),
+                $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
+                $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
+            );
+            
             require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
                 Stephino_Rpg_Renderer_Ajax_Dialog_User::TEMPLATE_ARENA_PLAY_DETAILS
             );
@@ -355,14 +551,20 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             // Get the author ID
             $authorId = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID];
 
-            // Get the rewards
-            list($playerReward, $authorReward) = Stephino_Rpg_Db::get()->modelPtfs()->getRewards($playerId, $ptfId);
-
-            // Player rewards
-            Stephino_Rpg_Db::get()->modelPtfs()->reward($playerId, $playerReward);
+            // No reward
+            $playerReward = 0;
             
-            // Author royalties
-            Stephino_Rpg_Db::get()->modelPtfs()->reward($authorId, $authorReward, $ptfId, $playerId);
+            // Don't profit playing own games
+            if ($playerId != $authorId) {
+                // Get the rewards
+                list($playerReward, $authorReward) = Stephino_Rpg_Db::get()->modelPtfs()->getRewards($playerId, $ptfId);
+            
+                // Player rewards
+                Stephino_Rpg_Db::get()->modelPtfs()->reward($playerId, $playerReward);
+                
+                // Author royalties
+                Stephino_Rpg_Db::get()->modelPtfs()->reward($authorId, $authorReward, $ptfId, $playerId);
+            }
             
             // Total score
             if (0 != Stephino_Rpg_Config::get()->core()->getPtfScore()) {

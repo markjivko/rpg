@@ -12,9 +12,6 @@
  */
 class Stephino_Rpg {
     
-    // Run cron tasks on the public pages
-    const PLUGIN_CRON_PUBLIC      = false;
-    
     // Plugin slug
     const PLUGIN_SLUG             = 'stephino-rpg';
     
@@ -22,13 +19,13 @@ class Stephino_Rpg {
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.3.2';
+    const PLUGIN_VERSION          = '0.3.3';
     
     // Pro Plugin minimum compatible version
-    const PLUGIN_VERSION_PRO      = '0.1.7';
+    const PLUGIN_VERSION_PRO      = '0.2.0';
     
     // DataBase version
-    const PLUGIN_VERSION_DATABASE = '0.2.2';
+    const PLUGIN_VERSION_DB       = '0.2.3';
     
     // Firebase version
     const PLUGIN_VERSION_FIREBASE = '7.22.1';
@@ -45,6 +42,9 @@ class Stephino_Rpg {
     // Demo Mode
     const PLUGIN_DEMO             = false;
     
+    // Run cron tasks on the public pages
+    const PLUGIN_CRON_PUBLIC      = false;
+    
     // Plugin cache key
     const OPTION_CACHE            = 'stephino_rpg_cache';
     
@@ -57,6 +57,13 @@ class Stephino_Rpg {
      * @var Stephino_Rpg
      */
     protected static $_instance = null;
+    
+    /**
+     * Cache the admin
+     * 
+     * @var boolean
+     */
+    protected $_isAdmin = null;
     
     /**
      * Cache the activation flag
@@ -88,6 +95,9 @@ class Stephino_Rpg {
      * Stephino: Multi-player Online Role-Playing Game engine for WordPress
      */
     protected function __construct() {
+        // Register the hooks
+        Stephino_Rpg_WordPress::registerHooks();
+        
         // Perform meta changes
         Stephino_Rpg_WordPress::metaChages();
         
@@ -105,11 +115,15 @@ class Stephino_Rpg {
     }
     
     /**
-     * Remove all game options
+     * Get whether the current user is a site admin
+     * 
+     * @return boolean
      */
-    public function purge() {
-        // Remove the cache
-        delete_option(self::OPTION_CACHE);
+    public function isAdmin() {
+        if (null === $this->_isAdmin) {
+            $this->_isAdmin = is_super_admin();
+        }
+        return $this->_isAdmin;
     }
     
     /**

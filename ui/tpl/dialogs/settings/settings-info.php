@@ -114,18 +114,39 @@
         </label>
     </div>
     <div class="col-12 col-lg-8 param-input">
-        <div data-effect="pwaInstall"><?php echo esc_html__('Install app', 'stephino-rpg');?></div>
-        <button class="btn btn-info w-100" data-click="dialog" data-click-args="dialogSettingsAbout">
-            <span><?php echo esc_html__('About', 'stephino-rpg');?></span>
-        </button>
         <button class="btn btn-info w-100" data-click="helpDialog" data-click-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,0">
             <span><?php echo esc_html__('Help', 'stephino-rpg');?></span>
         </button>
+        <button class="btn btn-info w-100" data-click="dialog" data-click-args="dialogSettingsAbout">
+            <span><?php echo esc_html__('About', 'stephino-rpg');?></span>
+        </button>
+        <div class="dropdown">
+            <button class="btn w-100 dropdown-toggle" type="button" id="ddLanguage" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <span>&#x1F30D; <?php echo esc_html__('Language', 'stephino-rpg');?></span>
+            </button>
+            <div class="dropdown-menu" aria-labelledby="ddLanguage">
+                <?php 
+                    foreach (Stephino_Rpg_Utils_Lingo::getLanguages() as $langKey => $langValue):
+                        $langCurrent = ($langKey == Stephino_Rpg_Config::lang(true));
+                ?>
+                    <span 
+                        class="dropdown-item<?php if($langCurrent):?> active<?php endif;?>"
+                        data-click="settingsSetLanguage"
+                        data-click-args="<?php echo $langKey;?>">
+                        <?php echo esc_html($langValue);?>
+                    </span>
+                <?php endforeach;?>
+            </div>
+        </div>
         <?php if (strlen(Stephino_Rpg::PLUGIN_URL_DISCORD)):?>
             <a class="btn btn-info w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_DISCORD);?>">
                 <span><?php echo esc_html__('Feedback', 'stephino-rpg');?></span>
             </a>
         <?php endif;?>
+        <div 
+            data-txt-install="<?php echo esc_attr__('Install app', 'stephino-rpg');?>"
+            data-txt-prepare="<?php echo esc_attr__('Prepare app', 'stephino-rpg');?>"
+            data-effect="pwaInstall"></div>
     </div>
 </div>
 <div data-name="more" class="row">
@@ -141,30 +162,30 @@
         <button class="btn btn-danger w-100" data-click="settingsLogOut">
             <span><?php echo esc_html__('Log Out', 'stephino-rpg');?></span>
         </button>
-        <?php if (!is_super_admin()):?>
-            <button class="btn btn-info w-100" data-click="settingsDeleteAccount">
+        <?php if (!Stephino_Rpg::get()->isAdmin()):?>
+            <button class="btn btn-info w-100" data-click="settingsDeleteAccount" data-click-multi="true">
                 <span><?php echo esc_html__('Delete account', 'stephino-rpg');?></span>
             </button>
         <?php endif;?>
     </div>
 </div>
-<?php if (Stephino_Rpg::get()->isDemo() || is_super_admin()): ?>
+<?php if (Stephino_Rpg::get()->isDemo() || Stephino_Rpg::get()->isAdmin()): ?>
     <div data-name="admin" class="row">
         <hr />
         <div class="col-6 col-lg-4">
             <label for="input-admin">
                 <h4 class="text-left p-0 mb-0">
                     <?php echo esc_html__('My rules', 'stephino-rpg');?>
-                    <?php if (Stephino_Rpg::get()->isDemo() && !is_super_admin()):?>
+                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()):?>
                         (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                     <?php endif;?>
                 </h4>
-                <div class="param-desc">Stephino RPG <?php echo esc_html__('Game Mechanics', 'stephino-rpg');?></div>
+                <div class="param-desc">Stephino RPG: <?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics(true);?></div>
             </label>
         </div>
         <div class="col-12 col-lg-8 param-input">
             <a class="btn btn-info w-100" target="_blank" href="<?php echo Stephino_Rpg_Utils_Lingo::escape(Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS);?>">
-                <span><?php echo esc_html__('Game Mechanics', 'stephino-rpg');?></span>
+                <span><?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics();?></span>
             </a>
         </div>
     </div>
@@ -177,7 +198,7 @@
                             data-effect="help"
                             data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE;?>">
                             <?php echo esc_html__('Console', 'stephino-rpg');?>
-                            <?php if (Stephino_Rpg::get()->isDemo() && !is_super_admin()):?>
+                            <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()):?>
                                 (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                             <?php endif;?>
                         </span>
@@ -192,14 +213,14 @@
             </div>
         </div>
     <?php endif;?>
-    <?php if (!Stephino_Rpg::get()->isPro() && is_super_admin()): ?>
+    <?php if (!Stephino_Rpg::get()->isPro() && Stephino_Rpg::get()->isAdmin()): ?>
         <div data-name="admin-buy" class="row">
             <div class="col-6 col-lg-4">
                 <label for="input-admin-buy">
                     <h4 class="text-left p-0 mb-0"><?php echo esc_html__('Unlock Game', 'stephino-rpg');?></h4>
                     <div class="param-desc"><?php 
                         echo sprintf(
-                            esc_html__('Buy %s to enable PayPal micro-transactions and more!', 'stephino-rpg'),
+                            esc_html__('Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!', 'stephino-rpg'),
                             '<b>Stephino RPG Pro</b>'
                         );
                     ?></div>
@@ -215,7 +236,7 @@
         </div>
     <?php endif;?>
 <?php endif;?>
-<?php if (!is_super_admin() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
+<?php if (!Stephino_Rpg::get()->isAdmin() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
     <div data-name="admin-download" class="row">
         <hr />
         <div class="col-6 col-lg-4">

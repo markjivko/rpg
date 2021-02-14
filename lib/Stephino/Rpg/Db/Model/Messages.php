@@ -52,19 +52,22 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
      * Loads the "timelapse-diplomacy" template automatically<br/>
      * Prevents message flooding and sending to robots
      * 
-     * @param int $senderId          Sender User ID
-     * @param int $recipientId       Recipient User ID
-     * @param string $messageSubject Message Subject
-     * @param string $messageContent Message Content
+     * @param int     $senderId       Sender User ID
+     * @param int     $recipientId    Recipient User ID
+     * @param string  $messageSubject Message Subject
+     * @param string  $messageContent Message Content
+     * @param boolean $contentIsHtml  (optional) Message content should be treated as clean HTML, otherwise it will be parsed as plain text; default <b>false</b>
      * @return int|null New Message ID or Null on error
      * @throws Exception
      */
-    public function send($senderId, $recipientId, $messageSubject, $messageContent) {
+    public function send($senderId, $recipientId, $messageSubject, $messageContent, $contentIsHtml = false) {
         // Sanitization
-        $senderId = intval($senderId);
-        $recipientId = intval($recipientId);
+        $senderId = abs((int) $senderId);
+        $recipientId = abs((int) $recipientId);
         $messageSubject = Stephino_Rpg_Utils_Lingo::cleanup($messageSubject);
-        $messageContent = Stephino_Rpg_Utils_Lingo::cleanup($messageContent);
+        if (!$contentIsHtml) {
+            $messageContent = Stephino_Rpg_Utils_Lingo::cleanup($messageContent);
+        }
         
         // Don't send to self
         if ($senderId == $recipientId) {
@@ -110,8 +113,10 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
         try {
             // Load the template
             require Stephino_Rpg_TimeLapse::getTemplatePath(Stephino_Rpg_TimeLapse::TEMPLATE_DIPLOMACY);
-        } catch (Exception $ex) {
-            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
+        } catch (Exception $exc) {
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                "Db_Model_Messages.send, sender #$senderId, recipient #$recipientId: {$exc->getMessage()}"
+            );
         }
 
         // Override the content with our template
@@ -156,8 +161,10 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
         try {
             // Load the template
             require Stephino_Rpg_TimeLapse::getTemplatePath($notifTemplate);
-        } catch (Exception $ex) {
-            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
+        } catch (Exception $exc) {
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                "Db_Model_Messages.sendNotification, recipient #$recipientId: {$exc->getMessage()}"
+            );
         }
 
         // Get the notification text
@@ -169,8 +176,10 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
             try {
                 // Load the template
                 require Stephino_Rpg_TimeLapse::getTemplatePath(Stephino_Rpg_TimeLapse::TEMPLATE_DIPLOMACY);
-            } catch (Exception $ex) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
+            } catch (Exception $exc) {
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    "Db_Model_Messages.sendNotification, recipient #$recipientId: {$exc->getMessage()}"
+                );
             }
 
             // Override the content with our template

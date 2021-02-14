@@ -398,8 +398,10 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
                             try {
                                 // Load the template
                                 require Stephino_Rpg_TimeLapse::getTemplatePath($templateFileName);
-                            } catch (Exception $ex) {
-                                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($ex->getMessage());
+                            } catch (Exception $exc) {
+                                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                                    "Timelapse_Abstract._sendMessages: {$exc->getMessage()}"
+                                );
                             }
                             
                             // Store the result, removing extra spaces
@@ -509,7 +511,6 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
                 );
             }
             
-            // All went well
             $result = true;
         } while(false);
         

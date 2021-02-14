@@ -373,7 +373,12 @@ class Stephino_Rpg_Utils_Config {
             // Levels are not enabled for this research field
             if ($configSetItem instanceof Stephino_Rpg_Config_ResearchField) {
                 if (!$configSetItem->getLevelsEnabled() && $configSetLevel > 1) {
-                    throw new Exception('Requirements: <b>' . (null === $configSetItem->getName() ? $nodeKey : $configSetItem->getName()) . '</b> does not allow multiple upgrades');
+                    throw new Exception(
+                        sprintf(
+                            __('Requirements: %s does not allow multiple upgrades', 'stephino-rpg'),
+                            '<b>' . (null === $configSetItem->getName() ? $nodeKey : $configSetItem->getName()) . '</b>'
+                        )
+                    );
                 }
             }
             
@@ -398,7 +403,12 @@ class Stephino_Rpg_Utils_Config {
                 }, $infiniteLoop);
                 
                 // Stop here
-                throw new Exception('Requirements: infinite recursion on [<b>' . implode(' › ', $infiniteLoop) . '</b>]');
+                throw new Exception(
+                    sprintf(
+                        __('Requirements: infinite recursion on %s', 'stephino-rpg'),
+                        '[<b>' . implode(' › ', $infiniteLoop) . '</b>]'
+                    )
+                );
             }
             
             // Store this node (prepend)
@@ -464,7 +474,7 @@ class Stephino_Rpg_Utils_Config {
         
         // No starting point
         if (!count($unlockLevels)) {
-            throw new Exception('Requirements: <b>ALL</b> models are unreachable');
+            throw new Exception(__('Requirements: all models are unreachable', 'stephino-rpg'));
         }
         
         // Prepare the unlock stages
@@ -574,7 +584,12 @@ class Stephino_Rpg_Utils_Config {
             }, $unreachableItems);
             
             // Inform the user
-            throw new Exception('Requirements: <b>' . implode(', ', $unreachableItems) . '</b> are unreachable');
+            throw new Exception(
+                sprintf(
+                    __('Requirements: %s are unreachable', 'stephino-rpg'),
+                    '<b>' . implode(', ', $unreachableItems) . '</b>'
+                )
+            );
         }
         
         // Get objects instead
@@ -765,7 +780,9 @@ class Stephino_Rpg_Utils_Config {
                     }
                 }
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning("Utils_Config.getUnlockNext: {$exc->getMessage()}");
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($buildingLevels);
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($researchFieldLevels);
             }
         }
         

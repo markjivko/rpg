@@ -181,7 +181,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
 
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE           => $buildingConfig->getName(),
+                self::RESULT_TITLE           => (Stephino_Rpg::get()->isAdmin() ? "({$buildingConfig->getId()}) " : '') . $buildingConfig->getName(),
                 self::RESULT_DATA            => $buildingData,
                 self::RESULT_BUILDING_CONFIG => $buildingConfig->toArray(),
                 self::RESULT_BUILDING_QUEUE  => $queueData,
@@ -332,10 +332,13 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
     public static function ajaxUpgrade($data) {
         // Get the building information
         /* @var $buildingConfig Stephino_Rpg_Config_Building */
-        list($buildingData, $buildingConfig, $cityData, $queueData, $costData) = Stephino_Rpg_Renderer_Ajax_Action::getBuildingInfo(
+        list($buildingData, $buildingConfig, $cityData, $queueData, $costData, $productionData, $affordList) = Stephino_Rpg_Renderer_Ajax_Action::getBuildingInfo(
             isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null, 
             isset($data[self::REQUEST_BUILDING_CONFIG_ID]) ? intval($data[self::REQUEST_BUILDING_CONFIG_ID]) : null
         );
+        
+        // Upgrade afforded
+        $canAfford = count($affordList) > 0 && min($affordList) > 0;
         
         // Get the Building requirements
         list($requirements, $requirementsMet) = Stephino_Rpg_Renderer_Ajax_Action::getRequirements(

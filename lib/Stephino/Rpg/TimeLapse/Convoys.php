@@ -475,10 +475,11 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                     $targetIslandIndex
                 );
                 
-                // All went well
                 $messageDetails = array($newCityId, $newCityConfig->getId());
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    "Timelapse_Convoys._colonize, island #$targetIslandId, index #$targetIslandId: {$exc->getMessage()}"
+                );
             }
         } while(false);
         
@@ -747,7 +748,12 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                             $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] 
                         );
                     } catch (Exception $exc) {
-                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                            "Timelapse_Convoys._transport, city #{$dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID]},"
+                                . " Entity/{$entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE]}"
+                                . " ({$entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]})"
+                                . " x {$entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]}: {$exc->getMessage()}"
+                        );
                     }
 
                     // This entity does not return

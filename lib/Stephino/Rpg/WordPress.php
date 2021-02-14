@@ -123,7 +123,7 @@ class Stephino_Rpg_WordPress {
                     'href'  => Stephino_Rpg_Utils_Media::getAdminUrl(!is_user_logged_in()),
                 ));
 
-                if (is_super_admin()) {
+                if (Stephino_Rpg::get()->isAdmin()) {
                     // Dashboard
                     $wp_admin_bar->add_node(array(
                         'id'     => Stephino_Rpg::PLUGIN_SLUG . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_DASHBOARD,
@@ -135,7 +135,7 @@ class Stephino_Rpg_WordPress {
                     // Game Mechanics
                     $wp_admin_bar->add_node(array(
                         'id'     => Stephino_Rpg::PLUGIN_SLUG . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS,
-                        'title'  => esc_html__('Game Mechanics', 'stephino-rpg'),
+                        'title'  => Stephino_Rpg_Utils_Lingo::getGameMechanics() . (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;'),
                         'href'   => Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS,
                         'parent' => Stephino_Rpg::PLUGIN_SLUG,
                     ));
@@ -196,6 +196,7 @@ class Stephino_Rpg_WordPress {
                         'game_ver'  => Stephino_Rpg_Utils_Media::getPwaVersion(false, false),
                         'game_desc' => Stephino_Rpg_Config::get()->core()->getDescription(),
                         'game_name' => Stephino_Rpg_Config::get()->core()->getName(true),
+                        'game_lang' => Stephino_Rpg_Config::lang(),
                         'app_name'  => Stephino_Rpg_Utils_Lingo::getGameName(),
                         'is_demo'   => Stephino_Rpg::get()->isDemo(),
                         'is_pro'    => Stephino_Rpg::get()->isPro(),
@@ -334,6 +335,18 @@ class Stephino_Rpg_WordPress {
     }
     
     /**
+     * Register activation and deactivation hooks
+     */
+    public static function registerHooks() {
+        register_deactivation_hook(
+            STEPHINO_RPG_ROOT . '/stephino-rpg.php',
+            function() {
+                Stephino_Rpg_Cache_Game::get()->purge();
+            }
+        );
+    }
+    
+    /**
      * Register the AJAX handler
      */
     public static function registerAjax() {
@@ -348,12 +361,22 @@ class Stephino_Rpg_WordPress {
     protected static function _addMenu() {
         // Game
         add_menu_page(
-            Stephino_Rpg_Utils_Lingo::getGameName(), 
-            esc_html__('Play', 'stephino-rpg') . ' <span>' . esc_html(Stephino_Rpg_Utils_Lingo::getGameName()) . '</span>', 
+            'Stephino RPG', 
+            'Stephino RPG', 
             'read', // Subscriber
             Stephino_Rpg::PLUGIN_SLUG, 
             array(Stephino_Rpg_Renderer::class, Stephino_Rpg_Renderer::INTERFACE_HTML),
             'data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBzdGFuZGFsb25lPSJubyI/Pgo8IURPQ1RZUEUgc3ZnIFBVQkxJQyAiLS8vVzNDLy9EVEQgU1ZHIDIwMDEwOTA0Ly9FTiIgImh0dHA6Ly93d3cudzMub3JnL1RSLzIwMDEvUkVDLVNWRy0yMDAxMDkwNC9EVEQvc3ZnMTAuZHRkIj4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMCIgd2lkdGg9IjE1Ljk4NDAwMHB0IiBoZWlnaHQ9IjE1Ljk4NDAwMHB0IiB2aWV3Qm94PSIwIDAgMTUuOTg0MDAwIDE1Ljk4NDAwMCIgcHJlc2VydmVBc3BlY3RSYXRpbz0ieE1pZFlNaWQgbWVldCI+CiAgPG1ldGFkYXRhPkNvcHlyaWdodCAoYykgMjAxOSBTdGVwaGlubywgaHR0cDovL3N0ZXBoaW5vLmNvbTwvbWV0YWRhdGE+CiAgPGcgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoMC4wMDAwMDAsMTUuOTg0MDAwKSBzY2FsZSgwLjAwMzEyMiwtMC4wMDMxMjIpIiBmaWxsPSIjMzMzMzMzIiBzdHJva2U9Im5vbmUiPgogICAgPGc+CiAgICAgIDxwYXRoIGQ9Ik0zMjc2IDQ1ODkgYzIgLTQgLTEzIC02IC0zNCAtNCAtMzQgMiAtMTEwIC01IC0yMTcgLTIxIC02NSAtOSAtMTkxIC00MyAtMjczIC03MyAtNzYgLTI4IC0yMDggLTg4IC0yMjcgLTEwMyAtNSAtNSAtMzcgLTI2IC03MSAtNDcgLTgzIC01MiAtOTYgLTY0IC0xODkgLTE1NiAtMTc3IC0xNzUgLTI2NiAtMzY1IC0yNjkgLTU3MiAtMSAtMjkgLTQgLTQ5IC03IC00NSAtMyA0IC0yNiAzOSAtNTIgNzcgLTEwOCAxNjcgLTI0NSAyOTQgLTM5MiAzNjcgLTcxIDM1IC0xODIgNzQgLTE5MCA2NiAtMyAtMyA2IC0yOCAyMCAtNTcgNjggLTE0MCA5NyAtMjk1IDY3IC0zNTIgLTkgLTE2IC0yOSAtMzAgLTU5IC0zOSAtMTM1IC0zOSAtMjU3IC0xMzAgLTMwMyAtMjI2IC0xNiAtMzIgLTI4IC00MyAtNjAgLTUzIC02MyAtMTkgLTcyIC0zOSAtNDggLTExOCA0MCAtMTM0IDEyMCAtMjA4IDI0NCAtMjI3IDE2MCAtMjQgMjUwIC02NCAyODggLTEyOCAxMiAtMTkgMzUgLTU1IDUyIC03OSA2MiAtODkgODYgLTE5NSA2NCAtMjkwIC03IC0zMCAtMTQgLTYzIC0xNiAtNzQgLTUgLTI5IC0xMiAtNjkgLTI5IC0xNTUgLTIwIC0xMDYgLTI3IC0xNDMgLTMwIC0xNjAgLTEgLTggLTUgLTI2IC04IC00MCAtNCAtMTQgLTkgLTM3IC0xMiAtNTMgLTEwIC01MyAtMTYgLTgyIC0yNSAtMTE3IC01IC0xOSAtMTEgLTUxIC0xNCAtNzAgLTMgLTE5IC0yNCAtMTExIC00NiAtMjA1IC0yMyAtOTMgLTQzIC0xNzcgLTQ1IC0xODUgLTM4IC0xNjkgLTE5MiAtNjc5IC0yMDkgLTY5OCAtMiAtMSAtMTYgNCAtMzIgMTMgLTMwIDE2IC03MSAxOSAtOTggOSAtMjEgLTggLTExNiAtMTI4IC0xMTYgLTE0NiAwIC0yOCAzNiAtMzQgMjA5IC0zNCBsMTczIDEgNDIgNDYgYzEwMCAxMTEgMjI3IDMzNCAzMTIgNTUyIDIxIDUzIDQxIDk3IDQ0IDk3IDMgMCA1IC0xOSA1IC00MyAwIC01NCAyOCAtMTk1IDU0IC0yNzEgMzcgLTEwNiAxMDcgLTIxMCAxNzkgLTI2NyAyNCAtMTkgNDkgLTM5IDU2IC00NCAyOSAtMjcgMTYxIC04MSAyNDEgLTEwMCA0OCAtMTEgNTcgLTEzIDEyMCAtMTkgODUgLTEwIDk0IC0xMSAxMDAgLTE4IDQgLTMgMjAgLTIgMzYgMiAxOCA1IDI3IDUgMjQgLTEgLTggLTEyIDIgLTEyIDI1IDEgMTEgNiAyMSA2IDI0IDEgNyAtMTAgOTggLTcgMTE2IDQgOCA1IDExIDQgNyAtMSAtMyAtNSAzIC0xMCAxMyAtMTAgMTAgMCAxNyAzIDE0IDcgLTIgNCA5IDcgMjQgNyA0MSAwIDE2NSAxMyAxNzMgMTggNCAyIDI0IDYgNDUgOSAyMiAyIDY2IDEyIDk5IDIxIDMzIDggNjcgMTcgNzUgMTkgOTEgMjEgMjU2IDEwMCAzNzEgMTc3IDIxMCAxMzkgMzc5IDM2NSA0NTMgNjAzIDgzIDI2NiA3NiA2MzEgLTE1IDg3MCAtMTMgMzMgLTI0IDYyIC0yNCA2NSAtMyAyNCAtOTggMTgyIC0xNDkgMjUwIC05NiAxMjcgLTIxMCAyMzUgLTQ4NiA0NTkgLTI5NiAyNDEgLTQwOCAzOTEgLTQ1NSA2MTYgLTEzIDYyIC0xNCAxODMgLTEgMjMzIDUzIDE5OSAyNDAgMzM1IDQ2MSAzMzMgNzkgLTEgOTAgLTMgMTYwIC0yNiAxMjggLTQzIDIyOSAtMTQ3IDI1MCAtMjU3IDYgLTMwIDIgLTYxIC0yMCAtMTU4IC0xNiAtNzMgLTk0IC0xNzIgLTE3OCAtMjI4IC00MSAtMjcgLTM4IC00MCAxNSAtNjggNTkgLTMwIDEzOCAtMjMgMjk1IDI3IDEzOCA0NCAyMDUgODcgMjY1IDE2OSAzMCA0MSA2MCAxMjEgNjEgMTY4IDEgMTcgNCAzMiA3IDMyIDQgMCA2IDMyIDYgNzAgMCAzOSAtMyA3MCAtNiA3MCAtMyAwIC02IDE5IC03IDQyIC04IDEzMiAtMTA3IDI5NSAtMjI5IDM3OCAtOTAgNjEgLTI2MCAxMjIgLTM3NiAxMzUgLTI5IDMgLTY2IDggLTgzIDEwIC0xNiAyIC01MiA0IC03OCA0IC0zNiAxIC00NiA0IC00MSAxNCA2IDEwIDQgMTAgLTcgMCAtNyAtNyAtMjIgLTEzIC0zMyAtMTMgLTE3IDAgLTE4IDIgLTYgMTAgMTIgNyAxMCA5IC03IDcgLTEyIDAgLTIwIC00IC0xNyAtOHogbS0xNjkzIC0xMTExIGM4MSAtNTUgNzggLTY5IC0xMyAtODcgLTU3IC0xMCAtMjc1IC05IC0yODYgMiAtMTAgMTAgNTcgODMgOTEgMTAxIDE3IDggNDYgMTggNjUgMjEgMTkgMyAzNiA4IDM4IDEwIDcgNiA2OSAtMjIgMTA1IC00N3ogbTUxNyAtMjc5IGMwIC0xNyA4MCAtMTMyIDE0NSAtMjA5IDE2IC0xOSAxNDMgLTE1MCAyODIgLTI5MCAyODcgLTI4OSAyOTIgLTI5NSAzNzQgLTQwOCAxMDQgLTE0MiAyMDIgLTM1MyAyMjMgLTQ4MiAyNyAtMTU3IDI3IC0zNTEgMiAtNDc1IC0xNyAtODEgLTM0IC0xMzIgLTczIC0yMTUgLTU3IC0xMTkgLTE0MyAtMjEwIC0yNDUgLTI1OCAtMjUyIC0xMjAgLTU4MiAtMzMgLTcxMCAxODggLTQ2IDc4IC02OCAxNzggLTY0IDI5MyAzIDEwNSA0IDExMSAzMSAyMDUgMzAgMTAwIDkwIDE3OSAxODkgMjQzIDU0IDM1IDE3MSA4MSAyNDQgOTQgMTUgMyAzOCA3IDUxIDEwIDEzIDIgNDEgNSA2MiA3IDUxIDMgMzAgMzIgLTYwIDgzIC04OSA1MSAtMjc1IDcxIC0zNzYgNDEgLTkyIC0yOCAtMjU0IC0xNDMgLTI5MSAtMjA2IC0xNCAtMjUgLTE0IC0yNSAtMTAgMTAgMiAxOSAxMSA2NyAyMCAxMDUgMTYgNzIgMjMgMTE2IDMyIDE5NSAzIDI1IDcgNTYgOSA3MCAyIDE0IDcgNDUgMTAgNzAgMyAyNSA4IDYxIDEwIDgwIDMgMTkgOCA1NSAxMSA4MCA1IDQ3IDggNjggMTkgMTM1IDYgNDEgOSA2MiAyMCAxNTAgMyAyOCAxMiA5MyAyMCAxNDUgMTUgMTAwIDIzIDE1OSAzMCAyMjQgMyAyMSA3IDU3IDExIDgwIDQgMjMgNyA0NyA3IDUzIDAgOSA0IDEwIDE0IDIgNyAtNiAxMyAtMTUgMTMgLTIweiIvPgogICAgPC9nPgogIDwvZz4KPC9zdmc+Cg=='
+        );
+        
+        // Play game
+        add_submenu_page(
+            Stephino_Rpg::PLUGIN_SLUG, 
+            Stephino_Rpg_Utils_Lingo::getGameName(),
+            esc_html__('Play', 'stephino-rpg') . ' <span>' . esc_html(Stephino_Rpg_Utils_Lingo::getGameName()) . '</span>',
+            'read', // Subscriber
+            Stephino_Rpg::PLUGIN_SLUG, 
+            array(Stephino_Rpg_Renderer::class, Stephino_Rpg_Renderer::INTERFACE_HTML)
         );
         
         // Dashboard
@@ -369,8 +392,8 @@ class Stephino_Rpg_WordPress {
         // Game Mechanics
         add_submenu_page(
             Stephino_Rpg::PLUGIN_SLUG, 
-            Stephino_Rpg_Utils_Lingo::getGameName() . ' - ' . esc_html__('Game Mechanics', 'stephino-rpg'),
-            esc_html__('Game Mechanics', 'stephino-rpg'),
+            Stephino_Rpg_Utils_Lingo::getGameName() . ' - ' . Stephino_Rpg_Utils_Lingo::getGameMechanics(),
+            Stephino_Rpg_Utils_Lingo::getGameMechanics() . (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;'),
             Stephino_Rpg::get()->isDemo() ? 'read' : 'activate_plugins', // Subscriber OR Admin
             Stephino_Rpg::PLUGIN_SLUG . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS, 
             array(Stephino_Rpg_Renderer::class, Stephino_Rpg_Renderer::INTERFACE_HTML)

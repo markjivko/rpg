@@ -276,8 +276,6 @@ Thank you for joining me!', 'stephino-rpg'),
     'premiumPackages.2.description'       => __('Give your empire the explosive growth it deserves', 'stephino-rpg'),
     'premiumPackages.3.name'              => __('Mother lode', 'stephino-rpg'),
     'premiumPackages.3.description'       => __('Live the life of a king!', 'stephino-rpg'),
-    'premiumPackages.4.name'              => __('Pro', 'stephino-rpg'),
-    'premiumPackages.4.description'       => __('The best value for our most valuable players!', 'stephino-rpg'),
 );
 
 /*EOF*/

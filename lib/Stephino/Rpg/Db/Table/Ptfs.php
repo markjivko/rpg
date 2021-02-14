@@ -16,6 +16,16 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     const PTF_VISIBILITY_PUBLIC  = 'l';
     const PTF_VISIBILITY_PRIVATE = 'p';
     
+    // Platformer review status
+    const PTF_REVIEW_PENDING                     = 'p';
+    const PTF_REVIEW_APPROVED                    = 'a';
+    const PTF_REVIEW_REJECTED_TITLE_SPAM         = 'rts';
+    const PTF_REVIEW_REJECTED_TITLE_INVALID      = 'rti';
+    const PTF_REVIEW_REJECTED_CONTENT_SPAM       = 'rcs';
+    const PTF_REVIEW_REJECTED_CONTENT_TOO_EASY   = 'rce';
+    const PTF_REVIEW_REJECTED_CONTENT_IMPOSSIBLE = 'rci';
+    const PTF_REVIEW_SUSPENDED                   = 's';
+    
     // Minimum dimentions
     const PTF_MIN_WIDTH  = 26;
     const PTF_MIN_HEIGHT = 15;
@@ -142,6 +152,22 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     const COL_PTF_VISIBILITY = 'ptf_visibility';
     
     /**
+     * Platformer review
+     * 
+     * @var string <ul>
+     *     <li><b>'a'</b> for approved</li>
+     *     <li><b>'p'</b> for pending</li>
+     *     <li><b>'rts'</b> for rejected: title spam</li>
+     *     <li><b>'rti'</b> for rejected: title invalid</li>
+     *     <li><b>'rcs'</b> for rejected: content spam</li>
+     *     <li><b>'rce'</b> for rejected: content too easy</li>
+     *     <li><b>'rci'</b> for rejected: content impossible</li>
+     *     <li><b>'s'</b> for suspended</li>
+     * </ul>
+     */
+    const COL_PTF_REVIEW = 'ptf_review';
+    
+    /**
      * Table creation SQL statement
      * 
      * @return string
@@ -163,6 +189,7 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     `" . self::COL_PTF_RATING . "` decimal(6,4) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_PTF_RATING_COUNT . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_PTF_VISIBILITY . "` char(1) NOT NULL DEFAULT '" . self::PTF_VISIBILITY_PRIVATE . "',
+    `" . self::COL_PTF_REVIEW . "` varchar(3) NOT NULL DEFAULT '" . self::PTF_REVIEW_APPROVED . "',
     UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
 );";
     }
@@ -189,13 +216,16 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
             $result = $this->getDb()->getWpDb()->insert(
                 $this->getTableName(), 
                 array(
-                    self::COL_PTF_USER_ID => $userId,
-                    self::COL_PTF_NAME      => $name,
-                    self::COL_PTF_WIDTH     => $tileSetWidth,
-                    self::COL_PTF_HEIGHT    => $tileSetHeight,
-                    self::COL_PTF_CONTENT   => json_encode($tileSetC),
-                    self::COL_PTF_CREATED_TIME   => $timestamp,
-                    self::COL_PTF_MODIFIED_TIME  => $timestamp,
+                    self::COL_PTF_USER_ID       => $userId,
+                    self::COL_PTF_NAME          => $name,
+                    self::COL_PTF_WIDTH         => $tileSetWidth,
+                    self::COL_PTF_HEIGHT        => $tileSetHeight,
+                    self::COL_PTF_CONTENT       => json_encode($tileSetC),
+                    self::COL_PTF_CREATED_TIME  => $timestamp,
+                    self::COL_PTF_MODIFIED_TIME => $timestamp,
+                    self::COL_PTF_REVIEW        => Stephino_Rpg::get()->isAdmin()
+                        ? self::PTF_REVIEW_APPROVED
+                        : self::PTF_REVIEW_PENDING,
                 )
             );
         }
@@ -240,13 +270,14 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      * </ul>
      * 
      * @param int     $userId      User ID
+     * @param boolean $viewAll     (optional) View all results (no review filtering); default <b>true</b>
      * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
      * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
      * @param int     $limitCount  (optional) Limit count; default <b>null</b>
      * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getForUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
+    public function getForUserId($userId, $viewAll = true, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
         $result = array();
         
         // Sanitize the user ID
@@ -282,7 +313,10 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
                 "SELECT * FROM `$this`"
                 . " WHERE ("
                     . " `" . self::COL_PTF_USER_ID . "` = '$userId'"
-                    . " OR `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'"
+                    . " OR (" 
+                        . " `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'" 
+                        . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED  . "'")
+                    . " )"
                 . " )"
                 . (null !== $orderBy
                     ? " ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
@@ -305,10 +339,11 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      * <li>Other live platformers</li>
      * </ul>
      * 
-     * @param int $userId User ID
+     * @param int     $userId  User ID
+     * @param boolean $viewAll (optional) View all results (no review filtering); default <b>true</b>
      * @return int Number of platformers
      */
-    public function getCountForUserId($userId) {
+    public function getCountForUserId($userId, $viewAll = true) {
         $result = 0;
         
         // Sanitize the user ID
@@ -318,7 +353,10 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
                 "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
                 . " WHERE ("
                     . " `" . self::COL_PTF_USER_ID  . "` = '$userId'"
-                    . " OR `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'"
+                    . " OR (" 
+                        . " `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'" 
+                        . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'")
+                    . " )"
                 . " )", 
                 ARRAY_A
             );
@@ -336,13 +374,14 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      * Get all the platformers this user has authored
      * 
      * @param int     $userId      User ID
+     * @param boolean $viewAll     (optional) View all results (no review filtering); default <b>true</b>
      * @param string  $orderBy     (optional) Column to order by; default <b>null</b>
      * @param boolean $orderAsc    (optional) Order in ASC or DESC order; default <b>true</b>
      * @param int     $limitCount  (optional) Limit count; default <b>null</b>
      * @param int     $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array List of platformers; array may be empty
      */
-    public function getByUserId($userId, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
+    public function getByUserId($userId, $viewAll = true, $orderBy = null, $orderAsc = true, $limitCount = null, $limitOffset = null) {
         $result = array();
         
         // Sanitize the user ID
@@ -377,6 +416,7 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
             $result = $this->getDb()->getWpDb()->get_results(
                 "SELECT * FROM `$this`"
                 . " WHERE `" . self::COL_PTF_USER_ID . "` = '$userId'"
+                . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'")
                 . (null !== $orderBy
                     ? " ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
                     : ''
@@ -395,10 +435,11 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     /**
      * Get all the platformers this user has authored (count)
      * 
-     * @param int $userId User ID
+     * @param int     $userId  User ID
+     * @param boolean $viewAll (optional) View all results (no review filtering); default <b>true</b>
      * @return int Number of platformers
      */
-    public function getCountByUserId($userId) {
+    public function getCountByUserId($userId, $viewAll = true) {
         $result = 0;
         
         // Sanitize the user ID
@@ -406,7 +447,36 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
         if ($userId > 0) {
             $dbRow = $this->getDb()->getWpDb()->get_row(
                 "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE `" . self::COL_PTF_USER_ID  . "` = '$userId'", 
+                . " WHERE `" . self::COL_PTF_USER_ID  . "` = '$userId'" 
+                . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'"), 
+                ARRAY_A
+            );
+
+            // Valid result
+            if (is_array($dbRow) && isset($dbRow['count'])) {
+                $result = intval($dbRow['count']);
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Get all the suspended platformers this user has authored (count)
+     * 
+     * @param int     $userId  User ID
+     * @return int Number of platformers
+     */
+    public function getCountSuspended($userId) {
+        $result = 0;
+        
+        // Sanitize the user ID
+        $userId = abs((int) $userId);
+        if ($userId > 0) {
+            $dbRow = $this->getDb()->getWpDb()->get_row(
+                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
+                . " WHERE `" . self::COL_PTF_USER_ID  . "` = '$userId'" 
+                . " AND `" . self::COL_PTF_REVIEW  . "` = '" . self::PTF_REVIEW_SUSPENDED . "'",
                 ARRAY_A
             );
 

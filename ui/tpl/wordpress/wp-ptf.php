@@ -28,6 +28,10 @@ if (null !== $gameTileMap = Stephino_Rpg_Db::get()->modelPtfs()->getTileMap($gam
 } else {
     $gameId = 0;
 }
+$userRatings = Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_PTF_RATES, array());
+if (!is_array($userRatings)) {
+    $userRatings = array();
+}
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
     <head>
@@ -80,6 +84,16 @@ if (null !== $gameTileMap = Stephino_Rpg_Db::get()->modelPtfs()->getTileMap($gam
                     <h4><?php echo esc_html__('Game over', 'stephino-rpg');?></h4>
                 </span>
             </span>
+            <div class="col-12">
+                <div data-role="ptf-rating">
+                    <?php 
+                        for ($rating = 1; $rating <= 5; $rating++):
+                            $ratingActive = isset($userRatings[$gameId]) && $userRatings[$gameId] >= $rating;
+                    ?>
+                        <i data-rating="<?php echo $rating;?>"<?php if ($ratingActive):?> class="active"<?php endif;?>></i>
+                    <?php endfor;?>
+                </div>
+            </div>
             <span class="col">
                 <button class="btn btn-info w-100" data-role="ptf-refresh">
                     <span><?php echo esc_html__('Play again', 'stephino-rpg');?></span>

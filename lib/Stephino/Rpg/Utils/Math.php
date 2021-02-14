@@ -14,64 +14,69 @@ class Stephino_Rpg_Utils_Math {
     
     /**
      * Break-down a time interval into equal steps in order to perform discretization.<br/>
-     * This is useful when calculating resources that vary according to linear continuous functions.<br/>
-     * An accuracy degradation is performed by increasing the step size after the alloted time has passed.<br/>
+     * This is used when calculating resources that vary according to continuous functions.<br/>
+     * An accuracy degradation is performed by increasing the step size after the allotted time has passed.<br/>
      * This is to ensure no performance degradation for very large <b>$length</b> values.<br/><br/>
      * The resulting interval lengths are as follows:<ul>
      * <li><b>$stepSize, ...</b> - Until <b>$degradeAfter</b> is reached in total length</li>
-     * <li><b>x * $stepSize * 1.2 ^ k, ...</b> - Where <b>x</b> increases with each step and <b>k = total length / $degradeAfter</b></li>
+     * <li><b>x * $stepSize * $degradeBase ^ k, ...</b> - Where <b>x</b> increases with each step and <b>k = total length / $degradeAfter</b></li>
      * </ul><br/>
      * The end result is accurate discretization for the first <b>$degradeAfter</b> seconds and a small result array size afterwards.<br/>
-     * For <b>$stepSize = 180</b> and <b>$length</b> (days) => the result array size:<ul>
-     * <li>1 => 480</li>
-     * <li>2 => 506</li>
-     * <li>3 => 517</li>
-     * <li>4 => 525</li>
-     * <li>5 => 521</li>
-     * <li>10 => 552</li>
-     * <li>30 => 578</li>
-     * <li>90 => 584</li>
-     * <li>720 => 584</li>
-     * </ul>
      * 
      * @param int   $timestamp    Final timestamp in seconds
      * @param int   $length       Total interval length in seconds
      * @param int   $stepSize     Step size in seconds
      * @param int   $degradeAfter (optional) Increase step size exponentially after this total in seconds; default <b>21600</b>
      * @param float $degradeBase  (optional) Exponential base; default <b>1.2</b>
+     * @param int   $maxSteps     (optional) Maximum number of steps; default <b>350</b>
      * @return array Array of [<ul>
      * <li>(int) Timestamp</li>
      * <li>(int) Step Size</li>
      * </ul>]
      */
-    public static function getDiscretization($timestamp, $length, $stepSize, $degradeAfter = 21600, $degradeBase = 1.2) {
+    public static function getDiscretization($timestamp, $length, $stepSize, $degradeAfter = 21600, $degradeBase = 1.5, $maxSteps = 300) {
+        $timestamp = abs((int) $timestamp);
+        $length = abs((int) $length);
+        $stepSize = abs((int) $stepSize);
+        $degradeAfter = abs((int) $degradeAfter);
+        $degradeBase = abs((float) $degradeBase);
+        $maxSteps = abs((int) $maxSteps);
+        
         // Prepare the result
         $result = array();
 
         // Initialize the counters
         $divStep = $divTotal = $stepSize;
         
+        // Total number of steps
+        $totalSteps = 1;
+        
         // Go through the divisions
         do {
             // Append to the result
             $result[] = array(
-                $timestamp - $length + $divTotal, 
-                $divStep
+                $timestamp - $length + (int) $divTotal, 
+                (int) $divStep
             );
             
             // Exponential accuracy degradation
             if ($divTotal >= $degradeAfter) {
-                $divStep += intval($stepSize * pow($degradeBase, (int) $divTotal / $degradeAfter));
+                $divStep += round($stepSize * pow($degradeBase, floor($divTotal / $degradeAfter)), 0);
             }
             
             // Next division
             $divTotal += $divStep;
             
             // Check for the final step
-            if ($divTotal + $divStep - $length > 0) {
+            if ($divTotal + $divStep > $length) {
                 break;
             }
-        } while(true);
+            
+            // Avoid infinite loops
+            if (++$totalSteps >= $maxSteps) {
+                break;
+            }
+        } while (true);
 
         // The final step includes the left-over time
         $result[] = array(

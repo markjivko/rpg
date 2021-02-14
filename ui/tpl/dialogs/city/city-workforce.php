@@ -51,7 +51,11 @@ $currentWorkers = 0;
                             ? (int) $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_WORKERS]
                             : 0;
                     }
-                } catch (Exception $exc) {}
+                } catch (Exception $exc) {
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::error(
+                        "tpl/dialogs/city/city-workforce, city #{$cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]}, Building ({$buildingConfig->getId()}): {$exc->getMessage()}"
+                    );
+                }
                 
                 // Building not found
                 if (null === $buildingData) {

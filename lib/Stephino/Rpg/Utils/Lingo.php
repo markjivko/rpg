@@ -13,6 +13,32 @@
 class Stephino_Rpg_Utils_Lingo {
     
     /**
+     * Languages
+     */
+    const LANG_EN = 'en_US';
+    const LANG_DE = 'de_DE';
+    const LANG_ES = 'es_ES';
+    const LANG_FR = 'fr_FR';
+    const LANG_IT = 'it_IT';
+    const LANG_PT = 'pt_BR';
+    const LANG_RO = 'ro_RO';
+    const LANG_RU = 'ru_RU';
+    
+    /**
+     * List of allowed languages
+     */
+    const ALLOWED_LANGS = array(
+        self::LANG_EN => 'English',
+        self::LANG_DE => 'Deutsche',
+        self::LANG_ES => 'Español',
+        self::LANG_FR => 'Français',
+        self::LANG_IT => 'Italiano',
+        self::LANG_PT => 'Português',
+        self::LANG_RO => 'Română',
+        self::LANG_RU => 'Русский',
+    );
+    
+    /**
      * Get the final game name, HTML escaped
      * 
      * @return string
@@ -57,7 +83,7 @@ class Stephino_Rpg_Utils_Lingo {
      * @return string
      */
     public static function getUserName($userDbRow = array()) {
-        $result = 'Unknown';
+        $result = __('Unknown', 'stephino-rpg');
         do {
             // Invalid input
             if (!is_array($userDbRow) && !isset($userDbRow[Stephino_Rpg_Db_Table_Users::COL_ID])) {
@@ -67,7 +93,7 @@ class Stephino_Rpg_Utils_Lingo {
             // A robot
             if (!isset($userDbRow[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]) 
                 || !is_numeric($userDbRow[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])) {
-                $result = 'Robot #' . $userDbRow[Stephino_Rpg_Db_Table_Users::COL_ID];
+                $result = __('Robot', 'stephino-rpg') . ' #' . $userDbRow[Stephino_Rpg_Db_Table_Users::COL_ID];
                 break;
             }
 
@@ -115,6 +141,42 @@ class Stephino_Rpg_Utils_Lingo {
         } while(false);
         
         return $result;
+    }
+    
+    /**
+     * Get available languages, filtered by the core configuration<br/>
+     * Always includes English
+     * 
+     * @return string[] Associative array of [locale ("en_US") => language name ("English"), ...]
+     */
+    public static function getLanguages() {
+        $result = self::ALLOWED_LANGS;
+        
+        $configLanguages = Stephino_Rpg_Config::get()->core()->getLanguages();
+        foreach (array_keys($result) as $locale) {
+            if (self::LANG_EN == $locale || in_array($locale, $configLanguages)) {
+                continue;
+            }
+            unset($result[$locale]);
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Get the i18n and HTML escaped "Game Mechanics" or "Labels" text, depending on the current user language
+     * 
+     * @param boolean $titleMode (optional) Title mode - use the current language instead of "translations"; default <b>false</b>
+     * @return string
+     */
+    public static function getGameMechanics($titleMode = false) {
+        return null === Stephino_Rpg_Config::lang() 
+            ? 'Game Mechanics' 
+            : (
+                $titleMode
+                    ? self::ALLOWED_LANGS[Stephino_Rpg_Config::lang(true)]
+                    : esc_html__('Translations', 'stephino-rpg')
+            );
     }
     
     /**

@@ -20,10 +20,10 @@ if (!defined('ABSPATH') || !defined('WP_UNINSTALL_PLUGIN')) {
 
 // Prepare the autoloader
 require_once STEPHINO_RPG_ROOT . '/lib/Stephino/Rpg/Autoloader.php';
+Stephino_Rpg_Autoloader::get();
 
-// Remove all options
-Stephino_Rpg_Autoloader::getInstance();
-Stephino_Rpg::get()->purge();
+// Remove all options (except for the PRO-level config)
+Stephino_Rpg_Cache_Game::get()->purge();
 
 // Drop all tables
 Stephino_Rpg_Db::get()->purge();

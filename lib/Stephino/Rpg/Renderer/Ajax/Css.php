@@ -79,7 +79,7 @@ class Stephino_Rpg_Renderer_Ajax_Css {
         // Valid view
         if (in_array($view, Stephino_Rpg_Renderer_Ajax::AVAILABLE_VIEWS)) {
             // Get the cache
-            $cachedAnimations = Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, array());
+            $cachedAnimations = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, array());
 
             // Valid animation found
             if (is_array($cachedAnimations) && isset($cachedAnimations[$view])) {
@@ -148,8 +148,8 @@ CSS;
         }
 
         // Store in cache
-        Stephino_Rpg_Cache_Game::getInstance()->setValue(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, $data);
-        Stephino_Rpg_Cache_Game::getInstance()->setValue(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, time());
+        Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, $data);
+        Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, time());
     }
     
     /**

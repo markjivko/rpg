@@ -28,35 +28,41 @@ class Stephino_Rpg_Task_Initializer {
      * @return boolean
      */
     public static function initWorld() {
+        $result = false;
+        
         // Regenerate the CSS animation rules
-        $animations = Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, array());
+        $animations = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, array());
         if (!is_array($animations) || !count($animations)) {
             Stephino_Rpg_Renderer_Ajax_Css::generate();
         }
         
-        // Prevent multiple runs
-        if (Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_WORLD_INIT, false)) {
-            return false;
-        }
-        
-        // Get the total number
-        if (null !== $islandCount = Stephino_Rpg_Config::get()->core()->getInitialIslandsCount()) {
-            // Add the islands
-            for ($islandIndex = 1; $islandIndex <= $islandCount; $islandIndex++) {
-                try {
-                    // Create the island
-                    Stephino_Rpg_Db::get()->modelIslands()->create();
-                } catch (Exception $exc) {
-                    // Nothing to do for now
+        do {
+            // Prevent multiple runs
+            if (Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_WORLD_INIT, false)) {
+                break;
+            }
+
+            // Get the total number
+            if (null !== $islandCount = Stephino_Rpg_Config::get()->core()->getInitialIslandsCount()) {
+                // Add the islands
+                for ($islandIndex = 1; $islandIndex <= $islandCount; $islandIndex++) {
+                    try {
+                        // Create the island
+                        Stephino_Rpg_Db::get()->modelIslands()->create();
+                    } catch (Exception $exc) {
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                            "Task_Initializer.initWorld, island index #$islandIndex: {$exc->getMessage()}"
+                        );
+                    }
                 }
             }
-        }
+
+            // Mark the world as initalized
+            Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_WORLD_INIT, true);
+            $result = true;
+        } while(true);
         
-        // Mark the world as initalized
-        Stephino_Rpg_Cache_Game::getInstance()->setValue(Stephino_Rpg_Cache_Game::KEY_WORLD_INIT, true);
-        
-        // All went well
-        return true;
+        return $result;
     }
     
     /**
@@ -146,11 +152,15 @@ class Stephino_Rpg_Task_Initializer {
                     if (null !== Stephino_Rpg_Config::get()->core()->getInitialRobotsPerUser()) {
                         for ($robotIndex = Stephino_Rpg_Config::get()->core()->getInitialRobotsPerUser(); $robotIndex >= 1; $robotIndex--) {
                             try {
+                                // Handle this on the same thread that created the human player account to avoid duplicates
                                 if (null !== $newRobotId = $db->tableUsers()->create(true)) {
-                                    // Handle this on the same thread that created the human player account to avoid duplicates
                                     self::initUser($newRobotId);
                                 }
-                            } catch (Exception $exc) {}
+                            } catch (Exception $exc) {
+                                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                                    "Task_Initializer.initUser, robot index #$robotIndex: {$exc->getMessage()}"
+                                );
+                            }
                         }
                     }
                 }

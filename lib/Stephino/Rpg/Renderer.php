@@ -71,17 +71,17 @@ class Stephino_Rpg_Renderer {
 
             // Invalid method
             if (!strlen($callMethod)) {
-                throw new Exception('Invalid method specified');
+                throw new Exception(__('Invalid method specified', 'stephino-rpg'));
             }
             
             // Only authenticated users are allowed; CSS and JS outputs are available after logout to prevent a layout crash
             if (!is_user_logged_in() && !in_array(strtolower($callMethod), array(Stephino_Rpg_Renderer_Ajax::CONTROLLER_CSS, Stephino_Rpg_Renderer_Ajax::CONTROLLER_JS))) {
-                throw new Exception('You have logged out. Please refresh and try again');
+                throw new Exception(__('You have logged out. Please refresh and try again', 'stephino-rpg'));
             }
             
             // Admin method?
-            if (preg_match('%^admin%i', $callMethod) && !Stephino_Rpg::get()->isDemo() && !is_super_admin()) {
-                throw new Exception('Insufficient privileges');
+            if (preg_match('%^admin%i', $callMethod) && !Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()) {
+                throw new Exception(__('Insufficient privileges', 'stephino-rpg'));
             }
             
             // Run the User-facing Cron Tasks, but only on the XHR and HTML threads
@@ -119,12 +119,12 @@ class Stephino_Rpg_Renderer {
                         }
                     }
                     
-                    throw new Exception('Method not implemented');
+                    throw new Exception(__('Method not implemented', 'stephino-rpg'));
                 } while(false);
             }
             
             // Store the cache mechanism
-            $ajaxCache = Stephino_Rpg_Cache_Ajax::getInstance(
+            $ajaxCache = Stephino_Rpg_Cache_Ajax::get(
                 $className, 
                 $methodName, 
                 array(
@@ -143,9 +143,9 @@ class Stephino_Rpg_Renderer {
                 ? null 
                 : call_user_func(array($className, $methodName), is_array($methodData) ? $methodData : array());
             
-        } catch (Exception $ex) {
+        } catch (Exception $exc) {
             // Store the message
-            $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT] = $ex->getMessage();
+            $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT] = $exc->getMessage();
             
             // Invalid result
             $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_STATUS] = false;

@@ -182,12 +182,16 @@
             <?php endforeach;?>
         </div>
         <div class="col-12 col-lg-8 p-3 mt-2" data-role="content">
-            <?php try {
+            <?php 
+                try {
                     Stephino_Rpg_Renderer_Ajax_Dialog_Help::ajaxItem(array(
                         Stephino_Rpg_Renderer_Ajax_Dialog_Help::REQUEST_ITEM_TYPE => $itemType,
                         Stephino_Rpg_Renderer_Ajax_Dialog_Help::REQUEST_ITEM_ID   => $itemId,
                     ));
                 } catch (Exception $exc) {
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::error(
+                        "tpl/dialogs/help/help, $itemType ($itemId): {$exc->getMessage()}"
+                    );
                     echo '<div class="alert alert-danger">' . $exc->getMessage() . '</div>';
                 }
             ?>

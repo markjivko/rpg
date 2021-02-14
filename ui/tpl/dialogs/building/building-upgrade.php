@@ -11,6 +11,8 @@
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
+/* @var $canAfford boolean */
+/* @var $requirementsMet boolean */
 /* @var $buildingConfig Stephino_Rpg_Config_Building */
 $buildingLevel = is_array($buildingData) ? intval($buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL]) : 0;
 ?>
@@ -35,20 +37,15 @@ $buildingLevel = is_array($buildingData) ? intval($buildingData[Stephino_Rpg_Db_
         );
     ?>
     <div class="row">
-        <div
-            <?php if ($requirementsMet):?>
-                class="col-6"
-            <?php else:?>
-                class="col-12"
-            <?php endif;?>>
+        <div class="col">
             <button class="btn w-100" data-click="goBack">
                 <span>
                     <b><?php echo esc_html__('Go Back', 'stephino-rpg');?></b>
                 </span>
             </button>
         </div>
-        <?php if ($requirementsMet):?>
-            <div class="col-6">
+        <?php if ($requirementsMet && $canAfford):?>
+            <div class="col">
                 <button 
                     class="btn btn-warning w-100" 
                     data-click="buildingUpgrade">

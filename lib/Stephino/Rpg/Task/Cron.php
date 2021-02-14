@@ -68,7 +68,9 @@ class Stephino_Rpg_Task_Cron {
                         // Run the time-lapse
                         Stephino_Rpg_TimeLapse::get()->run();
                     } catch(Exception $exc) {
-                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage(), $exc->getFile(), $exc->getLine());
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                            "Task_Cron.robots, robot #$robotId: {$exc->getMessage()}"
+                        );
                     }
                 }
             }

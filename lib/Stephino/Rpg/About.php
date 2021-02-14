@@ -34,7 +34,7 @@
  * Special thanks to all those who contributed to Stephino RPG on [KickStarter](https://www.kickstarter.com/projects/markjivko/stephino-rpg): 
  * Stefy, Iuly, Patrick Lawitzky, Floris Robbert Bronzwaer, Nicholas Wilson, 
  * [Digissues.co](https://twitter.com/digissues), [JayKubKolTun](https://twitter.com/JayKubKolTun), [Jakob Schindler-Scholz](https://twitter.com/jakobscholz), 
- * Ryan Smith, Crimson D, JinjaGamer, Kevin Streat, [Ward Pederson](https://twitter.com/WarPed1), Eddy Dauber 
+ * [Smitty2447](https://twitter.com/Smitty2447), Crimson D, JinjaGamer, Kevin Streat, [Ward Pederson](https://twitter.com/WarPed1), Eddy Dauber 
  * and Carl Wiseman.
  * 
  * Thank you all! This game could not have grown without your support!

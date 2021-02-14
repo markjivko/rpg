@@ -35,6 +35,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
     const PTF_STAT_PLAYED  = 'gamesPlayed';
     const PTF_STAT_WON     = 'gamesWon';
     
+    // JavaScript actions
+    const JS_ACTION_PTF_ARENA_LIST = 'ptfArenaList';
+    
     /**
      * View user profile
      * 
@@ -83,6 +86,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
                 __('Played', 'stephino-rpg'),
             ),
         );
+        
+        // Game Arena player is suspended
+        $ptfSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId);
         
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
@@ -212,19 +218,23 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             $arenaPageOrder = !$arenaPageOrder;
         }
         
+        // View all games
+        $ptfViewAll = ($arenaAuthorId == $userId || Stephino_Rpg::get()->isAdmin());
+        
         // Pagination data
         $pagination = (new Stephino_Rpg_Utils_Pagination(
             $arenaAuthorId > 0
-                ? Stephino_Rpg_Db::get()->tablePtfs()->getCountByUserId($arenaAuthorId)
-                : Stephino_Rpg_Db::get()->tablePtfs()->getCountForUserId($userId),
+                ? Stephino_Rpg_Db::get()->tablePtfs()->getCountByUserId($arenaAuthorId, $ptfViewAll)
+                : Stephino_Rpg_Db::get()->tablePtfs()->getCountForUserId($userId, $ptfViewAll),
             Stephino_Rpg_Db_Model_Ptfs::PAGINATION_ITEMS_PER_PAGE,
             $arenaPageNumber
-        ))->setAction('ptfArenaList');
+        ))->setAction(self::JS_ACTION_PTF_ARENA_LIST);
         
         // Get the data
         $ptfsList = $arenaAuthorId > 0
             ? Stephino_Rpg_Db::get()->modelPtfs()->getByUserId(
                 $arenaAuthorId,
+                $ptfViewAll,
                 $arenaPageCategory,
                 $arenaPageOrder,
                 $pagination->getSqlLimitCount(),
@@ -232,6 +242,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             )
             : Stephino_Rpg_Db::get()->modelPtfs()->getForUserId(
                 $userId,
+                $ptfViewAll,
                 $arenaPageCategory,
                 $arenaPageOrder,
                 $pagination->getSqlLimitCount(),
@@ -275,17 +286,22 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         
         // The user can create new platformers
         $userCanCreate = true;
+        $userGamesCreated = 0;
         
         // Player authorship limits
-        if (!is_super_admin()) {
+        if (!Stephino_Rpg::get()->isAdmin()) {
             if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 $userCanCreate = false;
             } else {
-                if (Stephino_Rpg_Db::get()->tablePtfs()->getCountByUserId($userId) >= Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
+                $userGamesCreated = Stephino_Rpg_Db::get()->tablePtfs()->getCountByUserId($userId);
+                if ($userGamesCreated >= Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                     $userCanCreate = false;
                 }
             }
         }
+        
+        // Account suspended
+        $userSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg::get()->isAdmin());
 
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_LIST);
         return Stephino_Rpg_Renderer_Ajax::wrap(
@@ -316,6 +332,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             $commonArgs = array();
         }
         
+        // Get the current user ID
+        $userId = Stephino_Rpg_TimeLapse::get()->userId();
+        
         // Get the platformer ID
         $ptfId = abs((int) current($commonArgs));
         
@@ -325,6 +344,14 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
                 Stephino_Rpg_Renderer_Ajax_Action_User::REQUEST_PTF_ID => $ptfId
             ),
             false
+        );
+        
+        // Editing rights
+        $ptfEditable = Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
+            $userId, 
+            Stephino_Rpg::get()->isAdmin(),
+            $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
+            $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
         );
         
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_PLAY);
@@ -357,6 +384,11 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Get the current user ID
         $userId = Stephino_Rpg_TimeLapse::get()->userId();
         
+        // Account suspended
+        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg::get()->isAdmin())) {
+            throw new Exception(__('Your game arena publisher account was suspended', 'stephino-rpg'));
+        }
+        
         // Get the platformer ID
         $ptfId = abs((int) current($commonArgs));
         
@@ -374,8 +406,13 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('Game not found', 'stephino-rpg'));
         }
         
-        // Confirm the author
-        if ($userId != $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
+        // Editing rights
+        if (!Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
+            $userId, 
+            Stephino_Rpg::get()->isAdmin(),
+            $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
+            $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
+        )) {
             throw new Exception(__('You cannot edit this game', 'stephino-rpg'));
         }
         

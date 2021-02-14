@@ -91,6 +91,7 @@ class Stephino_Rpg_Renderer_Ajax {
     const RESULT_RESOURCES         = 'resources';
     const RESULT_ENTITIES          = 'entities';
     const RESULT_ANNOUNCEMENT      = 'announcement';
+    const RESULT_LANGUAGE          = 'language';
     const RESULT_CHANGELOG         = 'changelog';
     const RESULT_NAVIGATION        = 'navigation';
     const RESULT_BUILDING_UPGS     = 'building_upgs';
@@ -168,6 +169,7 @@ class Stephino_Rpg_Renderer_Ajax {
         if (is_array($result)) {
             // Cell AJAX request
             if (isset($result[Stephino_Rpg_Renderer_Ajax_Cells::RESULT_GRID])) {
+                $wrappedResult[self::RESULT_LANGUAGE]     = self::_getLanguage();
                 $wrappedResult[self::RESULT_ANNOUNCEMENT] = self::_getAnnouncement();
                 $wrappedResult[self::RESULT_CHANGELOG]    = self::_getChangelog();
             }
@@ -458,6 +460,16 @@ class Stephino_Rpg_Renderer_Ajax {
     }
     
     /**
+     * Does the user need to select a language?
+     * 
+     * @return boolean True if the user has never set his language
+     */
+    protected static function _getLanguage() {
+        return null === Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_LANG)
+            && count(Stephino_Rpg_Utils_Lingo::getLanguages()) > 1;
+    }
+    
+    /**
      * Is there an announcement ready for this user?
      * 
      * @return boolean An announcement is available for this user
@@ -472,7 +484,7 @@ class Stephino_Rpg_Renderer_Ajax {
                 // Authenticated user
                 if (Stephino_Rpg_TimeLapse::get()->userId()) {
                     // Have not read this announcement yet
-                    if ($result[0] != Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ANN_READ)) {
+                    if ($result[0] != Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ANN)) {
                         break;
                     }
                 }
@@ -492,7 +504,7 @@ class Stephino_Rpg_Renderer_Ajax {
      */
     protected static function _getChangelog() {
         return Stephino_Rpg_Config::get()->core()->getShowAbout() 
-            && Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_CHL_READ);
+            && Stephino_Rpg::PLUGIN_VERSION !== Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_CHL);
     }
     
     /**

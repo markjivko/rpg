@@ -13,13 +13,17 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_Ajax_Dialog {
 
     // Dialog templates
-    const TEMPLATE_LIST = 'messages/messages-list';
-    const TEMPLATE_READ = 'messages/messages-read';
+    const TEMPLATE_LIST       = 'messages/messages-list';
+    const TEMPLATE_READ       = 'messages/messages-read';
+    const TEMPLATE_PTF_REVIEW = 'messages/messages-ptf-review';
     
     // Request keys
     const REQUEST_MESSAGE_ID   = 'messageId';
     const REQUEST_MESSAGE_TYPE = 'messageType';
     const REQUEST_MESSAGE_PAGE = 'messagePage';
+    
+    // JavaScript actions
+    const JS_ACTION_MESSAGE_LIST = 'messageList';
     
     /**
      * Message list
@@ -75,7 +79,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
             ),
             Stephino_Rpg_Config::get()->core()->getMessagePageSize(),
             $messagePageNumber
-        ))->setAction('messageList');
+        ))->setAction(self::JS_ACTION_MESSAGE_LIST);
         
         // Get the message data
         $messageData = Stephino_Rpg_Db::get()->tableMessages()->getByType(

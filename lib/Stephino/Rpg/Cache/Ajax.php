@@ -70,14 +70,14 @@ class Stephino_Rpg_Cache_Ajax {
     protected $_eTag = null;
     
     /**
-     * Get a Singleton instance
+     * Get a Singleton instance of AJAX Cache
      * 
      * @param string $className  Called class name
      * @param string $methodName Called class method name
      * @param array  $extraInfo  (optional) Extra info, list of strings; default <b>[]</b>
      * @return Stephino_Rpg_Cache_Ajax
      */
-    public static function getInstance($className, $methodName, Array $extraInfo = array()) {
+    public static function get($className, $methodName, Array $extraInfo = array()) {
         // Prepare the instance key
         $instanceKey = trim($className) . '.' . trim($methodName) . '.' . implode('.', $extraInfo);
         
@@ -103,13 +103,13 @@ class Stephino_Rpg_Cache_Ajax {
         $this->_instanceKey = $instanceKey;
         
         // Store the last animation change timestamp
-        $this->_timestampCreated = Stephino_Rpg_Cache_Game::getInstance()->getValue(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, null);
+        $this->_timestampCreated = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, null);
         $this->_timestampCreatedString = null === $this->_timestampCreated ? null : (gmdate('D, d M Y H:i:s ', $this->_timestampCreated) . 'GMT');
         
         // Create the entity tag
         $this->_eTag = md5(implode('-', array(
             Stephino_Rpg::PLUGIN_VERSION,
-            Stephino_Rpg::PLUGIN_VERSION_DATABASE,
+            Stephino_Rpg::PLUGIN_VERSION_DB,
             $this->_instanceKey,
             $this->_timestampCreated,
             isset($_COOKIE) && isset($_COOKIE[LOGGED_IN_COOKIE]) ? trim($_COOKIE[LOGGED_IN_COOKIE]) : 'x',

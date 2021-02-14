@@ -240,7 +240,9 @@
         <div class="col-12 p-2 text-center">
             <?php 
                 echo esc_html__('Unknown military action', 'stephino-rpg');
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($itemType, $itemData);
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    "tpl/timelapse/timelapse-military, $itemType ($itemId), user #$userId: {$exc->getMessage()}"
+                );
             ?>
         </div>
     <?php break; endswitch; ?>
