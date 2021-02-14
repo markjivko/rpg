@@ -38,7 +38,16 @@ Starting with version 0.1.2, robots can perform the following tasks:
  * Perform Research activities
  * Assign workers to Buildings
 
-Robots do not have military capabilities for now so it's a great time to attack them!
+Starting with version 0.3.2, robots have military capabilities:
+
+ * Queue military units and ships
+ * Estimate the best time for attack
+ * Systematically attack players
+
+You can control the robot military activity with the following configuration items:
+
+ * **Aggression**: low/medium/high
+ * **Fervor**: between 5 and 100; the higher the number, the more active robots are
 
 ### Platformer
 Design your own platformer mini-levels and play games created by others to earn gems!
