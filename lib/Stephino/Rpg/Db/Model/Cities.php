@@ -80,7 +80,7 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
     }
     
     /**
-     * Create a city, adding the first buildings as well
+     * Create a city, adding the first buildings as well; assign tutorial rewards to robots
      * 
      * @param int     $userId       Owner User ID
      * @param boolean $isRobot      Owner is a Robot account
@@ -244,6 +244,64 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
             } catch (Exception $exc) {
                 Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
                     "Db_Model_Cities.create, city #$cityId, building config #{$buildingConfig->getId()}: {$exc->getMessage()}"
+                );
+            }
+        }
+        
+        // Tutorial rewards for robots
+        if ($isRobot) {
+            // Prepare the update data
+            $updates = array(
+                Stephino_Rpg_Db_Table_Users::NAME  => array(),
+                Stephino_Rpg_Db_Table_Cities::NAME => array(),
+            );
+            
+            // Go through the checkpoints
+            foreach (Stephino_Rpg_Config::get()->tutorials()->getAll() as $tutorialObject) {
+                if ($tutorialObject->getTutorialIsCheckPoint()) {
+                    // Prepare the rewards
+                    $rewards = array(
+                        Stephino_Rpg_Db_Table_Users::NAME => array(
+                            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD     => $tutorialObject->getTutorialCheckPointRewardGold(),
+                            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH => $tutorialObject->getTutorialCheckPointRewardResearch(),
+                            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM      => $tutorialObject->getTutorialCheckPointRewardGem(),
+                        ),
+                        Stephino_Rpg_Db_Table_Cities::NAME => array(
+                            Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_ALPHA   => $tutorialObject->getTutorialCheckPointRewardAlpha(),
+                            Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_BETA    => $tutorialObject->getTutorialCheckPointRewardBeta(),
+                            Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_GAMMA   => $tutorialObject->getTutorialCheckPointRewardGamma(),
+                            Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_1 => $tutorialObject->getTutorialCheckPointRewardExtra1(),
+                            Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_2 => $tutorialObject->getTutorialCheckPointRewardExtra2(),
+                        )
+                    );
+                    
+                    // Add the rewards to the corresponding tables
+                    foreach ($rewards as $rewardTableName => $rewardData) {
+                        foreach ($rewardData as $rewardTableKey => $rewardValue) {
+                            if ($rewardValue > 0) {
+                                if (!isset($updates[$rewardTableName][$rewardTableKey])) {
+                                    $updates[$rewardTableName][$rewardTableKey] = 0;
+                                }
+                                $updates[$rewardTableName][$rewardTableKey] += $rewardValue;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            // Tutorial reward: robot
+            if (count($updates[Stephino_Rpg_Db_Table_Users::NAME])) {
+                $this->getDb()->tableUsers()->updateById(
+                    $updates[Stephino_Rpg_Db_Table_Users::NAME], 
+                    $userId
+                );
+            }
+            
+            // Tutorial reward: robot's city
+            if (count($updates[Stephino_Rpg_Db_Table_Cities::NAME])) {
+                $this->getDb()->tableCities()->updateById(
+                    $updates[Stephino_Rpg_Db_Table_Cities::NAME], 
+                    $cityId
                 );
             }
         }

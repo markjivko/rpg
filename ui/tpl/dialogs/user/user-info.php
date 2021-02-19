@@ -99,7 +99,7 @@
         </div>
     <?php endif;?>
 </div>
-<?php if (Stephino_Rpg_Config::get()->core()->getPtfEnabled()):?>
+<?php if (Stephino_Rpg_Config::get()->core()->getPtfEnabled() && is_numeric($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
     <div class="col-12 align-items-center mt-2 framed">
         <div class="col-12 text-center mb-2">
             <h5 
@@ -191,10 +191,20 @@
                         if (!is_array($userSettingsArray = @json_decode($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS], true))) {
                             $userSettingsArray = array();
                         }
-                        foreach ($userSettingsArray as $userSettingKey => $userSettingValue):
+                        
+                        // Go through the list of keys
+                        foreach (Stephino_Rpg_Cache_User::get()->allowedKeys() as $userSettingKey):
+                            if (!isset($userSettingsArray[$userSettingKey])) {
+                                continue;
+                            }
+                            
+                            // Hide platformer data
+                            if (preg_match('%^ptf_%', $userSettingKey)) {
+                                continue;
+                            }
                     ?>
                         <li>
-                            <b><?php echo esc_html($userSettingKey);?></b>: <?php echo json_encode($userSettingValue);?>
+                            <b><?php echo esc_html(ucfirst(str_replace('_', ' ', $userSettingKey)));?></b>: <?php echo json_encode($userSettingsArray[$userSettingKey]);?>
                         </li>
                     <?php endforeach;?>
                 </ul>

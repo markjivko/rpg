@@ -1,13 +1,13 @@
 # Copyright (c) 2021 Stephino
 # 
-# Stephen Covey | There are three constants in life... change, choice and principles.
+# Christina Rossetti | Love shall be our token love be yours and love be mine.
 # 
 # Distributed under the GNU General Public License v2 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Stephino Rpg v.0.3.3\n"
-"POT-Creation-Date: 2021-02-14 15:11:19+00:00\n"
-"PO-Revision-Date: 2021-02-14 15:11:19+00:00\n"
+"Project-Id-Version: Stephino Rpg v.0.3.4\n"
+"POT-Creation-Date: 2021-02-19 07:40:58+00:00\n"
+"PO-Revision-Date: 2021-02-19 07:40:58+00:00\n"
 "Last-Translator: Stephino\n"
 "Language-Team: Stephino\n"
 "MIME-Version: 1.0\n"
@@ -58,8 +58,8 @@ msgstr ""
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:34
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:54
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:133
-#: lib/Stephino/Rpg/Db/Model/Cities.php:348
-#: lib/Stephino/Rpg/Db/Model/Cities.php:426
+#: lib/Stephino/Rpg/Db/Model/Cities.php:406
+#: lib/Stephino/Rpg/Db/Model/Cities.php:484
 #: lib/Stephino/Rpg/Db/Model/Convoys.php:329
 #: lib/Stephino/Rpg/Db/Model/Convoys.php:498
 #: lib/Stephino/Rpg/Db/Model/Entities.php:71
@@ -92,8 +92,8 @@ msgstr ""
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:44
 #: lib/Stephino/Rpg/Db/Model/Buildings.php:143
 #: lib/Stephino/Rpg/Db/Model/Cities.php:142
-#: lib/Stephino/Rpg/Db/Model/Cities.php:338
-#: lib/Stephino/Rpg/Db/Model/Cities.php:404
+#: lib/Stephino/Rpg/Db/Model/Cities.php:396
+#: lib/Stephino/Rpg/Db/Model/Cities.php:462
 #: lib/Stephino/Rpg/Db/Model/Entities.php:38
 #: lib/Stephino/Rpg/Db/Model/Queues.php:117
 #: lib/Stephino/Rpg/Db/Model/Queues.php:319
@@ -150,19 +150,19 @@ msgstr ""
 msgid "Lot already occupied"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Cities.php:361
+#: lib/Stephino/Rpg/Db/Model/Cities.php:419
 #: lib/Stephino/Rpg/Db/Model/ResearchFields.php:76
 #, php-format
 #@ stephino-rpg
 msgid "Could not update (%s)"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Cities.php:394
+#: lib/Stephino/Rpg/Db/Model/Cities.php:452
 #@ stephino-rpg
 msgid "Invalid resource name"
 msgstr ""
 
-#: lib/Stephino/Rpg/Db/Model/Cities.php:451
+#: lib/Stephino/Rpg/Db/Model/Cities.php:509
 #@ stephino-rpg
 msgid "Could not update resource"
 msgstr ""
@@ -608,7 +608,7 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:41
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:91
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:217
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:394
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:398
 #, php-format
 #@ stephino-rpg
 msgid "Not found (%s)"
@@ -703,7 +703,7 @@ msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/City.php:172
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:85
-#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3053
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3055
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:150
 #, php-format
 #@ stephino-rpg
@@ -1190,12 +1190,12 @@ msgstr ""
 msgid "Entity configuration ID is invalid"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3003
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3005
 #@ stephino-rpg
 msgid "Nothing to refund"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3004
+#: lib/Stephino/Rpg/Renderer/Ajax/Action.php:3006
 #@ stephino-rpg
 msgid "Could not acquire item"
 msgstr ""
@@ -1254,6 +1254,39 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Attack.php:114
 #@ stephino-rpg
 msgid "Confirm attack"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:315
+#@ stephino-rpg
+msgid "Trade resources"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:364
+#: ui/tpl/dialogs/building/building-info-entities.php:245
+#: ui/tpl/dialogs/building/building-info.php:61
+#: ui/tpl/dialogs/building/building-upgrade.php:53
+#: ui/tpl/dialogs/city/city-advisor.php:68
+#: ui/tpl/dialogs/city/city-garrison.php:90
+#: ui/tpl/dialogs/entity/entity-recruit.php:88
+#@ stephino-rpg
+msgid "Build"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:365
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:92
+#: ui/tpl/dialogs/building/building-info.php:61
+#: ui/tpl/dialogs/building/building-upgrade.php:53
+#: ui/tpl/dialogs/city/city-advisor.php:69
+#: ui/tpl/dialogs/island/island-info.php:46
+#: ui/tpl/dialogs/island/island-upgrade.php:39
+#: ui/tpl/dialogs/settings/settings-resources.php:230
+#@ stephino-rpg
+msgid "Upgrade"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Building.php:409
+#@ stephino-rpg
+msgid "Cancel upgrade"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/City.php:64
@@ -1327,6 +1360,12 @@ msgstr ""
 msgid "Queues"
 msgstr ""
 
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Convoy.php:30
+#: ui/tpl/wordpress/wp-game.php:75 ui/tpl/wordpress/wp-game.php:92
+#@ stephino-rpg
+msgid "Convoys"
+msgstr ""
+
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Entity.php:88
 #: ui/tpl/dialogs/building/building-info-entities.php:243
 #: ui/tpl/dialogs/city/city-garrison.php:88
@@ -1378,17 +1417,6 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:84
 #@ stephino-rpg
 msgid "Upgrade not allowed"
-msgstr ""
-
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:92
-#: ui/tpl/dialogs/building/building-info.php:61
-#: ui/tpl/dialogs/building/building-upgrade.php:53
-#: ui/tpl/dialogs/city/city-advisor.php:69
-#: ui/tpl/dialogs/island/island-info.php:46
-#: ui/tpl/dialogs/island/island-upgrade.php:39
-#: ui/tpl/dialogs/settings/settings-resources.php:230
-#@ stephino-rpg
-msgid "Upgrade"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Island.php:123
@@ -3435,16 +3463,6 @@ msgstr ""
 msgid "Transported mass"
 msgstr ""
 
-#: ui/tpl/dialogs/building/building-info-entities.php:245
-#: ui/tpl/dialogs/building/building-info.php:61
-#: ui/tpl/dialogs/building/building-upgrade.php:53
-#: ui/tpl/dialogs/city/city-advisor.php:68
-#: ui/tpl/dialogs/city/city-garrison.php:90
-#: ui/tpl/dialogs/entity/entity-recruit.php:88
-#@ stephino-rpg
-msgid "Build"
-msgstr ""
-
 #: ui/tpl/dialogs/building/building-info-metrics.php:38
 #, php-format
 #@ stephino-rpg
@@ -4894,7 +4912,7 @@ msgid "Colonize from"
 msgstr ""
 
 #: ui/tpl/dialogs/island/island-colonize-review.php:72
-#: ui/tpl/dialogs/spy/spy-review.php:86 ui/tpl/dialogs/user/user-info.php:236
+#: ui/tpl/dialogs/spy/spy-review.php:86 ui/tpl/dialogs/user/user-info.php:246
 #@ stephino-rpg
 msgid "Send"
 msgstr ""
@@ -5540,64 +5558,64 @@ msgstr ""
 msgid "Tutorial level"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:211
+#: ui/tpl/dialogs/user/user-info.php:221
 #@ stephino-rpg
 msgid "Contact"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:214
+#: ui/tpl/dialogs/user/user-info.php:224
 #@ stephino-rpg
 msgid "Message sent"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:221
+#: ui/tpl/dialogs/user/user-info.php:231
 #@ stephino-rpg
 msgid "Subject"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:222 ui/tpl/dialogs/user/user-info.php:229
+#: ui/tpl/dialogs/user/user-info.php:232 ui/tpl/dialogs/user/user-info.php:239
 #, php-format
 #@ stephino-rpg
 msgid "max. %d characters"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:228
+#: ui/tpl/dialogs/user/user-info.php:238
 #@ stephino-rpg
 msgid "Message"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:250
+#: ui/tpl/dialogs/user/user-info.php:260
 #: ui/tpl/dialogs/user/user-leader-board.php:26
 #@ stephino-rpg
 msgid "Nickname"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:251
+#: ui/tpl/dialogs/user/user-info.php:261
 #@ stephino-rpg
 msgid "Choose a nickname (no spaces)"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:270
+#: ui/tpl/dialogs/user/user-info.php:280
 #@ stephino-rpg
 msgid "Bio"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:271
+#: ui/tpl/dialogs/user/user-info.php:281
 #@ stephino-rpg
 msgid "Describe yourself (optional)"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:296
+#: ui/tpl/dialogs/user/user-info.php:306
 #@ stephino-rpg
 msgid "Password"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:297
+#: ui/tpl/dialogs/user/user-info.php:307
 #@ stephino-rpg
 msgid "Set a new password for your account"
 msgstr ""
 
-#: ui/tpl/dialogs/user/user-info.php:309
+#: ui/tpl/dialogs/user/user-info.php:319
 #@ stephino-rpg
 msgid "Change password"
 msgstr ""
@@ -5974,11 +5992,6 @@ msgstr ""
 #: ui/tpl/wordpress/wp-game.php:64 ui/tpl/wordpress/wp-game.php:84
 #@ stephino-rpg
 msgid "Fullscreen"
-msgstr ""
-
-#: ui/tpl/wordpress/wp-game.php:75 ui/tpl/wordpress/wp-game.php:92
-#@ stephino-rpg
-msgid "Convoys"
 msgstr ""
 
 #: ui/tpl/wordpress/wp-game.php:187

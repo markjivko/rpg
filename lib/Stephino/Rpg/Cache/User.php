@@ -13,9 +13,9 @@
 class Stephino_Rpg_Cache_User {
     
     /**
-     * Announcement read
+     * Selected language
      */
-    const KEY_ANN        = 'ann';
+    const KEY_LANG       = 'lang';
     
     /**
      * Changelog read (binds to current game version)
@@ -23,9 +23,9 @@ class Stephino_Rpg_Cache_User {
     const KEY_CHL        = 'chl';
     
     /**
-     * Last selected language
+     * Announcement read
      */
-    const KEY_LANG       = 'lang';
+    const KEY_ANN        = 'ann';
     
     // Volumes
     const KEY_VOL_MUSIC  = 'vol_music';
@@ -93,7 +93,7 @@ class Stephino_Rpg_Cache_User {
     protected $_changed = false;
     
     /**
-     * Get the user cache instance, time-lapse workspace dependant
+     * Get the user cache instance, dependent on time-lapse workspace
      * 
      * @return Stephino_Rpg_Cache_User
      */
@@ -114,9 +114,18 @@ class Stephino_Rpg_Cache_User {
             // Initialize the local data storage
             if (self::$_instance->_userId) {
                 list($wpUserId, $robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
-                self::$_instance->_data = Stephino_Rpg_Db::get($robotId, $wpUserId)
+                
+                // Get the stored user data
+                $userData = Stephino_Rpg_Db::get($robotId, $wpUserId)
                     ->tableUsers()
                     ->getGameSettings();
+                
+                // Filter-out invalid keys
+                foreach (self::$_instance->allowedKeys() as $allowedKey) {
+                    if (isset($userData[$allowedKey])) {
+                        self::$_instance->_data[$allowedKey] = $userData[$allowedKey];
+                    }
+                }
             }
         }
         
@@ -137,6 +146,15 @@ class Stephino_Rpg_Cache_User {
     }
     
     /**
+     * Get the list of allowed cache keys
+     * 
+     * @return string[]
+     */
+    public function allowedKeys() {
+        return $this->_allowedKeys;
+    }
+    
+    /**
      * Get the current user data
      * 
      * @return array
@@ -153,7 +171,7 @@ class Stephino_Rpg_Cache_User {
      * @return mixed|null Cached value or the default on error
      */
     public function read($cacheKey, $default = null) {
-        return in_array($cacheKey, $this->_allowedKeys) && isset($this->_data[$cacheKey]) 
+        return in_array($cacheKey, $this->allowedKeys()) && isset($this->_data[$cacheKey]) 
             ? $this->_data[$cacheKey] 
             : $default;
     }
@@ -167,7 +185,7 @@ class Stephino_Rpg_Cache_User {
      */
     public function write($cacheKey, $cacheValue) {
         // Valid key
-        if (in_array($cacheKey, $this->_allowedKeys)) {
+        if (in_array($cacheKey, $this->allowedKeys())) {
             $this->_data[$cacheKey] = $cacheValue;
             $this->_changed = true;
         }

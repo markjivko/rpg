@@ -14,8 +14,8 @@ jQuery && jQuery(document).ready(function() { var $ = jQuery, bodyObject = $('bo
 
 /*!
  * Screenfull v5.0.2
- * 
  * https://github.com/sindresorhus/screenfull.js/
+ * 
  * Copyright (c) Sindre Sorhus
  * Licensed under MIT
  */

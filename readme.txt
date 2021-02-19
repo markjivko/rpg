@@ -134,6 +134,15 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 
 == Changelog ==
 
+= [0.3.4] 2021-02-19 =
+* Enhancements
+  * Robots earn tutorial rewards automatically
+* Bug fixes
+  * Fixed English labels bug
+  * Fixed several translation issues
+* Additional changes
+  * Improved "Extra info" display for game masters
+
 = [0.3.3] 2021-02-14 =
 * Enhancements
   * Player-level **language selection**

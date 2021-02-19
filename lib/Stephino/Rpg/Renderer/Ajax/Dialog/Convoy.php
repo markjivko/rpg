@@ -27,7 +27,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Convoy extends Stephino_Rpg_Renderer_Aja
         
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE => 'Active Convoys',
+                self::RESULT_TITLE => __('Convoys', 'stephino-rpg'),
             )
         );
     }

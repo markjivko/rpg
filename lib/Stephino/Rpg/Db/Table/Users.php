@@ -180,24 +180,25 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     }
 
     /**
-     * Create a new user
+     * Create a new user; set the tutorial level to max. for robot accounts
      * 
-     * @param boolean $robot (optional) Create a robot account; default <b>false</b>
+     * @param boolean $isRobot (optional) Create a robot account; default <b>false</b>
      * @return int|null New User ID or Null on error
      */
-    public function create($robot = false) {
+    public function create($isRobot = false) {
         $currentTime = time();
         
         // Execute the query
         $insertResult = $this->getDb()->getWpDb()->insert(
             $this->getTableName(), 
             array(
-                self::COL_USER_WP_ID             => ($robot ? null : ($this->getDb()->getRobotId() ? null : $this->getDb()->getWpUserId())),
+                self::COL_USER_WP_ID             => ($isRobot ? null : ($this->getDb()->getRobotId() ? null : $this->getDb()->getWpUserId())),
                 self::COL_USER_RESOURCE_GOLD     => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceGold()),
                 self::COL_USER_RESOURCE_RESEARCH => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceResearch()),
                 self::COL_USER_RESOURCE_GEM      => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceGem()),
                 self::COL_USER_CREATED           => $currentTime,
                 self::COL_USER_LAST_TICK         => $currentTime,
+                self::COL_USER_TUTORIAL_LEVEL    => ($isRobot ? count(Stephino_Rpg_Config::get()->tutorials()->getAll()) : 0),
             )
         );
 

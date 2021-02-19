@@ -28,7 +28,7 @@
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game Masters', 'stephino-rpg');?></span></h6>
     <ul>
-        <?php if (Stephino_Rpg::get()->isDemo() || Stephino_Rpg::get()->isAdmin()):?>
+        <?php if (Stephino_Rpg::get()->isAdmin()):?>
             <li><b><?php echo esc_html__('You are a Game Master', 'stephino-rpg');?></b></li>
         <?php endif;?>
         <li><?php echo esc_html__('Decide the rules of the game, as they are presented here', 'stephino-rpg');?></li>

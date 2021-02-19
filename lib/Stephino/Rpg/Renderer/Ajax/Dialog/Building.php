@@ -312,7 +312,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         require self::dialogTemplatePath(self::TEMPLATE_MARKET);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE           => 'Trade resources',
+                self::RESULT_TITLE           => __('Trade resources', 'stephino-rpg'),
                 self::RESULT_BUILDING_CONFIG => $buildingConfig->toArray(),
             ),
             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]
@@ -359,7 +359,11 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE           => $buildingConfig->getName() . ' - ' . (!is_array($buildingData) ? 'Build' : 'Upgrade'),
+                self::RESULT_TITLE           => $buildingConfig->getName() . ': ' . (
+                    !is_array($buildingData) 
+                        ? __('Build', 'stephino-rpg') 
+                        : __('Upgrade', 'stephino-rpg')
+                ),
                 self::RESULT_DATA            => $buildingData,
                 self::RESULT_BUILDING_CONFIG => $buildingConfig->toArray(),
                 self::RESULT_BUILDING_QUEUE  => $queueData,
@@ -402,7 +406,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE           => $buildingConfig->getName() . ' - Cancel Upgrade',
+                self::RESULT_TITLE           => $buildingConfig->getName() . ': ' . __('Cancel upgrade', 'stephino-rpg'),
                 self::RESULT_DATA            => $buildingData,
                 self::RESULT_BUILDING_CONFIG => $buildingConfig->toArray(),
                 self::RESULT_BUILDING_QUEUE  => $queueData,

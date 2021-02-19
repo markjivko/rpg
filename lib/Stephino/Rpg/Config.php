@@ -13,7 +13,7 @@
 class Stephino_Rpg_Config {
     
     // Files
-    const FILE_CONFIG = 'config.php';
+    const FILE_CONFIG = 'config.json';
     const FILE_I18N   = 'i18n.php';
     
     // Folders
@@ -272,36 +272,33 @@ class Stephino_Rpg_Config {
     /**
      * Get the default configuration array OR alter the provided configuration array with i18n labels
      * 
-     * @param array|null $configData (optional) Saved configuration array (English); default <b>null</b> to use the default config instead
-     * @param array|null $userLabels (optional) Saved user labels array (multilanguage); default <b>null</b>
+     * @param array|null $configData (optional) Saved configuration array (English); default <b>null</b> to use the default configuration instead
+     * @param array|null $userLabels (optional) Saved user labels array (non-English); default <b>null</b>
      * @return array
      */
     public static function getI18n($configData = null, $userLabels = null) {
-        // Get the default configuration file path
-        if (is_array($configData)) {
-            $result = $configData;
-        } else {
+        // Prepare the result
+        $result = $configData;
+            
+        do {
+            if (is_array($configData)) {
+                break;
+            }
+            
+            // Get the default configuration array
             $configDefaultPath = STEPHINO_RPG_ROOT . '/' . self::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . self::FILE_CONFIG;
             
             // Get the configuration data
             $result = is_file($configDefaultPath)
-                ? json_decode(
-                    trim(
-                        substr(
-                            file_get_contents($configDefaultPath), 
-                            15
-                        )
-                    ), 
-                    true
-                )
+                ? json_decode(trim(file_get_contents($configDefaultPath)), true)
                 : array();
             if (!is_array($result)) {
                 $result = array();
             }
-        }
+        } while(false);
 
-        // Invalid format
-        if (count($result)) {
+        // Load language-specific labels
+        if (null !== self::lang() && count($result)) {
             if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . self::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . self::FILE_I18N)) {
                 $stephino_rpg_i18n = null;
                 

@@ -2888,7 +2888,9 @@ class Stephino_Rpg_Renderer_Ajax_Action {
                                     if ($cityId == $dbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID]
                                         && $configId == $dbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]
                                         && $entityType == $dbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE]) {
-                                        $prodFactor = intval($dbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]);
+                                        if ((int) $dbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT] > 0) {
+                                            $prodFactor = (int) $dbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];
+                                        }
                                         break;
                                     }
                                 }
