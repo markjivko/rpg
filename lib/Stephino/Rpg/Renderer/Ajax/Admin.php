@@ -8,19 +8,24 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Admin {
 
     /**
      * Request keys
      */
-    const REQUEST_STATS_TYPE  = 'statsType';
-    const REQUEST_STATS_YEAR  = 'statsYear';
-    const REQUEST_STATS_MONTH = 'statsMonth';
-    const REQUEST_ANN_TITLE   = 'annTitle';
-    const REQUEST_ANN_CONTENT = 'annContent';
-    const REQUEST_ANN_DAYS    = 'annDays';
+    const REQUEST_STATS_TYPE     = 'statsType';
+    const REQUEST_STATS_YEAR     = 'statsYear';
+    const REQUEST_STATS_MONTH    = 'statsMonth';
+    const REQUEST_ANN_TITLE      = 'annTitle';
+    const REQUEST_ANN_CONTENT    = 'annContent';
+    const REQUEST_ANN_DAYS       = 'annDays';
+    const REQUEST_THEME_NAME     = 'themeName';
+    const REQUEST_THEME_TEMPLATE = 'themeTemplate';
+    const REQUEST_THEME_SLUG     = 'themeSlug';
+    const REQUEST_FILE_PATH      = 'filePath';
+    const REQUEST_FILE_TEXT      = 'fileText';
     
     /**
      * Get the configuration definition
@@ -39,7 +44,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminGetStats($data) {
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have access to the Dashboard', 'stephino-rpg'));
         }
         
@@ -58,7 +63,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminSetAnnouncement($data) {
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have access to the Announcements', 'stephino-rpg'));
         }
         
@@ -82,7 +87,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminDelAnnouncement() {
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have access to the Announcements', 'stephino-rpg'));
         }
         
@@ -102,7 +107,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminExportConfig() {
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have permission to export the game configuration', 'stephino-rpg'));
         }
         return Stephino_Rpg_Config::export(false, true);
@@ -112,9 +117,10 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * Reset the game configuration to default values
      */
     public static function ajaxAdminResetConfig() {
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have permission to reset the game configuration', 'stephino-rpg'));
         }
+        
         return Stephino_Rpg_Config::reset();
     }
     
@@ -124,12 +130,12 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminRestartGame() {
-        if (!Stephino_Rpg::get()->isAdmin()) {
-            throw new Exception(__('You do not have permission to reset the game', 'stephino-rpg'));
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('You do not have permission to restart the game', 'stephino-rpg'));
         }
         
         // Remove all options (except for the PRO-level config)
-        Stephino_Rpg_Cache_Game::get()->purge();
+        Stephino_Rpg_Cache_Game::get()->purge(false);
 
         // Drop all tables
         Stephino_Rpg_Db::get()->purge();
@@ -142,7 +148,7 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
      * @throws Exception
      */
     public static function ajaxAdminSetConfig($data) {
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('(DEMO) You are free to experiment but your changes will not be saved', 'stephino-rpg'));
         }
 
@@ -159,12 +165,275 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
         Stephino_Rpg_Config::set($data);
 
         // Validate and save the data
-        Stephino_Rpg_Config::save();
+        Stephino_Rpg_Config::save(true);
 
         // Regenerate the CSS animation rules
         Stephino_Rpg_Renderer_Ajax_Css::generate();
     }
+    
+    /**
+     * Create a new theme
+     * 
+     * @param array $data
+     * @return boolean
+     * @throws Exception
+     */
+    public static function ajaxAdminThemeCreate($data) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('Permission denied', 'stephino-rpg'));
+        }
+        
+        // Get the arguments
+        $themeSlug = isset($data[self::REQUEST_THEME_TEMPLATE]) ? trim($data[self::REQUEST_THEME_TEMPLATE]) : '';
+        $themeName = isset($data[self::REQUEST_THEME_NAME]) ? trim($data[self::REQUEST_THEME_NAME]) : '';
+        
+        // Sanitize the name
+        $themeName = trim(
+            preg_replace(
+                array('%[^\w \-]+%i', '% {2,}%'), 
+                array('', ' '), 
+                $themeName
+            )
+        );
+        
+        // Validate the template
+        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+        if (!isset($installedThemes[$themeSlug])) {
+            throw new Exception(__('Invalid theme template', 'stephino-rpg'));
+        }
+        
+        // Duplicate this theme
+        return $installedThemes[$themeSlug]->duplicate($themeName);
+    }
+    
+    /**
+     * Delete an existing theme
+     * 
+     * @param array $data
+     * @return boolean
+     * @throws Exception
+     */
+    public static function ajaxAdminThemeDelete($data) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('Permission denied', 'stephino-rpg'));
+        }
+        
+        $themeSlug = isset($data[self::REQUEST_THEME_SLUG]) ? trim($data[self::REQUEST_THEME_SLUG]) : '';
+        
+        // Validate the template
+        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+        if (!isset($installedThemes[$themeSlug])) {
+            throw new Exception(__('Theme does not exist', 'stephino-rpg'));
+        }
+        
+        // Remove this theme
+        return $installedThemes[$themeSlug]->delete();
+    }
+    
+    /**
+     * Activate a theme and restart the game
+     * 
+     * @param array $data
+     * @throws Exception
+     */
+    public static function ajaxAdminThemeActivate($data) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('Permission denied', 'stephino-rpg'));
+        }
+        
+        $themeSlug = isset($data[self::REQUEST_THEME_SLUG]) ? trim($data[self::REQUEST_THEME_SLUG]) : '';
+        
+        // Validate the template
+        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+        if (!isset($installedThemes[$themeSlug])) {
+            throw new Exception(__('Theme does not exist', 'stephino-rpg'));
+        }
+        
+        // Theme already active
+        if ($installedThemes[$themeSlug]->isActive()) {
+            throw new Exception(__('Theme already activated', 'stephino-rpg'));
+        }
+        
+        // Activate this theme
+        return $installedThemes[$themeSlug]->activate();
+    }
 
+    /**
+     * Get all the files within a theme
+     * 
+     * @param array $data
+     * @return array
+     * @throws Exception
+     */
+    public static function ajaxAdminThemeEditList($data) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('Permission denied', 'stephino-rpg'));
+        }
+        
+        $themeSlug = isset($data[self::REQUEST_THEME_SLUG]) ? trim($data[self::REQUEST_THEME_SLUG]) : '';
+        
+        // Validate the template
+        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+        if (!isset($installedThemes[$themeSlug])) {
+            throw new Exception(__('Theme does not exist', 'stephino-rpg'));
+        }
+        
+        // Cannot edit this theme
+        if ($installedThemes[$themeSlug]->isDefault()) {
+            throw new Exception(__('Cannot edit the default theme', 'stephino-rpg'));
+        }
+        
+        // Get the theme folder
+        $themeFolder = $installedThemes[$themeSlug]->getFilePath();
+        return Stephino_Rpg_Utils_Folder::get()
+            ->fileSystem()
+            ->dirlist($themeFolder, false, true);
+    }
+    
+    /**
+     * Upload a file
+     * 
+     * @param array $data
+     * @throws Exception
+     */
+    public static function ajaxAdminThemeEditUpload($data) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('Permission denied', 'stephino-rpg'));
+        }
+        
+        // Prepare the file path and slug
+        $filePath = isset($data[self::REQUEST_FILE_PATH]) ? trim($data[self::REQUEST_FILE_PATH]) : '';
+        $themeSlug = isset($data[self::REQUEST_THEME_SLUG]) ? trim($data[self::REQUEST_THEME_SLUG]) : '';
+        
+        // Validate the template
+        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+        if (!isset($installedThemes[$themeSlug])) {
+            throw new Exception(__('Theme does not exist', 'stephino-rpg'));
+        }
+        
+        // Cannot edit this theme
+        if ($installedThemes[$themeSlug]->isDefault()) {
+            throw new Exception(__('Cannot edit the default theme', 'stephino-rpg'));
+        }
+        
+        // No files uploaded
+        if (!isset($_FILES) || !isset($_FILES['file']) || !isset($_FILES['file']['tmp_name'])) {
+            throw new Exception(__('No file was uploaded', 'stephino-rpg'));
+        }
+        
+        // Get the file extension
+        if (!preg_match('%^.*?\.(\w+)$%i', $filePath, $matches)) {
+            throw new Exception(__('Invalid file name', 'stephino-rpg'));
+        }
+        
+        // Validate extension
+        if (!in_array($matches[1], array('png', 'jpg', 'cur', 'mp3', 'webm', 'mp4'))) {
+            throw new Exception(__('Invalid file extension', 'stephino-rpg'));
+        }
+        
+        // Validate the uploaded file extension
+        if (!preg_match('%\.' . $matches[1] . '$%i', $_FILES['file']['name'])) {
+            throw new Exception(
+                sprintf(
+                    __('Invalid file extension, expecting "%s"', 'stephino-rpg'),
+                    '.' . strtolower($matches[1])
+                )
+            );
+        }
+        
+        // Check file on disk
+        $themeFilePath = $installedThemes[$themeSlug]->getFilePath($filePath);
+        if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_file($themeFilePath)) {
+            throw new Exception(__('Invalid file', 'stephino-rpg'));
+        }
+        
+        // Move uploaded file
+        Stephino_Rpg_Utils_Folder::get()
+            ->fileSystem()
+            ->move(
+                $_FILES['file']['tmp_name'],
+                $themeFilePath,
+                true
+            );
+        
+        // Force cache reset and PWA app version change, forcing local storage reset
+        Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_MEDIA_CHANGED, time());
+        return __('File uploaded successfully', 'stephino-rpg');
+    }
+    
+    /**
+     * Save a text file
+     * 
+     * @param array $data
+     * @throws Exception
+     */
+    public static function ajaxAdminThemeEditText($data) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
+            throw new Exception(__('Permission denied', 'stephino-rpg'));
+        }
+        
+        // Prepare the file path and slug
+        $filePath = isset($data[self::REQUEST_FILE_PATH]) ? trim($data[self::REQUEST_FILE_PATH]) : '';
+        $fileText = isset($data[self::REQUEST_FILE_TEXT]) ? trim($data[self::REQUEST_FILE_TEXT]) : '';
+        $themeSlug = isset($data[self::REQUEST_THEME_SLUG]) ? trim($data[self::REQUEST_THEME_SLUG]) : '';
+        
+        // Validate the template
+        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+        if (!isset($installedThemes[$themeSlug])) {
+            throw new Exception(__('Theme does not exist', 'stephino-rpg'));
+        }
+        
+        // Cannot edit this theme
+        if ($installedThemes[$themeSlug]->isDefault()) {
+            throw new Exception(__('Cannot edit the default theme', 'stephino-rpg'));
+        }
+        
+        // Get the file extension
+        if (!preg_match('%^.*?\.(\w+)$%i', $filePath, $matches)) {
+            throw new Exception(__('Invalid file name', 'stephino-rpg'));
+        }
+        
+        // Validate text
+        switch ($matches[1]) {
+            case 'txt':
+            case 'css':
+                // Nothing to check
+                break;
+            
+            case 'json':
+                if ('null' !== $fileText && null === json_decode($fileText, true)) {
+                    throw new Exception(__('Invalid JSON', 'stephino-rpg'));
+                } else {
+                    // Pretty-print the JSON file
+                    $fileText = json_encode(
+                        json_decode($fileText, true),
+                        JSON_PRETTY_PRINT
+                    );
+                }
+                break;
+            
+            default:
+                throw new Exception(__('Invalid file extension', 'stephino-rpg'));
+        }
+        
+        // Check file on disk
+        $themeFilePath = $installedThemes[$themeSlug]->getFilePath($filePath);
+        if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_file($themeFilePath)) {
+            throw new Exception(__('Invalid file', 'stephino-rpg'));
+        }
+        
+        // Write to file
+        Stephino_Rpg_Utils_Folder::get()
+            ->fileSystem()
+            ->put_contents(
+                $themeFilePath,
+                $fileText
+            );
+        
+        // Force cache reset and PWA app version change, forcing local storage reset
+        Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_MEDIA_CHANGED, time());
+        return __('File saved successfully', 'stephino-rpg');
+    }
 }
 
 /*EOF*/

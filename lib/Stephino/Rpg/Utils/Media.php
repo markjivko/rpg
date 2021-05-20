@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Utils_Media {
@@ -59,6 +59,47 @@ class Stephino_Rpg_Utils_Media {
      */
     protected static $_cacheAdminUrls = array();
     
+    /**
+     * Get the Avatar URL for a user
+     * 
+     * @param int    $wpUserId WordPress User ID
+     * @param int    $size     (optional) Height and width of the avatar image file in pixels; default <b>256</b>
+	 * @param string $default  (optional) URL for the default image or a default type; accepts: <ul>
+     * <li>'404': return a 404 instead of a default image</li>
+     * <li>'retro': 8bit</li>
+     * <li>'monsterid': monster</li>
+     * <li>'wavatar': cartoon face</li>
+     * <li>'indenticon': the "quilt"</li>                           
+     * <li>'mystery', 'mm', or 'mysteryman': The Oyster Man</li>
+     * <li>'blank': transparent GIF</li>
+	 * <li>'gravatar_default': the Gravatar logo</li>
+     * </ul>
+     * default <b>wavatar</b>
+     * @return string|null WordPress User Avatar URL or null on error
+     */
+    public static function getAvatarUrl($wpUserId, $size = 256, $default = 'wavatar') {
+        $result = null;
+
+        do {
+            // Filtered avatar <img/> tag
+            if (preg_match('%\bsrc\s*=\s*["\'](.*?)["\']%ims', get_avatar($wpUserId, $size, $default), $matches)) {
+                $result = $matches[1];
+                break;
+            }
+
+            // Fall-back to the unfiltered avatar url
+            $result = get_avatar_url(
+                $wpUserId,
+                array(
+                    'size'    => $size,
+                    'default' => $default
+                )
+            );
+        } while (false);
+
+        return $result;
+    }
+
     /**
      * Get the plugins URL
      * 
@@ -112,7 +153,7 @@ class Stephino_Rpg_Utils_Media {
         $hash = $includeHash
             ? (
                 substr(
-                    md5(Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, 1)), 
+                    md5(Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_MEDIA_CHANGED, 1)), 
                     0, 
                     12
                 ) . '/'
@@ -137,7 +178,7 @@ class Stephino_Rpg_Utils_Media {
         $result = array();
         
         // Check the events file
-        if (is_file($filePath = Stephino_Rpg_Config::get()->themePath(true) . '/audio/events.json')) {
+        if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath(Stephino_Rpg_Theme::FILE_AUDIO_EVENTS))) {
             $result = @json_decode(file_get_contents($filePath), true);
         }
         return $result;
@@ -151,8 +192,9 @@ class Stephino_Rpg_Utils_Media {
      * @return type
      */
     public static function getCommonBackgroundUrl($configKey, $fileName = self::IMAGE_512_VACANT) {
-        return self::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() 
-            . '/img/story/' . $configKey . '/' . self::FOLDER_COMMON . '/' . $fileName . '.png';
+        return Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(
+            'img/story/' . $configKey . '/' . self::FOLDER_COMMON . '/' . $fileName . '.png'
+        );
     }
     
     /**
@@ -188,10 +230,28 @@ class Stephino_Rpg_Utils_Media {
                 self::$_cacheClosestBackground[$cacheKey] = array();
                 
                 // Prepare the image pattern
-                $filePattern = Stephino_Rpg_Config::get()->themePath() . '/img/story/' . $configKey . '/*/*.' . $fileExtension;
+                $imagePattern = 'img/story/' . $configKey . '/*/*.' . $fileExtension;
+                
+                // Check for the default theme
+                if (Stephino_Rpg_Utils_Themes::getActive()->isDefault()) {
+                    $globList = glob(Stephino_Rpg_Utils_Themes::getActive()->getFilePath() . '/' . $imagePattern);
+                    
+                    // Default pro path already scoped
+                    if (Stephino_Rpg::get()->isPro()) {
+                        // Search locally
+                        $globListLocal = glob(Stephino_Rpg_Utils_Themes::getActive()->getFilePath(null, true) . '/' . $imagePattern);
+                        
+                        // Append the results
+                        $globList = is_array($globList)
+                            ? array_merge($globList, $globListLocal)
+                            : $globListLocal;
+                    }
+                } else {
+                    $globList = glob(Stephino_Rpg_Utils_Themes::getActive()->getFilePath() . '/' . $imagePattern);
+                }
                 
                 // Get the files list
-                if (is_array($globList = glob($filePattern))) {
+                if (is_array($globList)) {
                     natsort($globList);
                     foreach($globList as $globItem) {
                         // Prepare the configuration ID
@@ -264,9 +324,10 @@ class Stephino_Rpg_Utils_Media {
         }
         
         // Get the path
-        return self::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() 
-            . '/img/story/' . $configKey . '/' . $configId . '/' . $fileName 
-            . (1 === $backgroundId ? '' : '-' . $backgroundId) . '.' . $fileExtension;
+        return Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(
+            'img/story/' . $configKey . '/' . $configId . '/' . $fileName 
+            . (1 === $backgroundId ? '' : '-' . $backgroundId) . '.' . $fileExtension
+        );
     }
 }
 

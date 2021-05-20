@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action {
     
@@ -725,7 +725,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
      *     <li>Stephino_Rpg_Config_ResearchField</li>
      * </ul>
      * @return array|null [<ul>
-     *     <li>(int) <b>Time contraction</b>; 1 or lower means contraction disabled</li>
+     *     <li>(int) <b>Time contraction</b> 1 or lower means contraction disabled</li>
      *     <li>(int) <b>Premium Modifier Configuration ID</b> or <b>0</b> if none applied</li>
      * </ul>] or <b>null</b> if invalid configuration object
      */
@@ -916,7 +916,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
 
         // Get the available military entities configs
         $entityConfigs = array_filter(
-            self::getEntityConfigs(Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK),
+            Stephino_Rpg_Utils_Config::getEntitiesByCapability(Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK),
             function($entityConfig) use($cityId) {
                 list(, $requirementsMet) = self::getRequirements($entityConfig, $cityId);
                 return $requirementsMet;
@@ -1065,8 +1065,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
             }
             
             // Store the entities we afford considering maintenance costs
-            $affordMaintenance = min($affordList);
-            
+            $affordMaintenance = count($affordList) ? min($affordList) : 0;
             if ($affordMaintenance > 0) {
                 // Prepare the resources
                 $resources = Stephino_Rpg_Renderer_Ajax::getResources($cityId);
@@ -1092,7 +1091,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
                 }
 
                 // Store the entities we afford considering upfront cost
-                $affordCost = min($affordList);
+                $affordCost = count($affordList) ? min($affordList) : 0;
 
                 // We afford at least one
                 if ($affordCost > 0) {
@@ -1893,78 +1892,6 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         }
 
         return $queueData;
-    }
-    
-    /**
-     * Get entity configuration object by capability
-     * 
-     * @param string $capability Entity capability, one of <ul>
-     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK</li>
-     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER</li>
-     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SPY</li>
-     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER</li>
-     * </ul>
-     * @return (Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Unit)[] List of configuration objects. The list may be empty
-     */
-    public static function getEntityConfigs($capability) {
-        $result = array();
-        
-        // A specific ability
-        switch ($capability) {
-            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK:
-                $result = array_filter(
-                    Stephino_Rpg_Config::get()->units()->getAll(),
-                    function($unitConfig) {
-                        /* @var $unitConfig Stephino_Rpg_Config_Unit */
-                        return !$unitConfig->getCivilian();
-                    }
-                ) + array_filter(
-                    Stephino_Rpg_Config::get()->ships()->getAll(),
-                    function($shipConfig) {
-                        /* @var $shipConfig Stephino_Rpg_Config_Ship */
-                        return !$shipConfig->getCivilian();
-                    }
-                );
-                break;
-
-            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER:
-                $result = array_filter(
-                    Stephino_Rpg_Config::get()->units()->getAll(),
-                    function($unitConfig) {
-                        /* @var $unitConfig Stephino_Rpg_Config_Unit */
-                        return $unitConfig->getCivilian() && $unitConfig->getAbilityColonize();
-                    }
-                ) + array_filter(
-                    Stephino_Rpg_Config::get()->ships()->getAll(),
-                    function($shipConfig) {
-                        /* @var $shipConfig Stephino_Rpg_Config_Ship */
-                        return $shipConfig->getCivilian() && $shipConfig->getAbilityColonize();
-                    }
-                );
-                break;
-
-            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SPY:
-                $result = array_filter(
-                    Stephino_Rpg_Config::get()->units()->getAll(),
-                    function($unitConfig) {
-                        /* @var $unitConfig Stephino_Rpg_Config_Unit */
-                        return $unitConfig->getCivilian() && $unitConfig->getAbilitySpy();
-                    }
-                );
-                break;
-
-            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER:
-                $result = array_filter(
-                    Stephino_Rpg_Config::get()->ships()->getAll(),
-                    function($shipConfig) {
-                        /* @var $shipConfig Stephino_Rpg_Config_Ship */
-                        return $shipConfig->getCivilian() && $shipConfig->getAbilityTransport();
-                    }
-                );
-                break;
-        }
-        
-        return $result;
     }
     
     /**
@@ -2976,7 +2903,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
      *     <li>Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_GAMMA</li>
      *     <li>Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_1</li>
      *     <li>Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_2</li>
-     * </ul>; default <b>null</b> - auto-populated with user-level resources
+     * </ul> default <b>null</b> - auto-populated with user-level resources
      * @param int                             $multiplier (optional) Cost multiplier; default <b>1</b>
      * @param Stephino_Rpg_Config_Item_Single $itemConfig (optional) Configuration object to check Requirements against; default <b>null</b>
      * @param boolean                         $refund (optional) Reverse an expense; default <b>false</b>   

@@ -7,18 +7,19 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
-/* @var array|null $unlockNext */
+/* @var $cityConfig Stephino_Rpg_Config_City */ 
+/* @var $unlockNext array|null */
 ?>
 <div class="row mt-0 framed p-0">
-    <div data-effect="parallax" data-effect-args="<?php echo Stephino_Rpg_Config_Cities::KEY;?>,<?php echo $cityConfig->getId();?>"></div>
+    <div data-effect="parallax" data-effect-args="<?php echo $cityConfig->keyCollection();?>,<?php echo $cityConfig->getId();?>"></div>
     <div class="page-help">
         <span 
             data-effect="help"
-            data-effect-args="<?php echo Stephino_Rpg_Config_Cities::KEY;?>,<?php echo $cityConfig->getId();?>">
+            data-effect-args="<?php echo $cityConfig->keyCollection();?>,<?php echo $cityConfig->getId();?>">
             <?php echo $cityConfig->getName(true);?>
         </span>
     </div>
@@ -58,9 +59,6 @@
         
         // The object can only be a Building or a Research Field
         if ($unlockObject instanceof Stephino_Rpg_Config_Building) {
-            $unlockKey = Stephino_Rpg_Config_Buildings::KEY;
-            $clickFunction = $unlockQueued ? 'buildingViewDialog' : 'buildingUpgradeDialog';
-            $clickArgs = $unlockObject->getId();
             $title = $unlockQueued 
                 ? esc_html__('Under construction', 'stephino-rpg') 
                 : (
@@ -69,19 +67,17 @@
                         : esc_html__('Upgrade', 'stephino-rpg')
                 );
         } else {
-            $unlockKey = Stephino_Rpg_Config_ResearchFields::KEY;
             if (null !== $unlockObject->getResearchArea()) {
-                $clickFunction = 'researchAreaInfo';
-                $clickArgs = $unlockObject->getResearchArea()->getId() . ',' . $unlockObject->getId();
                 $title = $unlockQueued 
                     ? esc_html__('Researching', 'stephino-rpg') 
                     : esc_html__('Research', 'stephino-rpg');
             } else {
-                $clickFunction = 'helpDialog';
-                $clickArgs = $unlockKey . ',' . $unlockObject->getId();
                 $title = esc_html__('Learn about', 'stephino-rpg');
             }
         }
+        
+        // Get the item card details
+        list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($unlockObject, false, !$unlockQueued);
 ?>
     <div class="framed">
         <h5><span><?php echo esc_html__('Upgrade Advisor', 'stephino-rpg');?></span></h5>
@@ -90,12 +86,12 @@
                 <div class="col-12 col-lg-3 text-center">
                     <div 
                         data-html="true"
-                        title="<?php echo $title . ' <b>' . Stephino_Rpg_Utils_Lingo::escape($unlockObject->getName()) . '</b>'; ?>"
-                        class="building-entity-icon framed mt-4" 
-                        data-click="<?php echo $clickFunction;?>"
-                        data-click-args="<?php echo $clickArgs;?>"
+                        title="<?php echo $title . ' <b>' . esc_attr($unlockObject->getName()) . '</b>'; ?>"
+                        class="item-card framed mt-4" 
+                        data-click="<?php echo $itemCardFn;?>"
+                        data-click-args="<?php echo $itemCardArgs;?>"
                         data-effect="background" 
-                        data-effect-args="<?php echo $unlockKey;?>,<?php echo $unlockObject->getId();?>">
+                        data-effect-args="<?php echo $unlockObject->keyCollection();?>,<?php echo $unlockObject->getId();?>">
                         <span class="label">
                             <span>
                                 <?php echo $labelText;?></b>
@@ -106,8 +102,8 @@
                 <div class="col-12 col-lg-9">
                     <h5>
                         <?php echo $title;?>
-                        <span data-effect="help" data-effect-args="<?php echo $unlockKey;?>,<?php echo $unlockObject->getId();?>">
-                            <?php echo Stephino_Rpg_Utils_Lingo::escape($unlockObject->getName());?>
+                        <span data-effect="help" data-effect-args="<?php echo $unlockObject->keyCollection();?>,<?php echo $unlockObject->getId();?>">
+                            <?php echo $unlockObject->getName(true);?>
                         </span>
                     </h5>
                     <button 

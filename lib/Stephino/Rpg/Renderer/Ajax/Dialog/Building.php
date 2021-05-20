@@ -22,7 +22,9 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
     const TEMPLATE_MARKET              = 'building/building-market';
     
     // Request keys
-    const REQUEST_BUILDING_CONFIG_ID = 'buildingConfigId';
+    const REQUEST_BUILDING_CONFIG_ID        = 'buildingConfigId';
+    const REQUEST_BUILDING_ENTITY_TYPE      = 'buildingEntityType';
+    const REQUEST_BUILDING_ENTITY_CONFIG_ID = 'buildingEntityConfigId';
     
     // Result keys
     const RESULT_BUILDING_CONFIG = 'buildingConfig';
@@ -46,6 +48,15 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
             isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null, 
             isset($data[self::REQUEST_BUILDING_CONFIG_ID]) ? intval($data[self::REQUEST_BUILDING_CONFIG_ID]) : null
         );
+        
+        // Entity highlight
+        $entityHighlight = null;
+        if (isset($data[self::REQUEST_BUILDING_ENTITY_TYPE]) && isset($data[self::REQUEST_BUILDING_ENTITY_CONFIG_ID])) {
+            $entityHighlight = array(
+                trim($data[self::REQUEST_BUILDING_ENTITY_TYPE]),
+                abs((int) $data[self::REQUEST_BUILDING_ENTITY_CONFIG_ID]),
+            );
+        }
         
         // Research data
         list($researchAreaConfigs, $researchQueueData) = Stephino_Rpg_Renderer_Ajax_Action::getResearchBuildingInfo($buildingConfig);
@@ -179,9 +190,13 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
 
+        $titlePrefix = Stephino_Rpg_Cache_User::get()->isGameMaster() 
+            ? "({$buildingConfig->getId()}) " 
+            : '';
+            
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE           => (Stephino_Rpg::get()->isAdmin() ? "({$buildingConfig->getId()}) " : '') . $buildingConfig->getName(),
+                self::RESULT_TITLE           => $titlePrefix . $buildingConfig->getName(),
                 self::RESULT_DATA            => $buildingData,
                 self::RESULT_BUILDING_CONFIG => $buildingConfig->toArray(),
                 self::RESULT_BUILDING_QUEUE  => $queueData,

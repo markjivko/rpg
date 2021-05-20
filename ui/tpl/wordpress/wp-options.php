@@ -7,11 +7,11 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
-<!--[if lt IE 10]><meta http-equiv="Refresh" content="0; url=<?php echo Stephino_Rpg_Utils_Lingo::escape(get_dashboard_url());?>"><![endif]-->
+<!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
 <!-- stephino-rpg -->
 <div class="content-loading">
     <div class="loading-text" style="font-size: 30px; color: #ffffff; line-height: 40px;"><?php echo esc_html__('Loading...', 'stephino-rpg');?></div>
@@ -36,9 +36,10 @@
         <div class="col-12 col-sm-2"></div>
         <div class="col-12 col-sm-10 banner" lang="<?php echo Stephino_Rpg_Config::lang();?>">
             <div class="logo"></div>
-            <div class="info">Stephino RPG 
+            <div class="info">
+                <?php echo Stephino_Rpg::PLUGIN_NAME;?> 
                 <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?>
-                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()):?><b>DEMO</b><?php endif;?>
+                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?><b>DEMO</b><?php endif;?>
                 </span>
                 <?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics(true);?>
                 <?php if (!Stephino_Rpg::get()->isPro() && strlen(Stephino_Rpg::PLUGIN_URL_PRO)):?>

@@ -7,15 +7,16 @@
  * Description: Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on WordPress
  * Author:      Mark Jivko
  * Author URI:  https://stephino.com
- * Version:     0.3.4
+ * Version:     0.3.5
  * Text Domain: stephino-rpg
  * Domain Path: /languages
  * License:     GPL v3+
- * License URI: gnu.org/licenses/gpl-3.0.txt
+ * License URI: https://gnu.org/licenses/gpl-3.0.txt
  * 
- * @author      Mark Jivko <stephino.team@gmail.com>
- * @license     GNU General Public License, version 3
- * @copyright   2018 Stephino
+ * @copyright  (c) 2021, Stephino
+ * @author     Mark Jivko <stephino.team@gmail.com>
+ * @package    stephino-rpg
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('ABSPATH') && exit();
 

@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 abstract class Stephino_Rpg_Config_Item_Collection extends Stephino_Rpg_Config_Item_Abstract {
 
@@ -33,7 +33,7 @@ abstract class Stephino_Rpg_Config_Item_Collection extends Stephino_Rpg_Config_I
     protected $_singleClassName = '';
 
     /**
-     * Set the Class name of corresponding Single Item
+     * Get the key of corresponding Single Item
      * 
      * @return string|null
      */

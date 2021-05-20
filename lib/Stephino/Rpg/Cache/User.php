@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Cache_User {
     
@@ -26,6 +26,11 @@ class Stephino_Rpg_Cache_User {
      * Announcement read
      */
     const KEY_ANN        = 'ann';
+    
+    /**
+     * User is a Game Master
+     */
+    const KEY_GAME_MASTER = 'gm';
     
     // Volumes
     const KEY_VOL_MUSIC  = 'vol_music';
@@ -63,6 +68,13 @@ class Stephino_Rpg_Cache_User {
      * @var Stephino_Rpg_Cache_User
      */
     protected static $_instance = null;
+    
+    /**
+     * Super-admin cache
+     * 
+     * @var boolean[]
+     */
+    protected static $_dataGameAdmins = array();
     
     /**
      * Cache data - local storage
@@ -116,16 +128,22 @@ class Stephino_Rpg_Cache_User {
                 list($wpUserId, $robotId) = Stephino_Rpg_TimeLapse::getWorkspace();
                 
                 // Get the stored user data
-                $userData = Stephino_Rpg_Db::get($robotId, $wpUserId)
+                $userGameSettings = Stephino_Rpg_Db::get($robotId, $wpUserId)
                     ->tableUsers()
                     ->getGameSettings();
                 
                 // Filter-out invalid keys
                 foreach (self::$_instance->allowedKeys() as $allowedKey) {
-                    if (isset($userData[$allowedKey])) {
-                        self::$_instance->_data[$allowedKey] = $userData[$allowedKey];
+                    if (isset($userGameSettings[$allowedKey])) {
+                        self::$_instance->_data[$allowedKey] = $userGameSettings[$allowedKey];
                     }
                 }
+                
+                // Update game master status
+                self::$_instance->_data[self::KEY_GAME_MASTER] = self::$_instance->isGameMaster(
+                    $wpUserId,
+                    $userGameSettings
+                );
             }
         }
         
@@ -174,6 +192,58 @@ class Stephino_Rpg_Cache_User {
         return in_array($cacheKey, $this->allowedKeys()) && isset($this->_data[$cacheKey]) 
             ? $this->_data[$cacheKey] 
             : $default;
+    }
+    
+    /**
+     * Check whether this user is a Game Admin (WordPress-level super-admin)<br/><br/>
+     * Players &lt; Game Masters &lt; <b>Game Admins</b>
+     * 
+     * @param int $wpUserId (optional) WordPress user ID; default <b>null</b> for the current user
+     * @return boolean
+     */
+    public function isGameAdmin($wpUserId = null) {
+        // Cache check
+        if (!isset(self::$_dataGameAdmins[$wpUserId])) {
+            self::$_dataGameAdmins[$wpUserId] = is_super_admin($wpUserId);
+        }
+
+        return self::$_dataGameAdmins[$wpUserId];
+    }
+    
+    /**
+     * Check whether this user is <b>at least</b> a Game Master<br/><br/>
+     * Players &lt; <b>Game Masters &lt; Game Admins</b>
+     * 
+     * @param int   $wpUserId         (optional) WordPress User ID; default <b>null</b>
+     * @param array $userGameSettings (optional) Game settings array; used only if <b>$wpUserId</b> is provided; default <b>null</b>
+     * @return boolean
+     */
+    public function isGameMaster($wpUserId = null, $userGameSettings = null) {
+        do {
+            // A super-admin
+            if ($result = $this->isGameAdmin($wpUserId)) {
+                break;
+            }
+                
+            // Get the GM status for the provided user
+            if (null !== $wpUserId) {
+                // Get more info about the user
+                if (!is_array($userGameSettings)) {
+                    $userGameSettings = Stephino_Rpg_Db::get(null, $wpUserId)
+                        ->tableUsers()
+                        ->getGameSettings();
+                }
+                
+                // Marked as a game master
+                $result = isset($userGameSettings[self::KEY_GAME_MASTER]) && $userGameSettings[self::KEY_GAME_MASTER];
+                break;
+            }
+            
+            // Get the GM status for the current user
+            $result = $this->read(self::KEY_GAME_MASTER, false);
+        } while(false);
+        
+        return $result;
     }
     
     /**

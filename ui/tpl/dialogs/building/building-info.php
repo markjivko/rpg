@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -24,11 +24,12 @@ list($requirements, $requirementsMet) = Stephino_Rpg_Renderer_Ajax_Action::getRe
 );
 ?>
 <div class="row mt-0 framed p-0">
-    <div data-effect="parallax" <?php if (!$requirementsMet):?>class="disabled"<?php endif;?> data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>"></div>
+    <div data-effect="parallax" <?php if (!$requirementsMet):?>class="disabled"<?php endif;?> 
+         data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>"></div>
     <div class="page-help">
         <span 
             data-effect="help"
-            data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
+            data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>">
             <?php echo $buildingConfig->getName(true);?>
         </span>
     </div>
@@ -140,7 +141,7 @@ list($requirements, $requirementsMet) = Stephino_Rpg_Renderer_Ajax_Action::getRe
                         data-effect="staticBar" 
                         data-effect-args="<?php echo (round($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_METRIC_POPULATION]) . ',' . round($cityMaxPopulation));?>"
                         data-click="helpDialog"
-                        data-click-args="<?php echo Stephino_Rpg_Config_Cities::KEY;?>,<?php echo $cityConfig->getId();?>">
+                        data-click-args="<?php echo $cityConfig->keyCollection();?>,<?php echo $cityConfig->getId();?>">
                     </div>
                 <?php endif;?>
             </div>

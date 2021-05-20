@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -20,7 +20,7 @@
             <span class="badge badge-primary">
                 <span 
                     data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $configObject->getRequiredBuilding()->getId();?>">
+                    data-effect-args="<?php echo $configObject->getRequiredBuilding()->keyCollection();?>,<?php echo $configObject->getRequiredBuilding()->getId();?>">
                     <?php echo $configObject->getRequiredBuilding()->getName(true);?>
                 </span>
                 <?php echo esc_html__('level', 'stephino-rpg');?> <b><?php echo $configObject->getRequiredBuildingLevel();?></b>
@@ -30,7 +30,7 @@
             <span class="badge badge-primary">
                 <span 
                     data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $configObject->getRequiredResearchField()->getId();?>">
+                    data-effect-args="<?php echo $configObject->getRequiredResearchField()->keyCollection();?>,<?php echo $configObject->getRequiredResearchField()->getId();?>">
                     <?php echo $configObject->getRequiredResearchField()->getName(true);?>
                 </span>
                 <?php if ($configObject->getRequiredResearchField()->getLevelsEnabled()):?>

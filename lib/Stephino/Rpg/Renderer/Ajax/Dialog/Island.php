@@ -13,11 +13,10 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_Island extends Stephino_Rpg_Renderer_Ajax_Dialog {
     
     // Dialog templates
-    const TEMPLATE_INFO                  = 'island/island-info';
-    const TEMPLATE_UPGRADE               = 'island/island-upgrade';
-    const TEMPLATE_COLONIZE_PREPARE      = 'island/island-colonize-prepare';
-    const TEMPLATE_COLONIZE_REVIEW       = 'island/island-colonize-review';
-    const TEMPLATE_COLONIZE_REVIEW_EMPTY = 'island/island-colonize-review-empty';
+    const TEMPLATE_INFO              = 'island/island-info';
+    const TEMPLATE_UPGRADE           = 'island/island-upgrade';
+    const TEMPLATE_COLONIZE_PREPARE  = 'island/island-colonize-prepare';
+    const TEMPLATE_COLONIZE_REVIEW   = 'island/island-colonize-review';
     
     // Request keys
     const REQUEST_ISLAND_ID   = 'islandId';

@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
@@ -311,7 +311,7 @@ class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
                 
                 // Store the WordPress User Avatar
                 $item[Stephino_Rpg_Db_Model_Invoices::INVOICE_USER_WP_ICON] = isset($userRows[$userId])
-                    ? get_avatar($userRows[$userId][Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])
+                    ? get_avatar($userRows[$userId][Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 96, 'wavatar')
                     : null;
                 
                 // Store the Premium Package Name
@@ -362,9 +362,8 @@ class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
                     );
 
                     // Store the WordPress User Avatar
-                    $item[Stephino_Rpg_Db_Model_Users::LEADER_BOARD_USER_WP_ICON] = get_avatar(
-                        $item[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]
-                    );
+                    $item[Stephino_Rpg_Db_Model_Users::LEADER_BOARD_USER_WP_ICON] = 
+                        get_avatar($item[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 96, 'wavatar');
                     
                     // Is the user live?
                     $item[Stephino_Rpg_Db_Model_Users::LEADER_BOARD_USER_LIVE] = (

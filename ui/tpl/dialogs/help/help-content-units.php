@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -41,7 +41,7 @@ foreach (Stephino_Rpg_Config::get()->units()->getAll() as $unitConfig) {
                 <span>
                     <span
                         data-effect="helpMenuItem"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $configObject->getBuilding()->getId();?>">
+                        data-effect-args="<?php echo $configObject->getBuilding()->keyCollection();?>,<?php echo $configObject->getBuilding()->getId();?>">
                         <?php echo $configObject->getBuilding()->getName(true);?>
                     </span>
                     <?php echo esc_html__('level', 'stephino-rpg');?>
@@ -219,7 +219,7 @@ foreach (Stephino_Rpg_Config::get()->units()->getAll() as $unitConfig) {
                 <?php echo esc_html__('Recruited in', 'stephino-rpg');?>:
                 <span
                     data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $configObject->getBuilding()->getId();?>">
+                    data-effect-args="<?php echo $configObject->getBuilding()->keyCollection();?>,<?php echo $configObject->getBuilding()->getId();?>">
                     <?php echo $configObject->getBuilding()->getName(true);?>
                 </span>
             </li>

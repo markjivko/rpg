@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -15,17 +15,17 @@
 /* @var $islandStatueConfig Stephino_Rpg_Config_IslandStatue */
 ?>
 <div class="row mt-0 framed p-0">
-    <div data-effect="parallax" data-effect-args="<?php echo Stephino_Rpg_Config_IslandStatues::KEY;?>,<?php echo $islandStatueConfig->getId();?>"></div>
+    <div data-effect="parallax" data-effect-args="<?php echo $islandStatueConfig->keyCollection();?>,<?php echo $islandStatueConfig->getId();?>"></div>
     <div class="page-help">
         <span 
             data-effect="help"
-            data-effect-args="<?php echo Stephino_Rpg_Config_IslandStatues::KEY;?>,<?php echo $islandStatueConfig->getId();?>">
+            data-effect-args="<?php echo $islandStatueConfig->keyCollection();?>,<?php echo $islandStatueConfig->getId();?>">
             <?php echo $islandStatueConfig->getName(true);?>
         </span>
         <?php echo esc_html__('on', 'stephino-rpg');?> 
         <span 
             data-effect="help"
-            data-effect-args="<?php echo Stephino_Rpg_Config_Islands::KEY;?>,<?php echo $islandConfig->getId();?>">
+            data-effect-args="<?php echo $islandConfig->keyCollection();?>,<?php echo $islandConfig->getId();?>">
             <?php echo $islandConfig->getName(true);?>
         </span>
     </div>

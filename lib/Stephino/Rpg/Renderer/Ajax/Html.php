@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Renderer_Ajax_Html {
@@ -22,7 +22,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
      * @return string
      */
     public static function ajaxHtml() {
-        return Stephino_Rpg_Renderer_Ajax_Html::_renderForView(
+        return self::_renderForView(
             Stephino_Rpg_Utils_Sanitizer::getView(false), 
             Stephino_Rpg_Utils_Sanitizer::getViewData()
         );
@@ -36,6 +36,13 @@ class Stephino_Rpg_Renderer_Ajax_Html {
      * @return string
      */
     protected static function _renderForView($viewName, $viewData) {
+        // Set the title
+        add_filter('document_title_parts', function($title) use ($viewName) {
+            $title['title'] = Stephino_Rpg_Utils_Lingo::getGameName() 
+                . (Stephino_Rpg_Renderer_Ajax::VIEW_PWA == $viewName ? ' - ' . esc_html__('Offline', 'stephino-rpg') : '');
+            return $title;
+        });
+        
         // Prepare the animation rules identifier
         $animationIdentifier = null;
         
@@ -178,83 +185,100 @@ class Stephino_Rpg_Renderer_Ajax_Html {
             Stephino_Rpg_Renderer_Ajax::CALL_VIEW   => $viewName,
         );
         
-        // Prepare the attributes
-        $atts = '';
+        // Prepare the attributes string
+        $viewAttrs = '';
+        
+        /**
+         * Reduce an associative array to a string of HTML attributes
+         * 
+         * @example 'attr="foo" attr-two="bar"'
+         * @param array $attributes Associative array
+         * @return string List of HTML attributes
+         */
+        $reduceAttributes = function($attributes) {
+            $pairs = array();
+            foreach ($attributes as $attrName => $attrValue) {
+                $pairs[] = $attrName . '="' . $attrValue . '"';
+            }
+            return implode(' ', $pairs);
+        };
         switch ($viewName) {
             case Stephino_Rpg_Renderer_Ajax::VIEW_CITY:
                 $islandCoords = Stephino_Rpg_Utils_Math::getSnakePoint(
                     intval($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID])
                 );
-                $atts = 'island-id="' . $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID] . '"'
-                    . ' island-x="' . $islandCoords[0] . '"'
-                    . ' island-y="' . $islandCoords[1] . '"'
-                    . ' city-id="' . $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID] . '"';
+                $viewAttrs = $reduceAttributes(array(
+                    'island-id' => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
+                    'island-x'  => $islandCoords[0],
+                    'island-y'  => $islandCoords[1],
+                    'city-id'   => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
+                ));
                 break;
 
             case Stephino_Rpg_Renderer_Ajax::VIEW_ISLAND:
                 $islandCoords = Stephino_Rpg_Utils_Math::getSnakePoint(
                     intval($islandData[Stephino_Rpg_Db_Table_Islands::COL_ID])
                 );
-                $atts = 'island-id="' . $islandData[Stephino_Rpg_Db_Table_Islands::COL_ID] . '"'
-                    . ' island-x="' . $islandCoords[0] . '"'
-                    . ' island-y="' . $islandCoords[1] . '"';
+                $viewAttrs = $reduceAttributes(array(
+                    'island-id' => (int) $islandData[Stephino_Rpg_Db_Table_Islands::COL_ID],
+                    'island-x'  => $islandCoords[0],
+                    'island-y'  => $islandCoords[1],
+                ));
                 break;
 
             case Stephino_Rpg_Renderer_Ajax::VIEW_WORLD:
-                $atts = 'data-start-x="' . $viewData[0] . '"'
-                    . ' data-start-y="' . $viewData[1] . '"';
+                $viewAttrs = $reduceAttributes(array(
+                    'data-start-x' => $viewData[0],
+                    'data-start-y' => $viewData[1],
+                ));
                 break;
         }
-        
-        // Dequeue theme scripts and styles, except for those whose handles begin with 'stephino-rpg'
-        add_action('wp_enqueue_scripts', function() {
-            $urlThemes = get_theme_root_uri();
-            $urlPlugins = plugins_url('', STEPHINO_RPG_ROOT);
-            
-            // Go through the scripts
-            foreach(wp_scripts()->registered as $wpScript) {
-                $pluginOrTheme = (0 === strpos($wpScript->src, $urlThemes) || 0 === strpos($wpScript->src, $urlPlugins));
-
-                // Handle does not begin with 'stephino-rpg'
-                if ($pluginOrTheme && 0 !== strpos($wpScript->handle, Stephino_Rpg::PLUGIN_SLUG)) {
-                    wp_deregister_script($wpScript->handle);
-                }
-            }
-            
-            // Go through the styles
-            foreach (wp_styles()->registered as $wpStyle) {
-                $pluginOrTheme = (0 === strpos($wpStyle->src, $urlThemes) || 0 === strpos($wpStyle->src, $urlPlugins));
-
-                // Handle does not begin with 'stephino-rpg'
-                if ($pluginOrTheme && 0 !== strpos($wpStyle->handle, Stephino_Rpg::PLUGIN_SLUG)) {
-                    wp_deregister_style($wpStyle->handle);
-                }
-            }
-        }, 999);
-        
-        // Prepare the chat room data
-        $gameChatData = null;
         
         // jQuery needed
         wp_enqueue_script('jquery');
         
+        // Dequeue other themes' and plugins' scripts and styles
+        add_action('wp_enqueue_scripts', function() {
+            // Remove emojis
+            remove_action('wp_head', 'print_emoji_detection_script', 7);
+            remove_action('admin_print_scripts', 'print_emoji_detection_script');
+            remove_action('wp_print_styles', 'print_emoji_styles');
+            remove_action('admin_print_styles', 'print_emoji_styles');	
+    
+            // Remove redundant scripts
+            foreach(wp_scripts()->registered as $wpScript) {
+                if (!preg_match('%^(?:jquery|underscore|backbone|' . Stephino_Rpg::PLUGIN_SLUG . ')\b%', $wpScript->handle)) {
+                    wp_deregister_script($wpScript->handle);
+                }
+            }
+            
+            // Remove redundant styles
+            foreach (wp_styles()->registered as $wpStyle) {
+                if (!preg_match('%^(?:' . Stephino_Rpg::PLUGIN_SLUG . ')\b%', $wpStyle->handle)) {
+                    wp_deregister_style($wpStyle->handle);
+                }
+            }
+        }, 9999);
+        
+        // Prepare the chat room data
+        $gameChatData = null;
         if (Stephino_Rpg_Renderer_Ajax::VIEW_PTF == $viewName) {
             wp_enqueue_style(
                 Stephino_Rpg::PLUGIN_SLUG,
-                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/css/bootstrap.css',
+                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_CSS . '/bootstrap.css',
                 array(), 
                 Stephino_Rpg::PLUGIN_VERSION
             );
             wp_enqueue_script(
                 Stephino_Rpg::PLUGIN_SLUG,
-                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/js/phaser.js',
+                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_JS . '/phaser.js',
                 array(), 
                 Stephino_Rpg::PLUGIN_VERSION
             );
         } else {
             wp_enqueue_script(
                 Stephino_Rpg::PLUGIN_SLUG,
-                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/js/stephino.js',
+                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_JS . '/stephino.js',
                 array(), 
                 Stephino_Rpg::PLUGIN_VERSION
             );
@@ -287,7 +311,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                     );
 
                     // Include the necessary components
-                    foreach (array('firebase-app', 'firebase-database') as $firebasePart) {
+                    foreach (array('firebase-app', 'firebase-database', 'firebase-auth') as $firebasePart) {
                         wp_enqueue_script(
                             Stephino_Rpg::PLUGIN_SLUG . '-' . $firebasePart,
                             'https://www.gstatic.com/firebasejs/' . Stephino_Rpg::PLUGIN_VERSION_FIREBASE . '/' . $firebasePart . '.js',
@@ -319,13 +343,12 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                     'game_ver'       => Stephino_Rpg_Utils_Media::getPwaVersion(false, false),
                     'game_lang'      => Stephino_Rpg_Config::lang(),
                     'res_url'        => Stephino_Rpg_Utils_Media::getPluginsUrl(),
-                    'theme_url'      => Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme(),
-                    'theme_url_pro'  => Stephino_Rpg_Utils_Media::getPluginsUrl(true) . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme(),
+                    'theme_slug'     => Stephino_Rpg_Utils_Themes::getActive()->getThemeSlug(),
                     'app_name'       => Stephino_Rpg_Utils_Lingo::getGameName(),
                     'events_sprite'  => Stephino_Rpg_Utils_Media::getEventsSprite(),
                     'discord_url'    => esc_url(Stephino_Rpg::PLUGIN_URL_DISCORD),
                     'symbol_capital' => Stephino_Rpg_Renderer_Ajax_Html::SYMBOL_CAPITAL,
-                    'is_admin'       => Stephino_Rpg::get()->isAdmin(),
+                    'is_admin'       => Stephino_Rpg_Cache_User::get()->isGameMaster(),
                     'is_demo'        => Stephino_Rpg::get()->isDemo(),
                     'is_pro'         => Stephino_Rpg::get()->isPro(),
                     'ptf_size'       => Stephino_Rpg_Db::get()->modelPtfs()->getViewBox(),
@@ -395,12 +418,6 @@ class Stephino_Rpg_Renderer_Ajax_Html {
             );
         }
         
-        // Set the title
-        add_filter('the_title', function() {
-            return Stephino_Rpg_Utils_Lingo::getGameName() 
-                . (Stephino_Rpg_Renderer_Ajax::VIEW_PWA == $viewName ? ' - ' . esc_html__('Offline', 'stephino-rpg') : '');
-        });
-        
         // Prepare the buffer
         ob_start();
         
@@ -410,7 +427,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
             : Stephino_Rpg_Renderer_Html::TEMPLATE_GAME;
         
         // Load the game template
-        if (is_file($templatePath = STEPHINO_RPG_ROOT . '/ui/tpl/wordpress/wp-' . $templateName . '.php')) {
+        if (is_file($templatePath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_TPL . '/wordpress/wp-' . $templateName . '.php')) {
             require $templatePath;
         }
         

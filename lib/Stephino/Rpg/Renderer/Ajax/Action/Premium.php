@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -201,15 +201,18 @@ class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Aj
         // Inform the user
         echo sprintf(
             esc_html__('Premium modifier "%s" enabled', 'stephino-rpg'),
-            '<b>' . Stephino_Rpg_Utils_Lingo::escape($premiumModifierConfig->getName()) . '</b>'
+            '<b>' . $premiumModifierConfig->getName(true) . '</b>'
         );
         
-        // Send a message
-        Stephino_Rpg_Db::get()->modelMessages()->sendNotification(
+        // Send the notification
+        Stephino_Rpg_Db::get()->modelMessages()->notify(
             Stephino_Rpg_TimeLapse::get()->userId(), 
-            $premiumModifierConfig->getName() . ' ' . esc_html__('activated', 'stephino-rpg'), 
-            Stephino_Rpg_TimeLapse::TEMPLATE_NOTIF_PREMIUM_MODIFIER,
-            $premiumModifierConfig
+            Stephino_Rpg_Db_Model_Messages::TEMPLATE_NOTIF_PREMIUM_MODIFIER,
+            array(
+                // premiumModifierConfigId
+                $premiumModifierConfig->getId()
+            ),
+            Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY
         );
         
         // Wrap the final result
@@ -256,15 +259,15 @@ class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Aj
     /**
      * Premium package bought successfully - award gems and optionally send a notification
      * 
-     * @param Stephino_Rpg_Config_PremiumPackage $packageConfig Premium package configuration object
-     * @param boolean                              $sendNotif     (optional) Send a notification; default <b>true</b>
+     * @param Stephino_Rpg_Config_PremiumPackage $premiumPackageConfig Premium package configuration object
+     * @param boolean                            $sendNotif            (optional) Send a notification; default <b>true</b>
      */
-    protected static function _rewardGems($packageConfig, $sendNotif = true) {
+    protected static function _rewardGems($premiumPackageConfig, $sendNotif = true) {
         // Get the user data
         $userData = Stephino_Rpg_TimeLapse::get()->userData();
 
         // Get the reward
-        $gemReward = $packageConfig->getGem();
+        $gemReward = $premiumPackageConfig->getGem();
 
         // Prepare the new balance
         $gemBalance = $userData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM] + $gemReward;
@@ -277,12 +280,15 @@ class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Aj
             $userData[Stephino_Rpg_Db_Table_Users::COL_ID]
         );
         
-        // Send a message
-        $sendNotif && Stephino_Rpg_Db::get()->modelMessages()->sendNotification(
+        // Send the notification
+        $sendNotif && Stephino_Rpg_Db::get()->modelMessages()->notify(
             $userData[Stephino_Rpg_Db_Table_Users::COL_ID], 
-            $packageConfig->getName() . ' ' . esc_html__('acquired', 'stephino-rpg'), 
-            Stephino_Rpg_TimeLapse::TEMPLATE_NOTIF_PREMIUM_PACKAGE,
-            $packageConfig
+            Stephino_Rpg_Db_Model_Messages::TEMPLATE_NOTIF_PREMIUM_PACKAGE,
+            array(
+                // premiumPackageConfigId
+                $premiumPackageConfig->getId()
+            ),
+            Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY
         );
 
         // Update the time-lapse references

@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Css {
 
@@ -98,7 +98,8 @@ class Stephino_Rpg_Renderer_Ajax_Css {
             $result .= PHP_EOL . PHP_EOL . self::_getGameCss($view);
         }
 
-        // Get the plugin version
+        // Get the plugin details
+        $pluginName = Stephino_Rpg::PLUGIN_NAME;
         $pluginVersion = Stephino_Rpg::PLUGIN_VERSION;
         
         // Copyright year
@@ -111,7 +112,7 @@ class Stephino_Rpg_Renderer_Ajax_Css {
         // Prepare the header
         $cssHeader = <<<"CSS"
 /**
- * Stephino Rpg CSS - $view
+ * $pluginName CSS - $view
  * 
  * @id         $cssId
  * @title      Game Renderer
@@ -120,7 +121,7 @@ class Stephino_Rpg_Renderer_Ajax_Css {
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @version    $pluginVersion
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 [anim]{will-change:transform,opacity,z-index;position:absolute;overflow:hidden;}[anim]>div{will-change:transform,top;position:absolute;}.no-anim [anim],.no-anim [anim]>div{display:none;-webkit-animation:none;animation:none;}
 CSS;
@@ -149,7 +150,9 @@ CSS;
 
         // Store in cache
         Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS, $data);
-        Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, time());
+        
+        // Force cache reset and PWA app version change, forcing local storage reset
+        Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_MEDIA_CHANGED, time());
     }
     
     /**
@@ -160,17 +163,20 @@ CSS;
      */
     protected static function _getGameCss($view = null) {
         if (Stephino_Rpg_Renderer_Ajax::VIEW_PTF == $view) {
-            $cssPath = STEPHINO_RPG_ROOT . '/ui/css/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_MAIN . '.css';
+            $cssPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_CSS . '/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_MAIN . '.css';
         } else {
-            $cssPath = STEPHINO_RPG_ROOT . '/ui/css/game/' . (null == $view ? Stephino_Rpg_Renderer_Ajax::FILE_COMMON : $view) . '.css';
+            $cssPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_CSS . '/game/' . (null == $view ? Stephino_Rpg_Renderer_Ajax::FILE_COMMON : $view) . '.css';
         }
         
         // Get the game CSS path
         if (is_file($cssPath)) {
             // Prepare the variables
             $variables = array(
-                '__THEME__'    => Stephino_Rpg_Config::get()->core()->getTheme(),
-                '__ROOT_URL__' => Stephino_Rpg_Utils_Media::getPluginsUrl(),
+                '__ROOT_URL__'  => Stephino_Rpg_Utils_Media::getPluginsUrl(),
+                '__MEDIA_URL__' => Stephino_Rpg_Utils_Media::getAdminUrl(true, false) . '&' . http_build_query(array(
+                    Stephino_Rpg_Renderer_Ajax::CALL_METHOD     => Stephino_Rpg_Renderer_Ajax::CONTROLLER_MEDIA,
+                    Stephino_Rpg_Renderer_Ajax::CALL_MEDIA_PATH => '',
+                ))
             );
 
             // Prepare the CSS script
@@ -180,12 +186,12 @@ CSS;
             if (Stephino_Rpg_Renderer_Ajax::VIEW_PTF != $view) {
                 // Append the current theme's style - included with all views
                 if (null !== $view) {
-                    if (is_file($cssThemePath = Stephino_Rpg_Config::get()->themePath() . '/css/style.css')) {
+                    if (is_file($cssThemePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath(Stephino_Rpg_Theme::FILE_CSS_STYLE))) {
                         $cssContents .= PHP_EOL . PHP_EOL . file_get_contents($cssThemePath);
                     }
                 } else {
                     // Prepend the Twitter's Bootstrap
-                    if (is_file($cssBootstrapPath = STEPHINO_RPG_ROOT . '/ui/css/bootstrap.css')) {
+                    if (is_file($cssBootstrapPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_CSS . '/bootstrap.css')) {
                         $cssContents = file_get_contents($cssBootstrapPath) . PHP_EOL . PHP_EOL . $cssContents;
                     }
                 }
@@ -363,10 +369,6 @@ CSS;
             $configId = Stephino_Rpg_Utils_Media::FOLDER_COMMON;
         }
         
-        // Get the animation folder
-        $path = Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() 
-            . '/img/story/' . $configFolder . '/' . $configId;
-        
         // Prepare the known common backgrounds
         $files = array(
             Stephino_Rpg_Renderer_Ajax_Cells::CELL_DATA_TYPE_ISLAND => array(
@@ -377,7 +379,6 @@ CSS;
             ),
         );
         
-        
         // Get the result
         $result = '';
         if (isset($files[$configFolder])) {
@@ -385,10 +386,13 @@ CSS;
                 // Prepare the final class name
                 $finalClassName = is_numeric($configId) ? "$cssClassName-$configId" : $cssClassName; 
                 
+                // Get the file URL
+                $fileUrl = Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/story/' . $configFolder . '/' . $configId . '/' . $cssFileName);
+                
                 // Append the rule
                 $result .= "$finalClassName{"
-                        . "background: url(\"$path/$cssFileName\") no-repeat transparent;"
-                    . "}";
+                    . "background: url(\"$fileUrl\") no-repeat transparent;"
+                . "}";
             }
         }
         return $result;
@@ -405,10 +409,6 @@ CSS;
     protected static function _getAnimation($configFolder, $configId, $animationName, $animationData) {
         // Prepare the animations
         $result = array();
-
-        // Get the animation folder
-        $path = Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() 
-            . '/img/story/' . $configFolder . '/sprites';
 
         // Valid animation
         if (is_array($animationData)) {
@@ -455,7 +455,12 @@ CSS;
                             . 'steps(2000) infinite',
                         ))
                     );
-
+                    
+                    // Get the file URL
+                    $fileUrl = Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(
+                        'img/story/' . $configFolder . '/sprites/' . $animationDataValue[Stephino_Rpg_Config_Item_Single::TYPE_ANIM_FRAME_SPRITE] . '.png'
+                    );
+        
                     // Prepare the core background CSS rules
                     $selectorBkgRules = array(
                         // top will force painting, changes rarely (max. once per "animation keyframe")
@@ -467,9 +472,7 @@ CSS;
                             $animationDataValue[Stephino_Rpg_Config_Item_Single::TYPE_ANIM_FRAME_HEIGHT] 
                             * $walkYRows
                         ) . 'px',
-                        'background' => 'url("' . $path . '/' 
-                            . $animationDataValue[Stephino_Rpg_Config_Item_Single::TYPE_ANIM_FRAME_SPRITE] . '.png'
-                        . '") 0 0 no-repeat transparent',
+                        'background' => 'url("' . $fileUrl . '") 0 0 no-repeat transparent',
                         'animation' => implode(', ', array(
                             // X: illusion of animation
                             $selectorName . '-x '

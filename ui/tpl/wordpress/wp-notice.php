@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
@@ -42,7 +42,7 @@
         <?php 
             echo sprintf(
                 esc_html__('Buy %s version %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!', 'stephino-rpg'),
-                '<b>Stephino RPG Pro</b>',
+                '<b>' . Stephino_Rpg::PLUGIN_NAME . ' Pro</b>',
                 '<b>' . Stephino_Rpg::PLUGIN_VERSION_PRO . '+</b>'
             );
         ?>

@@ -8,17 +8,18 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Cache_Game {
 
     // Cache keys
-    const KEY_VERSION_DB             = 'version_db';
-    const KEY_VERSION_PTF            = 'version_ptf';
-    const KEY_VERSION                = 'version';
-    const KEY_WORLD_INIT             = 'world_init';
-    const KEY_ANIMATIONS             = 'animations';
-    const KEY_ANIMATIONS_LAST_CHANGE = 'animations_last_change';
+    const KEY_VERSION_DB    = 'version_db';
+    const KEY_VERSION_PTF   = 'version_ptf';
+    const KEY_VERSION       = 'version';
+    const KEY_THEME         = 'theme';
+    const KEY_WORLD_INIT    = 'world_init';
+    const KEY_ANIMATIONS    = 'animations';
+    const KEY_MEDIA_CHANGED = 'media_changed';
     
     /**
      * Singleton instance
@@ -116,7 +117,6 @@ class Stephino_Rpg_Cache_Game {
         
         // Reset the options
         delete_option(Stephino_Rpg::OPTION_CACHE);
-        delete_option(Stephino_Rpg::OPTION_CONFIG);
         
         return $this;
     }

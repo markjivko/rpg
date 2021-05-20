@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -22,23 +22,26 @@
                 $researchAreaConfig, 
                 $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID]
             );
+        
+            // Get the item card details
+            list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($researchAreaConfig, !$requirementsMet);
     ?>
         <div class="col-12 framed">
             <h5>
                 <span 
                     data-effect="help"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_ResearchAreas::KEY;?>,<?php echo $researchAreaConfig->getId();?>">
+                    data-effect-args="<?php echo $researchAreaConfig->keyCollection();?>,<?php echo $researchAreaConfig->getId();?>">
                     <?php echo $researchAreaConfig->getName(true);?>
                 </span>
             </h5>
             <div class="row align-items-center mb-4">
                 <div class="col-12 col-lg-3 text-center">
                     <div 
-                        class="building-research-icon framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
-                        data-click="helpDialog"
-                        data-click-args="<?php echo Stephino_Rpg_Config_ResearchAreas::KEY;?>,<?php echo $researchAreaConfig->getId();?>"
+                        class="item-card framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
+                        data-click="<?php echo $itemCardFn;?>"
+                        data-click-args="<?php echo $itemCardArgs;?>"
                         data-effect="background" 
-                        data-effect-args="<?php echo Stephino_Rpg_Config_ResearchAreas::KEY;?>,<?php echo $researchAreaConfig->getId();?>">
+                        data-effect-args="<?php echo $researchAreaConfig->keyCollection();?>,<?php echo $researchAreaConfig->getId();?>">
                         <?php 
                             list(
                                 $researchAreaConfig, 

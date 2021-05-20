@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -43,7 +43,7 @@
                 <h4>
                     <span
                         data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_PremiumModifiers::KEY;?>,<?php echo $premiumModifierConfig->getId();?>">
+                        data-effect-args="<?php echo $premiumModifierConfig->keyCollection();?>,<?php echo $premiumModifierConfig->getId();?>">
                         <?php echo $premiumModifierConfig->getName(true);?>
                     </span>
                     <?php if (isset($premiumModifierDuration)):?>
@@ -114,7 +114,7 @@
                                 <li>
                                     <span 
                                         data-effect="help"
-                                        data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
+                                        data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>">
                                         <?php echo $buildingConfig->getName(true); ?>
                                     </span>: <b>-<?php echo $premiumModifierConfig->getDiscountBuildingsPercent();?></b>%
                                 </li>
@@ -123,7 +123,7 @@
                                 <li>
                                     <span 
                                         data-effect="help"
-                                        data-effect-args="<?php echo Stephino_Rpg_Config_Units::KEY;?>,<?php echo $unitConfig->getId();?>">
+                                        data-effect-args="<?php echo $unitConfig->keyCollection();?>,<?php echo $unitConfig->getId();?>">
                                         <?php echo $unitConfig->getName(true); ?>
                                     </span>: <b>-<?php echo $premiumModifierConfig->getDiscountUnitsPercent();?></b>%
                                 </li>
@@ -132,7 +132,7 @@
                                 <li>
                                     <span 
                                         data-effect="help"
-                                        data-effect-args="<?php echo Stephino_Rpg_Config_Ships::KEY;?>,<?php echo $shipConfig->getId();?>">
+                                        data-effect-args="<?php echo $shipConfig->keyCollection();?>,<?php echo $shipConfig->getId();?>">
                                         <?php echo $shipConfig->getName(true); ?>
                                     </span>: <b>-<?php echo $premiumModifierConfig->getDiscountShipsPercent();?></b>%
                                 </li>
@@ -273,12 +273,12 @@
             <?php endif;?>
         </div>
     <?php endforeach; ?>
-    <?php if (!Stephino_Rpg::get()->isAdmin() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
+    <?php if (!Stephino_Rpg_Cache_User::get()->isGameMaster() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
         <div class="col-12 framed mb-4">
             <div class="col-12 mb-4">
                 <div class="card card-body bg-dark mb-4"><?php echo esc_html__('Install this WordPress plugin for free and host your own game!', 'stephino-rpg');?></div>
             </div>
-            <a class="btn btn-warning w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_WORDPRESS);?>">
+            <a rel="noreferrer" target="_blank" class="btn btn-warning w-100" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_WORDPRESS);?>">
                 <span><?php echo esc_html__('Free Install', 'stephino-rpg');?></span>
             </a>
         </div>

@@ -7,12 +7,13 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
 /* @var $entitiesData array */
 /* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
+/* @var $entityHighlight array|null */ 
 
 // Prepare the max values
 $maxArmour = 0;
@@ -30,11 +31,6 @@ foreach ($entitiesData as list($entityConfig)) {
 ?>
 <?php 
     foreach ($entitiesData as list($entityConfig, $entityDbRow, $entityQueueData)):
-        // Prepare the entity key
-        $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
-            ? Stephino_Rpg_Config_Units::KEY
-            : Stephino_Rpg_Config_Ships::KEY;
-
         // Get the entity count
         $entityCount = (null === $entityDbRow ? 0 : $entityDbRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]);
 
@@ -43,8 +39,16 @@ foreach ($entitiesData as list($entityConfig)) {
             $entityConfig, 
             $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID]
         );
+
+        // Get the item card details
+        list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($entityConfig, !$requirementsMet);
+        
+        // Entity highlighted
+        $currentEntity = isset($entityHighlight) && is_array($entityHighlight) && 2 === count($entityHighlight)
+            && $entityHighlight[0] == $entityConfig->keyCollection()
+            && $entityHighlight[1] == $entityConfig->getId();
 ?>
-    <div class="framed p-2">
+    <div class="framed p-2<?php if ($currentEntity):?> active<?php endif;?>">
         <div class="row no-gutters">
             <div class="col-12 p-2">
                 <div class="col-12">
@@ -52,7 +56,7 @@ foreach ($entitiesData as list($entityConfig)) {
                         <span>
                             <span 
                                 data-effect="help"
-                                data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                                data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
                                 <?php echo $entityConfig->getName(true);?>
                             </span>
                         </span>
@@ -61,14 +65,12 @@ foreach ($entitiesData as list($entityConfig)) {
                 <div class="row col-12 m-0 align-items-center">
                     <div class="col-12 col-lg-3 text-center">
                         <div 
-                            class="building-entity-icon framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
-                            data-click="helpDialog"
-                            data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
+                            class="item-card framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
+                            data-click="<?php echo $itemCardFn;?>"
+                            data-click-args="<?php echo $itemCardArgs;?>"
                             data-effect="background" 
-                            data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
-                            <span 
-                                data-effect="help"
-                                data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                            data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
+                            <span>
                                 <?php echo $entityConfig->getName(true);?>
                             </span>
                             <span class="label" data-html="true" title="&times; <?php echo number_format($entityCount);?>">
@@ -88,7 +90,7 @@ foreach ($entitiesData as list($entityConfig)) {
                                 <span 
                                     class="w-100 text-center"
                                     data-click="entityDialog" 
-                                    data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
+                                    data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
                                     <b><?php echo esc_html__('Dequeue', 'stephino-rpg');?></b>
                                 </span>
                             </div>
@@ -227,7 +229,7 @@ foreach ($entitiesData as list($entityConfig)) {
                             <button 
                                 class="btn btn-default w-100" 
                                 data-click="entityDialog" 
-                                data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DISBAND;?>">
+                                data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DISBAND;?>">
                                 <span><?php echo esc_html__('Disband', 'stephino-rpg');?></span>
                             </button>
                         </div>
@@ -238,7 +240,7 @@ foreach ($entitiesData as list($entityConfig)) {
                             <button 
                                 class="btn btn-default w-100" 
                                 data-click="entityDialog" 
-                                data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_RECRUIT;?>">
+                                data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_RECRUIT;?>">
                                 <?php if ($entityConfig instanceof Stephino_Rpg_Config_Unit):?>
                                     <span><?php echo esc_html__('Recruit', 'stephino-rpg');?></span>
                                 <?php else:?>

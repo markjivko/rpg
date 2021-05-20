@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -321,6 +321,13 @@ class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_A
         if (null !== $queueData) {
             throw new Exception(__('Construction in progress', 'stephino-rpg'));
         }
+        
+        // Check max queue for buildings
+        Stephino_Rpg_Db::get()->modelQueues()->validateMaxQueue(
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID], 
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID], 
+            Stephino_Rpg_Db_Model_Buildings::NAME
+        );
         
         // Spend resources
         self::spend($costData, $cityData, 1, $buildingConfig);

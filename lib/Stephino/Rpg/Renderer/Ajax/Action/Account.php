@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Account extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -22,6 +22,8 @@ class Stephino_Rpg_Renderer_Ajax_Action_Account extends Stephino_Rpg_Renderer_Aj
     
     /**
      * Permanently delete the current user account and all associated posts/links/comments
+     * 
+     * @throws Exception
      */
     public static function ajaxDelete() {
         if (null !== $userData = Stephino_Rpg_Db::get()->tableUsers()->getData()) {

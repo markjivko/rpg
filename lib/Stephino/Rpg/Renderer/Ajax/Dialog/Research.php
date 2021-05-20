@@ -50,8 +50,21 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Research extends Stephino_Rpg_Renderer_A
             $researchAffordList
         ) = Stephino_Rpg_Renderer_Ajax_Action::getResearchAreaInfo($researchAreaConfigId);
         
-        // Action not allowed
-        Stephino_Rpg_Renderer_Ajax_Action::getRequirements($researchAreaConfig, $cityId, true);
+        // Requirements not met
+        try {
+            Stephino_Rpg_Renderer_Ajax_Action::getRequirements($researchAreaConfig, $cityId, true);
+        } catch (Exception $exc) {
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+            $researchAreaBuilding = $researchAreaConfig->getBuilding();
+            
+            // Redirect to the parent building
+            return Stephino_Rpg_Renderer_Ajax_Dialog_Building::ajaxInfo(array(
+                self::REQUEST_CITY_ID                                                  => $cityId,
+                Stephino_Rpg_Renderer_Ajax_Dialog_Building::REQUEST_BUILDING_CONFIG_ID => null !== $researchAreaBuilding
+                    ? $researchAreaBuilding->getId()
+                    : 0
+            ));
+        }
         
         // Get the city data
         $cityData = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);

@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Utils_Lingo {
@@ -26,6 +26,8 @@ class Stephino_Rpg_Utils_Lingo {
     
     /**
      * List of allowed languages
+     * 
+     * @var array
      */
     const ALLOWED_LANGS = array(
         self::LANG_EN => 'English',
@@ -37,6 +39,38 @@ class Stephino_Rpg_Utils_Lingo {
         self::LANG_RO => 'Română',
         self::LANG_RU => 'Русский',
     );
+    
+    /**
+     * Switch the locale and reload the text domain
+     * 
+     * @global string $locale
+     * @global array $l10n
+     * @param string $newLocale
+     */
+    public static function setLocale($newLocale) {
+        global $locale, $l10n;
+        $allowedLanguages = self::ALLOWED_LANGS;
+        
+        // Valid locale
+        if (isset($allowedLanguages[$newLocale])) {
+            // Set the locale
+            $locale = $newLocale;
+
+            // Reset the localization dictionary
+            $l10n = null;
+
+            // Short-circuit language determination
+            add_filter(
+                'pre_determine_locale', 
+                function() use($newLocale) {
+                    return $newLocale;
+                }
+            );
+
+            // Re-load the text domain
+            load_plugin_textdomain('stephino-rpg', false, 'stephino-rpg/languages');
+        }
+    }
     
     /**
      * Get the final game name, HTML escaped
@@ -71,6 +105,59 @@ class Stephino_Rpg_Utils_Lingo {
         }
         
         return $result;
+    }
+    
+    /**
+     * Get a configuration name
+     * 
+     * @param string $configKey Configuration key (plural), ex.: Stephino_Rpg_Config_Governments::KEY
+     * @param boolean $singular (optional) Singular form; default <b>true</b>
+     * @return string|null
+     */
+    public static function getConfigName($configKey, $singular = true) {
+        $configNames = array(
+            Stephino_Rpg_Config_Governments::KEY      => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigGovernmentName()
+                : Stephino_Rpg_Config::get()->core()->getConfigGovernmentsName(),
+            
+            Stephino_Rpg_Config_Islands::KEY          => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigIslandName()
+                : Stephino_Rpg_Config::get()->core()->getConfigIslandsName(),
+            
+            Stephino_Rpg_Config_IslandStatues::KEY    => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigIslandStatueName()
+                : Stephino_Rpg_Config::get()->core()->getConfigIslandStatuesName(),
+            
+            Stephino_Rpg_Config_Cities::KEY           => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigCityName()
+                : Stephino_Rpg_Config::get()->core()->getConfigCitiesName(),
+            
+            Stephino_Rpg_Config_Buildings::KEY        => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigBuildingName()
+                : Stephino_Rpg_Config::get()->core()->getConfigBuildingsName(),
+            
+            Stephino_Rpg_Config_Units::KEY            => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigUnitName()
+                : Stephino_Rpg_Config::get()->core()->getConfigUnitsName(),
+            
+            Stephino_Rpg_Config_Ships::KEY            => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigShipName()
+                : Stephino_Rpg_Config::get()->core()->getConfigShipsName(),
+            
+            Stephino_Rpg_Config_ResearchAreas::KEY   => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigResearchAreaName()
+                : Stephino_Rpg_Config::get()->core()->getConfigResearchAreasName(),
+
+            Stephino_Rpg_Config_ResearchFields::KEY   => $singular
+                ? Stephino_Rpg_Config::get()->core()->getConfigResearchFieldName()
+                : Stephino_Rpg_Config::get()->core()->getConfigResearchFieldsName(),
+            
+            Stephino_Rpg_Config_PremiumModifiers::KEY => $singular
+                ? __('Premium Modifier', 'stephino-rpg')
+                : __('Premium Modifiers', 'stephino-rpg'),
+        );
+        
+        return isset($configNames[$configKey]) ? $configNames[$configKey] : null;
     }
     
     /**
@@ -164,6 +251,20 @@ class Stephino_Rpg_Utils_Lingo {
     }
     
     /**
+     * Get the current language in plain text
+     * 
+     * @return string
+     */
+    public static function getLanguage() {
+        $allowedLanguages = self::ALLOWED_LANGS;
+        $currentLanguageKey = Stephino_Rpg_Config::lang(true);
+        
+        return isset($allowedLanguages[$currentLanguageKey])
+            ? $allowedLanguages[$currentLanguageKey]
+            : __('Unknown', 'stephino-rpg');
+    }
+    
+    /**
      * Get the i18n and HTML escaped "Game Mechanics" or "Labels" text, depending on the current user language
      * 
      * @param boolean $titleMode (optional) Title mode - use the current language instead of "translations"; default <b>false</b>
@@ -193,6 +294,21 @@ class Stephino_Rpg_Utils_Lingo {
         
         // Valid string
         return strlen($result) ? $result : null;
+    }
+    
+    /**
+     * Shorten a text to a specified length and add ellipsis if necessary
+     * 
+     * @param string $text      Text
+     * @param int    $maxLength Maximum length
+     * @return string
+     */
+    public static function ellipsize($text, $maxLength) {
+        if (strlen($text) > $maxLength) {
+            $text = substr($text, 0, $maxLength - 3) . '...';
+        }
+        
+        return $text;
     }
     
     /**

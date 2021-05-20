@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
@@ -120,14 +120,6 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
             );
         }
         
-        // Check max queue for buildings
-        $this->_validateMaxQueue(
-            $cityRow[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID], 
-            $cityRow[Stephino_Rpg_Db_Table_Cities::COL_ID], 
-            Stephino_Rpg_Db_Model_Buildings::NAME,
-            $timelapseMode
-        );
-        
         // Add the building at level 0
         if (null === $buildingRow) {
             $buildingId = $this->getDb()->modelBuildings()->create(
@@ -188,14 +180,6 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
                 )
             );
         }
-        
-        // Check max queue for research fields
-        $this->_validateMaxQueue(
-            $userId, 
-            0, 
-            Stephino_Rpg_Db_Model_ResearchFields::NAME,
-            $timelapseMode
-        );
         
         // Prepare the research row
         $researchRow = null;
@@ -321,14 +305,6 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
                 )
             );
         }
-        
-        // Check max queue for entities
-        $this->_validateMaxQueue(
-            $buildingRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_USER_ID], 
-            $buildingRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID], 
-            Stephino_Rpg_Db_Model_Entities::NAME,
-            $timelapseMode
-        );
         
         // Prepare the entity ID
         $entityId = null;
@@ -528,7 +504,7 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
      * @throws Exception
      * @return int Current queue size, strictly lower than the maximum
      */
-    protected function _validateMaxQueue($userId, $cityId, $queueType, $timelapseMode = true) {
+    public function validateMaxQueue($userId, $cityId, $queueType, $timelapseMode = true) {
         // Prepare the result
         $queueCount = 0;
         
@@ -579,6 +555,7 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
                 }
             }
         }
+        
         return $queueCount;
     }
 }

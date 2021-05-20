@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Utils_Config {
@@ -784,6 +784,153 @@ class Stephino_Rpg_Utils_Config {
                 Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($buildingLevels);
                 Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($researchFieldLevels);
             }
+        }
+        
+        return $result;
+    }
+    
+    /**
+     * Get the html <b>data-click</b> attributes for .item-card elements
+     * 
+     * @param Stephino_Rpg_Config_Item_Single $configObject    Configuration object
+     * @param boolean                         $showHelp        (optional) Show the help dialog; default <b>false</b>
+     * @param boolean                         $buildingUpgrade (optional) Show the upgrade dialog for buildings; only works if <b>showHelp</b> is false; default <b>false</b>
+     * @return array Array of <ul>
+     * <li><b>string</b> Item card data-click attribute</li>
+     * <li><b>string</b> Item card data-click-args attribute</li>
+     * </ul>
+     */
+    public static function getItemCardAttributes($configObject, $showHelp = false, $buildingUpgrade = false) {
+        // Prepare the default attributes (help sections)
+        $itemCardFn = 'helpDialog';
+        $itemCardArgs = $configObject instanceof Stephino_Rpg_Config_Item_Single
+            ? ($configObject->keyCollection() . ',' . $configObject->getId())
+            : Stephino_Rpg_Config_Core::KEY . ',0';
+        
+        // Go deeper
+        if (!$showHelp) {
+            switch (true) {
+                // Government: point to main building
+                case $configObject instanceof Stephino_Rpg_Config_Government:
+                    $itemCardFn = 'buildingViewDialog';
+                    $itemCardArgs = Stephino_Rpg_Config::get()->core()->getMainBuilding()->getId();
+                    break;
+                
+                // Building: upgrade or view dialog
+                case $configObject instanceof Stephino_Rpg_Config_Building:
+                    $itemCardFn = $buildingUpgrade 
+                        ? 'buildingUpgradeDialog'
+                        : 'buildingViewDialog';
+                    $itemCardArgs = $configObject->getId();
+                    break;
+
+                // Research field: highlight in research area
+                case $configObject instanceof Stephino_Rpg_Config_ResearchField:
+                    if (null !== $configObject->getResearchArea()) {
+                        $itemCardFn = 'researchAreaInfo';
+                        $itemCardArgs = $configObject->getResearchArea()->getId() . ',' 
+                            . $configObject->getId();
+                    }
+                    break;
+
+                // Research area
+                case $configObject instanceof Stephino_Rpg_Config_ResearchArea:
+                    $itemCardFn = 'researchAreaInfo';
+                    $itemCardArgs = $configObject->getId();
+                    break;
+                
+                // Unit/Ship: point to parent building
+                case $configObject instanceof Stephino_Rpg_Config_Unit:
+                case $configObject instanceof Stephino_Rpg_Config_Ship:
+                    if (null !== $configObject->getBuilding()) {
+                        $itemCardFn = 'buildingViewDialog';
+                        $itemCardArgs = $configObject->getBuilding()->getId() . ',' 
+                            . $configObject->keyCollection() . ',' 
+                            . $configObject->getId();
+                    }
+                    break;
+            }
+        }
+        
+        return array(
+            $itemCardFn, 
+            $itemCardArgs
+        );
+    }
+    
+    /**
+     * Get entity configuration object by capability
+     * 
+     * @param string $capability Entity capability, one of <ul>
+     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK</li>
+     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER</li>
+     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SPY</li>
+     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER</li>
+     * </ul>
+     * @return (Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Unit)[] List of configuration objects. The list may be empty
+     */
+    public static function getEntitiesByCapability($capability) {
+        $result = array();
+        
+        // A specific ability
+        switch ($capability) {
+            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK:
+                $result = array_merge(
+                    array_filter(
+                        Stephino_Rpg_Config::get()->units()->getAll(),
+                        function($unitConfig) {
+                            /* @var $unitConfig Stephino_Rpg_Config_Unit */
+                            return !$unitConfig->getCivilian();
+                        }
+                    ), 
+                    array_filter(
+                        Stephino_Rpg_Config::get()->ships()->getAll(),
+                        function($shipConfig) {
+                            /* @var $shipConfig Stephino_Rpg_Config_Ship */
+                            return !$shipConfig->getCivilian();
+                        }
+                    )
+                );
+                break;
+
+            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER:
+                $result = array_merge(
+                    array_filter(
+                        Stephino_Rpg_Config::get()->units()->getAll(),
+                        function($unitConfig) {
+                            /* @var $unitConfig Stephino_Rpg_Config_Unit */
+                            return $unitConfig->getCivilian() && $unitConfig->getAbilityColonize();
+                        }
+                    ), 
+                    array_filter(
+                        Stephino_Rpg_Config::get()->ships()->getAll(),
+                        function($shipConfig) {
+                            /* @var $shipConfig Stephino_Rpg_Config_Ship */
+                            return $shipConfig->getCivilian() && $shipConfig->getAbilityColonize();
+                        }
+                    )
+                );
+                break;
+
+            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SPY:
+                $result = array_filter(
+                    Stephino_Rpg_Config::get()->units()->getAll(),
+                    function($unitConfig) {
+                        /* @var $unitConfig Stephino_Rpg_Config_Unit */
+                        return $unitConfig->getCivilian() && $unitConfig->getAbilitySpy();
+                    }
+                );
+                break;
+
+            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER:
+                $result = array_filter(
+                    Stephino_Rpg_Config::get()->ships()->getAll(),
+                    function($shipConfig) {
+                        /* @var $shipConfig Stephino_Rpg_Config_Ship */
+                        return $shipConfig->getCivilian() && $shipConfig->getAbilityTransport();
+                    }
+                );
+                break;
         }
         
         return $result;

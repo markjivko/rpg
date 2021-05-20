@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -47,16 +47,25 @@
             <?php if (null !== $requirements[Stephino_Rpg_Config_Building::KEY][0]):?>
                 <span 
                     <?php if ($requirements[Stephino_Rpg_Config_Building::KEY][2]):?>
-                        class="badge badge-primary"
+                        class="badge badge-default"
                     <?php else:?>
                         class="badge badge-danger"
                     <?php endif;?>>
-                    <?php if ($requirements[Stephino_Rpg_Config_Building::KEY][2]):?>
-                        &#9989;
-                    <?php endif;?>
+                    <?php if ($requirements[Stephino_Rpg_Config_Building::KEY][2]):?>&#9989;<?php endif;?>
                     <span 
-                        data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getId();?>">
+                        <?php if ($requirements[Stephino_Rpg_Config_Building::KEY][2]):?>
+                            data-effect="help"
+                            data-effect-args="<?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->keyCollection();?>,<?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getId();?>"
+                        <?php 
+                            else:
+                                list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes(
+                                    $requirements[Stephino_Rpg_Config_Building::KEY][0]
+                                );
+                        ?>
+                            data-click="<?php echo $itemCardFn;?>" 
+                            data-click-args="<?php echo $itemCardArgs;?>"
+                        <?php endif;?>>
+                        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>(<?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getId();?>)<?php endif;?>
                         <?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getName(true);?>
                     </span>
                     <?php if (null !== $requirements[Stephino_Rpg_Config_Building::KEY][1]):?>
@@ -67,16 +76,25 @@
             <?php if (null !== $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]):?>
                 <span 
                     <?php if ($requirements[Stephino_Rpg_Config_ResearchField::KEY][2]):?>
-                        class="badge badge-primary"
+                        class="badge badge-default"
                     <?php else:?>
                         class="badge badge-danger"
                     <?php endif;?>>
-                    <?php if ($requirements[Stephino_Rpg_Config_ResearchField::KEY][2]):?>
-                        &#9989;
-                    <?php endif;?>
-                    <span 
-                        data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getId();?>">
+                    <?php if ($requirements[Stephino_Rpg_Config_ResearchField::KEY][2]):?>&#9989;<?php endif;?>
+                    <span
+                        <?php if ($requirements[Stephino_Rpg_Config_ResearchField::KEY][2] || null === $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getResearchArea()): ?>
+                            data-effect="help"
+                            data-effect-args="<?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->keyCollection();?>,<?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getId();?>"
+                        <?php 
+                            else: 
+                                list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes(
+                                    $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]
+                                );
+                        ?>
+                            data-click="<?php echo $itemCardFn;?>"
+                            data-click-args="<?php echo $itemCardArgs;?>"
+                        <?php endif;?>>
+                        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>(<?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getId();?>)<?php endif;?>
                         <?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getName(true);?>
                     </span>
                     <?php if (null !== $requirements[Stephino_Rpg_Config_ResearchField::KEY][1]):?>

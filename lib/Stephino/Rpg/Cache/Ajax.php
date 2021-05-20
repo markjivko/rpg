@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Cache_Ajax {
@@ -103,7 +103,7 @@ class Stephino_Rpg_Cache_Ajax {
         $this->_instanceKey = $instanceKey;
         
         // Store the last animation change timestamp
-        $this->_timestampCreated = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_ANIMATIONS_LAST_CHANGE, null);
+        $this->_timestampCreated = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_MEDIA_CHANGED, null);
         $this->_timestampCreatedString = null === $this->_timestampCreated ? null : (gmdate('D, d M Y H:i:s ', $this->_timestampCreated) . 'GMT');
         
         // Create the entity tag

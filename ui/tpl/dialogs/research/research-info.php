@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -15,11 +15,11 @@
 /* @var $researchFieldConfig Stephino_Rpg_Config_ResearchField */
 ?>
 <div class="row mt-0 framed p-0">
-    <div data-effect="parallax" data-effect-args="<?php echo Stephino_Rpg_Config_ResearchAreas::KEY;?>,<?php echo $researchAreaConfig->getId();?>"></div>
+    <div data-effect="parallax" data-effect-args="<?php echo $researchAreaConfig->keyCollection();?>,<?php echo $researchAreaConfig->getId();?>"></div>
     <div class="page-help">
         <span 
             data-effect="help"
-            data-effect-args="<?php echo Stephino_Rpg_Config_ResearchAreas::KEY;?>,<?php echo $researchAreaConfig->getId();?>">
+            data-effect-args="<?php echo $researchAreaConfig->keyCollection();?>,<?php echo $researchAreaConfig->getId();?>">
             <?php echo $researchAreaConfig->getName(true);?>
         </span>
     </div>
@@ -46,14 +46,16 @@
                     $researchFieldMaxLevelReached = true;
                 }
             }
+            
+            // Get the item card details
+            list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($researchFieldConfig, !$requirementsMet);
     ?>
         <div class="framed <?php if ($rfId == $researchFieldConfigId):?>active<?php endif;?>">
             <div class="col-12">
                 <h5>
                     <span 
                         data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $researchFieldConfig->getId();?>">
-                        <?php if (Stephino_Rpg::get()->isAdmin()):?>(<?php echo $researchFieldConfig->getId();?>)<?php endif;?>
+                        data-effect-args="<?php echo $researchFieldConfig->keyCollection();?>,<?php echo $researchFieldConfig->getId();?>">
                         <?php echo $researchFieldConfig->getName(true);?>
                     </span>
                 </h5>
@@ -61,17 +63,15 @@
             <div class="col-12 row align-items-center m-0">
                 <div class="col-12 col-lg-3 text-center">
                     <div 
-                        class="building-research-icon framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
-                        data-click="helpDialog"
-                        data-click-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $researchFieldConfig->getId();?>"
+                        class="item-card framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
+                        data-click="<?php echo $itemCardFn;?>"
+                        data-click-args="<?php echo $itemCardArgs;?>"
                         data-effect="background" 
-                        data-effect-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $researchFieldConfig->getId();?>">
+                        data-effect-args="<?php echo $researchFieldConfig->keyCollection();?>,<?php echo $researchFieldConfig->getId();?>">
                         <?php if (isset($researchFieldData[$rfId]) && $researchFieldData[$rfId][Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_LEVEL] > 0):?>
                             <span class="label">
                                 <span>
-                                    <?php if ($researchFieldMaxLevelReached):?>
-                                        &#9989;
-                                    <?php endif;?>
+                                    <?php if ($researchFieldMaxLevelReached):?>&#9989;<?php endif;?>
                                     <?php if ($researchFieldConfig->getLevelsEnabled()):?>
                                         <?php echo esc_html__('Level', 'stephino-rpg');?> <b><?php echo $researchFieldData[$rfId][Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_LEVEL];?></b>
                                     <?php else:?>

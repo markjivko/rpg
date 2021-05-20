@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -23,7 +23,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
     const MAX_MESSAGE_CONTENT_LENGTH = 2000;
     
     /**
-     * Delete a message
+     * Delete a received message
      * 
      * @param array $data Data containing <ul>
      * <li><b>messageId</b> (int) Message ID</li>
@@ -41,7 +41,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
         }
         
         // Delete the message
-        $result = Stephino_Rpg_Db::get()->tableMessages()->delete($messageId);
+        $result = Stephino_Rpg_Db::get()->tableMessages()->deleteInboxMessage(
+            Stephino_Rpg_TimeLapse::get()->userId(),
+            $messageId
+        );
         
         return Stephino_Rpg_Renderer_Ajax::wrap($result);
     }
@@ -89,7 +92,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
         }
         
         // Send the message
-        $messageId = Stephino_Rpg_Db::get()->modelMessages()->send(
+        $messageId = Stephino_Rpg_Db::get()->modelMessages()->contact(
             Stephino_Rpg_TimeLapse::get()->userId(),
             $messageTo,
             $messageSubject,

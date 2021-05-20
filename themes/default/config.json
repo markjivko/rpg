@@ -1,6 +1,5 @@
 {
     "core": {
-        "theme": "default",
         "name": "Mors",
         "description": "As you fight against other players for dominance over the resources of Mors and expand your empire, an archaeological expedition of planetary proportions is afoot. With each new technological finding you uncover bits and pieces of the true story of your origin and ultimately the dark secret that should have never been revealed.\n\nThis RPG allows for infinite gameplay but it also has a finite storyline. Please don't reveal the ending to new players.",
         "showWpLink": true,
@@ -14,7 +13,7 @@
         "ptfRewardAuthor": 20,
         "ptfRewardResetHours": 12,
         "ptfScore": 5,
-        "chatRoom": false,
+        "ptfStrikes": 3,
         "messageDailyLimit": 10,
         "messageInboxLimit": 100,
         "messageMaxAge": 30,
@@ -24,8 +23,6 @@
         "scoreQueueBuilding": 6,
         "scoreQueueEntity": 1,
         "scoreQueueResearch": 90,
-        "payPalCurrency": "EUR",
-        "payPalSandbox": true,
         "sandbox": false,
         "consoleEnabled": true,
         "robotsAggression": "high",

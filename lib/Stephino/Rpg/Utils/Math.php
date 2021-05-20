@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Utils_Math {
@@ -261,21 +261,22 @@ class Stephino_Rpg_Utils_Math {
      * @return int[] X,Y point
      */
     public static function getSnakePoint($snakeLength) {
-        // Invalid snake
-        if ($snakeLength <= 0) {
-            return array(0, 0);
-        }
-        
-        // First element
-        if (1 == $snakeLength) {
-            return array(-1, 0);
-        }
-        
         // Prepare the result
-        $result = array();
+        $result = array(0, 0);
         
         // Run along the coil
         do {
+            // Invalid snake
+            if ($snakeLength <= 0) {
+                break;
+            }
+
+            // First element
+            if (1 == $snakeLength) {
+                $result = array(-1, 0);
+                break;
+            }
+        
             // Get the coil number
             $coilNumber = (int) round(pow($snakeLength / 4, 0.5), 0);
         

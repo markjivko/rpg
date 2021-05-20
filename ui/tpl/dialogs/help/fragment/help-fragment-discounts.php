@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -25,7 +25,7 @@ if ($validDiscountsBuildings || $validDiscountsUnits || $validDiscountsShips): ?
                     <li>
                         <span 
                             data-effect="helpMenuItem"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
+                            data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>">
                             <?php echo $buildingConfig->getName(true); ?>
                         </span>: <b class="text-muted">-<?php echo $configObject->getDiscountBuildingsPercent();?></b>%
                     </li>
@@ -34,7 +34,7 @@ if ($validDiscountsBuildings || $validDiscountsUnits || $validDiscountsShips): ?
                     <li>
                         <span 
                             data-effect="helpMenuItem"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_Units::KEY;?>,<?php echo $unitConfig->getId();?>">
+                            data-effect-args="<?php echo $unitConfig->keyCollection();?>,<?php echo $unitConfig->getId();?>">
                             <?php echo $unitConfig->getName(true); ?>
                         </span>: <b class="text-muted">-<?php echo $configObject->getDiscountUnitsPercent();?></b>%
                     </li>
@@ -43,7 +43,7 @@ if ($validDiscountsBuildings || $validDiscountsUnits || $validDiscountsShips): ?
                     <li>
                         <span 
                             data-effect="helpMenuItem"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_Ships::KEY;?>,<?php echo $shipConfig->getId();?>">
+                            data-effect-args="<?php echo $shipConfig->keyCollection();?>,<?php echo $shipConfig->getId();?>">
                             <?php echo $shipConfig->getName(true); ?>
                         </span>: <b class="text-muted">-<?php echo $configObject->getDiscountShipsPercent();?></b>%
                     </li>

@@ -13,8 +13,7 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_Spy extends Stephino_Rpg_Renderer_Ajax_Dialog {
     
     // Dialog templates
-    const TEMPLATE_REVIEW       = 'spy/spy-review';
-    const TEMPLATE_REVIEW_EMPTY = 'spy/spy-review-empty';
+    const TEMPLATE_REVIEW = 'spy/spy-review';
     
     // Request keys
     const REQUEST_TO_CITY_ID   = 'toCityId';

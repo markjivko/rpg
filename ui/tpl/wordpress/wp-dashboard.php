@@ -7,11 +7,11 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
-<!--[if lt IE 10]><meta http-equiv="Refresh" content="0; url=<?php echo Stephino_Rpg_Utils_Lingo::escape(get_dashboard_url());?>"><![endif]-->
+<!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
 <!-- stephino-rpg -->
 <div class="content">
     <div role="info-badge">
@@ -21,7 +21,8 @@
     <div class="row no-gutters" data-role="header">
         <div class="col-12 banner">
             <div class="logo"></div>
-            <div class="info">Stephino RPG 
+            <div class="info">
+                <?php echo Stephino_Rpg::PLUGIN_NAME;?> 
                 <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?></span>
                 <?php echo esc_html__('Dashboard', 'stephino-rpg');?>
             </div>

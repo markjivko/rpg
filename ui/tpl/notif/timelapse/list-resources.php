@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -18,7 +18,7 @@ if (!isset($resourceExact)) {
 }
 if (isset($resourcesList) && is_array($resourcesList)):
 ?>
-    <div class="row justify-content-center text-center">
+    <div class="row justify-content-center">
         <?php 
             $cityResources = Stephino_Rpg_Renderer_Ajax_Action::getResourceData($resourcesList);
             foreach($cityResources as $resourceKey => list($resName, $resValue, $resAjaxKey)):
@@ -36,7 +36,7 @@ if (isset($resourcesList) && is_array($resourcesList)):
                     continue;
                 }
         ?>
-            <div class="col-6 col-lg-4">
+            <div class="col-6">
                 <div class="res res-<?php echo $resAjaxKey;?>">
                     <div class="icon"></div>
                     <span>

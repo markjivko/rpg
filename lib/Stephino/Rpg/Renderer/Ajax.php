@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax {
     
@@ -21,6 +21,7 @@ class Stephino_Rpg_Renderer_Ajax {
     const CALL_CONFIG_ID        = 'configId';
     const CALL_VIEW             = 'view';
     const CALL_VIEW_DATA        = 'viewData';
+    const CALL_MEDIA_PATH       = 'mediaPath';
     const CALL_RESPONSE_STATUS  = 'status';
     const CALL_RESPONSE_RESULT  = 'result';
     const CALL_RESPONSE_CONTENT = 'content';    
@@ -29,10 +30,11 @@ class Stephino_Rpg_Renderer_Ajax {
     const CONTROLLER_ACTION = 'action';
     const CONTROLLER_ADMIN  = 'admin';
     const CONTROLLER_CELLS  = 'cells';
-    const CONTROLLER_CSS    = 'css';
     const CONTROLLER_DIALOG = 'dialog';
-    const CONTROLLER_HTML   = 'html';
+    const CONTROLLER_MEDIA  = 'media';
+    const CONTROLLER_CSS    = 'css';
     const CONTROLLER_JS     = 'js';
+    const CONTROLLER_HTML   = 'html';
     
     // Common JS and CSS scripts
     const FILE_COMMON   = 'common';
@@ -55,10 +57,22 @@ class Stephino_Rpg_Renderer_Ajax {
         self::CONTROLLER_ACTION,
         self::CONTROLLER_ADMIN,
         self::CONTROLLER_CELLS,
-        self::CONTROLLER_CSS,
         self::CONTROLLER_DIALOG,
-        self::CONTROLLER_HTML,
+        self::CONTROLLER_MEDIA,
+        self::CONTROLLER_CSS,
         self::CONTROLLER_JS,
+        self::CONTROLLER_HTML,
+    );
+    
+    /**
+     * Public AJAX controllers
+     * 
+     * @var string[]
+     */
+    const PUBLIC_CONTROLLERS = array(
+        Stephino_Rpg_Renderer_Ajax::CONTROLLER_MEDIA, 
+        Stephino_Rpg_Renderer_Ajax::CONTROLLER_CSS, 
+        Stephino_Rpg_Renderer_Ajax::CONTROLLER_JS,
     );
     
     // Game views
@@ -514,7 +528,7 @@ class Stephino_Rpg_Renderer_Ajax {
      * @return array
      */
     protected static function _getMessages() {
-        return Stephino_Rpg_Db::get()->tableMessages()->getUnread(
+        return Stephino_Rpg_Db::get()->modelMessages()->fetchUnread(
             Stephino_Rpg_TimeLapse::get()->userId()
         );
     }

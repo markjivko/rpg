@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -29,7 +29,7 @@
             <?php 
                 echo sprintf(
                     esc_html__('Buy resources with %s', 'stephino-rpg'),
-                    '<span data-effect="help" data-effect-args="' . Stephino_Rpg_Config_Buildings::KEY . ',' . $buildingConfig->getId() . '">'
+                    '<span data-effect="help" data-effect-args="' . $buildingConfig->keyCollection() . ',' . $buildingConfig->getId() . '">'
                         . '<b>' . Stephino_Rpg_Config::get()->core()->getResourceGoldName(true) . '</b>'
                     . '</span>'
                 );
@@ -164,7 +164,7 @@
             <?php 
                 echo sprintf(
                     esc_html__('Sell resources for %s', 'stephino-rpg'),
-                    '<span data-effect="help" data-effect-args="' . Stephino_Rpg_Config_Buildings::KEY . ',' . $buildingConfig->getId() . '">'
+                    '<span data-effect="help" data-effect-args="' . $buildingConfig->keyCollection() . ',' . $buildingConfig->getId() . '">'
                         . '<b>' . Stephino_Rpg_Config::get()->core()->getResourceGoldName(true) . '</b>'
                     . '</span>'
                 );

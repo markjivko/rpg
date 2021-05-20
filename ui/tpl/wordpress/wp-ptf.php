@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -37,8 +37,8 @@ if (!is_array($userRatings)) {
     <head>
         <?php wp_head(); ?>
         <link rel="shortcut icon" type="image/png" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.png'); ?>" />
-        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() . '/img/ui/192.png'); ?>">
-        <!--[if lt IE 10]><meta http-equiv="Refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
+        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/ui/192.png')); ?>">
+        <!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="IE=edge">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, shrink-to-fit=no" />
@@ -66,6 +66,7 @@ if (!is_array($userRatings)) {
                 <?php echo esc_html__('Game not found', 'stephino-rpg');?>
             </div>
         </div>
+        <div data-role="info"></div>
         <div class="framed active row" data-role="ptf-popup">
             <span class="col-12">
                 <span class="success">

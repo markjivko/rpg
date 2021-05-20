@@ -8,11 +8,12 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_Action {
 
     // Request keys
+    const REQUEST_USER_ID        = 'userId';
     const REQUEST_TRADE_GEM      = 'tradeGem';
     const REQUEST_TRADE_TYPE     = 'tradeType';
     const REQUEST_PTF_ID         = 'ptfId';
@@ -118,6 +119,72 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
     }
     
     /**
+     * Toggle game master status for a player
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>self::REQUEST_USER_ID</b> (int) User ID</li>
+     * </ul>
+     * @throws Exception
+     */
+    public static function ajaxToggleGm($data) {
+        // Only GMs can promote game masters
+        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
+            throw new Exception(__('You cannot promote or demote other players', 'stephino-rpg'));
+        }
+        
+        // Get the user ID
+        $userId = isset($data[self::REQUEST_USER_ID]) ? abs((int) $data[self::REQUEST_USER_ID]) : 0;
+        
+        // Invalid user id
+        if ($userId <= 0) {
+            throw new Exception(__('Invalid user ID', 'stephino-rpg'));
+        }
+        
+        // Get the user data
+        $userData = Stephino_Rpg_Db::get()->tableUsers()->getById($userId);
+        if (!is_array($userData)) {
+            throw new Exception(__('Invalid user', 'stephino-rpg'));
+        }
+        
+        // Cannot promote/demote robots
+        if ((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID] <= 0) {
+            throw new Exception(__('Robots cannot be promoted to game masters', 'stephino-rpg'));
+        }
+        
+        // Cannot promote/demote super-admins
+        if (Stephino_Rpg_Cache_User::get()->isGameAdmin((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])) {
+            throw new Exception(__('Super-admins cannot be demoted', 'stephino-rpg'));
+        }
+        
+        // Get the game settings
+        $gameSettings = isset($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS])
+            ? json_decode($userData[Stephino_Rpg_Db_Table_Users::COL_USER_GAME_SETTINGS], true)
+            : array();
+        
+        // Sanitize
+        if (!is_array($gameSettings)) {
+            $gameSettings = array();
+        }
+        
+        // Toggle the Game Master flag
+        $gameSettings[Stephino_Rpg_Cache_User::KEY_GAME_MASTER] = !isset($gameSettings[Stephino_Rpg_Cache_User::KEY_GAME_MASTER])
+            || !$gameSettings[Stephino_Rpg_Cache_User::KEY_GAME_MASTER];
+        
+        // Send the notification
+        Stephino_Rpg_Db::get()->modelMessages()->notify(
+            $userId, 
+            Stephino_Rpg_Db_Model_Messages::TEMPLATE_NOTIF_USER_GAME_MASTER,
+            array(
+                // gameMaster
+                $gameSettings[Stephino_Rpg_Cache_User::KEY_GAME_MASTER]
+            )
+        );
+        
+        // Update the game settings
+        return Stephino_Rpg_Db::get()->tableUsers()->setGameSettings($gameSettings, $userId);
+    }
+    
+    /**
      * Delete a platformer game
      * 
      * @param array $data Data containing <ul>
@@ -131,7 +198,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Only admins can delete games
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
             throw new Exception(__('You cannot delete this game', 'stephino-rpg'));
         }
         
@@ -248,7 +315,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Only admins can review games
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
             throw new Exception(__('You cannot review this game', 'stephino-rpg'));
         }
         
@@ -296,37 +363,28 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Send message to players only
-        if (0 != $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
-            try {
-                // Get the number of suspended games
-                $ptfSuspended = null;
-                if (Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED == $ptfReview) {
-                    $ptfSuspended = Stephino_Rpg_Db::get()->tablePtfs()->getCountSuspended(
-                        $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]
-                    );
-                }
-                
-                // Prepare the message content
-                ob_start();
-                require Stephino_Rpg_Renderer_Ajax_Dialog::dialogTemplatePath(
-                    Stephino_Rpg_Renderer_Ajax_Dialog_Messages::TEMPLATE_PTF_REVIEW
-                );
-
-                // Send the message
-                Stephino_Rpg_Db::get()->modelMessages()->send(
-                    0, 
-                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
-                    Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING != $ptfReview
-                        ? __('Your game was reviewed', 'stephino-rpg')
-                        : __('Your game is under review', 'stephino-rpg'), 
-                    ob_get_clean(),
-                    true
-                );
-            } catch (Exception $exc) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                    "Renderer_Ajax_Action_User.ajaxPtfReview: {$exc->getMessage()}"
+        if (0 !== (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]) {
+            // Get the number of suspended games
+            $ptfSuspended = null;
+            if (Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_SUSPENDED === $ptfReview) {
+                $ptfSuspended = Stephino_Rpg_Db::get()->tablePtfs()->getCountSuspended(
+                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID]
                 );
             }
+
+            // Send the notification
+            Stephino_Rpg_Db::get()->modelMessages()->notify(
+                $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
+                Stephino_Rpg_Db_Model_Messages::TEMPLATE_NOTIF_PTF_REVIEW,
+                array(
+                    $ptfReview,
+                    // ptfId
+                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID],
+                    // ptfName
+                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME],
+                    $ptfSuspended
+                )
+            );
         }
         
         return $result;
@@ -354,7 +412,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         $userId = Stephino_Rpg_TimeLapse::get()->userId();
         
         // Account suspended
-        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg::get()->isAdmin())) {
+        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isGameMaster())) {
             throw new Exception(__('Your game arena publisher account was suspended', 'stephino-rpg'));
         }
         
@@ -374,7 +432,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         // Editing rights
         if (!Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
             $userId, 
-            Stephino_Rpg::get()->isAdmin(),
+            Stephino_Rpg_Cache_User::get()->isGameMaster(),
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
         )) {
@@ -427,7 +485,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
         );
         
         // Submit for re-review; got to here if the game was not suspended
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
             $ptfUpdateData[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW] = Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_PENDING;
         }
         
@@ -491,7 +549,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
             // Editing rights
             $ptfEditable = Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
                 $userId, 
-                Stephino_Rpg::get()->isAdmin(),
+                Stephino_Rpg_Cache_User::get()->isGameMaster(),
                 $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
                 $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
             );

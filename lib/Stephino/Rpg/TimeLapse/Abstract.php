@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 abstract class Stephino_Rpg_TimeLapse_Abstract {
 
@@ -223,208 +223,203 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
         
         // Go through the messages
         foreach ($this->_messages as $userId => $userMessages) {
-            foreach ($userMessages as $messageType => $messageData) {
-                foreach ($messageData as $itemType => $itemInfo) {
+            foreach ($userMessages as $messageType => $notifData) {
+                if (!in_array($messageType, array(
+                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_MILITARY,
+                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY,
+                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY,
+                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_RESEARCH,
+                ))) {
+                    continue;
+                }
+                
+                foreach ($notifData as $itemType => $itemInfo) {
                     foreach ($itemInfo as $itemId => list($stepTime, $itemData)) {
-                        // Prepare the message subject
-                        $messageSubject = '(' . esc_html__('empty', 'stephino-rpg') . ')';
+                        // Prepare the notification arguments
+                        $notifTemplate = null;
+                        $notifData = null;
+                        
                         switch ($messageType) {
                             case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_RESEARCH:
-                                $researchFieldConfig = Stephino_Rpg_Config::get()->researchFields()->getById(
-                                    $itemData[Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_CONFIG_ID]
-                                );
-                                
-                                // Invalid research field configuration
-                                if (null === $researchFieldConfig) {
-                                    continue 2;
+                                switch ($itemType) {
+                                    case Stephino_Rpg_TimeLapse_Queues::ACTION_RESEARCH_UNLOCK:
+                                        if (is_array($itemData) && count($itemData)) {
+                                            $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_RESEARCH_UNLOCK;
+                                            $notifData = array(
+                                                // unlockedItems
+                                                $itemData
+                                            );
+                                        }
+                                        break;
+                                    
+                                    case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH:
+                                        $researchFieldConfig = Stephino_Rpg_Config::get()->researchFields()->getById(
+                                            $itemData[Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_CONFIG_ID]
+                                        );
+                                        if (null !== $researchFieldConfig) {
+                                            $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_RESEARCH_DONE;
+                                            $notifData = array(
+                                                // researchFieldConfigId
+                                                $researchFieldConfig->getId(),
+                                                // researchFieldLevel
+                                                (int) $itemData[Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_LEVEL],
+                                            );
+                                        }
+                                        break;
+                                    
                                 }
-                                
-                                // Store the subject
-                                $messageSubject = sprintf(esc_html__('%s: research complete', 'stephino-rpg'), $researchFieldConfig->getName(true));
                                 break;
 
                             case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY:
                                 switch ($itemType) {
                                     case Stephino_Rpg_TimeLapse_Convoys::ACTION_TRANSPORT:
-                                        if ($itemData[0]) {
-                                            $messageSubject = esc_html__('Transporter returned', 'stephino-rpg');
-                                        } else {
-                                            $messageSubject = esc_html__('Goods delivered', 'stephino-rpg');
-                                        }
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_ECONOMY_TRANSPORT;
+                                        $notifData = array(
+                                            // transportReturned
+                                            !!$itemData[0],
+                                            // payloadArray
+                                            $itemData[1],
+                                            // fromCityId
+                                            (int) $itemData[2][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID],
+                                            // toCityId
+                                            (int) $itemData[2][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID],
+                                        );
                                         break;
                                     
                                     case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_BUILDING:
                                         $buildingConfig = Stephino_Rpg_Config::get()->buildings()->getById(
                                             $itemData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID]
                                         );
-                                        
-                                        // Invalid building configuration
-                                        if (null === $buildingConfig) {
-                                            continue 3;
+                                        if (null !== $buildingConfig) {
+                                            $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_ECONOMY_BUILDING;
+                                            $notifData = array(
+                                                // buildingConfigId
+                                                $buildingConfig->getId(),
+                                                // buildingLevel
+                                                (int) $itemData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                                                // buildingCityId
+                                                (int) $itemData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID],
+                                            );
                                         }
-                                        $messageSubject = sprintf(esc_html__('%s: upgraded', 'stephino-rpg'), $buildingConfig->getName(true));
                                         break;
                                         
                                     case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT:
-                                        $unitConfig = Stephino_Rpg_Config::get()->units()->getById(
-                                            $itemData[0][Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]
-                                        );
-                                        
-                                        // Invalid unit configuration
-                                        if (null === $unitConfig) {
-                                            continue 3;
-                                        }
-                                        $messageSubject = sprintf(esc_html__('%s: recruited', 'stephino-rpg'), $unitConfig->getName(true));
-                                        break;
-                                        
                                     case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_SHIP:
-                                        $shipConfig = Stephino_Rpg_Config::get()->ships()->getById(
-                                            $itemData[0][Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]
-                                        );
-                                        
-                                        // Invalid ship configuration
-                                        if (null === $shipConfig) {
-                                            continue 3;
+                                        $entityConfig = Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT === $itemType
+                                            ? Stephino_Rpg_Config::get()->units()->getById(
+                                                $itemData[0][Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]
+                                            )
+                                            : Stephino_Rpg_Config::get()->ships()->getById(
+                                                $itemData[0][Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID]
+                                            );
+                                        if (null !== $entityConfig) {
+                                            $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_ECONOMY_ENTITY;
+                                            $notifData = array(
+                                                // entityConfigId
+                                                $entityConfig->getId(),
+                                                // entityType
+                                                $itemType,
+                                                // entityCityId
+                                                (int) $itemData[0][Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID],
+                                            );
                                         }
-                                        $messageSubject = sprintf(esc_html__('%s: built', 'stephino-rpg'), $shipConfig->getName(true));
                                         break;
-                                    
                                 }
                                 break;
 
                             case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_MILITARY:
                                 switch ($itemType) {
                                     case Stephino_Rpg_TimeLapse_Convoys::ACTION_ATTACK:
-                                        // Prepare the title
-                                        list(, $convoyStatus) = $itemData;
-                                        switch ($convoyStatus) {
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_RETREAT: 
-                                                $messageSubject = esc_html__('Retreat', 'stephino-rpg');
-                                                break;
-
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_CRUSHING: 
-                                                $messageSubject = esc_html__('Crushing Defeat', 'stephino-rpg');
-                                                break;
-
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_CRUSHING: 
-                                                $messageSubject = esc_html__('Crushing Victory', 'stephino-rpg');
-                                                break;
-
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_HEROIC: 
-                                                $messageSubject = esc_html__('Heroic Defeat', 'stephino-rpg');
-                                                break;
-
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_HEROIC: 
-                                                $messageSubject = esc_html__('Heroic Victory', 'stephino-rpg');
-                                                break;
-
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_BITTER: 
-                                                $messageSubject = esc_html__('Bitter Defeat', 'stephino-rpg');
-                                                break;
-
-                                            case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_BITTER: 
-                                                $messageSubject = esc_html__('Bitter Victory', 'stephino-rpg');
-                                                break;
-                                        }
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_MILITARY_ATTACK;
+                                        $notifData = array(
+                                            // attacker
+                                            !!$itemData[0],
+                                            // attackStatus
+                                            $itemData[1],
+                                            // payloadArray
+                                            $itemData[2],
+                                            // fromCityId
+                                            (int) $itemData[3][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID],
+                                            // toCityId
+                                            (int) $itemData[3][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID],
+                                        );
                                     break;
                                 
                                     case Stephino_Rpg_TimeLapse_Convoys::ACTION_SPY:
-                                        list($transportReturned, $payloadArray) = $itemData;
-                                        if (!$transportReturned) {
-                                            if ($userId == $this->_userId && !is_array($payloadArray)) {
-                                                $messageSubject = esc_html__('We caught a spy', 'stephino-rpg');
-                                            } else {
-                                                $messageSubject = (
-                                                    is_array($payloadArray) 
-                                                        ? esc_html__('Spy mission successful', 'stephino-rpg') 
-                                                        : esc_html__('Spy mission failed', 'stephino-rpg')
-                                                );
-                                            }
-                                        } else {
-                                            $messageSubject = esc_html__('Our spy has returned', 'stephino-rpg');
-                                        }
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_MILITARY_SPY;
+                                        $notifData = array(
+                                            // transportReturned
+                                            $itemData[0],
+                                            // payloadArray
+                                            $itemData[1],
+                                            // fromCityId
+                                            (int) $itemData[2][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID],
+                                            // toCityId
+                                            (int) $itemData[2][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID],
+                                            // currentUser
+                                            $userId == $this->_userId
+                                        );
                                         break;
                                     
                                     default:
-                                        $messageSubject = esc_html__('Our troops have returned', 'stephino-rpg');
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_MILITARY_RETURN;
+                                        $notifData = array(
+                                            // payloadArray
+                                            $itemData[2],
+                                            // fromCityId
+                                            (int) $itemData[3][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID],
+                                            // toCityId
+                                            (int) $itemData[3][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID],
+                                        );
                                 }
                                 break;
                                 
                             case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY:
                                 switch($itemType) {
                                     case Stephino_Rpg_TimeLapse_Convoys::ACTION_COLONIZE:
-                                        $messageSubject = esc_html__('Colonization', 'stephino-rpg');
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_COLONY;
+                                        $notifData = array(
+                                            // itemDataCityInfo
+                                            $itemData[0],
+                                        );
                                         break;
                                     
                                     case Stephino_Rpg_TimeLapse_Queues::ACTION_PREMIUM_EXP:
-                                        $messageSubject = esc_html__('Premium modifier expired', 'stephino-rpg');
+                                        $premiumModifierConfig = Stephino_Rpg_Config::get()->premiumModifiers()->getById(
+                                            $itemData[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_ID]
+                                        );
+                                        if (null !== $premiumModifierConfig) {
+                                            $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_PREMIUM;
+                                            $notifData = array(
+                                                // premiumModifierConfigId
+                                                (int) $itemData[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_ID],
+                                                // premiumDuration
+                                                (int) $itemData[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_DURATION],
+                                                // premiumQuantity
+                                                (int) $itemData[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_QUANTITY],
+                                            );
+                                        }
                                         break;
                                     
                                     case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH:
-                                        $messageSubject = esc_html__('Discovery', 'stephino-rpg');
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_DISCOVERY;
+                                        $notifData = array(
+                                            // researchFieldConfigId
+                                            $itemData
+                                        );
                                         break;
                                 }
                                 break;
                         }
 
-                        // Prepare the message content
-                        $messageContent = '(' . esc_html__('empty', 'stephino-rpg') . ')';
-
-                        // Prepare the template name
-                        $templateFileName = null;
-                        switch ($messageType) {
-                            case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_MILITARY:
-                                $templateFileName = Stephino_Rpg_TimeLapse::TEMPLATE_MILITARY;
-                                break;
-                            
-                            case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY:
-                                $templateFileName = Stephino_Rpg_TimeLapse::TEMPLATE_ECONOMY;
-                                break;
-                            
-                            case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY:
-                                $templateFileName = Stephino_Rpg_TimeLapse::TEMPLATE_DIPLOMACY;
-                                break;
-                            
-                            case Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_RESEARCH:
-                                $templateFileName = Stephino_Rpg_TimeLapse::TEMPLATE_RESEARCH;
-                                break;
-                        }
-                        
-                        // Start the buffer
-                        if (null !== $templateFileName) {
-                            // Start the buffer
-                            ob_start();
-                            
-                            try {
-                                // Load the template
-                                require Stephino_Rpg_TimeLapse::getTemplatePath($templateFileName);
-                            } catch (Exception $exc) {
-                                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                                    "Timelapse_Abstract._sendMessages: {$exc->getMessage()}"
-                                );
-                            }
-                            
-                            // Store the result, removing extra spaces
-                            $messageContent = trim(
-                                preg_replace(
-                                    array(
-                                        '%[\r\n\t]+%',
-                                        '% {2,}%',
-                                    ), 
-                                    ' ', 
-                                    ob_get_clean()
-                                )
-                            );
-                        }
-
-                        // Add to the payload
-                        if (strlen($messageContent)) {
+                        // Append the payload; compatible with Stephino_Rpg_Db_Model_Messages::_parse()
+                        if (null !== $notifTemplate && is_array($notifData)) {
                             $payload[] = array(
-                                Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_TIME    => $stepTime,
                                 Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_TO      => $userId,
                                 Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_TYPE    => $messageType,
-                                Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT => $messageSubject,
-                                Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_CONTENT => $messageContent,
+                                Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT => $notifTemplate,
+                                Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_CONTENT => json_encode($notifData),
+                                Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_TIME    => $stepTime,
                             );
                         }
                     }

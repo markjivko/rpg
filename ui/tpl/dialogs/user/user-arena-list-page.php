@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -32,7 +32,7 @@
     ?>
         <div class="col-6 col-md-4 col-lg-3" data-click="dialog" data-click-args="dialogUserArenaPlay,<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];?>">
             <div class="ptf-card">
-                <?php if ($userId == $authorId || Stephino_Rpg::get()->isAdmin()):?>
+                <?php if ($userId == $authorId || Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
                     <div data-role="ptf-labels">
                         <?php if (Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PRIVATE === $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY]): ?>
                             <span class="badge badge-warning"><?php echo esc_html__('Private', 'stephino-rpg');?></span>

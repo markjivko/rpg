@@ -7,17 +7,24 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
+
+/* @var $cityData array */
+/* @var $islandData array */
+/* @var $viewName string */
+/* @var $viewAttrs string */
+
 ?><!doctype html>
 <html <?php language_attributes(); ?>>
     <head>
         <?php wp_head(); ?>
         <link rel="shortcut icon" type="image/png" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.png'); ?>" />
         <link rel="manifest" id="stephino_rpg_manifest" />
-        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() . '/img/ui/192.png'); ?>">
-        <!--[if lt IE 10]><meta http-equiv="Refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
+        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/ui/192.png')); ?>">
+        <!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
+        <?php if (Stephino_Rpg_Renderer_Ajax::VIEW_PWA == $viewName):?><meta http-equiv="refresh" content="5" /><?php endif;?>
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="IE=edge">
         <meta name="viewport" content="initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no, shrink-to-fit=no" />
@@ -97,7 +104,7 @@
         </div>
 
         <!-- Map -->
-        <div data-role="map-holder" <?php echo $atts; ?>>
+        <div data-role="map-holder" <?php echo $viewAttrs; ?>>
             <div data-role="map" class="map"></div>
         </div>
 
@@ -162,7 +169,7 @@
                         <div class="modal-footer-center col row no-gutters">
                             <div class="col modal-footer-pad-left"></div>
                             <div class="col-10 col-sm-8 col-lg-4 modal-footer-pad">
-                                <a target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_WORDPRESS);?>">
+                                <a rel="noreferrer" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_WORDPRESS);?>">
                                     v. <?php echo Stephino_Rpg_Utils_Media::getPwaVersion(false, false);?>
                                 </a>
                             </div>

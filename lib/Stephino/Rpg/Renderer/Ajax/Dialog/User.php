@@ -219,7 +219,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // View all games
-        $ptfViewAll = ($arenaAuthorId == $userId || Stephino_Rpg::get()->isAdmin());
+        $ptfViewAll = ($arenaAuthorId == $userId || Stephino_Rpg_Cache_User::get()->isGameMaster());
         
         // Pagination data
         $pagination = (new Stephino_Rpg_Utils_Pagination(
@@ -289,7 +289,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         $userGamesCreated = 0;
         
         // Player authorship limits
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
             if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 $userCanCreate = false;
             } else {
@@ -301,7 +301,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Account suspended
-        $userSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg::get()->isAdmin());
+        $userSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isGameMaster());
 
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_LIST);
         return Stephino_Rpg_Renderer_Ajax::wrap(
@@ -349,7 +349,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Editing rights
         $ptfEditable = Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
             $userId, 
-            Stephino_Rpg::get()->isAdmin(),
+            Stephino_Rpg_Cache_User::get()->isGameMaster(),
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
         );
@@ -385,7 +385,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         $userId = Stephino_Rpg_TimeLapse::get()->userId();
         
         // Account suspended
-        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg::get()->isAdmin())) {
+        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isGameMaster())) {
             throw new Exception(__('Your game arena publisher account was suspended', 'stephino-rpg'));
         }
         
@@ -409,7 +409,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Editing rights
         if (!Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
             $userId, 
-            Stephino_Rpg::get()->isAdmin(),
+            Stephino_Rpg_Cache_User::get()->isGameMaster(),
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
         )) {

@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
@@ -278,7 +278,8 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                                 break;
                             
                             default:
-                                $this->_addMessage(Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_MILITARY, 
+                                $this->_addMessage(
+                                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_MILITARY, 
                                     self::ACTION_RETURN, 
                                     $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID],
                                     array(
@@ -647,7 +648,6 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
 
         // Transfer all resources and entities locally
         if (is_array($payloadArray)) {
-            // Store the original payload
             $this->_transportMessage($dataRow, $payloadArray);
         
             // Transfer resources
@@ -794,7 +794,8 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
         $this->_addMessage(
             Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY, 
             self::ACTION_TRANSPORT, 
-            $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID], 
+            $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID] . '-' 
+                . $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_USER_ID], 
             array(
                 // Returned
                 false,
@@ -808,19 +809,25 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
         );
         
         // Destination
-        $this->_addMessage(
-            Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY, 
-            self::ACTION_TRANSPORT, 
-            $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID], 
-            array(
-                // Returned
+        if ($dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_USER_ID] 
+            != $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_USER_ID]) {
+            $this->_addMessage(
+                Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY, 
+                self::ACTION_TRANSPORT, 
+                $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID] . '-' 
+                    . $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_USER_ID], 
+                array(
+                    // Returned
+                    false,
+                    // Information
+                    $convoyPayload,
+                    // Convoy Row
+                    $dataRow
+                ),
                 false,
-                // Information
-                $convoyPayload,
-                // Convoy Row
-                $dataRow
-            )
-        );
+                $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_USER_ID]
+            );
+        }
     }
     
     /**

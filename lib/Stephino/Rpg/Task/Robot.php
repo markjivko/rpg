@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Task_Robot {
     
@@ -174,7 +174,7 @@ class Stephino_Rpg_Task_Robot {
                     // Building queue
                     if ($unlockObject instanceof Stephino_Rpg_Config_Building 
                         && count($queuedBuildings) < Stephino_Rpg_Config::get()->core()->getMaxQueueBuildings()) {
-                        // Try the upgrade
+                        // Spend resources
                         $this->_spend($costData, $cityData);
                         
                         // Queue the building
@@ -230,8 +230,8 @@ class Stephino_Rpg_Task_Robot {
                             $buildingLevel,
                             true
                         );
-
-                        // Allocate resources
+                        
+                        // Spend resources
                         $this->_spend($costData, $cityData);
 
                         // Queue the building

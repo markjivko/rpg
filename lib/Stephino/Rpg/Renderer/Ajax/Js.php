@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Js {
 
@@ -47,7 +47,8 @@ class Stephino_Rpg_Renderer_Ajax_Js {
             $result .= self::_getGameJs($view);
         }
         
-        // Get the plugin version
+        // Get the plugin details
+        $pluginName = Stephino_Rpg::PLUGIN_NAME;
         $pluginVersion = Stephino_Rpg::PLUGIN_VERSION;
         
         // Copyright year
@@ -65,7 +66,7 @@ class Stephino_Rpg_Renderer_Ajax_Js {
         // Prepare the header
         $jsHeader = <<<"JS"
 /**
- * Stephino Rpg JS
+ * $pluginName JS
  * 
  * @id         $view
  * @title      $title
@@ -74,7 +75,7 @@ class Stephino_Rpg_Renderer_Ajax_Js {
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
  * @version    $pluginVersion            
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 JS;
 
@@ -99,8 +100,8 @@ JS;
             }
             
             // Get the game JS paths
-            $gamePath = STEPHINO_RPG_ROOT . '/ui/js/game/' . Stephino_Rpg_Renderer_Ajax::FILE_COMMON . '.js';
-            $gameViewPath = STEPHINO_RPG_ROOT . '/ui/js/game/' . $view . '.js';
+            $gamePath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/game/' . Stephino_Rpg_Renderer_Ajax::FILE_COMMON . '.js';
+            $gameViewPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/game/' . $view . '.js';
             
             // Both files found
             if (is_file($gamePath) && is_file($gameViewPath)) {
@@ -121,12 +122,9 @@ JS;
         $result = '';
         
         // PWA file defined
-        if (is_file($pwaPath = STEPHINO_RPG_ROOT . '/ui/js/pwa/pwa-worker.js')) {
-            // Prepare the root using relative plugin url (starting with one forward slash "/")
-            $urlRoot = Stephino_Rpg_Utils_Media::getPluginsUrl();
-            
+        if (is_file($pwaPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/pwa/pwa-worker.js')) {
             // Prepare the offline file path
-            $offlineFile = Stephino_Rpg_Utils_Media::getAdminUrl(true) . '&view=' . Stephino_Rpg_Renderer_Ajax::VIEW_PWA;
+            $offlineFile = Stephino_Rpg_Utils_Media::getAdminUrl(true, false) . '&view=' . Stephino_Rpg_Renderer_Ajax::VIEW_PWA;
             
             // Prepare the list of files to cache
             $filesToCache = array(
@@ -134,58 +132,16 @@ JS;
                 $offlineFile,
                 
                 // Offline (+main) CSS
-                Stephino_Rpg_Utils_Media::getAdminUrl(true) . '&' . http_build_query(array(
+                Stephino_Rpg_Utils_Media::getAdminUrl(true, false) . '&' . http_build_query(array(
                     Stephino_Rpg_Renderer_Ajax::CALL_METHOD  => Stephino_Rpg_Renderer_Ajax::CONTROLLER_CSS,
                     Stephino_Rpg_Renderer_Ajax::CALL_VERSION => Stephino_Rpg::PLUGIN_VERSION,
                 )),
                 
                 // Offline (+main) JS
-                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/js/stephino.js?' . http_build_query(array(
+                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_JS . '/stephino.js?' . http_build_query(array(
                     Stephino_Rpg_Renderer_Ajax::CALL_VERSION => Stephino_Rpg::PLUGIN_VERSION
                 )),
-                
-                // Offline resources
-                $urlRoot . '/ui/img/badge-error.gif',
-                $urlRoot . '/ui/img/badge-success.gif',
-                $urlRoot . '/ui/img/icon.png',
-                $urlRoot . '/ui/img/icon.svg',
-                $urlRoot . '/ui/img/signature.png',
             );
-            
-            // Prepare the file iterators
-            $iterators = array(
-                $urlRoot => new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator(
-                        Stephino_Rpg_Config::get()->themePath(), 
-                        RecursiveDirectoryIterator::SKIP_DOTS
-                    ), 
-                    RecursiveIteratorIterator::SELF_FIRST
-                )
-            );
-            
-            // Prepare the PRO files iterator
-            if (Stephino_Rpg::get()->isPro()) {
-                $iterators[Stephino_Rpg_Utils_Media::getPluginsUrl(true)] = new RecursiveIteratorIterator(
-                    new RecursiveDirectoryIterator(
-                        Stephino_Rpg_Config::get()->themePath(true), 
-                        RecursiveDirectoryIterator::SKIP_DOTS
-                    ), 
-                    RecursiveIteratorIterator::SELF_FIRST
-                );
-            }
-
-            // Cache theme files
-            foreach ($iterators as $iteratorRootUrl => $iterator) {
-                foreach ($iterator as $item) {
-                    if (!$item->isDir() && preg_match('%\.(png|jpe?g|gif|svg|mp[34]|web[mp])$%i', $item)) {
-                        // Get the basename once
-                        $itemBasename = basename($item);
-
-                        // Store the file in cache
-                        $filesToCache[] = $iteratorRootUrl . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() . '/' . $iterator->getSubPathName();
-                    }
-                }
-            }
             
             // Update the result
             $result = str_replace(
@@ -219,7 +175,7 @@ JS;
             $result = json_encode(Stephino_Rpg_Db::get()->modelPtfs()->getTileMap((int) $gameId));
         } else {
             // Get the main game script
-            if (is_file($ptfPath = STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_MAIN . '.js')) {
+            if (is_file($ptfPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_MAIN . '.js')) {
                 $result = file_get_contents($ptfPath);
             }
         }

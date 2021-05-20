@@ -7,23 +7,11 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_TimeLapse {
 
-    // Message templates
-    const TEMPLATE_DIPLOMACY               = 'timelapse-diplomacy';
-    const TEMPLATE_ECONOMY                 = 'timelapse-economy';
-    const TEMPLATE_MILITARY                = 'timelapse-military';
-    const TEMPLATE_RESEARCH                = 'timelapse-research';
-    const TEMPLATE_COMMON_LIST_ENTITIES    = 'common/timelapse-list-entities';
-    const TEMPLATE_COMMON_LIST_RESOURCES   = 'common/timelapse-list-resources';
-    const TEMPLATE_NOTIF_PREMIUM_PACKAGE   = 'notification/notif-premium-package';
-    const TEMPLATE_NOTIF_PREMIUM_MODIFIER  = 'notification/notif-premium-modifier';
-    const TEMPLATE_NOTIF_TUTORIAL_REWARDS  = 'notification/notif-tutorial-rewards';
-    const TEMPLATE_NOTIF_PTF_AUTHOR_REWARD = 'notification/notif-ptf-author-reward';
-    
     /**
      * DataBase object
      *
@@ -72,19 +60,6 @@ class Stephino_Rpg_TimeLapse {
      * @var string
      */
     protected static $_workspaceKey = null;
-    
-    /**
-     * Get a time-lapse template path
-     * 
-     * @param string $templateName Time-lapse template name
-     * @return string|null
-     */
-    public static function getTemplatePath($templateName) {
-        if (!is_file($templatePath = STEPHINO_RPG_ROOT . '/ui/tpl/timelapse/' . $templateName . '.php')) {
-            throw new Exception('Time-lapse template "' . $templateName . '" not found');
-        }
-        return $templatePath;
-    }
     
     /**
      * Set the current workspace

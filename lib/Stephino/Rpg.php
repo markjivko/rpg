@@ -8,27 +8,30 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg {
     
     // Plugin slug
     const PLUGIN_SLUG             = 'stephino-rpg';
     
+    // Plugin name
+    const PLUGIN_NAME             = 'Stephino RPG';
+    
     // Plugin variable name
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.3.4';
+    const PLUGIN_VERSION          = '0.3.5';
     
     // Pro Plugin minimum compatible version
-    const PLUGIN_VERSION_PRO      = '0.2.0';
+    const PLUGIN_VERSION_PRO      = '0.2.1';
     
     // DataBase version
     const PLUGIN_VERSION_DB       = '0.2.3';
     
     // Firebase version
-    const PLUGIN_VERSION_FIREBASE = '7.22.1';
+    const PLUGIN_VERSION_FIREBASE = '8.4.3';
     
     // Pro Plugin download link
     const PLUGIN_URL_PRO          = 'https://gum.co/stephino-rpg';
@@ -48,8 +51,12 @@ class Stephino_Rpg {
     // Plugin cache key
     const OPTION_CACHE            = 'stephino_rpg_cache';
     
-    // Plugin configuration key
-    const OPTION_CONFIG           = 'stephino_rpg_config';
+    // Folders
+    const FOLDER_THEMES = 'themes';
+    const FOLDER_UI_CSS = 'ui/css';
+    const FOLDER_UI_IMG = 'ui/img';
+    const FOLDER_UI_JS  = 'ui/js';
+    const FOLDER_UI_TPL = 'ui/tpl';
     
     /**
      * Singleton instance of Stephino_Rpg
@@ -92,38 +99,13 @@ class Stephino_Rpg {
     }
     
     /**
-     * Stephino: Multi-player Online Role-Playing Game engine for WordPress
+     * Class constructor
+     * 
+     * @return Stephino_Rpg
      */
     protected function __construct() {
-        // Register the hooks
-        Stephino_Rpg_WordPress::registerHooks();
-        
-        // Perform meta changes
-        Stephino_Rpg_WordPress::metaChages();
-        
-        // Register the pages
-        Stephino_Rpg_WordPress::registerPages();
-        
-        // Register the AJAX handler
-        Stephino_Rpg_WordPress::registerAjax();
-        
-        // Register the Robots Cron actions
-        Stephino_Rpg_WordPress::registerRobotsCron();
-        
-        // Register the widgets
-        Stephino_Rpg_WordPress::registerWidgets();
-    }
-    
-    /**
-     * Get whether the current user is a site admin
-     * 
-     * @return boolean
-     */
-    public function isAdmin() {
-        if (null === $this->_isAdmin) {
-            $this->_isAdmin = is_super_admin();
-        }
-        return $this->_isAdmin;
+        // Perform all WordPress integration actions
+        Stephino_Rpg_WordPress::init();
     }
     
     /**

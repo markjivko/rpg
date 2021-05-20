@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -127,7 +127,7 @@ $depResearchAreas = array_filter(
                     <li>
                         <?php echo Stephino_Rpg_Config::get()->core()->getConfigUnitName();?>: <span
                             data-effect="helpMenuItem"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_Units::KEY;?>,<?php echo $depUnit->getId();?>">
+                            data-effect-args="<?php echo $depUnit->keyCollection();?>,<?php echo $depUnit->getId();?>">
                             <?php echo $depUnit->getName(true);?>
                         </span>
                     </li>
@@ -136,7 +136,7 @@ $depResearchAreas = array_filter(
                     <li>
                         <?php echo Stephino_Rpg_Config::get()->core()->getConfigShipName();?>: <span
                             data-effect="helpMenuItem"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_Ships::KEY;?>,<?php echo $depShip->getId();?>">
+                            data-effect-args="<?php echo $depShip->keyCollection();?>,<?php echo $depShip->getId();?>">
                             <?php echo $depShip->getName(true);?>
                         </span>
                     </li>
@@ -145,7 +145,7 @@ $depResearchAreas = array_filter(
                     <li>
                         <?php echo Stephino_Rpg_Config::get()->core()->getConfigResearchAreaName();?>: <span
                             data-effect="helpMenuItem"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_ResearchAreas::KEY;?>,<?php echo $depResearchArea->getId();?>">
+                            data-effect-args="<?php echo $depResearchArea->keyCollection();?>,<?php echo $depResearchArea->getId();?>">
                             <?php echo $depResearchArea->getName(true);?>
                         </span>
                     </li>

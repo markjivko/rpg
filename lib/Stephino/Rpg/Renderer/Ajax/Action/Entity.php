@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -155,6 +155,13 @@ class Stephino_Rpg_Renderer_Ajax_Action_Entity extends Stephino_Rpg_Renderer_Aja
                 throw new Exception(__('Not enough resources', 'stephino-rpg'));
             }
 
+            // Check max queue for entities
+            Stephino_Rpg_Db::get()->modelQueues()->validateMaxQueue(
+                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_USER_ID], 
+                $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID], 
+                Stephino_Rpg_Db_Model_Entities::NAME
+            );
+        
             // Spend resources for 1 x (block cost for $entityCount)
             self::spend($costData, $cityData, 1, $entityConfig);
 

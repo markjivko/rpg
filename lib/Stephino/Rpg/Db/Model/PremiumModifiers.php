@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Db_Model_PremiumModifiers extends Stephino_Rpg_Db_Model {
@@ -112,7 +112,7 @@ class Stephino_Rpg_Db_Model_PremiumModifiers extends Stephino_Rpg_Db_Model {
      * @param int     $userId        (optional) User ID, <b>ignored in time-lapse mode</b>
      * @param boolean $timelapseMode (optional) Using the model in Time-Lapse mode; default <b>true</b>
      * @return array [<ul>
-     *     <li>(int) <b>Time contraction</b>; 1 or lower means contraction disabled</li>
+     *     <li>(int) <b>Time contraction</b> 1 or lower means contraction disabled</li>
      *     <li>(int) <b>Premium Modifier Configuration ID</b> or <b>0</b> if none applied</li>
      * </ul>]
      */

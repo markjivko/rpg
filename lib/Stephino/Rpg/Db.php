@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Db {
 
@@ -164,7 +164,7 @@ class Stephino_Rpg_Db {
                     dbDelta($queries);
                     
                     // Get the platformer definition versions
-                    $versionPtf = md5_file(STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json');
+                    $versionPtf = md5_file(STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json');
                     $storedVersionPtf = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_VERSION_PTF, '');
                     
                     // Update the platformer pre-defined levels

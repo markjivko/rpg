@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -194,7 +194,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
      */
     public static function ajaxConsole($data) {
         // Not allowed
-        if (!Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()) {
             throw new Exception(__('Insufficient privileges', 'stephino-rpg'));
         }
         
@@ -266,7 +266,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         }
         
         // Help mode for players
-        if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin() && !preg_match($allowedMethodsRegex, $methodArguments[0])) {
+        if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster() && !preg_match($allowedMethodsRegex, $methodArguments[0])) {
             echo '<span class="badge badge-info">(DEMO) ' . esc_html__('Commands are read-only for non-admins', 'stephino-rpg') . '</span><br/>';
             array_unshift($methodArguments, 'help');
         }

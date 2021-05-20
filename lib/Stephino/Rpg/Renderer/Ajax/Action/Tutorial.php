@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_Ajax_Dialog {
 
@@ -157,15 +157,15 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
     /**
      * Prepare the update payloads for the User and City tables
      * 
-     * @param Stephino_Rpg_Config_Tutorial $tutorialObject Tutorial Level object
+     * @param Stephino_Rpg_Config_Tutorial $tutorialConfig Tutorial Level object
      * @param array                        $updatesUser    User updates
      * @param array                        $updatesCity    City updates
      * @param boolean                      $skipMode       (optional) Collect the rewards in Skip mode; default <b>false</b>
      */
-    protected static function _getRewardsPayload(Stephino_Rpg_Config_Tutorial $tutorialObject, &$updatesUser, &$updatesCity, $skipMode = false) {
+    protected static function _getRewardsPayload(Stephino_Rpg_Config_Tutorial $tutorialConfig, &$updatesUser, &$updatesCity, $skipMode = false) {
         do {
             // Checkpoint
-            if ($tutorialObject->getTutorialIsCheckPoint()) {
+            if ($tutorialConfig->getTutorialIsCheckPoint()) {
                 // Prepare the resources worker
                 $resourcesWorker = Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY);
 
@@ -189,32 +189,35 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
                 }
 
                 // Store the CheckPoint
-                $updatesUser[$userId][Stephino_Rpg_Db_Table_Users::COL_USER_TUTORIAL_LEVEL] = $tutorialObject->getId();
+                $updatesUser[$userId][Stephino_Rpg_Db_Table_Users::COL_USER_TUTORIAL_LEVEL] = $tutorialConfig->getId();
 
                 // No rewards in skip mode
-                if ($skipMode && !$tutorialObject->getTutorialRewardOnSkip()) {
+                if ($skipMode && !$tutorialConfig->getTutorialRewardOnSkip()) {
                     break;
                 }
 
                 // Prepare the reward payload
                 $resourcesList = array(
-                    Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD     => $tutorialObject->getTutorialCheckPointRewardGold(),
-                    Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH => $tutorialObject->getTutorialCheckPointRewardResearch(),
-                    Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM      => $tutorialObject->getTutorialCheckPointRewardGem(),
-                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_ALPHA   => $tutorialObject->getTutorialCheckPointRewardAlpha(),
-                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_BETA    => $tutorialObject->getTutorialCheckPointRewardBeta(),
-                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_GAMMA   => $tutorialObject->getTutorialCheckPointRewardGamma(),
-                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_1 => $tutorialObject->getTutorialCheckPointRewardExtra1(),
-                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_2 => $tutorialObject->getTutorialCheckPointRewardExtra2(),
+                    Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD     => $tutorialConfig->getTutorialCheckPointRewardGold(),
+                    Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH => $tutorialConfig->getTutorialCheckPointRewardResearch(),
+                    Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM      => $tutorialConfig->getTutorialCheckPointRewardGem(),
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_ALPHA   => $tutorialConfig->getTutorialCheckPointRewardAlpha(),
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_BETA    => $tutorialConfig->getTutorialCheckPointRewardBeta(),
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_GAMMA   => $tutorialConfig->getTutorialCheckPointRewardGamma(),
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_1 => $tutorialConfig->getTutorialCheckPointRewardExtra1(),
+                    Stephino_Rpg_Db_Table_Cities::COL_CITY_RESOURCE_EXTRA_2 => $tutorialConfig->getTutorialCheckPointRewardExtra2(),
                 );
 
                 // Reward resources available
                 if (array_sum($resourcesList) > 0) {
-                    Stephino_Rpg_Db::get()->modelMessages()->sendNotification(
+                    Stephino_Rpg_Db::get()->modelMessages()->notify(
                         Stephino_Rpg_TimeLapse::get()->userId(), 
-                        esc_html__('Tutorial reward', 'stephino-rpg'), 
-                        Stephino_Rpg_TimeLapse::TEMPLATE_NOTIF_TUTORIAL_REWARDS, 
-                        array($tutorialObject, $resourcesList)
+                        Stephino_Rpg_Db_Model_Messages::TEMPLATE_NOTIF_TUTORIAL_REWARDS, 
+                        array(
+                            // tutorialConfigId
+                            $tutorialConfig->getId()
+                        ),
+                        Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY
                     );
 
                     // Go through the rewards table

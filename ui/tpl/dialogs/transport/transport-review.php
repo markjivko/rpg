@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -68,25 +68,24 @@
         <div class="col-12">
             <?php foreach ($cityEntities as list($entityRow, $entityConfig)):?>
                 <?php 
-                    if (null !== $entityConfig && $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID] == $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]):
-                        $entityKey = Stephino_Rpg_Db_Table_Entities::ENTITY_TYPE_UNIT == $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE]
-                            ? Stephino_Rpg_Config_Units::KEY
-                            : Stephino_Rpg_Config_Ships::KEY;
+                    if (null !== $entityConfig && $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID] == $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]): 
+                        // Get the item card details
+                        list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($entityConfig);
                 ?>
                     <div class="row">
                         <div class="col-12 col-lg-3">
                             <div class="entity">
                                 <div 
                                     class="icon" 
-                                    data-click="helpDialog"
-                                    data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
+                                    data-click="<?php echo $itemCardFn;?>"
+                                    data-click-args="<?php echo $itemCardArgs;?>"
                                     data-effect="background" 
-                                    data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                                    data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
                                 </div>
                                 <span>
                                     <span 
                                         data-effect="help"
-                                        data-effect-args="<?php echo $entityKey?>,<?php echo $entityConfig->getId();?>">
+                                        data-effect-args="<?php echo $entityConfig->keyCollection()?>,<?php echo $entityConfig->getId();?>">
                                         <?php echo $entityConfig->getName(true);?>
                                     </span>
                                     (<?php echo $entityConfig->getTransportMass();?> )

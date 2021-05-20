@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -58,7 +58,7 @@ $productionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionData($configOb
                 <?php echo esc_html__('Available in', 'stephino-rpg');?> 
                 <span
                     data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $configObject->getResearchArea()->getBuilding()->getId();?>">
+                    data-effect-args="<?php echo $configObject->getResearchArea()->getBuilding()->keyCollection();?>,<?php echo $configObject->getResearchArea()->getBuilding()->getId();?>">
                     <?php echo $configObject->getResearchArea()->getBuilding()->getName(true);?>
                 </span>
             </li>

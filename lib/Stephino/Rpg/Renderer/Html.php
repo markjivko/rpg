@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Html {
     
@@ -17,9 +17,10 @@ class Stephino_Rpg_Renderer_Html {
     const METHOD_GAME   = 'game';
     
     // Templates
-    const TEMPLATE_DASHBOARD = 'dashboard';
     const TEMPLATE_GAME      = 'game';
     const TEMPLATE_PTF       = 'ptf';
+    const TEMPLATE_DASHBOARD = 'dashboard';
+    const TEMPLATE_THEMES    = 'themes';
     const TEMPLATE_OPTIONS   = 'options';
     
     /**
@@ -28,8 +29,9 @@ class Stephino_Rpg_Renderer_Html {
      * @var string[]
      */
     protected static $_allowedTemplates = array(
-        self::TEMPLATE_OPTIONS,
         self::TEMPLATE_DASHBOARD,
+        self::TEMPLATE_THEMES,
+        self::TEMPLATE_OPTIONS,
     );
     
     /**
@@ -56,6 +58,29 @@ class Stephino_Rpg_Renderer_Html {
     }
     
     /**
+     * Themes
+     */
+    public static function htmlThemes() {
+        // Admin scripts
+        foreach (array('jquery', 'jquery-ui-draggable', 'jquery-ui-droppable') as $scriptName) {
+            wp_enqueue_script($scriptName);
+        }
+        self::_enqueueScripts(
+            array('bootstrap', 'wp-themes'), 
+            array('wp-themes'),
+            array(
+                'error_ajax'   => esc_html__('Please try again later', 'stephino-rpg'),
+                'label_upload' => esc_html__('Upload', 'stephino-rpg'),
+                'label_save'   => esc_html__('Save', 'stephino-rpg'),
+                'warning_file' => esc_html__('File not found', 'stephino-rpg'),
+            )
+        );
+        
+        // Load the template
+        self::_loadTemplate(self::TEMPLATE_THEMES);
+    }
+    
+    /**
      * Game mechanics
      */
     public static function htmlOptions() {
@@ -67,7 +92,7 @@ class Stephino_Rpg_Renderer_Html {
         // Thickbox
         add_thickbox();
         
-        // Stephino RPG functionality
+        // Functionality
         self::_enqueueScripts(
             array('bootstrap', 'wp-options'), 
             array('wp-options'),
@@ -166,7 +191,7 @@ class Stephino_Rpg_Renderer_Html {
      */
     protected static function _loadTemplate($templateName, $viewName = null, $viewData = null) {
         if (in_array($templateName, self::$_allowedTemplates)) {
-            if (is_file($templatePath = STEPHINO_RPG_ROOT . '/ui/tpl/wordpress/wp-' . $templateName . '.php')) {
+            if (is_file($templatePath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_TPL . '/wordpress/wp-' . $templateName . '.php')) {
                 require $templatePath;
             }
         }
@@ -189,7 +214,7 @@ class Stephino_Rpg_Renderer_Html {
                 // Add the style
                 wp_enqueue_style(
                     Stephino_Rpg::PLUGIN_SLUG . '-style-' . $scriptName, 
-                    Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/css/' . $scriptPath . '.css', 
+                    Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_CSS . '/' . $scriptPath . '.css', 
                     array(), 
                     Stephino_Rpg::PLUGIN_VERSION
                 );
@@ -208,7 +233,7 @@ class Stephino_Rpg_Renderer_Html {
                 // Add the script
                 wp_enqueue_script(
                     Stephino_Rpg::PLUGIN_SLUG . '-js-' . $scriptName, 
-                    Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/js/' . $scriptPath . '.js', 
+                    Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_JS . '/' . $scriptPath . '.js', 
                     array(), 
                     Stephino_Rpg::PLUGIN_VERSION, 
                     true
@@ -221,17 +246,17 @@ class Stephino_Rpg_Renderer_Html {
                         Stephino_Rpg::PLUGIN_SLUG . '-js-' . $scriptName, 
                         Stephino_Rpg::PLUGIN_VARNAME . '_data',
                         array(
-                            'res_url'   => Stephino_Rpg_Utils_Media::getPluginsUrl(),
-                            'ajax_url'  => Stephino_Rpg_Utils_Media::getAdminUrl(true, false),
-                            'theme_url' => Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme(),
-                            'game_url'  => Stephino_Rpg_Utils_Media::getAdminUrl(),
-                            'game_ver'  => Stephino_Rpg_Utils_Media::getPwaVersion(false, false),
-                            'game_lang' => Stephino_Rpg_Config::lang(),
-                            'app_name'  => Stephino_Rpg_Utils_Lingo::getGameName(),
-                            'is_admin'  => Stephino_Rpg::get()->isAdmin(),
-                            'is_demo'   => Stephino_Rpg::get()->isDemo(),
-                            'is_pro'    => Stephino_Rpg::get()->isPro(),
-                            'i18n'      => $i18nStrings
+                            'res_url'    => Stephino_Rpg_Utils_Media::getPluginsUrl(),
+                            'ajax_url'   => Stephino_Rpg_Utils_Media::getAdminUrl(true, false),
+                            'theme_slug' => Stephino_Rpg_Utils_Themes::getActive()->getThemeSlug(),
+                            'game_url'   => Stephino_Rpg_Utils_Media::getAdminUrl(),
+                            'game_ver'   => Stephino_Rpg_Utils_Media::getPwaVersion(false, false),
+                            'game_lang'  => Stephino_Rpg_Config::lang(),
+                            'app_name'   => Stephino_Rpg_Utils_Lingo::getGameName(),
+                            'is_admin'   => Stephino_Rpg_Cache_User::get()->isGameMaster(),
+                            'is_demo'    => Stephino_Rpg::get()->isDemo(),
+                            'is_pro'     => Stephino_Rpg::get()->isPro(),
+                            'i18n'       => $i18nStrings
                         )
                     );
                     

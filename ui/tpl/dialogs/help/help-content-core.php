@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -18,31 +18,67 @@
     <h4>
         <span data-click="dialog" data-click-args="dialogSettingsAbout"><?php echo Stephino_Rpg_Utils_Lingo::getGameName();?></span>
     </h4>
-    <h6><?php echo esc_html__('Customized by', 'stephino-rpg');?> <?php echo esc_html(get_bloginfo('name'));?></h6>
+    <?php if (!Stephino_Rpg_Utils_Themes::getActive()->isDefault()):?>
+        <h6><?php echo esc_html__('Customized by', 'stephino-rpg');?> <?php echo esc_html(get_bloginfo('name'));?></h6>
+    <?php endif;?>
 </div>
 <?php 
     require Stephino_Rpg_Renderer_Ajax_Dialog_Help::dialogTemplatePath(
         Stephino_Rpg_Renderer_Ajax_Dialog_Help::TEMPLATE_FRAGMENT_DESCRIPTION
     );
 ?>
+<div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ADMIN == $itemId ? 'framed active' : '');?>">
+    <h6 class="heading"><span><?php echo esc_html__('Game Admins', 'stephino-rpg');?></span></h6>
+    <ul>
+        <?php if (Stephino_Rpg_Cache_User::get()->isGameAdmin()):?>
+            <li><b><?php echo esc_html__('You are a Game Admin', 'stephino-rpg');?></b></li>
+        <?php endif;?>
+        <li><?php echo esc_html__('Decide the rules of the game, as they are presented here', 'stephino-rpg');?></li>
+        <li>
+            <?php 
+                echo sprintf(
+                    esc_html__('Have full control over all players and %s', 'stephino-rpg'),
+                    '<span'
+                        . ' data-effect="helpMenuItem"'
+                        . ' data-effect-args="' . Stephino_Rpg_Config_Core::KEY . ',' . Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER . '">'
+                            . esc_html__('Game Masters', 'stephino-rpg')
+                    . '</span>'
+                );
+            ?>
+        </li>
+        <li><?php echo esc_html__('Cannot be demoted', 'stephino-rpg');?></li>
+    </ul>
+</div>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game Masters', 'stephino-rpg');?></span></h6>
     <ul>
-        <?php if (Stephino_Rpg::get()->isAdmin()):?>
+        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
             <li><b><?php echo esc_html__('You are a Game Master', 'stephino-rpg');?></b></li>
         <?php endif;?>
-        <li><?php echo esc_html__('Decide the rules of the game, as they are presented here', 'stephino-rpg');?></li>
-        <li><?php echo esc_html__('Control all game resources, including the flow of time', 'stephino-rpg');?></li>
-        <?php if ($configObject->getPtfEnabled()):?>
-            <li><span 
+        <li><?php echo esc_html__('Promote and demote other players and game masters, including themselves', 'stephino-rpg');?></li>
+        <?php if ($configObject->getConsoleEnabled()):?>
+            <li>
+                <span
                     data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
-                    <?php echo esc_html__('Game arena', 'stephino-rpg');?></span>: <?php echo esc_html__('Review all games', 'stephino-rpg');?>
+                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE;?>">
+                    <?php echo esc_html__('Game console', 'stephino-rpg');?>
+                </span>: <?php echo esc_html__('Control all game resources, including the flow of time', 'stephino-rpg');?>
             </li>
-            <li><span 
+        <?php endif;?>
+        <?php if ($configObject->getPtfEnabled()):?>
+            <li>
+                <span 
                     data-effect="helpMenuItem"
                     data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
-                    <?php echo esc_html__('Game arena', 'stephino-rpg');?></span>: <?php echo esc_html__('Edit and delete any game created by players', 'stephino-rpg');?>
+                    <?php echo esc_html__('Game arena', 'stephino-rpg');?>
+                </span>: <?php echo esc_html__('Review all games', 'stephino-rpg');?>
+            </li>
+            <li>
+                <span 
+                    data-effect="helpMenuItem"
+                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
+                    <?php echo esc_html__('Game arena', 'stephino-rpg');?>
+                </span>: <?php echo esc_html__('Edit and delete any game created by players', 'stephino-rpg');?>
             </li>
         <?php endif;?>
     </ul>
@@ -213,7 +249,7 @@
         </div>
     <?php endif;?>
 </div>
-<?php if ((Stephino_Rpg::get()->isDemo() || Stephino_Rpg::get()->isAdmin()) && $configObject->getConsoleEnabled()):?>
+<?php if ((Stephino_Rpg::get()->isDemo() || Stephino_Rpg_Cache_User::get()->isGameMaster()) && $configObject->getConsoleEnabled()):?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game console', 'stephino-rpg');?></span></h6>
     <ul>
@@ -480,7 +516,7 @@
                         <li>
                             <span 
                                 data-effect="helpMenuItem"
-                                data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
+                                data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>">
                                 <?php echo $buildingConfig->getName(true);?>
                             </span>
                             <?php if ($buildingConfig->isMainBuilding()):?>
@@ -497,7 +533,7 @@
                         echo sprintf(
                             esc_html__('%s: Initialized with a level 1 %s', 'stephino-rpg'),
                             $configObject->getConfigCitiesName(true),
-                            '<span data-effect="helpMenuItem" data-effect-args="' . Stephino_Rpg_Config_Buildings::KEY . ',' . $cityInitialBuilding->getId() . '">'
+                            '<span data-effect="helpMenuItem" data-effect-args="' . $cityInitialBuilding->keyCollection() . ',' . $cityInitialBuilding->getId() . '">'
                                 . $cityInitialBuilding->getName(true)
                             . '</span>'
                         );
@@ -598,7 +634,7 @@
                 }
             ?>
         </li>
-        <?php if (Stephino_Rpg::get()->isAdmin()):?>
+        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
             <li>
                 <?php 
                     echo sprintf(

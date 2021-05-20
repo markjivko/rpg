@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -20,10 +20,6 @@ $totalDefense = 0;
 <?php if (is_array($cityEntities) && count($cityEntities)):?>
     <?php 
         foreach($cityEntities as list($entityRow, $entityConfig)):
-            $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
-                ? Stephino_Rpg_Config_Units::KEY
-                : Stephino_Rpg_Config_Ships::KEY;
-        
             // Store the entity count
             $entityCount = (int) $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];
         
@@ -38,6 +34,9 @@ $totalDefense = 0;
             // Add to the totals
             $totalAttack += $entityAttackPoints;
             $totalDefense += $entityDefensePoints;
+            
+            // Get the item card details
+            list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($entityConfig);
     ?>
     <div class="framed">
         <div class="row align-items-center">
@@ -47,14 +46,12 @@ $totalDefense = 0;
                 data-entity-type="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE];?>"
                 data-entity-config="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID];?>" >
                 <div 
-                    class="building-entity-icon framed mt-4" 
-                    data-click="helpDialog"
-                    data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
+                    class="item-card framed mt-4" 
+                    data-click="<?php echo $itemCardFn;?>"
+                    data-click-args="<?php echo $itemCardArgs;?>"
                     data-effect="background" 
-                    data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
-                    <span 
-                        data-effect="help"
-                        data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                    data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
+                    <span>
                         <?php echo $entityConfig->getName(true);?>
                     </span>
                     <span class="label" data-html="true" title="&times; <?php echo number_format($entityCount);?>">
@@ -76,14 +73,14 @@ $totalDefense = 0;
                         <button 
                             class="btn btn-default w-100" 
                             data-click="entityDialog" 
-                            data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DISBAND;?>">
+                            data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DISBAND;?>">
                             <span><?php echo esc_html__('Disband', 'stephino-rpg');?></span>
                         </button>
                     <?php endif;?>
                     <button 
                         class="btn btn-default w-100" 
                         data-click="entityDialog" 
-                        data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_RECRUIT;?>">
+                        data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_RECRUIT;?>">
                         <?php if ($entityConfig instanceof Stephino_Rpg_Config_Unit):?>
                             <span><?php echo esc_html__('Recruit', 'stephino-rpg');?></span>
                         <?php else:?>
@@ -155,19 +152,20 @@ $totalDefense = 0;
             // Add to the totals
             $totalAttack += $militaryBuilding[Stephino_Rpg_Renderer_Ajax::RESULT_MIL_ATTACK];
             $totalDefense += $militaryBuilding[Stephino_Rpg_Renderer_Ajax::RESULT_MIL_DEFENSE];
+            
+            // Get the item card details
+            list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($buildingConfig);
     ?>
         <div class="framed">
             <div class="row align-items-center">
                 <div class="col-12 col-lg-3 text-center">
                     <div 
-                        class="building-entity-icon framed mt-4" 
-                        data-click="helpDialog"
-                        data-click-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>"
+                        class="item-card framed mt-4" 
+                        data-click="<?php echo $itemCardFn;?>"
+                        data-click-args="<?php echo $itemCardArgs;?>"
                         data-effect="background" 
-                        data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
-                        <span 
-                            data-effect="help"
-                            data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
+                        data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>">
+                        <span>
                             <?php echo $buildingConfig->getName(true);?>
                         </span>
                         <span class="label">

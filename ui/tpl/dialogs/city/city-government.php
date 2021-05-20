@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -30,6 +30,9 @@ foreach (Stephino_Rpg_Config::get()->governments()->getAll() as $governmentConfi
         $governmentConfig, 
         $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL]
     );
+    
+    // Get the item card details
+    list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($governmentConfig, !$requirementsMet);
 ?>
     <div class="framed <?php if($governmentConfig->getId() == $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_GOVERNMENT_CONFIG_ID]):?>active<?php endif;?>">
         <div class="col-12">
@@ -37,7 +40,7 @@ foreach (Stephino_Rpg_Config::get()->governments()->getAll() as $governmentConfi
                 <span>
                     <span 
                         data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_Governments::KEY;?>,<?php echo $governmentConfig->getId();?>">
+                        data-effect-args="<?php echo $governmentConfig->keyCollection();?>,<?php echo $governmentConfig->getId();?>">
                         <?php echo $governmentConfig->getName(true);?>
                     </span>
                 </span>
@@ -55,14 +58,12 @@ foreach (Stephino_Rpg_Config::get()->governments()->getAll() as $governmentConfi
         <div class="col-12 row align-items-center m-0">
             <div class="col-12 col-lg-3 text-center">
                 <div 
-                    class="building-entity-icon framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
-                    data-click="helpDialog"
-                    data-click-args="<?php echo Stephino_Rpg_Config_Governments::KEY;?>,<?php echo $governmentConfig->getId();?>"
+                    class="item-card framed mt-4 <?php if (!$requirementsMet):?>disabled<?php endif;?>" 
+                    data-click="<?php echo $itemCardFn;?>"
+                    data-click-args="<?php echo $itemCardArgs;?>"
                     data-effect="background" 
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Governments::KEY;?>,<?php echo $governmentConfig->getId();?>">
-                    <span 
-                        data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_Governments::KEY;?>,<?php echo $governmentConfig->getId();?>">
+                    data-effect-args="<?php echo $governmentConfig->keyCollection();?>,<?php echo $governmentConfig->getId();?>">
+                    <span>
                         <?php echo $governmentConfig->getName(true);?>
                     </span>
                     <?php if ($governmentConfig->getId() == $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_GOVERNMENT_CONFIG_ID]):?>

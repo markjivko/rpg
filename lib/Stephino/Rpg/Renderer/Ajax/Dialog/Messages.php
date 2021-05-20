@@ -15,7 +15,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
     // Dialog templates
     const TEMPLATE_LIST       = 'messages/messages-list';
     const TEMPLATE_READ       = 'messages/messages-read';
-    const TEMPLATE_PTF_REVIEW = 'messages/messages-ptf-review';
     
     // Request keys
     const REQUEST_MESSAGE_ID   = 'messageId';
@@ -73,7 +72,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
         
         // Pagination data
         $pagination = (new Stephino_Rpg_Utils_Pagination(
-            Stephino_Rpg_Db::get()->tableMessages()->getCountByType(
+            Stephino_Rpg_Db::get()->tableMessages()->getInboxCountByType(
                 Stephino_Rpg_TimeLapse::get()->userId(),
                 $messageType
             ),
@@ -82,7 +81,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
         ))->setAction(self::JS_ACTION_MESSAGE_LIST);
         
         // Get the message data
-        $messageData = Stephino_Rpg_Db::get()->tableMessages()->getByType(
+        $messageData = Stephino_Rpg_Db::get()->modelMessages()->fetchByType(
             Stephino_Rpg_TimeLapse::get()->userId(),
             $messageType,
             $pagination->getSqlLimitCount(),
@@ -109,41 +108,28 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
      */
     public static function ajaxRead($data) {
         // Get a full message
-        $messageId = isset($data[self::REQUEST_MESSAGE_ID]) ? intval($data[self::REQUEST_MESSAGE_ID]) : null;
+        $messageId = isset($data[self::REQUEST_MESSAGE_ID]) 
+            ? abs((int) $data[self::REQUEST_MESSAGE_ID]) 
+            : 0;
         
-        // Store the message data
-        $messageData = Stephino_Rpg_Db::get()->tableMessages()->getMessage(
+        // Get the parsed message data and mark as read
+        $messageData = Stephino_Rpg_Db::get()->modelMessages()->fetch(
             Stephino_Rpg_TimeLapse::get()->userId(),
-            $messageId
+            $messageId,
+            true
         );
 
         // Invalid result
         if (!is_array($messageData)) {
             throw new Exception(__('Message not found', 'stephino-rpg'));
         }
-        
-        // Mark as read
-        if (!intval($messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ])) {
-            // Update the database
-            Stephino_Rpg_Db::get()->tableMessages()->markRead(
-                Stephino_Rpg_TimeLapse::get()->userId(),
-                $messageId
-            );
 
-            // Store the "read" flag in the current result as well
-            $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ] = 1;
-        }
-
-        // Store the title
-        $dialogTitle = $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT];
-        
         // Load the template
         require self::dialogTemplatePath(self::TEMPLATE_READ);
         
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE => $dialogTitle,
-                self::RESULT_DATA  => $messageData,
+                self::RESULT_TITLE => $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]
             )
         );
     }

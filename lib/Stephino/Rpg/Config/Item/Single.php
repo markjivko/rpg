@@ -8,10 +8,15 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_Abstract {
-
+    
+    /**
+     * Class name of corresponding Collection Item
+     */
+    const COLLECTION_CLASS = '';
+    
     // Polynomial JSON specifics
     const TYPE_POLY_FUNC                 = 'func';
     const TYPE_POLY_FUNC_CONSTANT        = 'c';
@@ -50,6 +55,15 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
     private $_id = null;
 
     /**
+     * Get the key of corresponding Collection Item
+     * 
+     * @return string|null
+     */
+    public function keyCollection() {
+        return constant(static::COLLECTION_CLASS . '::KEY');
+    }
+    
+    /**
      * Get this single item's ID
      * 
      * @return int|null
@@ -57,7 +71,7 @@ abstract class Stephino_Rpg_Config_Item_Single extends Stephino_Rpg_Config_Item_
     public function getId() {
         return $this->_id;
     }
-
+    
     /**
      * Common name handler
      * 

@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Renderer {
@@ -62,7 +62,8 @@ class Stephino_Rpg_Renderer {
         
         // Custom error handler
         set_error_handler(array(Stephino_Rpg_Log::class, 'error'));
-			
+        
+        
         try {
             // Sanitize the method name
             if (isset($_REQUEST) && isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
@@ -75,17 +76,17 @@ class Stephino_Rpg_Renderer {
             }
             
             // Only authenticated users are allowed; CSS and JS outputs are available after logout to prevent a layout crash
-            if (!is_user_logged_in() && !in_array(strtolower($callMethod), array(Stephino_Rpg_Renderer_Ajax::CONTROLLER_CSS, Stephino_Rpg_Renderer_Ajax::CONTROLLER_JS))) {
+            if (!is_user_logged_in() && !in_array(strtolower($callMethod), Stephino_Rpg_Renderer_Ajax::PUBLIC_CONTROLLERS)) {
                 throw new Exception(__('You have logged out. Please refresh and try again', 'stephino-rpg'));
             }
             
             // Admin method?
-            if (preg_match('%^admin%i', $callMethod) && !Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()) {
+            if (preg_match('%^admin%i', $callMethod) && !Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
                 throw new Exception(__('Insufficient privileges', 'stephino-rpg'));
             }
             
             // Run the User-facing Cron Tasks, but only on the XHR and HTML threads
-            if (!in_array(strtolower($callMethod), array(Stephino_Rpg_Renderer_Ajax::CONTROLLER_CSS, Stephino_Rpg_Renderer_Ajax::CONTROLLER_JS))) {
+            if (!in_array(strtolower($callMethod), Stephino_Rpg_Renderer_Ajax::PUBLIC_CONTROLLERS)) {
                 // The admin should be able to edit the config no matter what
                 if (!preg_match('%^admin%i', $callMethod)) {
                     // Using time-lapse workers to fetch DB data from local memory instead of performing new SELECT queries
@@ -134,8 +135,8 @@ class Stephino_Rpg_Renderer {
             );
 
             // Prepare the method arguments
-            $methodData = isset($_POST) && isset($_POST[Stephino_Rpg_Renderer_Ajax::CALL_DATA]) 
-                ? @json_decode(base64_decode($_POST[Stephino_Rpg_Renderer_Ajax::CALL_DATA]), true) 
+            $methodData = isset($_REQUEST) && isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_DATA]) 
+                ? @json_decode(base64_decode($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_DATA]), true) 
                 : array();
             
             // Prepare the result; avoid unnecessary labor
@@ -144,6 +145,8 @@ class Stephino_Rpg_Renderer {
                 : call_user_func(array($className, $methodName), is_array($methodData) ? $methodData : array());
             
         } catch (Exception $exc) {
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+            
             // Store the message
             $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT] = $exc->getMessage();
             
@@ -153,11 +156,31 @@ class Stephino_Rpg_Renderer {
         
         // Store the content
         $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_CONTENT] = preg_replace('% {2,}%', ' ', ob_get_clean());
-            
+        
+        // Media output
+        if (Stephino_Rpg_Renderer_Ajax::CONTROLLER_MEDIA === $callMethod) {
+            // Valid server response, try to cache
+            if ($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_STATUS]) {
+                // Enable web caching
+                null !== $ajaxCache && $ajaxCache->sendHeaders();
+                
+                // Output the file
+                header("Content-Type: " . mime_content_type($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]));
+                header("Content-Length: " . filesize($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]));
+                readfile($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]);
+            } else {
+                // File not found
+                http_response_code(404);
+            }
+
+            // Stop here
+            exit();
+        }
+        
         // CSS output - cacheable
         if (Stephino_Rpg_Renderer_Ajax::CONTROLLER_CSS === $callMethod) {
             // Set the content type
-            header('Content-type: text/css');
+            header('Content-Type: text/css');
                 
             // Valid server response, try to cache
             if ($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_STATUS]) {
@@ -165,6 +188,7 @@ class Stephino_Rpg_Renderer {
                 null !== $ajaxCache && $ajaxCache->sendHeaders();
                 
                 // Time to download the game and animations CSS (not yet cached by browser)
+                header("Content-Length: " . strlen($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]));
                 echo $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT];
             } else {
                 // Show the error
@@ -178,7 +202,7 @@ class Stephino_Rpg_Renderer {
         // JS output - cacheable
         if (Stephino_Rpg_Renderer_Ajax::CONTROLLER_JS === $callMethod) {
             // Set the content type
-            header('Content-type: text/javascript');
+            header('Content-Type: text/javascript');
                 
             // Valid server response, try to cache
             if ($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_STATUS]) {
@@ -186,6 +210,7 @@ class Stephino_Rpg_Renderer {
                 null !== $ajaxCache && $ajaxCache->sendHeaders();
                 
                 // Time to download the JS (not yet cached by browser)
+                header("Content-Length: " . strlen($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]));
                 echo $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT];
             } else {
                 // Output the result
@@ -198,10 +223,9 @@ class Stephino_Rpg_Renderer {
         
         // HTML output - cacheable
         if (Stephino_Rpg_Renderer_Ajax::CONTROLLER_HTML === $callMethod) {
-            // Valid server response, try to cache
             if ($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_STATUS]) {
                 // Set the content type
-                header('Content-type: text/html');
+                header('Content-Type: text/html');
 
                 // Time to download the HTML (not yet cached by browser)
                 echo $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT];
@@ -217,14 +241,13 @@ class Stephino_Rpg_Renderer {
                         && count(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())
                     )
                 ) {
-                    // Prepare the game URL
-                    $gameUrl = Stephino_Rpg_Utils_Media::getAdminUrl(true);
-
-                    // Prepare the login URL
-                    $loginUrl = add_query_arg(Stephino_Rpg_Utils_Sanitizer::CALL_LOGIN, 1, wp_login_url($gameUrl));
+                    // Prepare the redirect location
+                    $locationUrl = is_user_logged_in()
+                        ? Stephino_Rpg_Utils_Media::getAdminUrl(true, false)
+                        : add_query_arg(Stephino_Rpg_Utils_Sanitizer::CALL_LOGIN, 1, wp_login_url());
                     
                     // Redirect to the log in page if session expired or to the main city page
-                    header('Location: ' . (!is_user_logged_in() ? $loginUrl : $gameUrl), true);
+                    header("Location: $locationUrl", true);
                     
                     // Stop here
                     exit();
@@ -238,7 +261,7 @@ class Stephino_Rpg_Renderer {
         }
         
         // JSON data
-        header('Content-type: text/json');
+        header('Content-Type: text/json');
         
         // Output the result
         echo json_encode($result);

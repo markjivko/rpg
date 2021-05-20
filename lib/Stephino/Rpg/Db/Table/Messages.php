@@ -8,15 +8,15 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     
     // Messages
     const MESSAGE_TYPE_DIPLOMACY = 'd';
-    const MESSAGE_TYPE_RESEARCH  = 'r';
     const MESSAGE_TYPE_ECONOMY   = 'e';
     const MESSAGE_TYPE_MILITARY  = 'm';
+    const MESSAGE_TYPE_RESEARCH  = 'r';
     const MESSAGE_TYPE_INVOICE   = 'i';
     
     // Allowed message types
@@ -135,7 +135,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     public function create($from, $to, $type, $subject, $content, $isRead = false, $time = null) {
         // Invalid message type
         if (!in_array($type, self::MESSAGE_TYPES)) {
-            return null;
+            $type = self::MESSAGE_TYPE_DIPLOMACY;
         }
         
         // Prepare the result
@@ -154,66 +154,6 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
         
         // Get the new city ID
         return (false !== $result ? $this->getDb()->getWpDb()->insert_id : null);
-    }
-    
-    /**
-     * Get an invoice
-     * 
-     * @param int    $userId    User ID
-     * @param string $paymentId Payment ID
-     * @return array|null
-     */
-    public function getInvoice($userId, $paymentId) {
-        return $this->getDb()->getWpDb()->get_row(
-            "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_FROM . "` = '" . intval($userId) . "'"
-                . " AND `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TO . "` = '0'"
-                . " AND `" . self::COL_MESSAGE_SUBJECT . "` = '" . preg_replace('%[^\w\-]+%i', '', $paymentId) . "'"
-            . " )",
-            ARRAY_A
-        );
-    }
-    
-    /**
-     * Get all invoices
-     * 
-     * @param int $startTime Start time (UNIX timestamp)
-     * @param int $endTime   End time (UNIZ timestamp)
-     * @return array|null
-     */
-    public function getAllInvoices($startTime, $endTime) {
-        $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `" . $this->getTableName() . "`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TO  . "` = '0'"
-                . " AND `" . self::COL_MESSAGE_TIME  . "` >= '" . intval($startTime) . "'"
-                . " AND `" . self::COL_MESSAGE_TIME  . "` <= '" . intval($endTime) . "'"
-            . " )",
-            ARRAY_A
-        );
-        
-        return is_array($result) && count($result) ? $result : null;
-    }
-    
-    /**
-     * Remove pending invoices
-     * 
-     * @param int $userId User ID
-     * @return int|false Number of rows affected or false on error
-     */
-    public function deleteInvoicePending($userId) {
-        return $this->getDb()->getWpDb()->query(
-            "DELETE FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_FROM . "` = '" . intval($userId) . "'"
-                . " AND `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TO . "` = '0'"
-                . " AND `" . self::COL_MESSAGE_READ . "` = '0'"
-            . " )"
-        );
     }
     
     /**
@@ -295,21 +235,81 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     }
     
     /**
+     * Get an invoice
+     * 
+     * @param int    $userId    User ID
+     * @param string $paymentId Payment ID
+     * @return array|null
+     */
+    public function getInvoice($userId, $paymentId) {
+        return $this->getDb()->getWpDb()->get_row(
+            "SELECT * FROM `$this`"
+            . " WHERE ("
+                . " `" . self::COL_MESSAGE_FROM . "` = '" . abs((int) $userId) . "'"
+                . " AND `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
+                . " AND `" . self::COL_MESSAGE_TO . "` = '0'"
+                . " AND `" . self::COL_MESSAGE_SUBJECT . "` = '" . preg_replace('%[^\w\-]+%i', '', $paymentId) . "'"
+            . " )",
+            ARRAY_A
+        );
+    }
+    
+    /**
+     * Get all invoices
+     * 
+     * @param int $startTime Start time (UNIX timestamp)
+     * @param int $endTime   End time (UNIZ timestamp)
+     * @return array|null
+     */
+    public function getAllInvoices($startTime, $endTime) {
+        $result = $this->getDb()->getWpDb()->get_results(
+            "SELECT * FROM `" . $this->getTableName() . "`"
+            . " WHERE ("
+                . " `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
+                . " AND `" . self::COL_MESSAGE_TO  . "` = '0'"
+                . " AND `" . self::COL_MESSAGE_TIME  . "` >= '" . abs((int) $startTime) . "'"
+                . " AND `" . self::COL_MESSAGE_TIME  . "` <= '" . abs((int) $endTime) . "'"
+            . " )",
+            ARRAY_A
+        );
+        
+        return is_array($result) && count($result) ? $result : null;
+    }
+    
+    /**
+     * Remove pending invoices
+     * 
+     * @param int $userId User ID
+     * @return int|false Number of rows affected or false on error
+     */
+    public function deleteInvoicePending($userId) {
+        return $this->getDb()->getWpDb()->query(
+            "DELETE FROM `$this`"
+            . " WHERE ("
+                . " `" . self::COL_MESSAGE_FROM . "` = '" . abs((int) $userId) . "'"
+                . " AND `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
+                . " AND `" . self::COL_MESSAGE_TO . "` = '0'"
+                . " AND `" . self::COL_MESSAGE_READ . "` = '0'"
+            . " )"
+        );
+    }
+    
+    /**
      * Get the number of messages sent by this user in the past 24 hours
      * 
-     * @param int $senderUserId Sender User ID
+     * @param int $userId Sender User ID
      * @return int Number
      */
-    public function getCountRecent($senderUserId) {
+    public function getSentRecent($userId) {
         $result = 0;
         
         // Sanitize the user ID
-        $senderUserId = abs((int) $senderUserId);
-        if ($senderUserId) {
+        $userId = abs((int) $userId);
+        if ($userId) {
             $dbRow = $this->getDb()->getWpDb()->get_row(
                 "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
                 . " WHERE ("
-                    . " `" . self::COL_MESSAGE_FROM . "` = '$senderUserId'"
+                    . " `" . self::COL_MESSAGE_FROM . "` = '$userId'"
                     . " AND `" . self::COL_MESSAGE_TIME . "` >= '" . (time() - 86400) . "'"
                 . " )",
                 ARRAY_A
@@ -317,7 +317,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
 
             // Valid result
             if (is_array($dbRow) && isset($dbRow['count'])) {
-                $result = intval($dbRow['count']);
+                $result = abs((int) $dbRow['count']);
             }
         }
         
@@ -325,8 +325,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     }
     
     /**
-     * Get all messages of a certain type for the current user 
-     * Message Content is excluded
+     * Get all messages of a certain type for the current user
      * 
      * @param int    $userId      Recipient user ID
      * @param string $messageType Message type
@@ -334,7 +333,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @param int    $limitOffset (optional) Limit offset; default <b>null</b>
      * @return array
      */
-    public function getByType($userId, $messageType, $limitCount = null, $limitOffset = null) {
+    public function getInboxByType($userId, $messageType, $limitCount = null, $limitOffset = null) {
         $result = array();
         
         // Sanitize the message type
@@ -352,14 +351,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
         
         // Get the list of unread messages
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT"
-                . " `" . self::COL_ID . "`,"
-                . " `" . self::COL_MESSAGE_FROM . "`,"
-                . " `" . self::COL_MESSAGE_TYPE . "`,"
-                . " `" . self::COL_MESSAGE_SUBJECT . "`,"
-                . " `" . self::COL_MESSAGE_READ . "`,"
-                . " `" . self::COL_MESSAGE_TIME . "`"
-            . " FROM `$this`"
+            "SELECT * FROM `$this`"
             . " WHERE ("
                 . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
                 . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'"
@@ -382,7 +374,7 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @param string $messageType Message type
      * @return int Number of messages by type
      */
-    public function getCountByType($userId, $messageType) {
+    public function getInboxCountByType($userId, $messageType) {
         $result = 0;
         
         // Sanitize the message type
@@ -404,91 +396,65 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
 
             // Valid result
             if (is_array($dbRow) && isset($dbRow['count'])) {
-                $result = intval($dbRow['count']);
+                $result = abs((int) $dbRow['count']);
             }
         }
         
         return $result;
     }
     
-    /**
-     * Delete a message permanently
+        /**
+     * Get the message by ID for the current user, including the sender information (game and WordPress Users data)
      * 
+     * @param int $userId    Recipient user ID
      * @param int $messageId Message ID
-     * @return int|false The number of rows deleted or false on error
+     * @return array|null
      */
-    public function delete($messageId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(), 
-            array(
-                self::COL_ID => $messageId,
-            )
+    public function getInboxMessage($userId, $messageId) {
+        // Get the list of unread messages
+        $usersTableName = $this->getDb()->tableUsers()->getTableName();
+        return $this->getDb()->getWpDb()->get_row(
+            "SELECT * FROM `$this`"
+                . " LEFT JOIN `$usersTableName`"
+                . " ON `$usersTableName`.`" . Stephino_Rpg_Db_Table_Users::COL_ID . "` = `$this`.`" . self::COL_MESSAGE_FROM . "`"
+                . " LEFT JOIN `" . $this->getDb()->getWpDb()->prefix . "users`"
+                . " ON `" . $this->getDb()->getWpDb()->prefix . "users`.`ID` =  `$usersTableName`.`" . Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID . "`"
+                . " WHERE ("
+                    . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+                    . " AND `" . self::COL_ID . "` = '" . abs((int) $messageId) . "'"
+                . " )"
+                . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC",
+            ARRAY_A
         );
     }
     
     /**
-     * Delete all messages sent from or to this user, including user invoices (right to be forgotten)
+     * Get unread messages for the current user
      * 
-     * @param int $userId User ID
-     * @return int|false Number of rows deleted or false on error
+     * @param int $userId Recipient User ID
+     * @return array
      */
-    public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->query(
-            "DELETE FROM `$this`"
+    public function getInboxAllUnread($userId) {
+        // Get the list of unread messages
+        return $this->getDb()->getWpDb()->get_results(
+            "SELECT * FROM `$this`"
             . " WHERE ("
-                . " `" . self::COL_MESSAGE_TO . "` = '" . intval($userId) . "'"
-                . " OR `" . self::COL_MESSAGE_FROM . "` = '" . intval($userId) . "'"
+                . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+                . " AND `" . self::COL_MESSAGE_READ . "` = '0'"
             . " )"
+            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC",
+            ARRAY_A
         );
     }
     
     /**
-     * Delete all messages (except for invoices) older than this number of days
-     * 
-     * @param int $days Maximum message age in days
-     * @return int|false Number of rows deleted or false on error
-     */
-    public function deleteOlder($days) {
-        return $this->getDb()->getWpDb()->query(
-            "DELETE FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TYPE . "` != '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TIME . "` <= '" . (time() - 86400 * abs((int) $days)) . "'"
-            . " )"
-        );
-    }
-    
-    /**
-     * Delete all this user's messages that overflow the inbox size limit
-     * 
-     * @param int $inboxLimit Inbox size limit
-     * @param int $userId     User ID
-     */
-    public function deleteOverLimit($inboxLimit, $userId) {
-        return $this->getDb()->getWpDb()->query(
-            "DELETE FROM `$this`"
-            . " WHERE `" . self::COL_ID . "` NOT IN"
-                . " (SELECT `" . self::COL_ID . "` FROM"
-                    . " (SELECT `" . self::COL_ID . "` FROM `$this`"
-                        . " WHERE ("
-                            . " `" . self::COL_MESSAGE_TO. "` = '" . intval($userId) . "'"
-                            . " OR `" . self::COL_MESSAGE_FROM. "` = '" . intval($userId) . "'"
-                        . " )"
-                        . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC"
-                        . " LIMIT " . intval($inboxLimit)
-                    . " )"
-                . " x )"
-        );
-    }
-    
-    /**
-     * Mark a message as read
+     * Mark an inbox message as read
      * 
      * @param int $userId    Recipient ID
      * @param int $messageId Message ID
      * @return int|false The number of rows updated or false on error
      */
-    public function markRead($userId, $messageId) {
+    public function readInboxMessage($userId, $messageId) {
         return $this->getDb()->getWpDb()->update(
             $this->getTableName(), 
             array(
@@ -502,56 +468,77 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     }
     
     /**
-     * Get the message by ID for the current user, including the sender information (game and WordPress Users data)
+     * Delete all messages (inbox and sent) for this user, including user invoices (right to be forgotten)
      * 
-     * @param int $userId    Recipient user ID
-     * @param int $messageId Message ID
-     * @return array|null
+     * @param int $userId User ID
+     * @return int|false Number of rows deleted or false on error
      */
-    public function getMessage($userId, $messageId) {
-        // Get the list of unread messages
-        $usersTableName = $this->getDb()->tableUsers()->getTableName();
-        return $this->getDb()->getWpDb()->get_row(
-            "SELECT * FROM `$this`"
-                . " LEFT JOIN `$usersTableName`"
-                . " ON `$usersTableName`.`" . Stephino_Rpg_Db_Table_Users::COL_ID . "` = `$this`.`" . self::COL_MESSAGE_FROM . "`"
-                . " LEFT JOIN `" . $this->getDb()->getWpDb()->prefix . "users`"
-                . " ON `" . $this->getDb()->getWpDb()->prefix . "users`.`ID` =  `$usersTableName`.`" . Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID . "`"
-                . " WHERE ("
-                    . " `" . self::COL_MESSAGE_TO . "` = '" . intval($userId) . "'"
-                    . " AND `" . self::COL_ID . "` = '" . intval($messageId) . "'"
-                . " )"
-                . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC",
-            ARRAY_A
-        );
+    public function deleteAll($userId) {
+        $query = "DELETE FROM `$this`"
+            . " WHERE ("
+                . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+                . " OR `" . self::COL_MESSAGE_FROM . "` = '" . abs((int) $userId) . "'"
+            . " )";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        
+        return $this->getDb()->getWpDb()->query($query);
     }
     
     /**
-     * Get the header information (no content) for unread messages for the current user<br/>
-     * Message Content is excluded
+     * Delete all messages (inbox and sent) for all users older than this number of days, except for invoices
      * 
-     * @param int $userId Recipient User ID
-     * @return array
+     * @param int $days Maximum message age in days
+     * @return int|false Number of rows deleted or false on error
      */
-    public function getUnread($userId) {
-        // Get the list of unread messages
-        return $this->getDb()->getWpDb()->get_results(
-            "SELECT"
-                . " `" . self::COL_ID . "`,"
-                . " `" . self::COL_MESSAGE_FROM . "`,"
-                . " `" . self::COL_MESSAGE_TYPE . "`,"
-                . " `" . self::COL_MESSAGE_SUBJECT . "`,"
-                . " `" . self::COL_MESSAGE_READ . "`,"
-                . " `" . self::COL_MESSAGE_TIME . "`"
-            . " FROM `$this`"
+    public function deleteAllExpired($days) {
+        $query = "DELETE FROM `$this`"
             . " WHERE ("
-                . " `" . self::COL_MESSAGE_TO . "` = '" . intval($userId) . "'"
-                . " AND `" . self::COL_MESSAGE_READ . "` = '0'"
-            . " )"
-            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC",
-            ARRAY_A
-        );
+                . " `" . self::COL_MESSAGE_TYPE . "` != '" . self::MESSAGE_TYPE_INVOICE . "'"
+                . " AND `" . self::COL_MESSAGE_TIME . "` <= '" . (time() - 86400 * abs((int) $days)) . "'"
+            . " )";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        
+        return $this->getDb()->getWpDb()->query($query);
     }
+    
+    /**
+     * Delete all this user's inbox messages that overflow the inbox size limit
+     * 
+     * @param int $userId     User ID
+     * @param int $inboxLimit Inbox size limit
+     */
+    public function deleteInboxOverflow($userId, $inboxLimit) {
+        $query = "DELETE FROM `$this`"
+            . " WHERE `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+            . " AND `" . self::COL_ID . "` NOT IN"
+            . " (SELECT `" . self::COL_ID . "` FROM"
+                . " (SELECT `" . self::COL_ID . "` FROM `$this`"
+                    . " WHERE `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+                    . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC"
+                    . " LIMIT " . abs((int) $inboxLimit)
+                . " ) x"
+            . " )";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        
+        return $this->getDb()->getWpDb()->query($query);
+    }
+    
+    /**
+     * Delete a received message
+     * 
+     * @param int $userId    User ID
+     * @param int $messageId Message ID
+     * @return int|false The number of rows deleted or false on error
+     */
+    public function deleteInboxMessage($userId, $messageId) {
+        $query = "DELETE FROM `$this`"
+            . " WHERE `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
+            . " AND `" . self::COL_ID . "` = '" . abs((int) $messageId) . "'";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        
+        return $this->getDb()->getWpDb()->query($query);
+    }
+
 }
 
 /*EOF*/

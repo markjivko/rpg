@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
@@ -24,7 +24,7 @@
             ?>
                 <div 
                     class="help-icon" 
-                    <?php if (Stephino_Rpg::get()->isPro() && is_file(Stephino_Rpg_Config::get()->themePath(true) . '/img/story/' . $itemType . '/' . $configObject->getId() . '/512.mp4')): ?>
+                    <?php if (Stephino_Rpg::get()->isPro() && is_file(Stephino_Rpg_Utils_Themes::getActive()->getFilePath('img/story/' . $itemType . '/' . $configObject->getId() . '/512.mp4'))): ?>
                         data-effect="video" 
                     <?php else:?>
                         data-effect="background" 

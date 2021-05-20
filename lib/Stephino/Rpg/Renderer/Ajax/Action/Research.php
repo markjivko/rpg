@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Action_Research extends Stephino_Rpg_Renderer_Ajax_Action {
 
@@ -106,6 +106,13 @@ class Stephino_Rpg_Renderer_Ajax_Action_Research extends Stephino_Rpg_Renderer_A
                 }
             }
         
+            // Check max queue for research fields
+            Stephino_Rpg_Db::get()->modelQueues()->validateMaxQueue(
+                Stephino_Rpg_TimeLapse::get()->userId(), 
+                0, 
+                Stephino_Rpg_Db_Model_ResearchFields::NAME
+            );
+            
             // Spend resources; also validates Research Field requirements
             self::spend(
                 $researchCostData[$researchFieldConfigId], 

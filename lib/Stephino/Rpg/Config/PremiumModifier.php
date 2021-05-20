@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Single {
 
@@ -49,6 +49,11 @@ class Stephino_Rpg_Config_PremiumModifier extends Stephino_Rpg_Config_Item_Singl
      * Serialization Key - Must be defined by each item individually
      */
     const KEY = 'premiumModifier';
+    
+    /**
+     * Class name of corresponding Collection Item
+     */
+    const COLLECTION_CLASS = Stephino_Rpg_Config_PremiumModifiers::class;
 
     /**
      * Premium Modifier Name

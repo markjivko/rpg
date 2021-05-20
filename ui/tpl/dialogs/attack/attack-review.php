@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
@@ -71,9 +71,9 @@
                         );
                         break;
                 }
-                $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
-                    ? Stephino_Rpg_Config_Units::KEY
-                    : Stephino_Rpg_Config_Ships::KEY;
+                if (null !== $entityConfig):
+                    // Get the item card details
+                    list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($entityConfig);
         ?>
             <div class="col-12 col-lg-3 text-center"
                 data-role="entity" 
@@ -81,14 +81,12 @@
                 data-entity-type="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE];?>"
                 data-entity-config="<?php echo $entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID];?>" >
                 <div 
-                    class="building-entity-icon framed mt-4" 
-                    data-click="helpDialog"
-                    data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
+                    class="item-card framed mt-4" 
+                    data-click="<?php echo $itemCardFn;?>"
+                    data-click-args="<?php echo $itemCardArgs;?>"
                     data-effect="background" 
-                    data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
-                    <span 
-                        data-effect="help"
-                        data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                    data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
+                    <span>
                         <?php echo $entityConfig->getName(true);?>
                     </span>
                     <span class="label" data-html="true" title="&times; <?php echo number_format($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]);?>">
@@ -98,7 +96,7 @@
                     </span>
                 </div>
             </div>
-        <?php endforeach;?>
+        <?php endif;endforeach;?>
     </div>
 </div>
 <div class="row p2">

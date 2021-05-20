@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     
@@ -223,7 +223,7 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
                     self::COL_PTF_CONTENT       => json_encode($tileSetC),
                     self::COL_PTF_CREATED_TIME  => $timestamp,
                     self::COL_PTF_MODIFIED_TIME => $timestamp,
-                    self::COL_PTF_REVIEW        => Stephino_Rpg::get()->isAdmin()
+                    self::COL_PTF_REVIEW        => Stephino_Rpg_Cache_User::get()->isGameMaster()
                         ? self::PTF_REVIEW_APPROVED
                         : self::PTF_REVIEW_PENDING,
                 )

@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
 
@@ -74,7 +74,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * 
      * @var string
      */
-    protected $_theme = Stephino_Rpg_Config::THEME_DEFAULT;
+    protected $_theme = Stephino_Rpg_Theme::THEME_DEFAULT;
 
     /**
      * Game name
@@ -189,25 +189,25 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_chatRoom = false;
     
     /**
-     * Firebase > Project ID
+     * Firebase > Project settings > Project ID
      *
      * @var string|null
      */
     protected $_firebaseProjectId = null;
     
     /**
-     * Firebase > Database URL
-     *
-     * @var string|null
-     */
-    protected $_firebaseDatabaseUrl = null;
-    
-    /**
-     * Firebase > Web API Key
+     * Firebase > Project settings > Web API Key
      *
      * @var string|null
      */
     protected $_firebaseWebApiKey = null;
+    
+    /**
+     * Firebase > Realtime Database > URL
+     *
+     * @var string|null
+     */
+    protected $_firebaseDatabaseUrl = null;
     
     /**
      * Message: Daily send limit
@@ -578,43 +578,6 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Current game theme
-     * 
-     * @return string Theme
-     */
-    public function getTheme() {
-        return $this->_theme;
-    }
-
-    /**
-     * Set the current theme
-     * 
-     * @param string $themeName Theme
-     * @return Stephino_Rpg_Config_Core
-     */
-    public function setTheme($themeName) {
-        // Assume the default - which is never double-checked, one less IO
-        $this->_theme = Stephino_Rpg_Config::THEME_DEFAULT;
-        
-        do {
-            // Default theme provided, no checks necessary
-            if (Stephino_Rpg_Config::THEME_DEFAULT === $themeName) {
-                break;
-            }
-            
-            // Sanitize the name
-            $themeName = trim(preg_replace('%\W+%', '', $themeName));
-
-            // Validate theme
-            if (strlen($themeName) && is_dir(STEPHINO_RPG_ROOT . '/' . Stephino_Rpg_Config::FOLDER_THEMES . '/' . $themeName)) {
-                $this->_theme = $themeName;
-            }
-        } while (false);
-
-        return $this;
-    }
-
-    /**
      * Set the name of your game
      * 
      * @return string Name
@@ -661,7 +624,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     
     /**
      * Show the "Free Install" WordPress.org link to your players 
-     * and embed the link in the "Stephino RPG" Gutenberg block
+     * and embed a link in the "Stephino RPG" Gutenberg block
      * 
      * @section User Interface
      * @return boolean Show WordPress Link
@@ -1047,8 +1010,9 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     
     /**
      * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
-     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.4&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.5&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
+     * @sensitive true
      * @return boolean Chat Room
      */
     public function getChatRoom() {
@@ -1068,7 +1032,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Firebase Project ID for your chat room
+     * Firebase > Project Settings > Project ID
      * 
      * @depends chatRoom
      * @sensitive true
@@ -1091,30 +1055,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Firebase Database URL for your chat room
-     * 
-     * @depends chatRoom
-     * @sensitive true
-     * @return string|null Chat Room: Database URL
-     */
-    public function getFirebaseDatabaseUrl() {
-        return $this->_firebaseDatabaseUrl;
-    }
-    
-    /**
-     * Set the "Firebase Database URL" parameter
-     * 
-     * @param string|null $databaseUrl Firebase Database URL
-     * @return Stephino_Rpg_Config_Core
-     */
-    public function setFirebaseDatabaseUrl($databaseUrl) {
-        $this->_firebaseDatabaseUrl = Stephino_Rpg_Utils_Lingo::cleanup($databaseUrl);
-
-        return $this;
-    }
-    
-    /**
-     * Firebase Web API Key for your chat room
+     * Firebase > Project Settings > Web API Key
      * 
      * @depends chatRoom
      * @sensitive true
@@ -1132,6 +1073,29 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      */
     public function setFirebaseWebApiKey($webApiKey) {
         $this->_firebaseWebApiKey = Stephino_Rpg_Utils_Lingo::cleanup($webApiKey);
+
+        return $this;
+    }
+    
+    /**
+     * Firebase > Realtime Database > URL
+     * 
+     * @depends chatRoom
+     * @sensitive true
+     * @return string|null Chat Room: Database URL
+     */
+    public function getFirebaseDatabaseUrl() {
+        return $this->_firebaseDatabaseUrl;
+    }
+    
+    /**
+     * Set the "Firebase Database URL" parameter
+     * 
+     * @param string|null $databaseUrl Firebase Database URL
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setFirebaseDatabaseUrl($databaseUrl) {
+        $this->_firebaseDatabaseUrl = Stephino_Rpg_Utils_Lingo::cleanup($databaseUrl);
 
         return $this;
     }
@@ -1418,7 +1382,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Get the client ID and secret from <a class="info" href="https://developer.paypal.com/developer/applications/" target="_blank">here</a><br/>
+     * Get the client ID and secret from <a rel="noreferrer" target="_blank" class="info" href="https://developer.paypal.com/developer/applications/">here</a><br/>
      * Omitting the client ID or secret means that premium packages can only be acquired with <b>{x}</b>
      * 
      * @section Monetization
@@ -1467,6 +1431,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * Set the type of currency used for premium package purchases
      * 
+     * @sensitive true
      * @default USD
      * @opt USD,EUR,GBP,AUD,BRL,CAD,CZK,DKK,HKD,HUF,INR,ILS,JPY,MYR,MXN,TWD,NZD,NOK,PHP,PLN,RUB,SGD,SEK,CHF,THB
      * @return string PayPal: Currency
@@ -1498,6 +1463,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * PayPal Sandbox mode
      * 
+     * @sensitive true
      * @return boolean PayPal: Sandbox
      */
     public function getPayPalSandbox() {

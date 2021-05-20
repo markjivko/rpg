@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -25,27 +25,12 @@ $configUnlocks = Stephino_Rpg_Utils_Config::getUnlocks($configObject);
                         $configUnlockedKey = null;
                         switch (true) {
                             case $configUnlocked instanceof Stephino_Rpg_Config_Building:
-                                $configUnlockedKey = Stephino_Rpg_Config_Buildings::KEY;
-                                break;
-                            
                             case $configUnlocked instanceof Stephino_Rpg_Config_Government:
-                                $configUnlockedKey = Stephino_Rpg_Config_Governments::KEY;
-                                break;
-                            
                             case $configUnlocked instanceof Stephino_Rpg_Config_ResearchArea:
-                                $configUnlockedKey = Stephino_Rpg_Config_ResearchAreas::KEY;
-                                break;
-                            
                             case $configUnlocked instanceof Stephino_Rpg_Config_ResearchField:
-                                $configUnlockedKey = Stephino_Rpg_Config_ResearchFields::KEY;
-                                break;
-                            
                             case $configUnlocked instanceof Stephino_Rpg_Config_Ship:
-                                $configUnlockedKey = Stephino_Rpg_Config_Ships::KEY;
-                                break;
-                            
                             case $configUnlocked instanceof Stephino_Rpg_Config_Unit:
-                                $configUnlockedKey = Stephino_Rpg_Config_Units::KEY;
+                                $configUnlockedKey = $configUnlocked->keyCollection();
                                 break;
                         }
                         if (null === $configUnlockedKey) {

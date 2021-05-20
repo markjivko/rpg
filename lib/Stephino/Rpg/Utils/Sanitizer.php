@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Utils_Sanitizer {
@@ -17,7 +17,30 @@ class Stephino_Rpg_Utils_Sanitizer {
      */
     const CALL_LOGIN        = 'stephino-rpg-login';
     const CALL_PAGE         = 'page';
+    const CALL_THEME        = 'theme';
     const CALL_REDIRECT_TO  = 'redirect_to';
+    
+    /**
+     * Get the sanitized theme slug _GET parameter (if set)
+     * 
+     * @return string|null
+     */
+    public static function getTheme() {
+        $themeSlug = isset($_GET) && isset($_GET[self::CALL_THEME])
+            ? trim($_GET[self::CALL_THEME])
+            : null;
+        
+        if (null !== $themeSlug) {
+            $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
+            
+            // Cannot edit the default theme or a theme that does not exist
+            if (Stephino_Rpg_Theme::THEME_DEFAULT == $themeSlug || !isset($installedThemes[$themeSlug])) {
+                $themeSlug = null;
+            }
+        }
+        
+        return $themeSlug;
+    }
     
     /**
      * Get whether the login page was requested by the game
@@ -60,6 +83,39 @@ class Stephino_Rpg_Utils_Sanitizer {
         }
         
         return $viewName;
+    }
+    
+    /**
+     * Get the sanitized media path:<ul>
+     * <li>Contains word characters and ".", "/", "-"</li>
+     * <li>Starts and ends with a word character (0-9, a-z, _)</li>
+     * <li>No more than 1 consecutive dot character</li>
+     * <li>No access to hidden files (starting with .)</li>
+     * </ul>
+     * 
+     * @param $mediaPath (optional) Treat this path instead of the _GET argument; default <b>null</b>
+     * @return string
+     */
+    public static function getMediaPath($mediaPath = null) {
+        // Prepare the result
+        $result = '';
+        
+        if (null === $mediaPath) {
+            $mediaPath = isset($_GET[Stephino_Rpg_Renderer_Ajax::CALL_MEDIA_PATH])
+                ? $_GET[Stephino_Rpg_Renderer_Ajax::CALL_MEDIA_PATH]
+                : null;
+        }
+        
+        // View data set
+        if (null !== $mediaPath) {
+            $result = preg_replace(
+                array('%(?:[^\w\.\/\-]+|^\W|\W$)%i', '%(?:\/\.|\/{2,})%'), 
+                array('', '/'), 
+                trim($mediaPath)
+            );
+        }
+        
+        return $result;
     }
     
     /**

@@ -1,4 +1,4 @@
-/* global self, caches, fetch */
+/* global self, caches, fetch, __FILES__ */
 // Service Worker configuration
 const staticCacheName = 'stephino-rpg-__VERSION__';
 const staticCacheFiles = __FILES__;
@@ -50,10 +50,11 @@ self.addEventListener('fetch', event => {
                     return response;
                 }
 
-                // Cache dynamic CSS/JS (except for PWA workers and Platformer files), static JS files, 
-                // static UI images and fonts and files that were not saved with cache.addAll
+                // Cache dynamic CSS, JS and Media (except for PWA workers and Platformer files), 
+                // static UI images, JS files and fonts and files that were not saved with cache.addAll
+                // Also cache the default theme's resources (immutable)
                 var cacheBuster = !!event.request.url.match(
-                    /(?:\bload\-scripts\.php|\badmin\-ajax\.php\?.*?\bmethod=(?:js|css)\b(?!.*?\bview=(?:pwa|ptf)\b)|\bstephino-rpg(?:\-pro)?\/themes\b|\bstephino-rpg\/ui\/(?:img|fonts|js\/.*?\.js)\b)/g
+                    /(?:\bload\-scripts\.php|\badmin\-ajax\.php\?.*?\bmethod=(?:js|css|media)\b(?!.*?\bview=(?:pwa|ptf)\b)|\bstephino-rpg(?:\-pro)?\/themes\b|\bstephino-rpg\/ui\/(?:img|fonts|js\/.*?\.js)\b)/g
                 );
 
                 // Fetch the new file; hacks.mozilla.org/2016/03/referrer-and-cache-control-apis-for-fetch/

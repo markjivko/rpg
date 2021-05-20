@@ -13,9 +13,8 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_Ajax_Dialog {
     
     // Dialog templates
-    const TEMPLATE_PREPARE_EMPTY = 'transport/transport-prepare-empty';
-    const TEMPLATE_PREPARE       = 'transport/transport-prepare';
-    const TEMPLATE_REVIEW        = 'transport/transport-review';
+    const TEMPLATE_PREPARE = 'transport/transport-prepare';
+    const TEMPLATE_REVIEW  = 'transport/transport-review';
     
     // Request keys
     const REQUEST_TO_CITY_ID          = 'toCityId';

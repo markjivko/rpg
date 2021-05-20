@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
     
@@ -111,7 +111,7 @@ class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
         
         // Prepare the island IDs
         $islandIds = array();
-        for ($x = $coordX - $radius ; $x <= $coordX + $radius; $x++) {
+        for ($x = $coordX - $radius; $x <= $coordX + $radius; $x++) {
             for ($y = $coordY - $radius; $y <= $coordY + $radius; $y++) {
                 $islandId = Stephino_Rpg_Utils_Math::getSnakeLength($x, $y);
                 if (0 != $islandId && !in_array($islandId, $excludedIds)) {

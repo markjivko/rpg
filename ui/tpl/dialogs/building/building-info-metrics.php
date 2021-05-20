@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -171,7 +171,7 @@
                                         data-effect="staticBar" 
                                         data-effect-args="<?php echo (round($buildingData[$mbdKey]) . ',' . round($mbdMaxValue));?>"
                                         data-click="helpDialog"
-                                        data-click-args="<?php echo Stephino_Rpg_Config_Cities::KEY;?>,<?php echo $cityConfig->getId();?>">
+                                        data-click-args="<?php echo $cityConfig->keyCollection();?>,<?php echo $cityConfig->getId();?>">
                                     </div><br/>
                                 <?php else: ?>
                                     <div 
@@ -205,7 +205,7 @@
                                         ?>
                                             <li>
                                                 <span 
-                                                    title="<?php echo ucfirst(preg_replace('%([A-Z])%', ' $1', $bdSatConfigKey));?>"
+                                                    title="<?php echo esc_attr(Stephino_Rpg_Utils_Lingo::getConfigName($bdSatConfigKey));?>"
                                                     data-effect="help"
                                                     data-effect-args="<?php echo $bdSatConfigKey;?>,<?php echo $bdSatConfigId;?>">
                                                     <b><?php echo $bdSatValue[1];?></b>

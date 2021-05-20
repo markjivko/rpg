@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -139,7 +139,7 @@
             </div>
         </div>
         <?php if (strlen(Stephino_Rpg::PLUGIN_URL_DISCORD)):?>
-            <a class="btn btn-info w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_DISCORD);?>">
+            <a rel="noreferrer" target="_blank" class="btn btn-info w-100" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_DISCORD);?>">
                 <span><?php echo esc_html__('Feedback', 'stephino-rpg');?></span>
             </a>
         <?php endif;?>
@@ -162,25 +162,25 @@
         <button class="btn btn-danger w-100" data-click="settingsLogOut">
             <span><?php echo esc_html__('Log Out', 'stephino-rpg');?></span>
         </button>
-        <?php if (!Stephino_Rpg::get()->isAdmin()):?>
+        <?php if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()):?>
             <button class="btn btn-info w-100" data-click="settingsDeleteAccount" data-click-multi="true">
                 <span><?php echo esc_html__('Delete account', 'stephino-rpg');?></span>
             </button>
         <?php endif;?>
     </div>
 </div>
-<?php if (Stephino_Rpg::get()->isDemo() || Stephino_Rpg::get()->isAdmin()): ?>
+<?php if (Stephino_Rpg::get()->isDemo() || Stephino_Rpg_Cache_User::get()->isGameAdmin()): ?>
     <div data-name="admin" class="row">
         <hr />
         <div class="col-6 col-lg-4">
             <label for="input-admin">
                 <h4 class="text-left p-0 mb-0">
                     <?php echo esc_html__('My rules', 'stephino-rpg');?>
-                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()):?>
+                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
                         (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                     <?php endif;?>
                 </h4>
-                <div class="param-desc">Stephino RPG: <?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics(true);?></div>
+                <div class="param-desc"><?php echo Stephino_Rpg::PLUGIN_NAME;?>: <?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics(true);?></div>
             </label>
         </div>
         <div class="col-12 col-lg-8 param-input">
@@ -198,7 +198,7 @@
                             data-effect="help"
                             data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE;?>">
                             <?php echo esc_html__('Console', 'stephino-rpg');?>
-                            <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg::get()->isAdmin()):?>
+                            <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
                                 (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                             <?php endif;?>
                         </span>
@@ -213,7 +213,7 @@
             </div>
         </div>
     <?php endif;?>
-    <?php if (!Stephino_Rpg::get()->isPro() && Stephino_Rpg::get()->isAdmin()): ?>
+    <?php if (!Stephino_Rpg::get()->isPro() && Stephino_Rpg_Cache_User::get()->isGameMaster()): ?>
         <div data-name="admin-buy" class="row">
             <div class="col-6 col-lg-4">
                 <label for="input-admin-buy">
@@ -221,7 +221,7 @@
                     <div class="param-desc"><?php 
                         echo sprintf(
                             esc_html__('Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!', 'stephino-rpg'),
-                            '<b>Stephino RPG Pro</b>'
+                            '<b>' . Stephino_Rpg::PLUGIN_NAME . ' Pro</b>'
                         );
                     ?></div>
                 </label>
@@ -236,7 +236,7 @@
         </div>
     <?php endif;?>
 <?php endif;?>
-<?php if (!Stephino_Rpg::get()->isAdmin() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
+<?php if (!Stephino_Rpg_Cache_User::get()->isGameMaster() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
     <div data-name="admin-download" class="row">
         <hr />
         <div class="col-6 col-lg-4">
@@ -246,7 +246,7 @@
             </label>
         </div>
         <div class="col-12 col-lg-8 param-input">
-            <a class="btn btn-warning w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_WORDPRESS);?>">
+            <a rel="noreferrer" class="btn btn-warning w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_WORDPRESS);?>">
                 <span><?php echo esc_html__('Free Install', 'stephino-rpg');?></span>
             </a>
         </div>

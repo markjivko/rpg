@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
@@ -16,7 +16,7 @@
         <div class="framed">
             <img class="city-icon" src="<?php echo Stephino_Rpg_Utils_Lingo::escape($islandIconUrl);?>"/>
         </div>
-        <?php if (count(Stephino_Rpg_Renderer_Ajax_Action::getEntityConfigs(Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER))):?>
+        <?php if (count(Stephino_Rpg_Utils_Config::getEntitiesByCapability(Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER))):?>
             <button
                 class="btn w-100"
                 data-click="cityColonizeReviewButton"

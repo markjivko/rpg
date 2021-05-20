@@ -13,9 +13,8 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_Attack extends Stephino_Rpg_Renderer_Ajax_Dialog {
     
     // Dialog templates
-    const TEMPLATE_PREPARE       = 'attack/attack-prepare';
-    const TEMPLATE_PREPARE_EMPTY = 'attack/attack-prepare-empty';
-    const TEMPLATE_REVIEW        = 'attack/attack-review';
+    const TEMPLATE_PREPARE = 'attack/attack-prepare';
+    const TEMPLATE_REVIEW  = 'attack/attack-review';
     
     // Request keys
     const REQUEST_ATT_CITY_ID = 'attCityId';

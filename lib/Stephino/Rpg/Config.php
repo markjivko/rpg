@@ -7,34 +7,24 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Config {
     
-    // Files
-    const FILE_CONFIG = 'config.json';
-    const FILE_I18N   = 'i18n.php';
-    
-    // Folders
-    const FOLDER_THEMES = 'themes';
-    
-    // Default theme
-    const THEME_DEFAULT = 'default';
+    /**
+     * 2-character user language or NULL for English
+     * 
+     * @var string|null
+     */
+    protected static $_lang = null;
     
     /**
-     * 2-character user language
+     * Current user locale; defaults to en_US if Stephino_Rpg_Config::$_lang is NULL
      * 
      * @var string
      */
-    protected static $_lang;
-    
-    /**
-     * Current user locale; defaults to en_US if $_lang is null
-     * 
-     * @var string
-     */
-    protected static $_locale;
+    protected static $_locale = null;
     
     /**
      * Available configuration item classes
@@ -87,42 +77,55 @@ class Stephino_Rpg_Config {
     /**
      * Get the current user language code (2 characters)
      * 
-     * @param boolean $getLocale (optional) Get the locale ("en_US" format) instead; default <b>false</b>
-     * @return string|null Lang mode: 2-letter lowercase string for current locale, null if English is used; Locale mode: locale string
+     * @param boolean $getLocale    (optional) Get the locale ("en_US" format) instead; default <b>false</b>
+     * @param string  $forcedLocale (optional) Force a locale for a configuration save; default <b>null</b>
+     * @return string|null <ul>
+     * <li>Language mode: 2-letter lowercase string for current locale, null if English is used</li>
+     * <li>Locale mode: locale string, ex. "en_US"</li>
+     * </ul>
      */
-    public static function lang($getLocale = false) {
-        if (!isset(self::$_lang)) {
-            self::$_lang = null;
-            self::$_locale = Stephino_Rpg_Utils_Lingo::LANG_EN;
-            if (is_array($userData = Stephino_Rpg_TimeLapse::get()->userData())) {
-                if (0 != $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]) {
-                    // Convert a locale ("en_US") to a 2-digit language code ("en")
-                    $getCode = function($locale) {
-                        return strtolower(
-                            preg_replace(
-                                '%^([a-z]+)_.*$%i', '$1', 
-                                $locale
-                            )
-                        );
-                    };
-                    
-                    // Get the current language code
-                    $langCode = $getCode(get_user_locale());
-                    
-                    // Valid language found
-                    if (strlen($langCode) && 'en' !== $langCode) {
-                        // Get all available locales; "en" => "en_US"
-                        $locales = array_combine(
-                            array_map(
-                                $getCode, 
+    public static function lang($getLocale = false, $forcedLocale = null) {
+        /**
+         * Convert a locale ("en_US") to a 2-digit language code ("en")
+         * 
+         * @return string|null 2-letter lowercase string for current locale, null for English
+         */
+        $getCode = function($locale) {
+            $result = strtolower(
+                preg_replace(
+                    '%^([a-z]+)_.*$%i', '$1', 
+                    $locale
+                )
+            );
+            return strlen($result) && 'en' !== $result ? $result : null;
+        };
+        
+        // Forced locale mode
+        if (null !== $forcedLocale && isset(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS[$forcedLocale])) {
+            self::$_locale = $forcedLocale;
+            self::$_lang = $getCode($forcedLocale);
+        } else {
+            // Locale is only null if not initialized
+            if (null === self::$_locale) {
+                self::$_lang = null;
+                self::$_locale = Stephino_Rpg_Utils_Lingo::LANG_EN;
+                if (is_array($userData = Stephino_Rpg_TimeLapse::get()->userData())) {
+                    if (0 != $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]) {
+                        // Valid language found
+                        if (null !== $langCode = $getCode(get_user_locale())) {
+                            // Get all available locales; "en" => "en_US"
+                            $locales = array_combine(
+                                array_map(
+                                    $getCode, 
+                                    array_keys(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS)
+                                ),
                                 array_keys(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS)
-                            ),
-                            array_keys(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS)
-                        );
-                        
-                        if (isset($locales[$langCode])) {
-                            self::$_lang   = $langCode;
-                            self::$_locale = $locales[$langCode];
+                            );
+
+                            if (isset($locales[$langCode])) {
+                                self::$_lang   = $langCode;
+                                self::$_locale = $locales[$langCode];
+                            }
                         }
                     }
                 }
@@ -138,7 +141,7 @@ class Stephino_Rpg_Config {
      * @return array
      */
     public static function definition() { 
-        return self::get()->_definition(!Stephino_Rpg::get()->isAdmin(), null !== self::lang());
+        return self::get()->_definition(!Stephino_Rpg_Cache_User::get()->isGameAdmin(), null !== self::lang());
     }
     
     /**
@@ -244,17 +247,19 @@ class Stephino_Rpg_Config {
     }
     
     /**
-     * Save the current game configuration
+     * Save the current game configuration<br/>
+     * Updates config.json and config_{lang}.json files for outside themes
      * 
+     * @param boolean $store (optional) Update config*.json files for outside themes; default <b>false</b>
      * @throws Exception
      */
-    public static function save() {
+    public static function save($store = false) {
         if (!Stephino_Rpg::get()->isPro()) {
             throw new Exception(__('You need to unlock the game to save your changes', 'stephino-rpg'));
         }
         
         // WARNING! Without properly managing object dependencies the game will break
-        Stephino_Rpg_Pro_Config::get()->save();
+        Stephino_Rpg_Pro_Config::get()->save(false, $store);
     }
     
     /**
@@ -265,6 +270,16 @@ class Stephino_Rpg_Config {
             throw new Exception(__('You need to unlock the game to reset the game settings', 'stephino-rpg'));
         }
         
+        // Only the default theme can be reset
+        if (Stephino_Rpg_Theme::THEME_DEFAULT !== Stephino_Rpg_Utils_Themes::getActive()->getThemeSlug()) {
+            throw new Exception(__('You can only reset the default theme', 'stephino-rpg'));
+        }
+        
+        // Non-English reset attempt
+        if (null !== Stephino_Rpg_Config::lang()) {
+            throw new Exception(__('You can only reset the default theme in English', 'stephino-rpg'));
+        }
+        
         // WARNING! Without properly managing object dependencies the game will break
         Stephino_Rpg_Pro_Config::get()->reset(self::get()->_data);
     }
@@ -272,26 +287,24 @@ class Stephino_Rpg_Config {
     /**
      * Get the default configuration array OR alter the provided configuration array with i18n labels
      * 
+     * @param string     $themeSlug  Theme slug
      * @param array|null $configData (optional) Saved configuration array (English); default <b>null</b> to use the default configuration instead
      * @param array|null $userLabels (optional) Saved user labels array (non-English); default <b>null</b>
      * @return array
      */
-    public static function getI18n($configData = null, $userLabels = null) {
+    public static function i18n($themeSlug, $configData = null, $userLabels = null) {
         // Prepare the result
         $result = $configData;
-            
         do {
             if (is_array($configData)) {
                 break;
             }
             
-            // Get the default configuration array
-            $configDefaultPath = STEPHINO_RPG_ROOT . '/' . self::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . self::FILE_CONFIG;
+            // Get the default configuration file
+            $configDefaultPath = Stephino_Rpg_Utils_Themes::getPath($themeSlug, Stephino_Rpg_Theme::FILE_CONFIG);
             
             // Get the configuration data
-            $result = is_file($configDefaultPath)
-                ? json_decode(trim(file_get_contents($configDefaultPath)), true)
-                : array();
+            $result = is_file($configDefaultPath) ? json_decode(trim(file_get_contents($configDefaultPath)), true) : array();
             if (!is_array($result)) {
                 $result = array();
             }
@@ -299,7 +312,7 @@ class Stephino_Rpg_Config {
 
         // Load language-specific labels
         if (null !== self::lang() && count($result)) {
-            if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . self::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . self::FILE_I18N)) {
+            if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . Stephino_Rpg_Theme::THEME_DEFAULT . '/' . Stephino_Rpg_Theme::FILE_I18N)) {
                 $stephino_rpg_i18n = null;
                 
                 // Load the file directly
@@ -349,22 +362,6 @@ class Stephino_Rpg_Config {
         }
         
         return $result;
-    }
-    
-    /**
-     * Get the path to the current theme
-     * 
-     * @param boolean $usePro (optional) Whether to use the PRO plugin; default <b>false</b>
-     * @return string
-     */
-    public function themePath($usePro = false) {
-        // Avoid an error when called incorrectly
-        $themeName = isset($this->_data[Stephino_Rpg_Config_Core::KEY])
-            ? $this->core()->getTheme()
-            : self::THEME_DEFAULT;
-        
-        // Get the configuration path
-        return (Stephino_Rpg::get()->isPro() && $usePro ? STEPHINO_RPG_PRO_ROOT : STEPHINO_RPG_ROOT) . '/' . self::FOLDER_THEMES . '/' . $themeName;
     }
     
     /**
@@ -514,7 +511,7 @@ class Stephino_Rpg_Config {
             }
             
             // Get the default configuration, internationalized
-            $configDefault = self::getI18n();
+            $configDefault = self::i18n(Stephino_Rpg_Theme::THEME_DEFAULT);
             
             // Initialize the values
             foreach (self::CONFIG_ITEMS as $configItemClass) {
@@ -549,10 +546,10 @@ class Stephino_Rpg_Config {
             }, 
             $this->_data
         );
-        
+
         // Keep only the i18n parameters and values
         if ($i18nOnly) {
-            if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . self::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . self::FILE_I18N)) {
+            if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . Stephino_Rpg_Theme::THEME_DEFAULT . '/' . Stephino_Rpg_Theme::FILE_I18N)) {
                 $stephino_rpg_i18n = null;
                 
                 // Load the file directly

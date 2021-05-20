@@ -7,14 +7,14 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
 <?php if (null != $commandName):?>
     <?php echo $commandInfo;?>
 <?php else:?>
-    <b>Stephino RPG Console Commands</b><br/><br/>
+    <b><?php echo Stephino_Rpg::PLUGIN_NAME;?> Console Commands</b><br/><br/>
     <?php 
         foreach ($methods as $methodKey => $methodInfo):
             list($cliMethodName, $cliMethodDetailsArray) = $methodInfo;

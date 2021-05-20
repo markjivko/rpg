@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
@@ -18,7 +18,8 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
     const KEY = 'Queues';
     
     // Queue actions
-    const ACTION_PREMIUM_EXP = 'premium_exp';
+    const ACTION_PREMIUM_EXP     = 'premium_exp';
+    const ACTION_RESEARCH_UNLOCK = 'research_unlock';
     
     /**
      * Stepper
@@ -57,6 +58,8 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                 case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_BUILDING:
                     // Construction complete
                     if ($dataRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_TIME] <= $checkPointTime) {
+                        $buildingConfig = null;
+                        
                         // Prepare the building level
                         $newBuildingLevel = null;
                         
@@ -82,7 +85,7 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                                 
                                 // Main building
                                 if (null !== $buildingConfig && $buildingConfig->isMainBuilding()) {
-                                    $newBuildingLevelCityId = $buildingRow[Stephino_Rpg_Db_Table_Cities::COL_ID];
+                                    $newBuildingLevelCityId = (int) $buildingRow[Stephino_Rpg_Db_Table_Cities::COL_ID];
                                 }
                                 
                                 // Store the message data
@@ -104,12 +107,20 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                                 }
                             }
                         
-                            // Add to the message list
                             $this->_addMessage(
                                 Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY, 
                                 Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_BUILDING, 
                                 $dataRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_ID],
                                 $buildingMessageData
+                            );
+                            
+                            // Unlocked something
+                            $this->_checkUnlocks(
+                                $buildingConfig, 
+                                $newBuildingLevel, 
+                                $buildingData, 
+                                $supportResearchData,
+                                (int) $buildingMessageData[Stephino_Rpg_Db_Table_Cities::COL_ID]
                             );
                             
                             Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Queue - Economy: Building');
@@ -179,20 +190,30 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
                                 $supportResearchMessageData
                             );
                             
+                            // Get the configuration object
+                            $researchFieldConfig = Stephino_Rpg_Config::get()->researchFields()->getById(
+                                $supportResearchMessageData[Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_CONFIG_ID]
+                            );
+                            
                             // Finished a research field for the first time
                             if (1 == $newResearchFieldLevel) {
-                                $researchFieldConfig = Stephino_Rpg_Config::get()->researchFields()->getById(
-                                    $supportResearchMessageData[Stephino_Rpg_Db_Table_ResearchFields::COL_ID]
-                                );
                                 if (null !== $researchFieldConfig && strlen($researchFieldConfig->getStory())) {
                                     $this->_addMessage(
                                         Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY, 
                                         Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH, 
-                                        $researchFieldConfig->getId(), 
-                                        $researchFieldConfig->getStory()
+                                        $dataRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_ID],
+                                        $researchFieldConfig->getId()
                                     );
                                 }
                             }
+                            
+                            // Unlocked something
+                            $this->_checkUnlocks(
+                                $researchFieldConfig, 
+                                $newResearchFieldLevel, 
+                                $buildingData, 
+                                $supportResearchData
+                            );
                             
                             Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('Queue - Research: Complete');
                             Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($supportResearchMessageData);
@@ -322,6 +343,101 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
         $this->setData(Stephino_Rpg_TimeLapse_Support_Entities::KEY, $supportEntitiesData);
     }
 
+    /**
+     * Get all the models this Building or Research Field unlocks, in the order they are unlocked
+     * 
+     * @param Stephino_Rpg_Config_Building|Stephino_Rpg_Config_ResearchField $configObject        Building or Research Field object
+     * @param int                                                            $configObjectLevel   New level
+     * @param array                                                          $buildingData        Building DB rows
+     * @param array                                                          $supportResearchData Research fields DB rows
+     * @param int                                                            $cityId              City ID for Building configuration objects
+     * @return \Stephino_Rpg_Config_Item_Single[]
+     */
+    protected function _checkUnlocks($configObject, $configObjectLevel, $buildingData, $supportResearchData, $cityId = null) {
+        do {
+            // This object does not unlock new items
+            if (!$configObject instanceof Stephino_Rpg_Config_Building && !$configObject instanceof Stephino_Rpg_Config_ResearchField) {
+                break;
+            }
+            
+            // No more items unlocked after this point
+            if ($configObjectLevel > Stephino_Rpg_Utils_Config::getUnlocksMaxLevel($configObject)) {
+                break;
+            }
+            
+            // Get the unlocked items
+            $unlockedItems = array();
+            foreach (Stephino_Rpg_Utils_Config::getUnlocks($configObject) as $configItem) {
+                $configUnlockedLevel = $configObject instanceof Stephino_Rpg_Config_Building
+                    ? $configItem->getRequiredBuildingLevel()
+                    : $configItem->getRequiredResearchFieldLevel();
+                
+                // First-time partial unlock
+                if ($configObjectLevel == $configUnlockedLevel) {
+                    $secondUnlockedObject = $configObject instanceof Stephino_Rpg_Config_Building
+                        ? $configItem->getRequiredResearchField()
+                        : $configItem->getRequiredBuilding();
+                    
+                    // Prepare the unlocked items corresponding city IDs
+                    $unlockCityIds = array();
+                    
+                    // No secondary unlock condition
+                    $fullyUnlocked = (null === $secondUnlockedObject);
+                    if (!$fullyUnlocked) {
+                        $secondUnlockedLevel = $configObject instanceof Stephino_Rpg_Config_Building
+                            ? $configItem->getRequiredResearchFieldLevel()
+                            : $configItem->getRequiredBuildingLevel();
+                        
+                        if ($configObject instanceof Stephino_Rpg_Config_Building) {
+                            foreach ($supportResearchData as $supportResearchRow) {
+                                if ($secondUnlockedObject->getId() == $supportResearchRow[Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_CONFIG_ID]) {
+                                    if ((int) $supportResearchRow[Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_LEVEL] >= $secondUnlockedLevel) {
+                                        $unlockCityIds[] = $cityId;
+                                        $fullyUnlocked = true;
+                                    }
+                                    break;
+                                }
+                            }
+                        } else {
+                            // Search through all cities
+                            foreach ($buildingData as $buildingRow) {
+                                if ($secondUnlockedObject->getId() == $buildingRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID]) {
+                                    if ((int) $buildingRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] >= $secondUnlockedLevel) {
+                                        $unlockCityIds[] = (int) $buildingRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID];
+                                        $fullyUnlocked = true;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        if ($configObject instanceof Stephino_Rpg_Config_Building) {
+                            $unlockCityIds[] = $cityId;
+                        }
+                    }
+                    
+                    // Store the fully unlocked item
+                    if ($fullyUnlocked) {
+                        $unlockedItems[] = array(
+                            $configItem->keyCollection(),
+                            $configItem->getId(),
+                            $unlockCityIds
+                        );
+                    }
+                }
+            }
+            
+            if (count($unlockedItems)) {
+                $this->_addMessage(
+                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_RESEARCH, 
+                    self::ACTION_RESEARCH_UNLOCK, 
+                    "{$configObject->keyCollection()}-{$configObject->getId()}",
+                    $unlockedItems
+                );
+            }
+            
+        } while(false);
+    }
+    
     /**
      * Get the definition for removals on save()
      * 

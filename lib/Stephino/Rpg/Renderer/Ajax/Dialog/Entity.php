@@ -75,7 +75,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Entity extends Stephino_Rpg_Renderer_Aja
         
         // Check affordability
         $entityCount = 1;
-        if (self::QUEUE_ACTION_RECRUIT === $queueAction && $entityCount > min($affordList)) {
+        if (self::QUEUE_ACTION_RECRUIT === $queueAction && count($affordList) && $entityCount > min($affordList)) {
             throw new Exception(__('Not enough resources', 'stephino-rpg'));
         }
         

@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -78,8 +78,8 @@ $currentWorkers = 0;
                 <div class="col-12 col-lg-3">
                     <span 
                         data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_Buildings::KEY;?>,<?php echo $buildingConfig->getId();?>">
-                        <b><?php echo Stephino_Rpg_Utils_Lingo::escape($buildingConfig->getName());?></b>
+                        data-effect-args="<?php echo $buildingConfig->keyCollection();?>,<?php echo $buildingConfig->getId();?>">
+                        <b><?php echo $buildingConfig->getName(true);?></b>
                     </span>
                     <?php if ((int) $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] > 0):?>
                         <?php echo esc_html__('level', 'stephino-rpg');?> <b><?php echo $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL];?></b>
@@ -99,7 +99,7 @@ $currentWorkers = 0;
                                 data-preview="true"
                                 data-preview-label="/ <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($workersCapacity);?>"
                                 data-preview-label-title="<b><?php echo number_format($workersCapacity) . '</b>';?> workers"
-                                name="<?php echo Stephino_Rpg_Config_Buildings::KEY . '_' . $buildingConfig->getId() ;?>" 
+                                name="<?php echo $buildingConfig->keyCollection() . '_' . $buildingConfig->getId();?>" 
                                 value="<?php echo $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_WORKERS];?>" 
                                 min="0" 
                                 max="<?php echo $workersCapacity;?>" />

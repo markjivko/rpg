@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
@@ -61,14 +61,16 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         // Player authorship limits
-        if (!Stephino_Rpg::get()->isAdmin()) {
+        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
             // Not allowed to create mini-games
             if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 throw new Exception(__('You cannot create games', 'stephino-rpg'));
             }
 
             // Total platformers limit
-            $authorPlatformers = Stephino_Rpg_Db::get()->tablePtfs()->getByUserId($userId);
+            $authorPlatformers = $this->getDb()
+                ->tablePtfs()
+                ->getByUserId($userId);
             if (count($authorPlatformers) >= Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 throw new Exception(__('You cannot create more games', 'stephino-rpg'));
             }
@@ -250,11 +252,19 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                             );
 
                             // Send the notification
-                            $this->getDb()->modelMessages()->sendNotification(
+                            $this->getDb()->modelMessages()->notify(
                                 $userId, 
-                                esc_html__('Royalties', 'stephino-rpg'), 
-                                Stephino_Rpg_TimeLapse::TEMPLATE_NOTIF_PTF_AUTHOR_REWARD,
-                                array($ptfRow, $playerId, $playerName, $rewardGems)
+                                Stephino_Rpg_Db_Model_Messages::TEMPLATE_NOTIF_PTF_AUTHOR_REWARD,
+                                array(
+                                    // ptfId
+                                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID], 
+                                    // ptfName
+                                    $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME], 
+                                    $playerId, 
+                                    $playerName, 
+                                    $rewardGems
+                                ),
+                                Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_ECONOMY
                             );
                         }
                     }
@@ -376,7 +386,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         do {
             // Get the platformers definition
             $preDefPlatformersData = null;
-            if (is_file($ptfsDataPath = STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json')) {
+            if (is_file($ptfsDataPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '.json')) {
                 $preDefPlatformersData = @json_decode(file_get_contents($ptfsDataPath), true);
             }
             if (!is_array($preDefPlatformersData)) {
@@ -390,8 +400,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             foreach ($preDefPlatformersData as $preDefPtfId => $preDefPtfDef) {
                 try {
                     $preDefPtfId = abs((int) $preDefPtfId);
+                    
                     // No definition found
-                    if (!is_file($preDefPtfPath = STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '/' . $preDefPtfId . '.json')) {
+                    if (!is_file($preDefPtfPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '/' . $preDefPtfId . '.json')) {
                         throw new Exception('JSON data file missing');
                     }
                     
@@ -544,10 +555,10 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         // This is a pre-defined platformer
         if (0 === intval($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID])) {
             // Prepare the file name
-            $preDefPtfId = abs((int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT]) ;
+            $preDefPtfId = abs((int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT]);
 
             // Store the enclosed data
-            if (is_file($preDefPtfPath = STEPHINO_RPG_ROOT . '/ui/js/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '/' . $preDefPtfId . '.json')) {
+            if (is_file($preDefPtfPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/ptf/' . Stephino_Rpg_Renderer_Ajax::FILE_PTF_LIST . '/' . $preDefPtfId . '.json')) {
                 $tileSet = @json_decode(file_get_contents($preDefPtfPath), true);
             }
         } else {
@@ -602,7 +613,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         
         do {
             // Get the platformer data
-            if (!is_array($ptfRow = Stephino_Rpg_Db::get()->tablePtfs()->getById($ptfId))) {
+            if (!is_array($ptfRow = $this->getDb()->tablePtfs()->getById($ptfId))) {
                 break;
             }
             
@@ -644,8 +655,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 'tilesets'    => array(
                     array(
                         'name'        => 'stephino-rpg-tiles',
-                        'image'       => Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' 
-                            . Stephino_Rpg_Config::get()->core()->getTheme() . '/img/ui/ptf-tiles.png?ver=' . Stephino_Rpg::PLUGIN_VERSION,
+                        'image'       => Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(
+                            Stephino_Rpg_Theme::FOLDER_IMG_UI . '/ptf-tiles.png?ver=' . Stephino_Rpg::PLUGIN_VERSION
+                        ),
                         'imagewidth'  => self::TILE_SIDE * self::TILE_SET_HORIZONTAL,
                         'imageheight' => self::TILE_SIDE * self::TILE_SET_VERTICAL,
                         'firstgid'    => 1,
@@ -730,7 +742,8 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
      */
     public function playerIsSuspended($playerId, $playerIsAdmin = false) {
         return !$playerIsAdmin 
-            && Stephino_Rpg_Db::get()->tablePtfs()->getCountSuspended($playerId) >= Stephino_Rpg_Config::get()->core()->getPtfStrikes();
+            && $this->getDb()->tablePtfs()->getCountSuspended($playerId) 
+                >= Stephino_Rpg_Config::get()->core()->getPtfStrikes();
     }
     
     /**

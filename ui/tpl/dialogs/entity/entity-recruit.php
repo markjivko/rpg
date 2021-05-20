@@ -7,21 +7,19 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
-$entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
-    ? Stephino_Rpg_Config_Units::KEY
-    : Stephino_Rpg_Config_Ships::KEY;
+/* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
 ?>
 <div class="row mt-0 framed p-0">
-    <div data-effect="parallax" data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+    <div data-effect="parallax" data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
     </div>
     <div class="page-help">
         <span 
             data-effect="help"
-            data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+            data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
             <?php echo $entityConfig->getName(true);?>
         </span>
     </div>
@@ -30,7 +28,7 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
     <div data-role="totalEffect">
         <?php 
             // Prepare the cost template
-            $costTitle = Stephino_Rpg_Config_Units::KEY == $entityKey 
+            $costTitle = Stephino_Rpg_Config_Units::KEY == $entityConfig->keyCollection() 
                 ? esc_html__('Recruitment cost', 'stephino-rpg') 
                 : esc_html__('Construction cost', 'stephino-rpg');
             $costDiscount = Stephino_Rpg_Renderer_Ajax_Action::getDiscount($entityConfig);
@@ -73,7 +71,7 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
                     max="<?php echo min($affordList);?>"
                     value="1"
                     data-change="entityQueuePreview"
-                    data-change-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
+                    data-change-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>"
                     data-preview="true"
                     data-preview-label="/ <?php echo Stephino_Rpg_Utils_Lingo::isuFormat(min($affordList));?>"
                     data-preview-label-title="<b><?php echo number_format(min($affordList)) . '</b>';?>" />
@@ -81,9 +79,9 @@ $entityKey = $entityConfig instanceof Stephino_Rpg_Config_Unit
             <button 
                 class="btn btn-warning w-100"
                 data-click="entityQueue"
-                data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,1">
+                data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,1">
                 <span><?php 
-                    echo (Stephino_Rpg_Config_Units::KEY == $entityKey 
+                    echo (Stephino_Rpg_Config_Units::KEY == $entityConfig->keyCollection() 
                         ? esc_html__('Recruit', 'stephino-rpg') 
                         : esc_html__('Build', 'stephino-rpg'));
                 ?></span>

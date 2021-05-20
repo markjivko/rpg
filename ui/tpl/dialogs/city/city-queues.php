@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -41,13 +41,10 @@ foreach ($queueData as $queueType => $queueRows):
         <?php if (count($queueRows)):?>
             <?php 
                 foreach ($queueRows as $queueRow): 
-                    $entityKey = null;
                     $entityConfig = null;
                     $entityDelta = null;
                     switch ($queueRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE]) {
                         case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_BUILDING:
-                            $entityKey = Stephino_Rpg_Config_Buildings::KEY;
-                            
                             // Find the building info
                             if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
                                 foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData() as $dbRow) {
@@ -69,10 +66,6 @@ foreach ($queueData as $queueType => $queueRows):
                         
                         case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT:
                         case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_SHIP:
-                            $entityKey = Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_UNIT == $queueRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE]
-                                ? Stephino_Rpg_Config_Units::KEY
-                                : Stephino_Rpg_Config_Ships::KEY;
-                            
                             // Entities spawned
                             $entityDelta = $queueRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_QUANTITY];
                             
@@ -93,8 +86,6 @@ foreach ($queueData as $queueType => $queueRows):
                             break;
                             
                         case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH:
-                            $entityKey = Stephino_Rpg_Config_ResearchFields::KEY;
-                            
                             // Find the research field config
                             if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Support_ResearchFields::KEY)->getData())) {
                                 foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Support_ResearchFields::KEY)->getData() as $dbRow) {
@@ -117,9 +108,12 @@ foreach ($queueData as $queueType => $queueRows):
                     }
                     
                     // Invalid queue
-                    if (null === $entityKey || null === $entityConfig) {
+                    if (null === $entityConfig) {
                         continue;
                     }
+                    
+                    // Get the item card details
+                    list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($entityConfig);
                     
                     // Prepare the countdown details
                     $queueLeft = intval($queueRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_TIME]) - time();
@@ -128,18 +122,12 @@ foreach ($queueData as $queueType => $queueRows):
                 <div class="row col-12 m-0 align-items-center">
                     <div class="col-12 col-lg-3 text-center">
                         <div 
-                            <?php if (Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH == $queueRow[Stephino_Rpg_Db_Table_Queues::COL_QUEUE_ITEM_TYPE]):?>
-                                class="building-entity-icon framed mt-4" 
-                            <?php else:?>
-                                class="building-research-icon framed mt-4" 
-                            <?php endif;?>
-                            data-click="helpDialog"
-                            data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>"
+                            class="item-card framed mt-4" 
+                            data-click="<?php echo $itemCardFn;?>"
+                            data-click-args="<?php echo $itemCardArgs;?>"
                             data-effect="background" 
-                            data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
-                            <span 
-                                data-effect="help"
-                                data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                            data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
+                            <span>
                                 <?php echo $entityConfig->getName(true);?>
                             </span>
                             <?php if (null !== $entityDelta):?>
@@ -168,7 +156,7 @@ foreach ($queueData as $queueType => $queueRows):
                         <h6>
                             <span 
                                 data-effect="help"
-                                data-effect-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>">
+                                data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
                                 <?php echo $entityConfig->getName(true);?>
                             </span>
                         </h6>
@@ -189,7 +177,7 @@ foreach ($queueData as $queueType => $queueRows):
                             <button 
                                 class="btn btn-default w-100"
                                 data-click="entityDialog" 
-                                data-click-args="<?php echo $entityKey;?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
+                                data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
                                 <span><b><?php echo esc_html__('Dequeue', 'stephino-rpg');?></b></span>
                             </button>
                         <?php break; case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH: ?>

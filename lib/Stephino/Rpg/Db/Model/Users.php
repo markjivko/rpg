@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Db_Model_Users extends Stephino_Rpg_Db_Model {
@@ -63,10 +63,10 @@ class Stephino_Rpg_Db_Model_Users extends Stephino_Rpg_Db_Model {
         
         // Get the WordPress user ID
         if (is_array($userData) && isset($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])) {
-            $wpUserId = intval($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]);
+            $wpUserId = abs((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]);
             
             // Attempting to remove a Super Admin account
-            if (is_super_admin($wpUserId)) {
+            if (Stephino_Rpg_Cache_User::get()->isGameAdmin($wpUserId)) {
                 throw new Exception(__('Super Admin accounts cannot be deleted', 'stephino-rpg'));
             }
         

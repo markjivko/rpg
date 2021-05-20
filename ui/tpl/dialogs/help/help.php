@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 ?>
@@ -77,14 +77,7 @@
                                 break;
                             
                             default:
-                                // Prepare the collection name
-                                $collectionItemName = ucfirst(
-                                    preg_replace(
-                                        array('%([A-Z])%', '%^premium%i'), 
-                                        array(' $1', '&#11088;'), 
-                                        $collectionItemKey
-                                    )
-                                );
+                                $collectionItemName = ucfirst(preg_replace('%([A-Z])%', ' $1', $collectionItemKey));
                                 break;
                         }
                 ?>
@@ -158,7 +151,7 @@
                                                                         class="active"
                                                                     <?php endif;?>
                                                                     data-effect="helpMenuItem"
-                                                                    data-effect-args="<?php echo Stephino_Rpg_Config_ResearchFields::KEY;?>,<?php echo $researchFieldConfig->getId();?>">
+                                                                    data-effect-args="<?php echo $researchFieldConfig->keyCollection();?>,<?php echo $researchFieldConfig->getId();?>">
                                                                     <span>
                                                                         <?php if (strlen($researchFieldConfig->getName())):?>
                                                                             <?php echo $researchFieldConfig->getName(true);?>

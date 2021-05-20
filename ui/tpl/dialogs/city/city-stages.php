@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -43,7 +43,6 @@
                         $unlockCurrentLevel = null;
 
                         // Prepare the ajax key
-                        $unlockKey = null;
                         switch (true) {
                             case $unlockObject instanceof Stephino_Rpg_Config_Building:
                                 if (isset($buildingLevels[$unlockObject->getId()])) {
@@ -51,7 +50,6 @@
                                 } else {
                                     $unlockCurrentLevel = -1;
                                 }
-                                $unlockKey = Stephino_Rpg_Config_Buildings::KEY;
                                 break;
 
                             case $unlockObject instanceof Stephino_Rpg_Config_ResearchField:
@@ -60,35 +58,21 @@
                                 } else {
                                     $unlockCurrentLevel = -1;
                                 }
-                                $unlockKey = Stephino_Rpg_Config_ResearchFields::KEY;
-                                break;
-
-                            case $unlockObject instanceof Stephino_Rpg_Config_ResearchArea:
-                                $unlockKey = Stephino_Rpg_Config_ResearchAreas::KEY;
-                                break;
-
-                            case $unlockObject instanceof Stephino_Rpg_Config_Government:
-                                $unlockKey = Stephino_Rpg_Config_Governments::KEY;
-                                break;
-
-                            case $unlockObject instanceof Stephino_Rpg_Config_Unit:
-                                $unlockKey = Stephino_Rpg_Config_Units::KEY;
-                                break;
-
-                            case $unlockObject instanceof Stephino_Rpg_Config_Ship:
-                                $unlockKey = Stephino_Rpg_Config_Ships::KEY;
                                 break;
                         }
+                        
+                        // Get the item card details
+                        list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($unlockObject, !$itemReqB || !$itemReqRF);
             ?>
                 <div class="col-12 col-md-6 col-lg-3 col-xl-2 text-center">
                     <div 
-                        class="building-entity-icon framed mt-4 <?php if (!$itemReqB || !$itemReqRF):?>disabled<?php endif;?> <?php if ($unlockCurrentLevel < 0):?>active<?php endif;?>" 
+                        class="item-card framed mt-4 <?php if (!$itemReqB || !$itemReqRF):?>disabled<?php endif;?> <?php if ($unlockCurrentLevel < 0):?>active<?php endif;?>" 
                         data-html="true"
-                        title="<?php echo Stephino_Rpg_Utils_Lingo::escape($unlockObject->getName());?>"
-                        data-click="helpDialog"
-                        data-click-args="<?php echo $unlockKey;?>,<?php echo $unlockObject->getId();?>"
+                        title="<?php echo esc_attr($unlockObject->getName());?>"
+                        data-click="<?php echo $itemCardFn;?>"
+                        data-click-args="<?php echo $itemCardArgs;?>"
                         data-effect="background" 
-                        data-effect-args="<?php echo $unlockKey;?>,<?php echo $unlockObject->getId();?>">
+                        data-effect-args="<?php echo $unlockObject->keyCollection();?>,<?php echo $unlockObject->getId();?>">
                         <?php if ($itemReqB && $itemReqRF && null !== $unlockCurrentLevel):?>
                             <div class="level">
                                 <?php switch(true): case ($unlockCurrentLevel < 0): ?>
@@ -102,7 +86,7 @@
                         <?php endif;?>
                         <span class="label">
                             <span>
-                                <?php echo Stephino_Rpg_Utils_Lingo::escape($unlockObject->getName());?>
+                                <?php echo $unlockObject->getName(true);?>
                             </span>
                         </span>
                     </div>

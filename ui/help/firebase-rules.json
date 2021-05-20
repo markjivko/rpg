@@ -4,7 +4,8 @@
         ".write": false,
         "chat": {
             "$message": {
-                ".validate": "newData.hasChildren(['i', 'd', 'n', 't'])",
+                ".validate": "newData.hasChildren(['i', 'd', 'n', 't', 'u'])",
+                ".write": "newData.child('u').val() === auth.uid || data.child('u').val() === auth.uid",
                 "i": {
                     ".validate": "newData.isNumber() && newData.val() > 0 && newData.val() <= 99999999"
                 },
@@ -17,12 +18,15 @@
                 "t": {
                     ".validate": "newData.isString() && newData.val().length > 0 && newData.val().length <= 500"
                 },
+                "u": {
+                    ".validate": "newData.isString() && newData.val().length > 0"
+                },
                 "$other": {
                     ".validate": false
                 }
             },
-            ".read": true,
-            ".write": true
+            ".read": "auth != null",
+            ".write": false
         }
     }
 }

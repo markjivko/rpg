@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -26,7 +26,15 @@
                 <?php echo esc_html__('Robot', 'stephino-rpg');?>
             </span>
         </div>
-    <?php elseif (is_super_admin($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+    <?php elseif (Stephino_Rpg_Cache_User::get()->isGameAdmin((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+        <div class="col-12 text-right">
+            <span 
+                data-effect="help"
+                data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ADMIN;?>">
+                <?php echo esc_html__('Game Admin', 'stephino-rpg');?>
+            </span>
+        </div>
+    <?php elseif (Stephino_Rpg_Cache_User::get()->isGameMaster((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
         <div class="col-12 text-right">
             <span 
                 data-effect="help"
@@ -38,9 +46,11 @@
     <div class="col-6 col-lg-4">
         <div class="user-icon-frame">
             <?php if (is_numeric($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
-                <?php echo get_avatar($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 256);?>
+                <a rel="noreferrer" target="_blank" href="https://en.gravatar.com/">
+                    <?php echo get_avatar($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 256, 'wavatar');?>
+                </a>
             <?php else:?>
-                <img src="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/themes/' . Stephino_Rpg_Config::get()->core()->getTheme() . '/img/ui/512-robot.png'); ?>" />
+                <img src="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/ui/512-robot.png')); ?>" />
             <?php endif;?>
         </div>
         <h4 class="label w-100 footer-label">
@@ -127,7 +137,7 @@
         <?php endif;?>
     </div>
 <?php endif;?>
-<?php if (Stephino_Rpg::get()->isAdmin()):?>
+<?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
     <div class="col-12 align-items-center mt-2 framed">
         <div class="col-12 text-center mb-2">
             <h5 <?php if ($userData[Stephino_Rpg_Db_Table_Users::COL_USER_BANNED]):?>class="text-danger"<?php endif;?>>
@@ -208,6 +218,25 @@
                         </li>
                     <?php endforeach;?>
                 </ul>
+            </div>
+            <div class="col-12 mt-2">
+                <?php if ((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID] > 0 
+                    && !Stephino_Rpg_Cache_User::get()->isGameAdmin((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+                    <div class="col">
+                        <button
+                            class="btn btn-warning w-100"
+                            data-click="userToggleGm"
+                            data-click-args="<?php echo (int) $userData[Stephino_Rpg_Db_Table_Users::COL_ID];?>">
+                            <span>
+                                <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+                                    <?php echo esc_html__('Demote', 'stephino-rpg');?>
+                                <?php else:?>
+                                    <?php echo esc_html__('Promote to Game Master', 'stephino-rpg');?>
+                                <?php endif;?>
+                            </span>
+                        </button>
+                    </div>
+                <?php endif;?>
             </div>
         </div>
     </div>

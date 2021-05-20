@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Renderer_Console {
@@ -67,7 +67,7 @@ class Stephino_Rpg_Renderer_Console {
      * @return string|null
      */
     protected static function _getTemplatePath($templateName) {
-        if (is_file($templatePath = STEPHINO_RPG_ROOT . '/ui/tpl/console/' . $templateName . '.php')) {
+        if (is_file($templatePath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_TPL . '/console/' . $templateName . '.php')) {
             return $templatePath;
         }
         return null;

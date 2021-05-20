@@ -193,7 +193,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Settings extends Stephino_Rpg_Renderer_A
         require self::dialogTemplatePath(self::TEMPLATE_ABOUT);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::RESULT_TITLE => __('About', 'stephino-rpg') . ' Stephino RPG',
+                self::RESULT_TITLE => __('About', 'stephino-rpg') . ' ' . Stephino_Rpg::PLUGIN_NAME,
             )
         );
     }

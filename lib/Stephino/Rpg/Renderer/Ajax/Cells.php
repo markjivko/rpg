@@ -8,7 +8,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 class Stephino_Rpg_Renderer_Ajax_Cells {
     
@@ -263,7 +263,7 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                 Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData()
             );
         }
-        
+		
         // Prepare the grid
         $grid = array_map(
             function($item) use($userData, $islandData, $citiesData, $configIsland, $configIslandStatue, $citySlots, $animationSlots, $statueSlot) {
@@ -282,7 +282,7 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                     $cellData[self::CELL_DATA_TYPE] = self::CELL_DATA_TYPE_STATUE;
                     $cellData[self::CELL_DATA_DATA] = array(
                         self::CELL_CONFIG_ID    => $configIslandStatue->getId(),
-                        self::CELL_CONFIG_NAME  => $configIslandStatue->getName(),
+                        self::CELL_CONFIG_NAME  => $configIslandStatue->getName(true),
                         self::CELL_CONFIG_LEVEL => $islandData[Stephino_Rpg_Db_Table_Islands::COL_ISLAND_STATUE_LEVEL],
                     );
                     
@@ -335,13 +335,13 @@ class Stephino_Rpg_Renderer_Ajax_Cells {
                             $cityOwner = $cellData[self::CELL_DATA_CITY_OWN]
                                 ? $userData
                                 : Stephino_Rpg_Db::get()->tableUsers()->getById($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID]);
-                            
+
                             // Store the icon
                             $cellData[self::CELL_DATA_DATA][self::CELL_CONFIG_ICON] = is_array($cityOwner)
                                 && $cityOwner[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID] > 0
-                                    ? get_avatar_url($cityOwner[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 256)
+                                    ? Stephino_Rpg_Utils_Media::getAvatarUrl($cityOwner[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])
                                     : null;
-                            
+							
                             // Get the configuration ID
                             if (null !== $configCity = Stephino_Rpg_Config::get()->cities()->getById($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID])) {
                                 $cellData[self::CELL_DATA_CONFIG_ID] = $configCity->getId();

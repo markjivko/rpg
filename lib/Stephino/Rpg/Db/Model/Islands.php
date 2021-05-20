@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
@@ -40,7 +40,7 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
             $islandIdentifier = '';
             
             // Prepare the file handler
-            if (is_file($filePath = Stephino_Rpg_Config::get()->themePath() . '/txt/' . self::NAME . '.txt')) {
+            if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath('txt/' . self::NAME . '.txt'))) {
                 $fileHandler = new SplFileObject($filePath, 'r');
                 $fileHandler->seek(PHP_INT_MAX);
 

@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -49,7 +49,7 @@
                         data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
                         <?php echo esc_html__('Rules', 'stephino-rpg');?>
                     </span>
-                    <?php if (Stephino_Rpg::get()->isAdmin() || Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0):?>
+                    <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster() || Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit() > 0):?>
                         <button 
                             class="btn btn-info" data-click="dialog" data-click-args="dialogUserArenaList,<?php echo $userId;?>">
                             <span><?php echo esc_html__('My games', 'stephino-rpg');?></span>

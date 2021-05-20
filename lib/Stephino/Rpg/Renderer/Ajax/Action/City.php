@@ -7,7 +7,7 @@
  * @copyright (c) 2021, Stephino
  * @author    Mark Jivko <stephino.team@gmail.com>
  * @package   stephino-rpg
- * @license   GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license   GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 
 class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_Action {
@@ -196,10 +196,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         $cityId = isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null;
         
         // Get our city information
-        $cityInfo = self::getCityInfo($cityId);
+        $cityData = self::getCityInfo($cityId);
         
         // Already the Metropolis
-        if ($cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_IS_CAPITAL]) {
+        if ($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_IS_CAPITAL]) {
             throw new Exception(
                 sprintf(
                     __('This %s is already your empire\'s metropolis', 'stephino-rpg'),
@@ -210,7 +210,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         
         // Get the city configuration
         $cityConfig = Stephino_Rpg_Config::get()->cities()->getById(
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID]
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID]
         );
         
         // Invalid city configuration
@@ -226,7 +226,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         // Get the Metropolis movement cost data
         $costData = self::getCostData(
             $cityConfig, 
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL] - 1
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL] - 1
         );
         
         // Metropolis cannot be changed
@@ -235,12 +235,12 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Try to pay for the Metropolis change
-        self::spend($costData, $cityInfo);
+        self::spend($costData, $cityData);
         
         // Update the Metropolis
         $result = Stephino_Rpg_Db::get()->tableCities()->setCapitalByUser(
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID],
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID]
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID],
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]
         );
         
         if (!$result) {
@@ -253,7 +253,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         // Store the result
         return Stephino_Rpg_Renderer_Ajax::wrap(
             $result,
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID]
+            $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]
         );
     }
     

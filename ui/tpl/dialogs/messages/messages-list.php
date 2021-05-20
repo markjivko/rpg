@@ -7,7 +7,7 @@
  * @copyright  (c) 2021, Stephino
  * @author     Mark Jivko <stephino.team@gmail.com>
  * @package    stephino-rpg
- * @license    GPL v3+, gnu.org/licenses/gpl-3.0.txt
+ * @license    GPL v3+, https://gnu.org/licenses/gpl-3.0.txt
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
@@ -15,16 +15,26 @@
 <div data-role="message-icon" data-msg-type="<?php echo $messageType;?>"></div>
 <?php if (is_array($messageData) && count($messageData)):?>
     <div data-role="message-holder">
-        <?php 
-            foreach($messageData as $message):
-        ?>
-            <div class="row col-12 no-gutters framed align-items-center message">
+        <?php foreach($messageData as $message): ?>
+            <div class="row col-12 no-gutters framed align-items-center message <?php echo ($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ] ? '' : 'active');?>">
                 <div class="col-6 col-lg-8 order-first">
                     <button 
-                        class="btn w-100 <?php echo ($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ] ? 'btn-default' : 'btn-danger');?>"
+                        class="btn w-100 btn-default"
                         data-click="messageRead" data-click-multi="true"
                         data-click-args="<?php echo $messageType;?>,<?php echo $message[Stephino_Rpg_Db_Table_Messages::COL_ID];?>">
                         <span>
+                            <?php 
+                                if (0 !== (int) $message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_FROM]):
+                            ?>
+                                &#x1F4AC; 
+                                <b>
+                                    <?php if (is_array($senderInfo = Stephino_Rpg_Db::get()->tableUsers()->getById($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_FROM], true))): ?>
+                                        <?php echo Stephino_Rpg_Utils_Lingo::getUserName($senderInfo);?>
+                                    <?php else:?>
+                                        <i><?php echo esc_html__('Unknown', 'stephino-rpg');?></i>
+                                    <?php endif;?>:
+                                </b>
+                            <?php endif;?>
                             <?php echo Stephino_Rpg_Utils_Lingo::escape($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]);?>
                         </span>
                     </button>
@@ -53,7 +63,7 @@
         </div>
     </div>
 <?php else:?>
-    <div class="col-12 text-center framed">
+    <div class="col-12 p-2 framed text-center">
         <?php echo esc_html__('You have no messages', 'stephino-rpg');?>
     </div>
 <?php endif;?>

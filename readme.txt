@@ -75,13 +75,17 @@ Available polynomials and their multiplicative inverses:
 * **exponential**: `a⋅bˣ + c`
 
 Nothing was hard-coded, not even the tutorial, so you can change the game any way you like.
-Future versions will include the ability to install game "themes", plugins that contain unique game mechanics and graphics that work with the Stephino RPG framework.
 
 = Admin Console =
 As an admin, you have complete control over your game.
 Just press **Alt+Ctrl+C** to toggle the console and type **help** to list all available commands.
 You can add resources to players, change building levels, fast-forward the game and more.
 New abilities will be added from time to time.
+
+= Themes (PRO) =
+Modify the design of your game to your heart's content directly from your browser.
+Themes are meant to be portable, i.e. you can export your game design and game mechanics changes as your very own themes
+in the form of Zip archives.
 
 = Microtransactions (PRO) =
 You can enable microtransactions using PayPal and start monetizing your game.
@@ -133,6 +137,32 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 6. Earn gems by designing and playing platformer mini-games in the game arena
 
 == Changelog ==
+
+= [0.3.5] 2021-05-20 =
+* Notices
+  * Please upgrade Stephino RPG **PRO** to version **0.2.1**
+  * **Chat Room**: Added Firebase anonymous login; please go to `Game Mechanics > User Content > Chat Room > Getting Started` and follow steps **6** and **9** to enable Anonymous Sign-in and update the Realtime Database rules
+* Enhancements
+  * **Themes**: you can now safely edit your own themes directly from the browser with auto-update enabled
+  * Chat Room: Messages can be deleted by authors; removed "message sent" sound and other improvements
+  * **Messages i18n**: messages are now stored as JSON configuration objects instead of plain HTML, resulting in a much smaller database footprint and dynamic templating of messages
+  * **Game Masters**: Promote/demote players to game masters, allowing them more control over the game i.e. console, Game Arena and others; game masters can promote/demote other players including themselves but not super-admins; super-admins are the only ones allowed to access administrative parts of the game, such as the `Dashboard`, `Themes`, `Game Mechanics` etc.
+  * **Item unlocked** notifications
+* Bug fixes
+  * Multisite (MU): Network Admin menu
+  * Fixed message pruning and delete bugs
+  * Fixed avatar URL mismatch
+  * Fixed interaction with other themes and plugins UI
+  * Fixed Discovery mix-up bug
+  * Fixed minor i18n issues in resource dialogs
+  * Fixed entity suggestions for attack and transport actions
+  * Fixed max. queue bug
+* Additional changes
+  * Updated Firebase to version 8.4.3
+  * Improved messages layout: user messages vs. system messages and other
+  * Unfulfilled requirements point to the corresponding building/research field instead of the help menu
+  * Unified item card behavior
+  * Added platformer game ID to interface
 
 = [0.3.4] 2021-02-19 =
 * Enhancements
