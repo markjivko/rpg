@@ -123,6 +123,9 @@ JS;
         
         // PWA file defined
         if (is_file($pwaPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_UI_JS . '/pwa/pwa-worker.js')) {
+            // Prepare the root using relative plugin url (starting with one forward slash "/")
+            $urlRoot = Stephino_Rpg_Utils_Media::getPluginsUrl();
+            
             // Prepare the offline file path
             $offlineFile = Stephino_Rpg_Utils_Media::getAdminUrl(true, false) . '&view=' . Stephino_Rpg_Renderer_Ajax::VIEW_PWA;
             
@@ -138,10 +141,51 @@ JS;
                 )),
                 
                 // Offline (+main) JS
-                Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_JS . '/stephino.js?' . http_build_query(array(
+                $urlRoot . '/' . Stephino_Rpg::FOLDER_UI_JS . '/stephino.js?' . http_build_query(array(
                     Stephino_Rpg_Renderer_Ajax::CALL_VERSION => Stephino_Rpg::PLUGIN_VERSION
                 )),
+                
+                // Offline resources
+                $urlRoot . '/ui/img/badge-error.gif',
+                $urlRoot . '/ui/img/badge-success.gif',
+                $urlRoot . '/ui/img/icon.png',
+                $urlRoot . '/ui/img/icon.svg',
+                $urlRoot . '/ui/img/signature.png',
             );
+            
+            // Just-in-time PWA cache disabled
+            if (!Stephino_Rpg_Config::get()->core()->getJitCacheEnabled()) {
+                // Prepare the file iterators
+                $iterators = array(
+                    new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator(
+                            Stephino_Rpg_Utils_Themes::getActive()->getFilePath(), 
+                            RecursiveDirectoryIterator::SKIP_DOTS
+                        ), 
+                        RecursiveIteratorIterator::SELF_FIRST
+                    )
+                );
+
+                // Look into the local files for the default theme
+                if (Stephino_Rpg::get()->isPro() && Stephino_Rpg_Theme::THEME_DEFAULT === Stephino_Rpg_Utils_Themes::getActive()->getThemeSlug()) {
+                    $iterators[] = new RecursiveIteratorIterator(
+                        new RecursiveDirectoryIterator(
+                            Stephino_Rpg_Utils_Themes::getActive()->getFilePath(null, true), 
+                            RecursiveDirectoryIterator::SKIP_DOTS
+                        ), 
+                        RecursiveIteratorIterator::SELF_FIRST
+                    );
+                }
+
+                // Cache theme files
+                foreach ($iterators as $iterator) {
+                    foreach ($iterator as $item) {
+                        if (!$item->isDir() && preg_match('%\.(png|jpg|cur|mp[34]|webm)$%i', $item)) {
+                            $filesToCache[] = Stephino_Rpg_Utils_Media::getMediaUrl($iterator->getSubPathName());
+                        }
+                    }
+                }
+            }
             
             // Update the result
             $result = str_replace(
@@ -151,7 +195,7 @@ JS;
                     '__OFFLINE_FILE__',
                 ), 
                 array(
-                    json_encode($filesToCache, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
+                    json_encode(array_unique($filesToCache), JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES),
                     Stephino_Rpg_Utils_Media::getPwaVersion(true),
                     $offlineFile,
                 ), 

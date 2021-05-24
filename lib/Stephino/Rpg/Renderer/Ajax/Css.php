@@ -173,10 +173,7 @@ CSS;
             // Prepare the variables
             $variables = array(
                 '__ROOT_URL__'  => Stephino_Rpg_Utils_Media::getPluginsUrl(),
-                '__MEDIA_URL__' => Stephino_Rpg_Utils_Media::getAdminUrl(true, false) . '&' . http_build_query(array(
-                    Stephino_Rpg_Renderer_Ajax::CALL_METHOD     => Stephino_Rpg_Renderer_Ajax::CONTROLLER_MEDIA,
-                    Stephino_Rpg_Renderer_Ajax::CALL_MEDIA_PATH => '',
-                ))
+                '__MEDIA_URL__' => Stephino_Rpg_Utils_Media::getMediaUrl(),
             );
 
             // Prepare the CSS script

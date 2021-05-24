@@ -1,4 +1,4 @@
-/* global self, caches, fetch, __FILES__ */
+/* global self, caches, fetch */
 // Service Worker configuration
 const staticCacheName = 'stephino-rpg-__VERSION__';
 const staticCacheFiles = __FILES__;

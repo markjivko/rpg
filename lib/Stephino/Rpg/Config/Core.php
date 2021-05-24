@@ -350,6 +350,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_timeLapseCooldown = 10;
     
     /**
+     * Just-in-time caching
+     * 
+     * @var boolean
+     */
+    protected $_jitCaching = false;
+    
+    /**
      * Cron interval (minutes)
      * 
      * @var int
@@ -1010,7 +1017,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     
     /**
      * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
-     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.5&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.6&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
      * @sensitive true
      * @return boolean Chat Room
@@ -1688,6 +1695,28 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         if ($this->_timeLapseCooldown > 120) {
             $this->_timeLapseCooldown = 120;
         }
+        
+        return $this;
+    }
+    
+    /**
+     * Cache game assets locally just-in-time for new players<br>
+     * This reduces server load with a small UX effect
+     * 
+     * @return boolean Just-in-time caching
+     */
+    public function getJitCacheEnabled() {
+        return (null === $this->_jitCaching ? false : $this->_jitCaching);
+    }
+    
+    /**
+     * Set the "JIT Caching" parameter
+     * 
+     * @param boolean $jitCaching JIT Caching
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setJitCacheEnabled($jitCaching) {
+        $this->_jitCaching = (boolean) $jitCaching;
         
         return $this;
     }

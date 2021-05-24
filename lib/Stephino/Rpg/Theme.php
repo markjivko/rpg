@@ -12,6 +12,10 @@
  */
 class Stephino_Rpg_Theme {
     
+    // Theme licensing
+    const LICENSE_NAME = 'CC BY-SA 4.0';
+    const LICENSE_URL  = 'https://creativecommons.org/licenses/by-sa/4.0/';
+    
     /**
      * Maximum name length
      */
@@ -45,6 +49,8 @@ class Stephino_Rpg_Theme {
     // Fles
     const FILE_ABOUT        = 'about.json';
     const FILE_CONFIG       = 'config.json';
+    const FILE_LICENSE      = 'license.md';
+    const FILE_LICENSE_IMG  = 'license.png';
     const FILE_I18N         = 'i18n.php';
     const FILE_AUDIO_EVENTS = 'audio/events.json';
     const FILE_CSS_STYLE    = 'css/style.css';
@@ -537,11 +543,8 @@ class Stephino_Rpg_Theme {
             throw new Exception(__('Choose another name for your theme', 'stephino-rpg'));
         }
         
-        // Get the list of installed themes
-        $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
-        
         // Theme slugs must be unique
-        if (isset($installedThemes[$themeSlug])) {
+        if (null !== Stephino_Rpg_Utils_Themes::getTheme($themeSlug)) {
             throw new Exception(__('Theme name already used', 'stephino-rpg'));
         }
         
@@ -711,7 +714,12 @@ class Stephino_Rpg_Theme {
         $result = $this->_themePath . $pathTail;
         
         // Pro resources that are stored locally instead of stephino-rpg-pro
-        if ($forceLocal || ($this->getThemeSlug() === self::THEME_DEFAULT && Stephino_Rpg::get()->isPro() && $this->_isLocalResource($relativePath))) {
+        if ($forceLocal 
+            || ($this->getThemeSlug() === self::THEME_DEFAULT 
+                && Stephino_Rpg::get()->isPro() 
+                && strlen($relativePath) 
+                && $this->_isLocalResource($relativePath)
+            )) {
             $result = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . self::THEME_DEFAULT . $pathTail;
         }
         

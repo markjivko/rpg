@@ -2,7 +2,7 @@
 Contributors: stephino
 Plugin link: https://stephino.com
 Donate link: https://gum.co/stephino-rpg
-Tags: rpg, fun, arcade, game, games, platformer, pwa, strategy, mmorpg
+Tags: rpg, fun, gutenberg, game, games, platformer, pwa, strategy, mmorpg
 Requires at least: 5.0
 Tested up to: 5.7
 Stable tag: trunk
@@ -137,6 +137,18 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 6. Earn gems by designing and playing platformer mini-games in the game arena
 
 == Changelog ==
+
+= [0.3.6] 2021-05-24 =
+* Enhancements
+  * PWA Just-in-time cache control in `Game Mechanics > Core > Performance`
+  * Theme import and export
+* Bug fixes
+  * Fixed audio loading bug
+  * Fixed PWA caching issues
+  * Fixed 768 assets 404 errors for the free version
+  * Fixed chat room pruning bug
+* Additional changes
+  * Theme editor improvements (cache clean and UI)
 
 = [0.3.5] 2021-05-20 =
 * Notices

@@ -101,6 +101,23 @@ class Stephino_Rpg_Utils_Media {
     }
 
     /**
+     * Get the URL for the media controller
+     * 
+     * @param string $mediaPath (optional) Relative path; default <b>empty string</b>
+     * @return string
+     */
+    public static function getMediaUrl($mediaPath = '') {
+        $sanitizedPath = strlen($mediaPath)
+            ? ('/' . preg_replace('%(?:^[\\\/]+|[\\\/]+$)%', '', $mediaPath))
+            : '';
+        
+        return Stephino_Rpg_Utils_Media::getAdminUrl(true, false) . '&' . http_build_query(array(
+            Stephino_Rpg_Renderer_Ajax::CALL_METHOD     => Stephino_Rpg_Renderer_Ajax::CONTROLLER_MEDIA,
+            Stephino_Rpg_Renderer_Ajax::CALL_MEDIA_PATH => '',
+        )) . $sanitizedPath;
+    }
+    
+    /**
      * Get the plugins URL
      * 
      * @param boolean $proVersion (optional) Get the pro version link; default <b>false</b>

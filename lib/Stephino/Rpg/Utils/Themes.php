@@ -65,11 +65,8 @@ class Stephino_Rpg_Utils_Themes {
                 // Sanitize the name
                 $themeSlug = trim(preg_replace('%[^\w\-]+%', '', $themeSlug));
 
-                // Get the list of installed themes
-                $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
-
                 // Validate theme
-                if (strlen($themeSlug) && isset($installedThemes[$themeSlug])) {
+                if (strlen($themeSlug) && null !== self::getTheme($themeSlug)) {
                     $newThemeSlug = $themeSlug;
                 }
             }
@@ -84,15 +81,17 @@ class Stephino_Rpg_Utils_Themes {
      * @return Stephino_Rpg_Theme
      */
     public static function getActive() {
-        $installedThemes = self::getInstalled();
-        $themeSlug = Stephino_Rpg_Cache_Game::get()->read(Stephino_Rpg_Cache_Game::KEY_THEME, Stephino_Rpg_Theme::THEME_DEFAULT);
+        $themeSlug = Stephino_Rpg_Cache_Game::get()->read(
+            Stephino_Rpg_Cache_Game::KEY_THEME, 
+            Stephino_Rpg_Theme::THEME_DEFAULT
+        );
         
         // Theme corrupted, return to the default
-        if (!isset($installedThemes[$themeSlug])) {
+        if (null === self::getTheme($themeSlug)) {
             self::setActive($themeSlug = Stephino_Rpg_Theme::THEME_DEFAULT);
         }
         
-        return $installedThemes[$themeSlug];
+        return self::getTheme($themeSlug);
     }
     
     /**
@@ -118,17 +117,20 @@ class Stephino_Rpg_Utils_Themes {
      * @return Stephino_Rpg_Theme|null
      */
     public static function getTheme($themeSlug) {
-        $installed = self::getInstalled();
-        return isset($installed[$themeSlug])
-            ? $installed[$themeSlug]
+        // Populate the installed cache
+        !count(self::$_installed) && self::getInstalled();
+        
+        // Get the theme by slug
+        return isset(self::$_installed[$themeSlug])
+            ? self::$_installed[$themeSlug]
             : null;
     }
     
     /**
      * Get the file path based on the theme slug
      * 
-     * @param string  $themeSlug    Theme slug
-     * @param string  $relativePath (optional) Relative path; default <b>null</b>
+     * @param string|boolean $themeSlug    Theme slug; use <b>false</b> for the temporary upload folder
+     * @param string         $relativePath (optional) Relative path; default <b>null</b>
      * @return string
      */
     public static function getPath($themeSlug, $relativePath = null) {
@@ -142,7 +144,9 @@ class Stephino_Rpg_Utils_Themes {
         $result = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . Stephino_Rpg_Theme::THEME_DEFAULT . $pathTail;
 
         // Clean-up (theme config might be corrupted; prevent directory traversal)
-        $themeSlug = preg_replace('%[^a-z\-\d]+%', '', strtolower($themeSlug));
+        $themeSlug = false === $themeSlug
+            ? '_temp'
+            : preg_replace('%[^a-z\-\d]+%', '', strtolower($themeSlug));
 
         // Outside theme
         if (strlen($themeSlug) && Stephino_Rpg_Theme::THEME_DEFAULT !== $themeSlug) {

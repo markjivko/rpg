@@ -1,13 +1,13 @@
 # Copyright (c) 2021 Stephino
 # 
-# Samuel Taylor Coleridge | Poetry has been to me its own exceeding great reward it has given me the habit of wishing to discover the good and beautiful in all that meets and surrounds me.
+# Mahatma Gandhi | Where there is love there is life.
 # 
 # Distributed under the GNU General Public License v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Stephino Rpg v.0.3.5\n"
-"POT-Creation-Date: 2021-05-20 16:45:12+00:00\n"
-"PO-Revision-Date: 2021-05-20 16:45:12+00:00\n"
+"Project-Id-Version: Stephino Rpg v.0.3.6\n"
+"POT-Creation-Date: 2021-05-24 04:49:55+00:00\n"
+"PO-Revision-Date: 2021-05-24 04:49:55+00:00\n"
 "Last-Translator: Stephino\n"
 "Language-Team: Stephino\n"
 "MIME-Version: 1.0\n"
@@ -17,7 +17,7 @@ msgstr ""
 "X-Generator: stephino-rpg\n"
 "Plural-Forms: nplurals=NUMBER; plural=EXPRESSION;\n"
 
-#: lib/Stephino/Rpg/Config.php:258 lib/Stephino/Rpg/Renderer/Ajax/Admin.php:156
+#: lib/Stephino/Rpg/Config.php:258 lib/Stephino/Rpg/Renderer/Ajax/Admin.php:157
 #@ stephino-rpg
 msgid "You need to unlock the game to save your changes"
 msgstr ""
@@ -1373,48 +1373,50 @@ msgstr ""
 msgid "Could not acquire item"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:48
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:49
 #@ stephino-rpg
 msgid "You do not have access to the Dashboard"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:67
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:91
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:68
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:92
 #@ stephino-rpg
 msgid "You do not have access to the Announcements"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:111
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:112
 #@ stephino-rpg
 msgid "You do not have permission to export the game configuration"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:121
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:122
 #@ stephino-rpg
 msgid "You do not have permission to reset the game configuration"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:134
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:135
 #@ stephino-rpg
 msgid "You do not have permission to restart the game"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:152
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:153
 #@ stephino-rpg
 msgid "(DEMO) You are free to experiment but your changes will not be saved"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:161
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:162
 #@ stephino-rpg
 msgid "Invalid configuration object"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:183
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:184
 #: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:218
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:241
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:270
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:301
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:372
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:240
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:268
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:297
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:369
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:438
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:529
 #@ stephino-rpg
 msgid "Permission denied"
 msgstr ""
@@ -1424,69 +1426,96 @@ msgstr ""
 msgid "Invalid theme template"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:226
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:249
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:278
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:311
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:383
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:225
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:247
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:275
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:306
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:379
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:445
 #@ stephino-rpg
 msgid "Theme does not exist"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:254 lib/Stephino/Rpg/Theme.php:411
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:252 lib/Stephino/Rpg/Theme.php:417
 #@ stephino-rpg
 msgid "Theme already activated"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:283
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:316
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:388
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:280
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:311
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:384
 #@ stephino-rpg
 msgid "Cannot edit the default theme"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:321
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:316
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:534
 #@ stephino-rpg
 msgid "No file was uploaded"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:326
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:393
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:321
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:389
 #@ stephino-rpg
 msgid "Invalid file name"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:331
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:416
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:326
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:406
 #@ stephino-rpg
 msgid "Invalid file extension"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:338
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:333
 #, php-format
 #@ stephino-rpg
 msgid "Invalid file extension, expecting \"%s\""
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:347
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:422
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:342
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:412
 #@ stephino-rpg
 msgid "Invalid file"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:361
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:358
 #@ stephino-rpg
 msgid "File uploaded successfully"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:405
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:401
 #@ stephino-rpg
 msgid "Invalid JSON"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:435
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:427
 #@ stephino-rpg
 msgid "File saved successfully"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:450
+#@ stephino-rpg
+msgid "Cannot export the default theme"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:458
+#@ stephino-rpg
+msgid "Could not export theme"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:539
+#@ stephino-rpg
+msgid "Invalid theme archive"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:545
+#@ stephino-rpg
+msgid "Theme already exists"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Admin.php:573
+#@ stephino-rpg
+msgid "Invalid archive structure"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Cells.php:67
@@ -2127,43 +2156,43 @@ msgstr ""
 msgid "More %s needed"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:408
+#: lib/Stephino/Rpg/Theme.php:414
 #@ stephino-rpg
 msgid "You need to unlock the game to activate themes"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:523
+#: lib/Stephino/Rpg/Theme.php:529
 #@ stephino-rpg
 msgid "Theme name is mandatory"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:528
+#: lib/Stephino/Rpg/Theme.php:534
 #, php-format
 #@ stephino-rpg
 msgid "Theme name should have less than %d characters"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:537
+#: lib/Stephino/Rpg/Theme.php:543
 #@ stephino-rpg
 msgid "Choose another name for your theme"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:545
+#: lib/Stephino/Rpg/Theme.php:548
 #@ stephino-rpg
 msgid "Theme name already used"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:560
+#: lib/Stephino/Rpg/Theme.php:563
 #@ stephino-rpg
 msgid "Parent theme missing configuration file"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:566
+#: lib/Stephino/Rpg/Theme.php:569
 #@ stephino-rpg
 msgid "Invalid parent configuration file"
 msgstr ""
 
-#: lib/Stephino/Rpg/Theme.php:579
+#: lib/Stephino/Rpg/Theme.php:582
 #@ stephino-rpg
 msgid "Could not create new theme directory"
 msgstr ""
@@ -2212,7 +2241,7 @@ msgstr ""
 msgid "Translations"
 msgstr ""
 
-#: lib/Stephino/Rpg/Utils/Media.php:167
+#: lib/Stephino/Rpg/Utils/Media.php:184
 #@ stephino-rpg
 msgid "Free"
 msgstr ""
@@ -2229,7 +2258,7 @@ msgid "Dashboard"
 msgstr ""
 
 #: lib/Stephino/Rpg/WordPress.php:199 lib/Stephino/Rpg/WordPress.php:200
-#: lib/Stephino/Rpg/WordPress.php:254 ui/tpl/wordpress/wp-themes.php:31
+#: lib/Stephino/Rpg/WordPress.php:254 ui/tpl/wordpress/wp-themes.php:30
 #@ stephino-rpg
 msgid "Themes"
 msgstr ""
@@ -5591,7 +5620,7 @@ msgstr ""
 
 #: ui/tpl/dialogs/user/user-arena-list-page.php:84
 #: ui/tpl/dialogs/user/user-arena-play-details.php:30
-#: ui/tpl/wordpress/wp-themes.php:47 ui/tpl/wordpress/wp-themes.php:181
+#: ui/tpl/wordpress/wp-themes.php:48 ui/tpl/wordpress/wp-themes.php:206
 #@ stephino-rpg
 msgid "by"
 msgstr ""
@@ -6286,72 +6315,98 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:45
+#: ui/tpl/wordpress/wp-themes.php:46
 #@ stephino-rpg
 msgid "Theme"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:53
+#: ui/tpl/wordpress/wp-themes.php:52
 #@ stephino-rpg
 msgid "Design locked"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:75
+#: ui/tpl/wordpress/wp-themes.php:56
+#@ stephino-rpg
+msgid "Export"
+msgstr ""
+
+#: ui/tpl/wordpress/wp-themes.php:79
 #@ stephino-rpg
 msgid "Design"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:82
+#: ui/tpl/wordpress/wp-themes.php:86
 #@ stephino-rpg
 msgid "Activate"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:88
+#: ui/tpl/wordpress/wp-themes.php:92
 #@ stephino-rpg
 msgid "Modify design"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:93
+#: ui/tpl/wordpress/wp-themes.php:97
 #@ stephino-rpg
 msgid "Game Mechanics"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:114
+#: ui/tpl/wordpress/wp-themes.php:118
 #@ stephino-rpg
 msgid "Theme assets"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:135
+#: ui/tpl/wordpress/wp-themes.php:139
 #@ stephino-rpg
 msgid "Create your first theme"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:136
+#: ui/tpl/wordpress/wp-themes.php:140
 #@ stephino-rpg
 msgid "Create a new theme"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:147
+#: ui/tpl/wordpress/wp-themes.php:151
 #@ stephino-rpg
 msgid "Design modifications are only allowed as part of themes"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:154
+#: ui/tpl/wordpress/wp-themes.php:158
 #@ stephino-rpg
 msgid "Theme name"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:170
+#: ui/tpl/wordpress/wp-themes.php:174
+#@ stephino-rpg
+msgid "License"
+msgstr ""
+
+#: ui/tpl/wordpress/wp-themes.php:177
+#, php-format
+#@ stephino-rpg
+msgid "All themes are licensed under %s"
+msgstr ""
+
+#: ui/tpl/wordpress/wp-themes.php:195
 #@ stephino-rpg
 msgid "Template"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:172
+#: ui/tpl/wordpress/wp-themes.php:197
 #@ stephino-rpg
 msgid "Start a new theme by modifying an existing one"
 msgstr ""
 
-#: ui/tpl/wordpress/wp-themes.php:193
+#: ui/tpl/wordpress/wp-themes.php:218
 #@ stephino-rpg
 msgid "Create theme"
+msgstr ""
+
+#: ui/tpl/wordpress/wp-themes.php:224
+#@ stephino-rpg
+msgid "Or"
+msgstr ""
+
+#: ui/tpl/wordpress/wp-themes.php:225
+#@ stephino-rpg
+msgid "Import theme"
 msgstr ""

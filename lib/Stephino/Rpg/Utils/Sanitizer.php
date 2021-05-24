@@ -30,11 +30,9 @@ class Stephino_Rpg_Utils_Sanitizer {
             ? trim($_GET[self::CALL_THEME])
             : null;
         
+        // Cannot edit the default theme or a theme that does not exist
         if (null !== $themeSlug) {
-            $installedThemes = Stephino_Rpg_Utils_Themes::getInstalled();
-            
-            // Cannot edit the default theme or a theme that does not exist
-            if (Stephino_Rpg_Theme::THEME_DEFAULT == $themeSlug || !isset($installedThemes[$themeSlug])) {
+            if (Stephino_Rpg_Theme::THEME_DEFAULT === $themeSlug || null === Stephino_Rpg_Utils_Themes::getTheme($themeSlug)) {
                 $themeSlug = null;
             }
         }
