@@ -58,8 +58,9 @@ class Stephino_Rpg_Utils_Folder {
                 throw new Exception('Could not initialize WordPress File System');
             }
             
-            $this->_fileSystem = $wp_filesystem;
 		}
+        
+        $this->_fileSystem = $wp_filesystem;
     }
     
     /**

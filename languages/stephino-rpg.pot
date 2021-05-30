@@ -1,13 +1,13 @@
 # Copyright (c) 2021 Stephino
 # 
-# Mahatma Gandhi | Where there is love there is life.
+# Margaret Thatcher | Plan your work for today and every day, then work your plan.
 # 
 # Distributed under the GNU General Public License v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Stephino Rpg v.0.3.6\n"
-"POT-Creation-Date: 2021-05-24 04:49:55+00:00\n"
-"PO-Revision-Date: 2021-05-24 04:49:55+00:00\n"
+"Project-Id-Version: Stephino Rpg v.0.3.7\n"
+"POT-Creation-Date: 2021-05-30 17:25:51+00:00\n"
+"PO-Revision-Date: 2021-05-30 17:25:51+00:00\n"
 "Last-Translator: Stephino\n"
 "Language-Team: Stephino\n"
 "MIME-Version: 1.0\n"
@@ -386,7 +386,7 @@ msgstr ""
 #: lib/Stephino/Rpg/Db/Model/Messages.php:256
 #: lib/Stephino/Rpg/Db/Model/Messages.php:303
 #: lib/Stephino/Rpg/Utils/Lingo.php:173 lib/Stephino/Rpg/Utils/Lingo.php:264
-#: ui/tpl/dialogs/messages/messages-list.php:34
+#: ui/tpl/dialogs/messages/messages-list.php:40
 #: ui/tpl/dialogs/messages/messages-read.php:28
 #: ui/tpl/notif/notif-tutorial-rewards.php:24
 #: ui/tpl/notif/timelapse/notif-diplomacy-colony.php:28
@@ -993,23 +993,28 @@ msgstr ""
 msgid "Cannot upgrade this"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:40
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:41
 #@ stephino-rpg
 msgid "Message ID mandatory"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:71
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:68
+#@ stephino-rpg
+msgid "Invalid message type"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:99
 #@ stephino-rpg
 msgid "Invalid recipient"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:78
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:106
 #, php-format
 #@ stephino-rpg
 msgid "Subject maximum lenght of %d characters exceeded"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:88
+#: lib/Stephino/Rpg/Renderer/Ajax/Action/Message.php:116
 #, php-format
 #@ stephino-rpg
 msgid "Content maximum lenght of %d characters exceeded"
@@ -2128,6 +2133,16 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Html.php:75
 #@ stephino-rpg
 msgid "File not found"
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Html.php:76
+#@ stephino-rpg
+msgid "Working..."
+msgstr ""
+
+#: lib/Stephino/Rpg/Renderer/Html.php:77
+#@ stephino-rpg
+msgid "Uploading..."
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer.php:75
@@ -5189,12 +5204,17 @@ msgstr ""
 msgid "%s abundance: %s"
 msgstr ""
 
-#: ui/tpl/dialogs/messages/messages-list.php:48
+#: ui/tpl/dialogs/messages/messages-list.php:22
+#@ stephino-rpg
+msgid "Delete all"
+msgstr ""
+
+#: ui/tpl/dialogs/messages/messages-list.php:54
 #@ stephino-rpg
 msgid "Delete message"
 msgstr ""
 
-#: ui/tpl/dialogs/messages/messages-list.php:67
+#: ui/tpl/dialogs/messages/messages-list.php:73
 #@ stephino-rpg
 msgid "You have no messages"
 msgstr ""

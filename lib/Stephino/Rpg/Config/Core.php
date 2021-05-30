@@ -1017,7 +1017,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     
     /**
      * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
-     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.6&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.7&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
      * @sensitive true
      * @return boolean Chat Room

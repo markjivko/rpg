@@ -13,8 +13,9 @@
 class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Ajax_Action {
 
     // Request keys
-    const REQUEST_MESSAGE_ID = 'messageId';
-    const REQUEST_MESSAGE_TO = 'messageTo';
+    const REQUEST_MESSAGE_ID      = 'messageId';
+    const REQUEST_MESSAGE_TO      = 'messageTo';
+    const REQUEST_MESSAGE_TYPE    = 'messageType';
     const REQUEST_MESSAGE_SUBJECT = 'messageSubject';
     const REQUEST_MESSAGE_CONTENT = 'messageContent';
     
@@ -33,17 +34,44 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
      */
     public static function ajaxDelete($data) {
         // Get the message ID
-        $messageId = isset($data[self::REQUEST_MESSAGE_ID]) ? intval($data[self::REQUEST_MESSAGE_ID]) : null;
+        $messageId = isset($data[self::REQUEST_MESSAGE_ID]) ? intval($data[self::REQUEST_MESSAGE_ID]) : 0;
         
-        // Invalid message
-        if (null === $messageId) {
+        // Invalid message ID
+        if ($messageId <= 0) {
             throw new Exception(__('Message ID mandatory', 'stephino-rpg'));
         }
         
         // Delete the message
-        $result = Stephino_Rpg_Db::get()->tableMessages()->deleteInboxMessage(
+        $result = Stephino_Rpg_Db::get()->tableMessages()->deleteInboxById(
             Stephino_Rpg_TimeLapse::get()->userId(),
             $messageId
+        );
+        
+        return Stephino_Rpg_Renderer_Ajax::wrap($result);
+    }
+    
+    /**
+     * Delete all messages of a certain type
+     * 
+     * @param array $data Data containing <ul>
+     * <li><b>messageType</b> (string) Message Type</li>
+     * </ul>
+     * @return array
+     * @throws Exception
+     */
+    public static function ajaxDeleteAll($data) {
+        // Get the message type
+        $messageType = isset($data[self::REQUEST_MESSAGE_TYPE]) ? trim($data[self::REQUEST_MESSAGE_TYPE]) : '';
+        
+        // Invalid message type
+        if (!in_array($messageType, Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPES)) {
+            throw new Exception(__('Invalid message type', 'stephino-rpg'));
+        }
+        
+        // Delete the messages
+        $result = Stephino_Rpg_Db::get()->tableMessages()->deleteInboxByType(
+            Stephino_Rpg_TimeLapse::get()->userId(),
+            $messageType
         );
         
         return Stephino_Rpg_Renderer_Ajax::wrap($result);

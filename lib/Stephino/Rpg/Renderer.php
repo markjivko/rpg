@@ -164,8 +164,13 @@ class Stephino_Rpg_Renderer {
                 // Enable web caching
                 null !== $ajaxCache && $ajaxCache->sendHeaders();
                 
+                // PHP incorrectly assumes that .webm files are "video/webm"; for this project all .webm files are audio containers
+                $mimeType = preg_match('%\.webm%i', $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT])
+                    ? 'audio/webm'
+                    : mime_content_type($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]);
+                
                 // Output the file
-                header("Content-Type: " . mime_content_type($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]));
+                header("Content-Type: $mimeType");
                 header("Content-Length: " . filesize($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]));
                 readfile($result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_RESULT]);
             } else {

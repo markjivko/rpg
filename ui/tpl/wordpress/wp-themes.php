@@ -152,7 +152,7 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                                 </div>
                             </div>
                         <?php endif;?>
-                        <div class="row mt-4">
+                        <div class="row mt-4 form-row">
                             <div class="col-12 col-lg-3">
                                 <label for="themeName">
                                     <h4><?php echo esc_html__('Theme name', 'stephino-rpg');?></h4>
@@ -168,7 +168,7 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                                     placeholder="<?php echo esc_attr__('Theme name');?>..." />
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row form-row">
                             <div class="col-12 col-lg-3">
                                 <label for="themeLicense">
                                     <h4><?php echo esc_html__('License', 'stephino-rpg');?></h4>
@@ -189,7 +189,7 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                                 </a>
                             </div>
                         </div>
-                        <div class="row">
+                        <div class="row form-row">
                             <div class="col-12 col-lg-3">
                                 <label for="themeTemplate">
                                     <h4><?php echo esc_html__('Template', 'stephino-rpg');?></h4>
@@ -219,7 +219,7 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                             </div>
                         </div>
                     </form>
-                    <div class="row mt-4">
+                    <div class="row mt-4 form-row">
                         <div class="col-12">
                             <span data-role="divider"><?php echo esc_html__('Or', 'stephino-rpg');?></span>
                             <button class="btn btn-primary w-100" data-role="import"><?php echo esc_html__('Import theme', 'stephino-rpg');?></button>

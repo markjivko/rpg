@@ -69,10 +69,12 @@ class Stephino_Rpg_Renderer_Html {
             array('bootstrap', 'wp-themes'), 
             array('wp-themes'),
             array(
-                'error_ajax'   => esc_html__('Please try again later', 'stephino-rpg'),
-                'label_upload' => esc_html__('Upload', 'stephino-rpg'),
-                'label_save'   => esc_html__('Save', 'stephino-rpg'),
-                'warning_file' => esc_html__('File not found', 'stephino-rpg'),
+                'error_ajax'     => esc_html__('Please try again later', 'stephino-rpg'),
+                'label_upload'   => esc_html__('Upload', 'stephino-rpg'),
+                'label_save'     => esc_html__('Save', 'stephino-rpg'),
+                'warning_file'   => esc_html__('File not found', 'stephino-rpg'),
+                'task_working'   => esc_html__('Working...', 'stephino-rpg'),
+                'task_uploading' => esc_html__('Uploading...', 'stephino-rpg'),
             )
         );
         

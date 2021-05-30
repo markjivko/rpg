@@ -5,6 +5,7 @@ Donate link: https://gum.co/stephino-rpg
 Tags: rpg, fun, gutenberg, game, games, platformer, pwa, strategy, mmorpg
 Requires at least: 5.0
 Tested up to: 5.7
+Requires PHP: 7.0
 Stable tag: trunk
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.txt
@@ -137,6 +138,16 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 6. Earn gems by designing and playing platformer mini-games in the game arena
 
 == Changelog ==
+
+= [0.3.7] 2021-05-30 =
+* Bug fixes
+  * Fixed uninstall bug
+  * Fixed Game Mechanics "Add" button functionality
+  
+* Additional changes
+  * Added "Delete all" button for messages
+  * Several UI fixes
+  * Improved UX for themes admin
 
 = [0.3.6] 2021-05-24 =
 * Enhancements

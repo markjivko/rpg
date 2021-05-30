@@ -234,7 +234,7 @@ class Stephino_Rpg_Db {
     public function purge() {
         // Go through all the tables
         foreach ($this->_tableInstances as $table) {
-            $this->_wpDb->query('DROP TABLE `' . $table->getTableName() . '`');
+            $this->_wpDb->query('DROP TABLE IF EXISTS `' . $table->getTableName() . '`');
         }
     }
 

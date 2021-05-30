@@ -15,6 +15,12 @@
 <div data-role="message-icon" data-msg-type="<?php echo $messageType;?>"></div>
 <?php if (is_array($messageData) && count($messageData)):?>
     <div data-role="message-holder">
+        <button 
+            class="btn btn-default float-right mb-4" 
+            data-click="messageDeleteAll" 
+            data-click-args="<?php echo $messageType;?>">
+            <span><?php echo esc_attr__('Delete all', 'stephino-rpg');?></span>
+        </button>
         <?php foreach($messageData as $message): ?>
             <div class="row col-12 no-gutters framed align-items-center message <?php echo ($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ] ? '' : 'active');?>">
                 <div class="col-6 col-lg-8 order-first">
