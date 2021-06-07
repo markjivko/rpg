@@ -14,6 +14,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
 
     // Response keys
     const DATA_HEARTBEAT_QUEUES = 'heartBeatQueues';
+    const DATA_HEARTBEAT_LANG   = 'heartBeatLang';
     
     // Request keys
     const REQUEST_KEY      = 'key';
@@ -84,17 +85,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
             throw new Exception(__('Language not defined', 'stephino-rpg'));
         }
         
-        // Valid user
-        if (null !== $currentUser = wp_get_current_user()) {
-            // Commit to user cache
-            Stephino_Rpg_Cache_User::get()
-                ->write(Stephino_Rpg_Cache_User::KEY_LANG, $locale)
-                ->commit();
-            
-            // Change WordPress locale for this user
-            $currentUser->locale = $locale;
-            wp_update_user($currentUser);
-        }
+        // Commit to user cache
+        Stephino_Rpg_Cache_User::get()
+            ->write(Stephino_Rpg_Cache_User::KEY_LANG, $locale)
+            ->commit();
     }
     
     /**
@@ -379,7 +373,8 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         // Wrap the result
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
-                self::DATA_HEARTBEAT_QUEUES => $queuesData
+                self::DATA_HEARTBEAT_QUEUES => $queuesData,
+                self::DATA_HEARTBEAT_LANG   => Stephino_Rpg_Config::lang(),
             ), 
             $cityId <= 0 ? null : $cityId
         );

@@ -382,15 +382,16 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
      * @return array
      */
     protected function _initData() {
+        $tableConvoys = $this->getDb()->tableConvoys()->getTableName();
+        
+        // Prepare the query
+        $query = "SELECT * FROM `$tableConvoys` " . PHP_EOL
+            . "WHERE `" . Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_USER_ID . "` = {$this->_userId}" 
+                . " OR `" . Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_USER_ID . "` = {$this->_userId}";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
         // Get the results
-        return $this->getDb()->getWpdb()->get_results(
-            "SELECT * FROM `" . $this->getDb()->tableConvoys() . "`"
-            . " WHERE ("
-                . " `" . $this->getDb()->tableConvoys() . "`.`" . Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_USER_ID . "` = '" . $this->_userId . "'"
-                . " OR `" . $this->getDb()->tableConvoys() . "`.`" . Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_USER_ID . "` = '" . $this->_userId . "'"
-            . " )", 
-            ARRAY_A
-        );
+        return $this->getDb()->getWpdb()->get_results($query, ARRAY_A);
     }
     
     /**
@@ -427,7 +428,14 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
             }
 
             // City already built here
-            if (null !== $this->getDb()->tableCities()->getByIslandAndIndex($targetIslandId, $targetIslandIndex)) {
+            if (null !== $cityData = $this->getDb()->tableCities()->getByIslandAndIndex($targetIslandId, $targetIslandIndex)) {
+                // (race condition) Our city already created by another thread
+                if ($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID] == $this->_userId) {
+                    $messageDetails = array(
+                        (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID], 
+                        (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID]
+                    );
+                }
                 break;
             }
             
@@ -1044,6 +1052,9 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
             }
         }
         
+        // Store the initial convoy payload
+        $attEntities = $finalConvoyPayload[self::PAYLOAD_ENTITIES];
+        
         // Store a copy of the pre-attack layout
         $attTroopsAfter = $attTroopsBefore;
         $cityTroopsAfter = $cityTroopsBefore;
@@ -1056,15 +1067,22 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
         $cityWalls[self::ARSENAL_DEFENSE] -= $attTroopsAfter[self::ARSENAL_OFFENSE];
         $attTroopsAfter[self::ARSENAL_DEFENSE] -= $cityWalls[self::ARSENAL_OFFENSE];
         
+        // Prepare city walls
+        $cityWallsIntact = true;
+        
         // Gone in the first wave
         if ($attTroopsAfter[self::ARSENAL_DEFENSE] <= 0) {
             // Send the message
             $this->_attackMessage(
                 $attUserId, 
                 self::ATTACK_DEFEAT_CRUSHING, 
-                $finalConvoyPayload, 
+                array(
+                    self::PAYLOAD_ENTITIES  => $attEntities,
+                    self::PAYLOAD_RESOURCES => $finalConvoyPayload[self::PAYLOAD_RESOURCES]
+                ), 
                 $dataRow, 
-                $buildingData
+                $buildingData,
+                $cityWallsIntact
             );
             
             // Remove the attack
@@ -1072,6 +1090,8 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
         } else {
             // City walls breached
             if ($cityWalls[self::ARSENAL_DEFENSE] <= 0) {
+                $cityWallsIntact = false;
+                
                 // Scale-down the invading army
                 if ($attTroopsBefore[self::ARSENAL_DEFENSE] > 0) {
                     $attTroopsAfter[self::ARSENAL_OFFENSE] *= (
@@ -1091,9 +1111,13 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                         $cityTroopsAfter[self::ARSENAL_DEFENSE] <= 0 
                             ? self::ATTACK_DEFEAT_BITTER 
                             : self::ATTACK_DEFEAT_HEROIC, 
-                        $finalConvoyPayload, 
+                        array(
+                            self::PAYLOAD_ENTITIES  => $attEntities,
+                            self::PAYLOAD_RESOURCES => $finalConvoyPayload[self::PAYLOAD_RESOURCES]
+                        ), 
                         $dataRow,
-                        $buildingData
+                        $buildingData,
+                        $cityWallsIntact
                     );
                     
                     // Remove attack
@@ -1197,18 +1221,26 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                         $this->_attackMessage(
                             $attUserId, 
                             self::ATTACK_VICTORY_HEROIC, 
-                            $finalConvoyPayload, 
+                            array(
+                                self::PAYLOAD_ENTITIES  => $attEntities,
+                                self::PAYLOAD_RESOURCES => $finalConvoyPayload[self::PAYLOAD_RESOURCES]
+                            ), 
                             $dataRow,
-                            $buildingData
+                            $buildingData,
+                            $cityWallsIntact
                         );
                     } else {
                         // Send the message
                         $this->_attackMessage(
                             $attUserId, 
                             self::ATTACK_VICTORY_BITTER, 
-                            $finalConvoyPayload, 
+                            array(
+                                self::PAYLOAD_ENTITIES  => $attEntities,
+                                self::PAYLOAD_RESOURCES => $finalConvoyPayload[self::PAYLOAD_RESOURCES]
+                            ), 
                             $dataRow,
-                            $buildingData
+                            $buildingData,
+                            $cityWallsIntact
                         );
                         
                         // Remove attack
@@ -1234,18 +1266,26 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                     $this->_attackMessage(
                         $attUserId, 
                         self::ATTACK_DEFEAT_RETREAT, 
-                        $finalConvoyPayload, 
+                        array(
+                            self::PAYLOAD_ENTITIES  => $attEntities,
+                            self::PAYLOAD_RESOURCES => $finalConvoyPayload[self::PAYLOAD_RESOURCES]
+                        ), 
                         $dataRow,
-                        $buildingData
+                        $buildingData,
+                        $cityWallsIntact
                     );
                 } else {
                     // Send the message
                     $this->_attackMessage(
                         $attUserId, 
                         self::ATTACK_DEFEAT_CRUSHING, 
-                        $finalConvoyPayload, 
+                        array(
+                            self::PAYLOAD_ENTITIES  => $attEntities,
+                            self::PAYLOAD_RESOURCES => $finalConvoyPayload[self::PAYLOAD_RESOURCES]
+                        ), 
                         $dataRow,
-                        $buildingData
+                        $buildingData,
+                        $cityWallsIntact
                     );
                     
                     // Remove attack
@@ -1279,13 +1319,14 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
     /**
      * Send the post-attack message to both parties
      * 
-     * @param int    $attackerUserId  Attacker user ID
-     * @param string $attackStatus    Attack status
-     * @param array  $attackerPayload Attacker payload
-     * @param array  $dataRow         Convoy DB Row
-     * @param array  $buildingData    Building Data
+     * @param int     $attackerUserId  Attacker user ID
+     * @param string  $attackStatus    Attack status
+     * @param array   $attackerPayload Attacker payload
+     * @param array   $dataRow         Convoy DB Row
+     * @param array   $buildingData    Building Data
+     * @param boolean $cityWallsIntact City walls are intact
      */
-    protected function _attackMessage($attackerUserId, $attackStatus, $attackerPayload, $dataRow, &$buildingData) {
+    protected function _attackMessage($attackerUserId, $attackStatus, $attackerPayload, $dataRow, &$buildingData, $cityWallsIntact) {
         // Prepare the attack status for the defender
         $defenderAttackStatus = self::ATTACK_VICTORY_HEROIC;
         
@@ -1355,7 +1396,9 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                 // Payload
                 $attackerPayload,
                 // Convoy Row
-                $dataRow
+                $dataRow,
+                // City Walls
+                $cityWallsIntact,
             ),
             false,
             $attackerUserId
@@ -1374,7 +1417,9 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                 // Payload
                 $attackerPayload,
                 // Convoy Row
-                $dataRow
+                $dataRow,
+                // City Walls
+                $cityWallsIntact,
             )
         );
         

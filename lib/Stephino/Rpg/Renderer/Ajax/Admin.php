@@ -15,6 +15,8 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
     /**
      * Request keys
      */
+    const REQUEST_SAVE_LANG      = 'saveLang';
+    const REQUEST_SAVE_DATA      = 'saveData';
     const REQUEST_STATS_TYPE     = 'statsType';
     const REQUEST_STATS_YEAR     = 'statsYear';
     const REQUEST_STATS_MONTH    = 'statsMonth';
@@ -111,6 +113,12 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
         if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have permission to export the game configuration', 'stephino-rpg'));
         }
+        
+        // English-only
+        if (Stephino_Rpg_Config::lang() !== null) {
+            throw new Exception(__('Please refresh and try again', 'stephino-rpg'));
+        }
+        
         return Stephino_Rpg_Config::export(false, true);
     }
     
@@ -120,6 +128,11 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
     public static function ajaxAdminResetConfig() {
         if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()) {
             throw new Exception(__('You do not have permission to reset the game configuration', 'stephino-rpg'));
+        }
+        
+        // English-only
+        if (Stephino_Rpg_Config::lang() !== null) {
+            throw new Exception(__('Please refresh and try again', 'stephino-rpg'));
         }
         
         return Stephino_Rpg_Config::reset();
@@ -157,13 +170,22 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
             throw new Exception(__('You need to unlock the game to save your changes', 'stephino-rpg'));
         }
         
-        // Get the data
-        if (!is_array($data) || !count($data)) {
+        // Get the language and data
+        $saveLang = isset($data[self::REQUEST_SAVE_LANG]) ? $data[self::REQUEST_SAVE_LANG] : null;
+        $saveData = isset($data[self::REQUEST_SAVE_DATA]) ? $data[self::REQUEST_SAVE_DATA] : null;
+        
+        // Validate the language (maybe the user set a different language in another tab)
+        if (Stephino_Rpg_Config::lang() !== $saveLang) {
+            throw new Exception(__('Please refresh and try again', 'stephino-rpg'));
+        }
+        
+        // Sanitize the data
+        if (!is_array($saveData) || !count($saveData)) {
             throw new Exception(__('Invalid configuration object', 'stephino-rpg'));
         }
 
         // Set the data
-        Stephino_Rpg_Config::set($data);
+        Stephino_Rpg_Config::set($saveData);
 
         // Validate and save the data
         Stephino_Rpg_Config::save(true);
@@ -549,10 +571,11 @@ class Stephino_Rpg_Renderer_Ajax_Admin {
         $tempPath = Stephino_Rpg_Utils_Themes::getPath(false);
         
         // Prepare the parent structure in case it does not exist
-        for ($level = 2; $level >= 1; $level--) {
-            if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir(dirname($tempPath, $level))) {
-                Stephino_Rpg_Utils_Folder::get()->fileSystem()->mkdir(dirname($tempPath, $level));
-            }
+        if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir(dirname(dirname($tempPath)))) {
+            Stephino_Rpg_Utils_Folder::get()->fileSystem()->mkdir(dirname(dirname($tempPath)));
+        }
+        if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir(dirname($tempPath))) {
+            Stephino_Rpg_Utils_Folder::get()->fileSystem()->mkdir(dirname($tempPath));
         }
         
         // Folder needs clean-up

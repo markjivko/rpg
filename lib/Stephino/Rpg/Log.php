@@ -22,11 +22,29 @@ class Stephino_Rpg_Log {
     }
     
     /**
+     * Debug logging (file and line from parent caller)
+     * 
+     * @ignore
+     */
+    public static function debugParent() {
+        // Disabled in production 
+    }
+    
+    /**
      * Info logging
      * 
      * @ignore
      */
     public static function info() {
+        // Disabled in production 
+    }
+    
+    /**
+     * Info logging (file and line from parent caller)
+     * 
+     * @ignore
+     */
+    public static function infoParent() {
         // Disabled in production 
     }
     
@@ -40,11 +58,29 @@ class Stephino_Rpg_Log {
     }
     
     /**
+     * Warning logging (file and line from parent caller)
+     * 
+     * @ignore
+     */
+    public static function warningParent() {
+        // Disabled in production 
+    }
+    
+    /**
      * Error logging
      * 
      * @ignore
      */
     public static function error() {
+        // Disabled in production 
+    }
+    
+    /**
+     * Error logging (file and line from parent caller)
+     * 
+     * @ignore
+     */
+    public static function errorParent() {
         // Disabled in production 
     }
     

@@ -62,8 +62,12 @@ class Stephino_Rpg_TimeLapse_Support_Entities extends Stephino_Rpg_TimeLapse_Abs
      */
     protected function _initData() {
         return $this->getDb()->getWpdb()->get_results(
-            "SELECT * FROM `" . $this->getDb()->tableEntities() . "`"
-            . " WHERE `" . $this->getDb()->tableEntities() . "`.`" . Stephino_Rpg_Db_Table_Entities::COL_ENTITY_USER_ID . "` = '" . $this->_userId . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getDb()->tableEntities(),
+                array(
+                    Stephino_Rpg_Db_Table_Entities::COL_ENTITY_USER_ID => $this->_userId
+                )
+            ),
             ARRAY_A
         );
     }

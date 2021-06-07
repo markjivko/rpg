@@ -84,11 +84,13 @@ class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
      * @return int|null New Island ID or Null on error
      */
     public function create($islandConfigId, $statueConfigId) {
-        $result = $this->getDb()->getWpDb()->insert(
-            $this->getTableName(), 
-            array(
-                self::COL_ISLAND_CONFIG_ID        => abs((int) $islandConfigId),
-                self::COL_ISLAND_STATUE_CONFIG_ID => abs((int) $statueConfigId),
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                array(
+                    self::COL_ISLAND_CONFIG_ID        => abs((int) $islandConfigId),
+                    self::COL_ISLAND_STATUE_CONFIG_ID => abs((int) $statueConfigId)
+                )
             )
         );
         
@@ -138,10 +140,13 @@ class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
         
         // Get a random island by ID
         $islandRows = $this->getDb()->getWpDb()->get_results(
-            "SELECT *"
-            . " FROM `$this`"
-            . " WHERE `" . self::COL_ISLAND_IS_FULL . "` = '0'"
-            . " LIMIT 1000",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_ISLAND_IS_FULL => 0,
+                ),
+                1000
+            ),
             ARRAY_A
         );
 
@@ -179,15 +184,15 @@ class Stephino_Rpg_Db_Table_Islands extends Stephino_Rpg_Db_Table {
         if (is_array($islandIds)) {
             if (count($islandIds)) {
                 // Prepare the multi-update payload
-                $dbUpdateData = array();
+                $fieldsArray = array();
                 foreach ($islandIds as $islandId) {
-                    $dbUpdateData[abs((int) $islandId)] = array(
+                    $fieldsArray[abs((int) $islandId)] = array(
                         self::COL_ISLAND_IS_FULL => $full ? 1 : 0
                     );
                 }
 
                 // Valid query produced
-                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate($dbUpdateData, $this->getTableName(), self::COL_ID)) {
+                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate($this->getTableName(), self::COL_ID, $fieldsArray)) {
                     $updateResult = $this->getDb()->getWpDb()->query($multiUpdateQuery);
                 }
             }

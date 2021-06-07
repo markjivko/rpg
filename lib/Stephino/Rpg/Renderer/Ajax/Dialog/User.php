@@ -129,7 +129,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
                 break;
             
             default:
-                throw new Exception(__('Invalid trade type', 'stephino-rpg'));
+                throw new Exception(__('Invalid type of transaction', 'stephino-rpg'));
         }
         
         // Prepare the user data
@@ -143,7 +143,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
             throw new Exception(__('User not initialized', 'stephino-rpg'));
         }
         
-        // Not enough resources
         if (floor($userData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM]) <= 0) {
             throw new Exception(
                 sprintf(

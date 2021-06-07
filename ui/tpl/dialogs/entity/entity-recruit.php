@@ -42,7 +42,7 @@
                 $entityConfig,
                 $buildingData[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
                 $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
-                $entityCount
+                1
             );
             if (count($productionData)) {
                 $productionTitle = __('Garrison effect', 'stephino-rpg');
@@ -87,9 +87,11 @@
                 ?></span>
             </button>
         <?php else:?>
-            <div class="d-flex justify-content-center">
-                <span class="badge badge-warning"><?php echo esc_html__('Not enough resources', 'stephino-rpg');?></span>
-            </div>
+            <button class="btn w-100" data-click="goBack">
+                <span>
+                    <b><?php echo esc_html__('Go Back', 'stephino-rpg');?></b>
+                </span>
+            </button>
         <?php endif; ?>
     <?php endif;?>
 </div>

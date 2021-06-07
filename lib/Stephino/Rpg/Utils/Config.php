@@ -156,6 +156,7 @@ class Stephino_Rpg_Utils_Config {
             // Store the value
             $result[$xValue] = $yValue;
         }
+        reset($result);
         
         return $valueFrom == $valueTo ? current($result) : $result;
     }

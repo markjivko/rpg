@@ -95,14 +95,16 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
      * @return int|null New Building ID or Null on error
      */
     public function create($userId, $islandId, $cityId, $configId, $level = 1) {
-        $result = $this->getDb()->getWpDb()->insert(
-            $this->getTableName(), 
-            array(
-                self::COL_BUILDING_USER_ID   => abs((int) $userId),
-                self::COL_BUILDING_ISLAND_ID => abs((int) $islandId),
-                self::COL_BUILDING_CITY_ID   => abs((int) $cityId),
-                self::COL_BUILDING_CONFIG_ID => abs((int) $configId),
-                self::COL_BUILDING_LEVEL     => abs((int) $level),
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(),
+                array(
+                    self::COL_BUILDING_USER_ID   => abs((int) $userId),
+                    self::COL_BUILDING_ISLAND_ID => abs((int) $islandId),
+                    self::COL_BUILDING_CITY_ID   => abs((int) $cityId),
+                    self::COL_BUILDING_CONFIG_ID => abs((int) $configId),
+                    self::COL_BUILDING_LEVEL     => abs((int) $level)
+                )
             )
         );
         
@@ -118,8 +120,12 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
      */
     public function getByUser($userId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `" . $this->getTableName() . "`"
-            . " WHERE `" . self::COL_BUILDING_USER_ID  . "` = '" . intval($userId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_BUILDING_USER_ID => abs((int) $userId)
+                )
+            ), 
             ARRAY_A
         );
         
@@ -134,8 +140,12 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
      */
     public function getByCity($cityId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_BUILDING_CITY_ID . "` = '" . intval($cityId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_BUILDING_CITY_ID => abs((int) $cityId)
+                )
+            ), 
             ARRAY_A
         );
         
@@ -151,9 +161,13 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
      */
     public function getByCityAndConfig($cityId, $buildingConfigId) {
         return $this->getDb()->getWpDb()->get_row(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_BUILDING_CITY_ID . "` = '" . intval($cityId) . "'"
-            . " AND `" . self::COL_BUILDING_CONFIG_ID . "` = '" . intval($buildingConfigId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_BUILDING_CITY_ID   => abs((int) $cityId),
+                    self::COL_BUILDING_CONFIG_ID => abs((int) $buildingConfigId)
+                )
+            ), 
             ARRAY_A
         );
     }
@@ -165,10 +179,12 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_BUILDING_USER_ID => abs((int) $userId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(), 
+                array(
+                    self::COL_BUILDING_USER_ID => abs((int) $userId)
+                )
             )
         );
     }
@@ -180,10 +196,12 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByCity($cityId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_BUILDING_CITY_ID => abs((int) $cityId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_BUILDING_CITY_ID => abs((int) $cityId)
+                )
             )
         );
     }
@@ -200,20 +218,20 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
         // Valid data set
         if (is_array($buildingWorkers) && count($buildingWorkers)) {
             // Prepare the fields info
-            $fieldsInfo = array();
+            $fieldsArray = array();
             foreach ($buildingWorkers as $buildingId => $buildingWorkerCount) {
                 $buildingWorkerCount = (int)$buildingWorkerCount;
 
                 // Negative values not allowed
                 if ($buildingWorkerCount >= 0) {
-                    $fieldsInfo[(int) $buildingId] = array(
+                    $fieldsArray[(int) $buildingId] = array(
                         self::COL_BUILDING_WORKERS => (int) $buildingWorkerCount,
                     );
                 }
             }
 
             // Prepare the query
-            if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate($fieldsInfo, $this->getTableName(), self::COL_ID)) {
+            if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate($this->getTableName(), self::COL_ID, $fieldsArray)) {
                 $result = $this->getDb()->getWpDb()->query($multiUpdateQuery);
             }
         }

@@ -178,7 +178,7 @@ foreach ($queueData as $queueType => $queueRows):
                                 class="btn btn-default w-100"
                                 data-click="entityDialog" 
                                 data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
-                                <span><b><?php echo esc_html__('Dequeue', 'stephino-rpg');?></b></span>
+                                <span><b><?php echo esc_html__('Cancel', 'stephino-rpg');?></b></span>
                             </button>
                         <?php break; case Stephino_Rpg_Db_Table_Queues::ITEM_TYPE_RESEARCH: ?>
                             <button 

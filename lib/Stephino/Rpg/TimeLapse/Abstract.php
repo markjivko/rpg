@@ -182,9 +182,7 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
             $tableIdentifier = $updateStructure[$tableName][0];
             
             // Prepare the query
-            if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $updateInfo, $tableName, $tableIdentifier
-            )) {
+            if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate($tableName, $tableIdentifier, $updateInfo, false)) {
                 $this->getDb()->getWpDb()->query($multiUpdateQuery);
             }
         }
@@ -195,9 +193,7 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
             $tableIdentifier = $removalStructure[$tableName];
             
             // Prepare the query
-            if (null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::getMultiDelete(
-                $removeInfo, $tableName, $tableIdentifier
-            )) {
+            if (null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::multiDelete($tableName, $tableIdentifier, $removeInfo)) {
                 $this->getDb()->getWpDb()->query($multiDeleteQuery);
             }
         }
@@ -342,6 +338,8 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
                                             (int) $itemData[3][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID],
                                             // toCityId
                                             (int) $itemData[3][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID],
+                                            // cityWalls
+                                            !!$itemData[4],
                                         );
                                     break;
                                 
@@ -663,14 +661,14 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
      * Time-Lapse
      * 
      * @param Stephino_Rpg_Db $dbObject DataBase object
-     * @param int               $userId   Current User ID
+     * @param int             $userId   Current User ID
      */
     public function __construct(Stephino_Rpg_Db $dbObject, $userId) {
         // Store the DB object
         $this->_db = $dbObject;
         
         // Store the user data
-        $this->_userId = $userId;
+        $this->_userId = abs((int) $userId);
         
         // Store the worker data
         $this->setData(static::KEY, $this->_initData());
@@ -709,6 +707,7 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
         // Search for the value
         if (isset(self::$_workerData[$coreKey]) && isset(self::$_workerData[$coreKey][$this->_userId])) {
             if (isset(self::$_workerData[$coreKey][$this->_userId][$key])) {
+                reset(self::$_workerData[$coreKey][$this->_userId][$key]);
                 return self::$_workerData[$coreKey][$this->_userId][$key];
             }
         }

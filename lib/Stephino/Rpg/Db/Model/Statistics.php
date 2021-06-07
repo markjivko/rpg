@@ -171,9 +171,9 @@ class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
             );
         }
         if (count($multiInsertArray) 
-            && null !== $multiInsertQuery = Stephino_Rpg_Utils_Db::getMultiInsert(
-                $multiInsertArray, 
-                $this->getDb()->tableStatistics()->getTableName()
+            && null !== $multiInsertQuery = Stephino_Rpg_Utils_Db::multiInsert(
+                $this->getDb()->tableStatistics()->getTableName(), 
+                $multiInsertArray
             )) {
             $this->getDb()->getWpDb()->query($multiInsertQuery);
         }
@@ -194,11 +194,10 @@ class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
                 );
             }
         }
-        if (count($multiUpdateArray)
-            && null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $multiUpdateArray, 
+        if (count($multiUpdateArray) && null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 $this->getDb()->tableStatistics()->getTableName(), 
-                Stephino_Rpg_Db_Table_Statistics::COL_ID
+                Stephino_Rpg_Db_Table_Statistics::COL_ID,
+                $multiUpdateArray
             )) {
             $this->getDb()->getWpDb()->query($multiUpdateQuery);
         }

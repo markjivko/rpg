@@ -86,20 +86,6 @@ class Stephino_Rpg_Config_Unit extends Stephino_Rpg_Config_Item_Single {
     protected $_troopMass = 0;
 
     /**
-     * Loot box size
-     *
-     * @var int
-     */
-    protected $_lootBox = 0;
-
-    /**
-     * Unit Building
-     * 
-     * @var int|null Stephino_Rpg_Config_Building ID
-     */
-    protected $_buildingId = null;
-    
-    /**
      * Unit name<br/>
      * <span class="info">
      *     Image files are stored in <b>{current theme}/img/story/units/{id}/</b><br/> 

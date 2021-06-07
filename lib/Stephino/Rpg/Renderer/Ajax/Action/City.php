@@ -58,7 +58,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Name is too long
-        if (mb_strlen($cityName) > self::MAX_LENGTH_CITY_NAME) {
+        if (strlen($cityName) > self::MAX_LENGTH_CITY_NAME) {
             throw new Exception(
                 sprintf(
                     __('The name is too long, please keep it shorter than %d characters', 'stephino-rpg'), 
@@ -248,7 +248,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Inform the user
-        echo esc_html__('Metropolis moved successfully', 'stephino-rpg');
+        echo esc_html__('The metropolis moved successfully', 'stephino-rpg');
         
         // Store the result
         return Stephino_Rpg_Renderer_Ajax::wrap(

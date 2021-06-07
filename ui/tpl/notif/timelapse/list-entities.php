@@ -39,25 +39,28 @@ if (isset($entitiesList) && is_array($entitiesList)):
                 // Get the item card details
                 list($itemCardFn, $itemCardArgs) = Stephino_Rpg_Utils_Config::getItemCardAttributes($entityConfig);
         ?>
-            <div class="col-6">
-                <div class="entity">
-                    <div 
-                        class="icon" 
-                        data-click="<?php echo $itemCardFn;?>"
-                        data-click-args="<?php echo $itemCardArgs;?>"
-                        <?php if (null !== $entitiesCityId):?>
-                            data-click-city-id="<?php echo (int) $entitiesCityId;?>"
-                        <?php endif;?>
-                        data-effect="background" 
-                        data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
-                    </div>
+            <div class="col-12 col-lg-3 text-center"
+                data-role="entity" 
+                data-entity-count="<?php echo $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT];?>"
+                data-entity-type="<?php echo $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_TYPE];?>"
+                data-entity-config="<?php echo $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CONFIG_ID];?>" >
+                <div 
+                    class="item-card framed mt-4" 
+                    data-click="<?php echo $itemCardFn;?>"
+                    data-click-args="<?php echo $itemCardArgs;?>"
+                    <?php if (null !== $entitiesCityId):?>
+                        data-click-city-id="<?php echo (int) $entitiesCityId;?>"
+                    <?php endif;?>
+                    data-effect="background" 
+                    data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
                     <span>
-                        <span 
-                            data-effect="help"
-                            data-effect-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>">
-                            <b>
-                                <?php /* false set in Stephino_Rpg_TimeLapse_Convoys::_spy() */ if (false !== $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]):?>
-                                    <?php 
+                        <?php echo $entityConfig->getName(true);?>
+                    </span>
+                    <span class="label" data-html="true" title="&times; <?php echo number_format($entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]);?>">
+                        <span>
+                            &times; <b><?php 
+                                // false set in Stephino_Rpg_TimeLapse_Convoys::_spy()
+                                if (false !== $entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]) {
                                         echo (
                                             $entityCountExact 
                                                 ? number_format($entityData[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_COUNT]) 
@@ -71,13 +74,10 @@ if (isset($entitiesList) && is_array($entitiesList)):
                                                     0
                                                 )
                                         );
-                                    ?>
-                                <?php else:?>
-                                    &#x1F6AB;
-                                <?php endif;?>
-                            </b> 
-                            &times; 
-                            <?php echo $entityConfig->getName(true);?>
+                                } else {
+                                    echo '&#x1F6AB;';
+                                }
+                            ?></b>
                         </span>
                     </span>
                 </div>

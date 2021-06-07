@@ -315,7 +315,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
      */
     public static function ajaxStages($data) {
         Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
-        
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }

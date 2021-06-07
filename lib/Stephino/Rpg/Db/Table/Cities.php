@@ -224,7 +224,12 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
         }
         
         // Create the entry
-        $result = $this->getDb()->getWpDb()->insert($this->getTableName(), $insertData);
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                $insertData
+            )
+        );
         
         // Get the new city ID
         return (false !== $result ? $this->getDb()->getWpDb()->insert_id : null);
@@ -238,8 +243,12 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      */
     public function getByUser($userId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_CITY_USER_ID  . "` = '" . abs((int) $userId) . "'", 
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_CITY_USER_ID => abs((int) $userId)
+                )
+            ), 
             ARRAY_A
         );
         
@@ -254,10 +263,15 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      */
     public function getByIsland($islandId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_CITY_ISLAND_ID  . "` = '" . intval($islandId) . "'", 
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_CITY_ISLAND_ID => abs((int) $islandId)
+                )
+            ),
             ARRAY_A
         );
+        
         return is_array($result) && count($result) ? $result : null;
     }
     
@@ -289,8 +303,12 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
 
             // Get the rows
             $dbResults = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `" . $this->getTableName() . "`"
-                . " WHERE `" . static::COL_CITY_ISLAND_ID . "` IN ( " . implode(', ', $sanitizedIslandIds) . " )",
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(), 
+                    array(
+                        self::COL_CITY_ISLAND_ID => $sanitizedIslandIds
+                    )
+                ),
                 ARRAY_A
             );
 
@@ -303,7 +321,7 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
                     }
 
                     // Prepare the item ID
-                    $dbItemId = intval($dbRow[static::COL_ID]);
+                    $dbItemId = abs((int) $dbRow[static::COL_ID]);
 
                     // Append to the results
                     $result[$dbItemId] = $dbRow;
@@ -323,9 +341,13 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      */
     public function getByIslandAndIndex($islandId, $islandIndex) {
         return $this->getDb()->getWpDb()->get_row(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_CITY_ISLAND_ID  . "` = '" . intval($islandId) . "'"
-            . " AND `" . self::COL_CITY_ISLAND_INDEX  . "` = '" . intval($islandIndex) . "'", 
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_CITY_ISLAND_ID    => abs((int) $islandId),
+                    self::COL_CITY_ISLAND_INDEX => abs((int) $islandIndex)
+                )
+            ),
             ARRAY_A
         );
     }
@@ -338,9 +360,13 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      */
     public function getCapitalByUser($userId) {
         return $this->getDb()->getWpDb()->get_row(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_CITY_USER_ID . "` = '" . intval($userId) . "'"
-            . " AND `" . self::COL_CITY_IS_CAPITAL . "` = '1'", 
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_CITY_USER_ID    => abs((int) $userId),
+                    self::COL_CITY_IS_CAPITAL => 1
+                )
+            ),
             ARRAY_A
         );
     }
@@ -354,21 +380,21 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      */
     public function setCapitalByUser($userId, $cityId) {
         // Prepare the old Metropolis ID - should only be 1, but gathering all just to be sure
-        $fieldsInfo = array();
+        $fieldsArray = array();
         
         // Go through the user's cities
         if (is_array($userCities = $this->getByUser($userId))) {
             foreach ($userCities as $dbRow) {
                 // Old Metropolises become regular cities
                 if ($dbRow[self::COL_CITY_IS_CAPITAL]) {
-                    $fieldsInfo[(int) $dbRow[self::COL_ID]] = array(
+                    $fieldsArray[(int) $dbRow[self::COL_ID]] = array(
                         self::COL_CITY_IS_CAPITAL => 0,
                     );
                 } 
                 
                 // Found our city - not trying to change other user's Metropolises
                 if ($dbRow[self::COL_ID] == $cityId) {
-                    $fieldsInfo[(int) $dbRow[self::COL_ID]] = array(
+                    $fieldsArray[(int) $dbRow[self::COL_ID]] = array(
                         self::COL_CITY_IS_CAPITAL => 1,
                     );
                 }
@@ -377,7 +403,7 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
 
         // Valid query produced
         $result = null;
-        if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate($fieldsInfo, $this->getTableName(), self::COL_ID)) {
+        if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate($this->getTableName(), self::COL_ID, $fieldsArray)) {
             $result = $this->getDb()->getWpDb()->query($multiUpdateQuery);
         }
         return $result;
@@ -390,10 +416,12 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_CITY_USER_ID => abs((int) $userId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_CITY_USER_ID => abs((int) $userId)
+                )
             )
         );
     }
@@ -405,10 +433,12 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByIsland($islandId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_CITY_ISLAND_ID => abs((int) $islandId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_CITY_ISLAND_ID => abs((int) $islandId)
+                )
             )
         );
     }

@@ -168,7 +168,7 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
         if (is_array($otherCities = $this->getDb()->tableCities()->getByIsland($islandId))) {
             // Go through the cities on this island
             foreach ($otherCities as $otherCity) {
-                $occupiedSlots[] = intval($otherCity[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_INDEX]);
+                $occupiedSlots[] = abs((int) $otherCity[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_INDEX]);
             }
         }
         
@@ -370,7 +370,7 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
                 // Get the islands that now have vacancies
                 $islandIds = array();
                 foreach ($cities as $cityRow) {
-                    $islandIds[] = intval($cityRow[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID]);
+                    $islandIds[] = abs((int) $cityRow[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID]);
                 }
 
                 // Mark this island as not full

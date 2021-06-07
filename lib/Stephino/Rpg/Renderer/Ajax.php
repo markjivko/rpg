@@ -109,6 +109,7 @@ class Stephino_Rpg_Renderer_Ajax {
     const RESULT_CHANGELOG         = 'changelog';
     const RESULT_NAVIGATION        = 'navigation';
     const RESULT_BUILDING_UPGS     = 'building_upgs';
+    const RESULT_BUILDING_UNLK     = 'building_unlk';
     const RESULT_SETTINGS          = 'settings';
     const RESULT_MODAL_SIZE        = 'modal_size';
     const RESULT_SET_TLCD          = 'tlcd';
@@ -177,6 +178,7 @@ class Stephino_Rpg_Renderer_Ajax {
         // City-level information
         if (null !== $resCityId) {
             $wrappedResult[self::RESULT_BUILDING_UPGS] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUpgs($resCityId);
+            $wrappedResult[self::RESULT_BUILDING_UNLK] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUnlk($resCityId);
         }
         
         // Append our details

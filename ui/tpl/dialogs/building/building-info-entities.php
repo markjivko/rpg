@@ -91,7 +91,7 @@ foreach ($entitiesData as list($entityConfig)) {
                                     class="w-100 text-center"
                                     data-click="entityDialog" 
                                     data-click-args="<?php echo $entityConfig->keyCollection();?>,<?php echo $entityConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Entity::QUEUE_ACTION_DEQUEUE;?>">
-                                    <b><?php echo esc_html__('Dequeue', 'stephino-rpg');?></b>
+                                    <b><?php echo esc_html__('Cancel', 'stephino-rpg');?></b>
                                 </span>
                             </div>
                         <?php endif;?>

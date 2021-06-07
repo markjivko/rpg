@@ -33,19 +33,14 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 3)):
     <?php if (is_array($payloadArray) 
             && isset($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])
             && is_array($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])
-            && count($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])):
-             ?>
-        <div class="col-12">
-            <h6 class="heading"><span><?php echo esc_html__('Army', 'stephino-rpg');?></span></h6>
-        </div>
-        <?php 
+            && count($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])) {
             $entitiesList = $payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES];
             $entitiesCityId = $fromCityId;
             require Stephino_Rpg_Db_Model_Messages::getTemplatePath(
                 Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_LIST_ENTITIES
             );
-        ?>
-    <?php endif;?>
+        }
+    ?>
     <?php if (is_array($payloadArray) 
             && isset($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_RESOURCES])
             && is_array($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_RESOURCES])

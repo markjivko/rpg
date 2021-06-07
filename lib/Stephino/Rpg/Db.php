@@ -203,7 +203,7 @@ class Stephino_Rpg_Db {
         $this->_isMultisite = is_multisite();
 
         // Prepare the table prefix
-        $this->_tablePrefix = $this->_wpDb->base_prefix . Stephino_Rpg::PLUGIN_VARNAME . '_';
+        $this->_tablePrefix = $this->getWpDb()->base_prefix . Stephino_Rpg::PLUGIN_VARNAME . '_';
 
         // MultiSite installation on a secondary site
         if ($this->_isMultisite && 1 != $blog_id) {
@@ -234,7 +234,12 @@ class Stephino_Rpg_Db {
     public function purge() {
         // Go through all the tables
         foreach ($this->_tableInstances as $table) {
-            $this->_wpDb->query('DROP TABLE IF EXISTS `' . $table->getTableName() . '`');
+            // Prepare the query
+            $query = 'DROP TABLE IF EXISTS `' . $table->getTableName() . '`';
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Drop the table
+            $this->getWpDb()->query($query);
         }
     }
 

@@ -276,7 +276,7 @@ class Stephino_Rpg_TimeLapse {
                     Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug(
                         'TL-CP U' . $userId . ' (' . ($checkPointKey + 1) . '/' . count($checkPointList) . '): ' 
                         . get_class($worker) . ' (' . $checkPointTime . ', ' . $checkPointDelta . ') in ' 
-                        . (microtime(true) - $logWorkerStart)
+                        . number_format((microtime(true) - $logWorkerStart) * 1000, 4) . 'ms'
                     );
                 }
             }
@@ -311,7 +311,9 @@ class Stephino_Rpg_TimeLapse {
                     $worker->save();
 
                     // Log the result
-                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info('TL-SV: ' . get_class($worker) . ' in ' . (microtime(true) - $logWorkerStart));
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                        'TL-SV: ' . get_class($worker) . ' in ' . number_format((microtime(true) - $logWorkerStart) * 1000, 4) . 'ms'
+                    );
                 }
 
                 // New threads were registered

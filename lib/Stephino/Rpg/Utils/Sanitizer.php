@@ -21,6 +21,36 @@ class Stephino_Rpg_Utils_Sanitizer {
     const CALL_REDIRECT_TO  = 'redirect_to';
     
     /**
+     * Get whether we are currently inside an AJAX request
+     * 
+     * @param boolean $excludePublic (optional) If running public controllers, consider this NOT an AJAX request; default <b>true</b>
+     * @global string $pagenow
+     * @return boolean
+     */
+    public static function isAjax($excludePublic = true) {
+        global $pagenow;
+        
+        // This is an AJAX request
+        $result = 'admin-ajax.php' === $pagenow 
+            && isset($_REQUEST)
+            && isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_ACTION])
+            && Stephino_Rpg::PLUGIN_VARNAME === $_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_ACTION];
+        
+        // Need to exclude public controllers
+        if ($result && $excludePublic) {
+            // Method specified
+            if (isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
+                // Public controller
+                if (in_array(strtolower($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]), Stephino_Rpg_Renderer_Ajax::PUBLIC_CONTROLLERS)) {
+                    $result = false;
+                }
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Get the sanitized theme slug _GET parameter (if set)
      * 
      * @return string|null

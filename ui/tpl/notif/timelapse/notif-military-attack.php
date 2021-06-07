@@ -11,61 +11,54 @@
  */
 !defined('STEPHINO_RPG_ROOT') && exit();
 
-if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 5)):
+if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 6)):
     /* @var $attacker boolean */
     /* @var $attackStatus string */
     /* @var $payloadArray array|null */
     /* @var $fromCityId int */
     /* @var $toCityId int */
-    list($attacker, $attackStatus, $payloadArray, $fromCityId, $toCityId) = $notifData;
+    /* @var $cityWalls boolean */
+    list($attacker, $attackStatus, $payloadArray, $fromCityId, $toCityId, $cityWalls) = $notifData;
 ?>
     <div class="col-12">
         <h4>
             <?php 
-                $titleText = esc_html__('Draw', 'stephino-rpg');
                 $convoySoundName = 'attackDraw';
                 switch ($attackStatus) {
                     case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_RETREAT: 
-                        $titleText = esc_html__('Retreat', 'stephino-rpg');
                         $convoySoundName = 'attackDefeat';
                         break;
 
                     case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_EASY: 
-                        $titleText = esc_html__('Easy victory', 'stephino-rpg');
                         $convoySoundName = 'attackVictory';
                         break;
 
                     case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_CRUSHING: 
-                        $titleText = esc_html__('Crushing defeat', 'stephino-rpg');
                         $convoySoundName = 'attackDefeat';
                         break;
 
                     case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_CRUSHING: 
-                        $titleText = esc_html__('Crushing victory', 'stephino-rpg');
                         $convoySoundName = 'attackVictory';
                         break;
 
                     case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_HEROIC: 
-                        $titleText = esc_html__('Heroic defeat', 'stephino-rpg');
                         $convoySoundName = 'attackDefeat';
                         break;
 
                     case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_HEROIC: 
-                        $titleText = esc_html__('Heroic victory', 'stephino-rpg');
                         $convoySoundName = 'attackVictory';
-                        break;
-
-                    case Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_BITTER: 
-                        $titleText = esc_html__('Bitter defeat', 'stephino-rpg');
-                        break;
-
-                    case Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_BITTER: 
-                        $titleText = esc_html__('Bitter victory', 'stephino-rpg');
                         break;
                 }
             ?>
             <div class="icon-attack icon-attack-<?php echo $attackStatus;?>" data-effect="sound" data-effect-args="<?php echo $convoySoundName;?>"></div>
-            <?php echo $titleText;?>
+            <?php 
+                echo sprintf(
+                    $cityWalls
+                        ? __('%s: defences remained intact', 'stephino-rpg')
+                        : __('%s: defences were destroyed', 'stephino-rpg'),
+                    Stephino_Rpg_Config::get()->core()->getConfigCityName(true)
+                );
+            ?>
         </h4>
     </div>
     <div class="col-12">
@@ -98,16 +91,28 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 5)):
     <?php if (is_array($payloadArray) 
             && isset($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])
             && is_array($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])
-            && count($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])):
-             ?>
-        <div class="col-12">
-            <h6 class="heading"><span><?php echo esc_html__('Army', 'stephino-rpg');?></span></h6>
-        </div>
-        <?php 
+            && count($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])) {
             $entitiesList = $payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES];
             $entitiesCityId = $attacker ? $fromCityId : $toCityId;
             require Stephino_Rpg_Db_Model_Messages::getTemplatePath(
                 Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_LIST_ENTITIES
+            );
+        }
+    ?>
+    <?php 
+        // Show the defender how much they were looted
+        if (!$attacker && is_array($payloadArray) 
+            && isset($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_RESOURCES])
+            && is_array($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_RESOURCES])
+            && count($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_RESOURCES])):?>
+        <div class="col-12">
+            <h6 class="heading"><span><?php echo esc_html__('Loss', 'stephino-rpg');?></span></h6>
+        </div>
+        <?php
+            $resourcesList = $payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_RESOURCES];
+            $resourceLost = true;
+            require Stephino_Rpg_Db_Model_Messages::getTemplatePath(
+                Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_LIST_RESOURCES
             );
         ?>
     <?php endif;?>

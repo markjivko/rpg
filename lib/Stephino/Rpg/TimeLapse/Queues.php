@@ -472,10 +472,13 @@ class Stephino_Rpg_TimeLapse_Queues extends Stephino_Rpg_TimeLapse_Abstract {
      * @return array
      */
     protected function _initData() {
-        // Get the results
         return $this->getDb()->getWpdb()->get_results(
-            "SELECT * FROM `" . $this->getDb()->tableQueues() . "`"
-            . " WHERE `" . $this->getDb()->tableQueues() . "`.`" . Stephino_Rpg_Db_Table_Queues::COL_QUEUE_USER_ID . "` = '" . $this->_userId . "'", 
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getDb()->tableQueues(),
+                array(
+                    Stephino_Rpg_Db_Table_Queues::COL_QUEUE_USER_ID => $this->_userId
+                )
+            ),
             ARRAY_A
         );
     }

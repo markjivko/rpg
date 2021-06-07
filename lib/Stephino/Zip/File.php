@@ -202,17 +202,11 @@ class Stephino_Zip_File {
 
         $comment = $this->opt->getComment();
 
-        if (!mb_check_encoding($name, 'ASCII') ||
-            !mb_check_encoding($comment, 'ASCII')) {
+        // Not ASCII
+        if (preg_match('/[^\x00-\x7F]/', $name) || preg_match('/[^\x00-\x7F]/', $comment)) {
             // Sets Bit 11: Language encoding flag (EFS).  If this bit is set,
             // the filename and comment fields for this file
             // MUST be encoded using UTF-8. (see APPENDIX D)
-            if (!mb_check_encoding($name, 'UTF-8') ||
-                !mb_check_encoding($comment, 'UTF-8')) {
-                throw new Exception(
-                    'File name and comment should use UTF-8 if one of them does not fit into ASCII range.'
-                );
-            }
             $this->bits |= self::BIT_EFS_UTF8;
         }
 

@@ -575,8 +575,8 @@ class Stephino_Rpg_Theme {
 
         // Prepare the parent directory
         if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir(dirname($destinationDir))) {
-            if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir(dirname($destinationDir, 2))) {
-                Stephino_Rpg_Utils_Folder::get()->fileSystem()->mkdir(dirname($destinationDir, 2));
+            if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir(dirname(dirname($destinationDir)))) {
+                Stephino_Rpg_Utils_Folder::get()->fileSystem()->mkdir(dirname(dirname($destinationDir)));
             }
 			if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->mkdir(dirname($destinationDir))) {
 				throw new Exception(__('Could not create new theme directory', 'stephino-rpg'));

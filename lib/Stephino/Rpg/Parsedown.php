@@ -295,7 +295,7 @@ class Stephino_Rpg_Parsedown {
             }
 
             while (($beforeTab = strstr($line, "\t", true)) !== false) {
-                $shortage = 4 - mb_strlen($beforeTab, 'utf-8') % 4;
+                $shortage = 4 - strlen($beforeTab) % 4;
                 $line = $beforeTab
                     . str_repeat(' ', $shortage)
                     . substr($line, strlen($beforeTab) + 1);

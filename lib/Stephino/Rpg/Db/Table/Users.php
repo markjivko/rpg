@@ -189,16 +189,18 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
         $currentTime = time();
         
         // Execute the query
-        $insertResult = $this->getDb()->getWpDb()->insert(
-            $this->getTableName(), 
-            array(
-                self::COL_USER_WP_ID             => ($isRobot ? null : ($this->getDb()->getRobotId() ? null : $this->getDb()->getWpUserId())),
-                self::COL_USER_RESOURCE_GOLD     => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceGold()),
-                self::COL_USER_RESOURCE_RESEARCH => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceResearch()),
-                self::COL_USER_RESOURCE_GEM      => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceGem()),
-                self::COL_USER_CREATED           => $currentTime,
-                self::COL_USER_LAST_TICK         => $currentTime,
-                self::COL_USER_TUTORIAL_LEVEL    => ($isRobot ? count(Stephino_Rpg_Config::get()->tutorials()->getAll()) : 0),
+        $insertResult = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                array(
+                    self::COL_USER_WP_ID             => ($isRobot ? null : ($this->getDb()->getRobotId() ? null : $this->getDb()->getWpUserId())),
+                    self::COL_USER_RESOURCE_GOLD     => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceGold()),
+                    self::COL_USER_RESOURCE_RESEARCH => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceResearch()),
+                    self::COL_USER_RESOURCE_GEM      => abs((int) Stephino_Rpg_Config::get()->core()->getInitialUserResourceGem()),
+                    self::COL_USER_CREATED           => $currentTime,
+                    self::COL_USER_LAST_TICK         => $currentTime,
+                    self::COL_USER_TUTORIAL_LEVEL    => ($isRobot ? count(Stephino_Rpg_Config::get()->tutorials()->getAll()) : 0),
+                )
             )
         );
 
@@ -217,12 +219,10 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
 
         // Valid user IDs
         if (is_array($userIds) && count($userIds)) {
-            // Prepare the statement
-            $userInStatement = implode(
-                ', ', 
+            $userIds = array_unique(
                 array_map(
                     function($item) {
-                        return "'" . intval($item) . "'";
+                        return abs((int) $item);
                     }, 
                     $userIds
                 )
@@ -230,9 +230,13 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
 
             // Get the rows
             $robotRows = $this->getDb()->getWpDb()->get_results(
-                "SELECT `" . self::COL_ID . "` FROM `$this`"
-                . " WHERE `" . self::COL_ID . "` IN ( $userInStatement )"
-                . " AND `" . self::COL_USER_WP_ID . "` IS null",
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(),
+                    array(
+                        self::COL_ID         => $userIds,
+                        self::COL_USER_WP_ID => null
+                    )
+                ), 
                 ARRAY_A
             );
 
@@ -240,7 +244,7 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
             if (is_array($robotRows) && count($robotRows)) {
                 $result = array_map(
                     function($row) {
-                        return intval($row[self::COL_ID]);
+                        return abs((int) $row[self::COL_ID]);
                     }, 
                     $robotRows
                 );
@@ -266,11 +270,12 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
         
         // Get the resouts
         if ($count > 0) {
+            // Prepare the query
+            $query = "SELECT MAX(`" . self::COL_ID . "`) AS `max` FROM `$this`";
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
             // Get the maximum number of users (robots and humans)
-            $usersMax = $this->getDb()->getWpDb()->get_row(
-                "SELECT MAX(`" . self::COL_ID . "`) AS `max` FROM `$this`",
-                ARRAY_A
-            );
+            $usersMax = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
             // Valid result
             if (is_array($usersMax) && isset($usersMax['max'])) {
@@ -293,23 +298,16 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
                         $userIds[] = $rangeId;
                     }
                 }
-
-                // Escape the IDs
-                $userIdsList = implode(
-                    ', ', 
-                    array_map(
-                        function($userId) {
-                            return "'$userId'";
-                        }, 
-                        array_unique($userIds)
-                    )
-                );
-                
+                        
                 // Get the result
                 $dbRows = $this->getDb()->getWpDb()->get_results(
-                    "SELECT * FROM `$this`"
-                    . " WHERE `" . self::COL_USER_WP_ID . "` IS " . ($getRobots ? '' : 'NOT ') . 'null'
-                    . " AND `" . self::COL_ID . "` IN ( " . $userIdsList . " )",
+                    Stephino_Rpg_Utils_Db::selectAll(
+                        $this->getTableName(),
+                        array(
+                            self::COL_ID         => array_unique($userIds),
+                            self::COL_USER_WP_ID => $getRobots ? null : true,
+                        )
+                    ), 
                     ARRAY_A
                 );
                 
@@ -349,14 +347,15 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
         
         // Sanitize the user score
         $userScore = abs((int) $userScore);
-        $dbRow = $this->getDb()->getWpDb()->get_row(
-            "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_USER_WP_ID  . "` IS NOT NULL"
-                . " AND `" . self::COL_USER_SCORE . "` > '$userScore'"
-            . ")", 
-            ARRAY_A
-        );
+        
+        // Prepare the query
+        $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_USER_WP_ID  . "` IS NOT NULL"
+                . " AND `" . self::COL_USER_SCORE . "` > $userScore";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        // Get the DB row
+        $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
         
         // Valid result
         if (is_array($dbRow) && isset($dbRow['count'])) {
@@ -369,22 +368,29 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     /**
      * Get the Most Valuable Players (humans) in descending order of total score
      * 
-     * @param int $limit Limit
+     * @param int $limitCount Limit
      * @return array|null
      */
-    public function getMVP($limit = 100) {
-        $limit = abs((int) $limit);
+    public function getMVP($limitCount = 100) {
+        $result = null;
+        $limitCount = abs((int) $limitCount);
         
-        // Get the result
-        $result = $limit > 0 
-            ? $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `$this`"
-                . " WHERE `" . self::COL_USER_WP_ID . "` IS NOT NULL"
-                . " ORDER BY `" . self::COL_USER_SCORE . "` DESC"
-                . " LIMIT " . $limit,
+        // Valid limit
+        if ($limitCount > 0 ) {            
+            $result = $this->getDb()->getWpDb()->get_results(
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(),
+                    array(
+                        self::COL_USER_WP_ID => true
+                    ),
+                    $limitCount,
+                    null,
+                    self::COL_USER_SCORE,
+                    false
+                ), 
                 ARRAY_A
-            ) 
-            : null;
+            );
+        }
         
         return is_array($result) && count($result) ? $result : null;
     }
@@ -401,14 +407,15 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
         
         // Sanitize the timestamp
         $timeStamp = abs((int) $timestamp);
-        $dbRow = $this->getDb()->getWpDb()->get_row(
-            "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_USER_WP_ID  . "` IS NOT NULL"
-                . " AND `" . self::COL_USER_LAST_TICK_AJAX . "` >= '$timeStamp'"
-            . ")", 
-            ARRAY_A
-        );
+        
+        // Prepare the query
+        $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_USER_WP_ID  . "` IS NOT NULL"
+                . " AND `" . self::COL_USER_LAST_TICK_AJAX . "` >= $timeStamp";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        // Get the DB row
+        $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
         
         // Valid result
         if (is_array($dbRow) && isset($dbRow['count'])) {
@@ -419,17 +426,19 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     }
     
     /**
-     * Get the ID, Creation Timestamp and Last AJAX Tick Timestamp for all human players
+     * Get the ID, Creation Timestamp and Last AJAX Tick Timestamp for all players (robots excluded)
      * 
      * @return array May be empty
      */
     public function getTimestamps() {
-        $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT `" . self::COL_ID . "`, `" . self::COL_USER_CREATED . "`, `" . self::COL_USER_LAST_TICK_AJAX . "`"
-            . " FROM `$this`"
-            . " WHERE `" . self::COL_USER_WP_ID . "` IS NOT NULL",
-            ARRAY_A
-        );
+        // Prepare the query
+        $query = "SELECT `" . self::COL_ID . "`, `" . self::COL_USER_CREATED . "`, `" . self::COL_USER_LAST_TICK_AJAX . "` "
+            . "FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_USER_WP_ID . "` IS NOT NULL";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        // Get the result
+        $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
         
         return is_array($result) ? $result : array();
     }
@@ -448,41 +457,34 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
                 break;
             }
             
-            // Robots do not have a corresponding WP ID
-            if (null !== $this->getDb()->getRobotId()) {
-                // Prepare the DB result
-                $dbResult = $this->getDb()->getWpDb()->get_row(
-                    "SELECT * FROM `$this`"
-                    . " WHERE `" . self::COL_ID . "` = '" . $this->getDb()->getRobotId() . "'"
-                    . " AND `" . self::COL_USER_WP_ID . "` is null",
-                    ARRAY_A
-                );
+            // Prepare the DB result
+            $dbResult = $this->getDb()->getWpDb()->get_row(
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(),
+                    // Robots do not have a corresponding WP ID
+                    (null !== $this->getDb()->getRobotId())
+                        ? array(
+                            self::COL_ID         => $this->getDb()->getRobotId(),
+                            self::COL_USER_WP_ID => null,
+                        )
+                        : array(
+                            self::COL_USER_WP_ID => $this->getDb()->getWpUserId(),
+                        )
+                ), 
+                ARRAY_A
+            );
 
-                // Valid robot ID provided
-                if (null !== $dbResult) {
-                    $this->_userData = $dbResult;
-                    break;
-                }
-            } else {
-                // Prepare the DB result
-                $dbResult = $this->getDb()->getWpDb()->get_row(
-                    "SELECT * FROM `$this`"
-                    . " WHERE `" . self::COL_USER_WP_ID . "` = '" . $this->getDb()->getWpUserId() . "'",
-                    ARRAY_A
-                );
-
-                // Valid user ID provided
-                if (null !== $dbResult) {
-                    $this->_userData = $dbResult;
-                    break;
-                }
+            // Valid user ID provided
+            if (null !== $dbResult) {
+                $this->_userData = $dbResult;
+                break;
             }
-            
-            // Nothing found
-            $result = false;
             
             // Invalidate the data
             $this->_userData = null;
+            
+            // Nothing found
+            $result = false;
         } while(false);
         
         return $result;
@@ -528,13 +530,60 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
 
             // Update
             $result = boolval(
-                $this->getDb()->getWpDb()->update(
-                    $this->getTableName(), 
-                    array(self::COL_USER_GAME_SETTINGS => json_encode($settings)), 
-                    array(self::COL_ID => $userId)
+                $this->getDb()->getWpDb()->query(
+                    Stephino_Rpg_Utils_Db::update(
+                        $this->getTableName(), 
+                        array(
+                            self::COL_USER_GAME_SETTINGS => json_encode($settings)
+                        ), 
+                        array(
+                            self::COL_ID => abs((int) $userId)
+                        )
+                    )
                 )
             );
         } while(false);
+        
+        return $result;
+    }
+    
+    /**
+     * Append these resources to all players (robots excluded)
+     * 
+     * @param string $resourceName   Resource name, one of <ul>
+     * <li>self::COL_USER_RESOURCE_GOLD</li>
+     * <li>self::COL_USER_RESOURCE_RESEARCH</li>
+     * <li>self::COL_USER_RESOURCE_GEM</li>
+     * </ul>
+     * @param int    $resourceValue  Resource value
+     * @return int|false The number of rows deleted or false on error
+     * @throws Exception
+     */
+    public function giftToAll($resourceName, $resourceValue) {
+        $result = false;
+        
+        // Prepare the resource names
+        $allowedResourceNames = array(
+            self::COL_USER_RESOURCE_GOLD,
+            self::COL_USER_RESOURCE_RESEARCH,
+            self::COL_USER_RESOURCE_GEM,
+        );
+        if (!in_array($resourceName, $allowedResourceNames)) {
+            throw new Exception(__('Invalid resource name', 'stephino-rpg'));
+        }
+        
+        // Integer only
+        $resourceValue = abs((int) $resourceValue);
+        if ($resourceValue > 0) {
+            // Prepare the query
+            $query = "UPDATE `$this` SET " . PHP_EOL
+                . "`$resourceName` = `$resourceName` + $resourceValue " . PHP_EOL
+                . "WHERE `" . self::COL_USER_WP_ID . "` IS NOT NULL";
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Store the result
+            $result = $this->getDb()->getWpDb()->query($query);
+        }
         
         return $result;
     }

@@ -539,6 +539,66 @@ class Stephino_Rpg_Renderer_Console {
     }
     
     /**
+     * Send a gift to all players
+     * The gift is added to existing resources
+     * This tools does not send any messages; you can let your players know about this gift from <b>Dashboard > Announcement</b>
+     * 
+     * @use     `gift-to-all (gold|gem|research) {resource value}`
+     * @example `gift-to-all gold 5000`
+     */
+    public static function cliGiftToAll($resourceName = null, $resourceValue = null) {
+        if (!is_numeric($resourceValue)) {
+            self::_throwHelp('Invalid resource value');
+        }
+        if ($resourceValue <= 0) {
+            self::_throwHelp('Resource value must be a positive integer');
+        }
+        $resourceValue = abs((int) $resourceValue);
+        
+        // Get the core configuration
+        $coreConfig = Stephino_Rpg_Config::get()->core();
+        
+        // Prepare the resource names
+        $resourceNames = array(
+            Stephino_Rpg_Renderer_Ajax::RESULT_RES_GOLD => array(
+                $coreConfig->getResourceGoldName(), 
+                Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD,
+            ),
+            Stephino_Rpg_Renderer_Ajax::RESULT_RES_RESEARCH => array(
+                $coreConfig->getResourceResearchName(), 
+                Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH,
+            ),
+            Stephino_Rpg_Renderer_Ajax::RESULT_RES_GEM => array(
+                $coreConfig->getResourceGemName(), 
+                Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM,
+            ),
+        );
+        
+        // Validate the resource name
+        if (!isset($resourceNames[$resourceName])) {
+            self::_throwHelp('Invalid resource name');
+        }
+        
+        // Send the gift
+        $result = Stephino_Rpg_Db::get()->tableUsers()->giftToAll(
+            $resourceNames[$resourceName][1], 
+            $resourceValue
+        );
+        
+        // Invalid result
+        if (false === $result) {
+            throw new Exception('Could not send the gift');
+        }
+        
+        // Inform the user
+        echo sprintf(
+            'All users have now received <b>%s %s</b>.',
+            number_format($resourceValue, 2),
+            $resourceNames[$resourceName][0]
+        );
+    }
+    
+    /**
      * Travel into the future
      * 
      * @use     `set-user-time-travel {user ID} {seconds}`
@@ -563,9 +623,12 @@ class Stephino_Rpg_Renderer_Console {
         
         // Update the last tick
         $userData[Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK] -= $seconds;
-        if (!Stephino_Rpg_Db::get()->tableUsers()->updateById(array(
-            Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK => $userData[Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK]
-        ), $userId)) {
+        if (!Stephino_Rpg_Db::get()->tableUsers()->updateById(
+            array(
+                Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK => $userData[Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK]
+            ), 
+            $userId
+        )) {
             throw new Exception('Could not update last tick');
         }
         
@@ -580,10 +643,10 @@ class Stephino_Rpg_Renderer_Console {
             }
             
             // Get the query
-            $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $queuesMultiUpdate, 
+            $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 Stephino_Rpg_Db::get()->tableQueues()->getTableName(), 
-                Stephino_Rpg_Db_Table_Queues::COL_ID
+                Stephino_Rpg_Db_Table_Queues::COL_ID,
+                $queuesMultiUpdate
             );
             if (null === $multiUpdateQuery) {
                 throw new Exception('Could not prepare queues query');
@@ -614,10 +677,10 @@ class Stephino_Rpg_Renderer_Console {
             }
             
             // Get the query
-            $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $convoysMultiUpdate, 
+            $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 Stephino_Rpg_Db::get()->tableConvoys()->getTableName(), 
-                Stephino_Rpg_Db_Table_Convoys::COL_ID
+                Stephino_Rpg_Db_Table_Convoys::COL_ID,
+                $convoysMultiUpdate
             );
             if (null === $multiUpdateQuery) {
                 throw new Exception('Could not prepare convoy update query');

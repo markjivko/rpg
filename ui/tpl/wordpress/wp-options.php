@@ -41,7 +41,7 @@
                 <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?>
                     <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?><b>DEMO</b><?php endif;?>
                 </span>
-                <?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics(true);?>
+                <?php echo Stephino_Rpg_Utils_Lingo::getOptionsLabel(true);?>
                 <?php if (!Stephino_Rpg::get()->isPro() && strlen(Stephino_Rpg::PLUGIN_URL_PRO)):?>
                     <a class="btn btn-default ml-2" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_PRO);?>"><?php echo esc_html__('Unlock Game', 'stephino-rpg');?> &#x1F513;</a>
                 <?php endif;?>
@@ -50,7 +50,7 @@
                 <li class="nav-item">
                     <span class="nav-link<?php if (Stephino_Rpg_Utils_Lingo::LANG_EN == Stephino_Rpg_Config::lang(true)):?> active<?php endif;?>" 
                         data-lang="<?php echo Stephino_Rpg_Utils_Lingo::LANG_EN;?>">
-                        Game Mechanics
+                        <?php echo esc_html__('Game Mechanics', 'stephino-rpg');?>
                     </span>
                 </li>
                 <?php if (count($allowedLanguages = Stephino_Rpg_Utils_Lingo::getLanguages()) > 1): ?>

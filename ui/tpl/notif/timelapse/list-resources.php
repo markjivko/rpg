@@ -16,6 +16,9 @@
 if (!isset($resourceExact)) {
     $resourceExact = true;
 }
+if (!isset($resourceLost)) {
+    $resourceLost = false;
+}
 if (isset($resourcesList) && is_array($resourcesList)):
 ?>
     <div class="row justify-content-center">
@@ -39,7 +42,7 @@ if (isset($resourcesList) && is_array($resourcesList)):
             <div class="col-6">
                 <div class="res res-<?php echo $resAjaxKey;?>">
                     <div class="icon"></div>
-                    <span>
+                    <span <?php if ($resourceLost):?>class="text-danger"<?php endif;?>>
                         <b>
                             <?php /* false set in Stephino_Rpg_TimeLapse_Convoys::_spy() */ if (false !== $resValue):?>
                                 <?php 

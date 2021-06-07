@@ -119,10 +119,14 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
             
             // Check for uniqueness
             $entityRow = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `$this`"
-                . " WHERE `" . self::COL_ENTITY_CITY_ID . "` = '" . abs((int) $cityId) . "'"
-                    . " AND `" . self::COL_ENTITY_TYPE . "` = '" . $entityType . "'"
-                    . " AND `" . self::COL_ENTITY_CONFIG_ID . "` = '" . abs((int) $entityConfigId) . "'",
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(), 
+                    array(
+                        self::COL_ENTITY_CITY_ID   => abs((int) $cityId),
+                        self::COL_ENTITY_TYPE      => $entityType,
+                        self::COL_ENTITY_CONFIG_ID => abs((int) $entityConfigId),
+                    )
+                ),
                 ARRAY_A
             );
             if (is_array($entityRow) && count($entityRow)) {
@@ -130,15 +134,17 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
             }
             
             // Failed insert
-            if (!$this->getDb()->getWpDb()->insert(
-                $this->getTableName(), 
-                array(
-                    self::COL_ENTITY_USER_ID     => abs((int) $userId),
-                    self::COL_ENTITY_ISLAND_ID   => abs((int) $islandId),
-                    self::COL_ENTITY_CITY_ID     => abs((int) $cityId),
-                    self::COL_ENTITY_TYPE        => $entityType,
-                    self::COL_ENTITY_CONFIG_ID   => abs((int) $entityConfigId),
-                    self::COL_ENTITY_COUNT       => abs((int) $entityCount),
+            if (!$this->getDb()->getWpDb()->query(
+                Stephino_Rpg_Utils_Db::insert(
+                    $this->getTableName(), 
+                    array(
+                        self::COL_ENTITY_USER_ID     => abs((int) $userId),
+                        self::COL_ENTITY_ISLAND_ID   => abs((int) $islandId),
+                        self::COL_ENTITY_CITY_ID     => abs((int) $cityId),
+                        self::COL_ENTITY_TYPE        => $entityType,
+                        self::COL_ENTITY_CONFIG_ID   => abs((int) $entityConfigId),
+                        self::COL_ENTITY_COUNT       => abs((int) $entityCount),
+                    )
                 )
             )) {
                 break;
@@ -163,12 +169,12 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
         $result = false;
         
         // Prepare the fields information
-        $fieldsInfo = array();
+        $fieldsArray = array();
         if (is_array($entities)) {
             foreach ($entities as $entityId => $entityCount) {
                 $entityId = abs((int) $entityId);
                 if ($entityId > 0) {
-                    $fieldsInfo[$entityId] = array(
+                    $fieldsArray[$entityId] = array(
                         self::COL_ENTITY_COUNT => $entityCount < 0 ? 0 : $entityCount
                     );
                 }
@@ -176,12 +182,12 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
         }
         
         // Invalid list
-        if (!count($fieldsInfo)) {
+        if (!count($fieldsArray)) {
             return false;
         }
         
         // Valid query produced
-        if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate($fieldsInfo, $this->getTableName(), self::COL_ID)) {
+        if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate($this->getTableName(), self::COL_ID, $fieldsArray)) {
             $result = $this->getDb()->getWpDb()->query($multiUpdateQuery);
         }
         
@@ -196,8 +202,12 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
      */
     public function getByCity($cityId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_ENTITY_CITY_ID . "` = '" . abs((int) $cityId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_ENTITY_CITY_ID => abs((int) $cityId),
+                )
+            ),
             ARRAY_A
         );
         
@@ -211,10 +221,12 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByCity($cityId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_ENTITY_CITY_ID => abs((int) $cityId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_ENTITY_CITY_ID => abs((int) $cityId)
+                )
             )
         );
     }
@@ -226,10 +238,12 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_ENTITY_USER_ID => abs((int) $userId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_ENTITY_USER_ID => abs((int) $userId)
+                )
             )
         );
     }

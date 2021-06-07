@@ -44,7 +44,7 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                         <h4>
                             <span>
                                 <?php if (!$theme->isDefault()) { echo esc_html__('Theme', 'stephino-rpg');} ?>
-                                <b><?php echo esc_html($theme->getName());?></b>
+                                <b><?php echo esc_html($theme->getThemeSlug());?></b>
                                 <?php echo esc_html__('by', 'stephino-rpg');?> 
                                 <a rel="noreferrer" target="_blank" href="<?php echo esc_attr($theme->getAuthorUrl());?>"><?php 
                                     echo strlen($theme->getAuthor()) ? esc_html($theme->getAuthor()) : esc_html__('Unknown', 'stephino-rpg');
@@ -63,6 +63,7 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                         <div data-url="<?php echo esc_attr($theme->getFileUrl(Stephino_Rpg_Theme::FOLDER_IMG_UI . '/768.png'));?>" data-effect="parallax"></div>
                         <article class="p-4">
                             <div class="mb-4">
+                                <b><?php echo esc_html($theme->getName());?></b><br/>
                                 <?php echo esc_html(Stephino_Rpg_Utils_Lingo::ellipsize($theme->getDescription(), Stephino_Rpg_Theme::MAX_LENGTH_DESCRIPTION));?>
                             </div>
                             <div class="row">
@@ -82,7 +83,13 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                                 <?php endif;?>
                                 <?php if (!$theme->isActive()):?>
                                     <div class="col">
-                                        <button data-role="activate" class="btn <?php echo ($theme->isDefault() ? 'btn-primary' : 'btn-info');?> w-100">
+                                        <button data-role="activate" class="btn <?php 
+                                            echo (
+                                                $theme->isDefault() || (count(Stephino_Rpg_Utils_Themes::getInstalled()) > 2 && !$theme->isActive()) 
+                                                    ? 'btn-primary' 
+                                                    : 'btn-info'
+                                            );
+                                            ?> w-100">
                                             <?php echo esc_html__('Activate', 'stephino-rpg') . (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;');?>
                                         </button>
                                     </div>
@@ -93,8 +100,8 @@ $themeSlug = Stephino_Rpg_Utils_Sanitizer::getTheme();
                                         </div>
                                     <?php else:?>
                                         <div class="col">
-                                            <a href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS);?>" class="btn btn-primary w-100">
-                                                <?php echo esc_html__('Game Mechanics', 'stephino-rpg');?>
+                                            <a href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS);?>" class="btn btn-info w-100">
+                                                <?php echo Stephino_Rpg_Utils_Lingo::getOptionsLabel(false, true);?>
                                             </a>
                                         </div>
                                     <?php endif;?>

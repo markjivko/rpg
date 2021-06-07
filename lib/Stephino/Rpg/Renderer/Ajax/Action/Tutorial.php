@@ -34,7 +34,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
             $resourcesWorker = Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY);
 
             // Get the latest from the DB
-            if(!is_array($dbRow = current(is_array($resourcesWorker->getData()) ? $resourcesWorker->getData() : array()))) {
+            if(!is_array($resourcesWorker->getData())) {
+                break;
+            }
+            if (!is_array($dbRow = current($resourcesWorker->getData()))) {
                 break;
             }
 
@@ -62,10 +65,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
 
             // Update the user resources
             if (count($updatesUser)) {
-                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                    $updatesUser, 
+                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                     Stephino_Rpg_Db::get()->tableUsers()->getTableName(), 
-                    Stephino_Rpg_Db_Table_Users::COL_ID
+                    Stephino_Rpg_Db_Table_Users::COL_ID,
+                    $updatesUser
                 )) {
                     Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
                 }
@@ -73,10 +76,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
 
             // Update the city resources
             if (count($updatesCity)) {
-                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                    $updatesCity, 
+                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                     Stephino_Rpg_Db::get()->tableCities()->getTableName(), 
-                    Stephino_Rpg_Db_Table_Cities::COL_ID
+                    Stephino_Rpg_Db_Table_Cities::COL_ID,
+                    $updatesCity
                 )) {
                     Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
                 }
@@ -105,7 +108,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
             $resourcesWorker = Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY);
 
             // Get the latest from the DB
-            if(!is_array($dbRow = current(is_array($resourcesWorker->getData()) ? $resourcesWorker->getData() : array()))) {
+            if(!is_array($resourcesWorker->getData())) {
+                break;
+            }
+            if (!is_array($dbRow = current($resourcesWorker->getData()))) {
                 break;
             }
 
@@ -126,10 +132,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
 
             // Update the user resources
             if (count($updatesUser)) {
-                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                    $updatesUser, 
+                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                     Stephino_Rpg_Db::get()->tableUsers()->getTableName(), 
-                    Stephino_Rpg_Db_Table_Users::COL_ID
+                    Stephino_Rpg_Db_Table_Users::COL_ID,
+                    $updatesUser
                 )) {
                     Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
                 }
@@ -137,10 +143,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
 
             // Update the city resources
             if (count($updatesCity)) {
-                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                    $updatesCity, 
+                if (null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                     Stephino_Rpg_Db::get()->tableCities()->getTableName(), 
-                    Stephino_Rpg_Db_Table_Cities::COL_ID
+                    Stephino_Rpg_Db_Table_Cities::COL_ID,
+                    $updatesCity
                 )) {
                     Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
                 }
@@ -170,7 +176,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Tutorial extends Stephino_Rpg_Renderer_A
                 $resourcesWorker = Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY);
 
                 // Get the latest from the DB
-                if(!is_array($dbRow = current(is_array($resourcesWorker->getData()) ? $resourcesWorker->getData() : array()))) {
+                if(!is_array($resourcesWorker->getData())) {
+                    break;
+                }
+                if (!is_array($dbRow = current($resourcesWorker->getData()))) {
                     break;
                 }
 

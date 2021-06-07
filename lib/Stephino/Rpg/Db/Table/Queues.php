@@ -129,17 +129,22 @@ class Stephino_Rpg_Db_Table_Queues extends Stephino_Rpg_Db_Table {
         
         // Prepare the row data
         $rowData = array(
-            self::COL_QUEUE_USER_ID        => abs((int) $userId),
-            self::COL_QUEUE_CITY_ID        => abs((int) $cityId),
-            self::COL_QUEUE_ITEM_TYPE      => $itemType,
-            self::COL_QUEUE_ITEM_ID => abs((int) $itemId),
-            self::COL_QUEUE_QUANTITY       => abs((int) $itemQuantity),
-            self::COL_QUEUE_DURATION       => floatval($queueDuration),
-            self::COL_QUEUE_TIME           => floatval($queueDuration) + time(),
+            self::COL_QUEUE_USER_ID   => abs((int) $userId),
+            self::COL_QUEUE_CITY_ID   => abs((int) $cityId),
+            self::COL_QUEUE_ITEM_TYPE => $itemType,
+            self::COL_QUEUE_ITEM_ID   => abs((int) $itemId),
+            self::COL_QUEUE_QUANTITY  => abs((int) $itemQuantity),
+            self::COL_QUEUE_DURATION  => floatval($queueDuration),
+            self::COL_QUEUE_TIME      => floatval($queueDuration) + time()
         );
         
         // Prepare the result
-        $result = $this->getDb()->getWpDb()->insert($this->getTableName(), $rowData);
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                $rowData
+            )
+        );
         
         // Insert
         if (false !== $result) {
@@ -161,10 +166,12 @@ class Stephino_Rpg_Db_Table_Queues extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_QUEUE_USER_ID => abs((int) $userId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_QUEUE_USER_ID => abs((int) $userId)
+                )
             )
         );
     }
@@ -182,9 +189,13 @@ class Stephino_Rpg_Db_Table_Queues extends Stephino_Rpg_Db_Table {
         }
         
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `" . $this->getTableName() . "`"
-            . " WHERE `" . self::COL_QUEUE_USER_ID  . "` = '" . abs((int) $userId) . "'"
-            . " AND `" . self::COL_QUEUE_ITEM_TYPE . "` = '$itemType'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_QUEUE_USER_ID   => abs((int) $userId),
+                    self::COL_QUEUE_ITEM_TYPE => $itemType
+                )
+            ),
             ARRAY_A
         );
         
@@ -199,8 +210,12 @@ class Stephino_Rpg_Db_Table_Queues extends Stephino_Rpg_Db_Table {
      */
     public function getByUserId($userId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `" . $this->getTableName() . "`"
-            . " WHERE `" . self::COL_QUEUE_USER_ID  . "` = '" . abs((int) $userId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_QUEUE_USER_ID => abs((int) $userId)
+                )
+            ),
             ARRAY_A
         );
         

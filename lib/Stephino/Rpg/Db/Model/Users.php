@@ -55,6 +55,9 @@ class Stephino_Rpg_Db_Model_Users extends Stephino_Rpg_Db_Model {
         // Remove Research Fields
         $this->getDb()->modelResearchFields()->deleteByUser($userId);
         
+        // Remove platformers
+        $this->getDb()->modelPtfs()->deleteByUser($userId);
+        
         // Get the user data
         $userData = ($removeWp ? $this->getDb()->tableUsers()->getById($userId) : null);
         
@@ -82,8 +85,12 @@ class Stephino_Rpg_Db_Model_Users extends Stephino_Rpg_Db_Model {
 
             // Prepare the comments list
             $comments = $this->getDb()->getWpDb()->get_results(
-                "SELECT `comment_ID` FROM `" . $this->getDb()->getWpDb()->comments . "`"
-                . " WHERE `user_id` = '$wpUserId'", 
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getDb()->getWpDb()->comments,
+                    array(
+                        'user_id' => $wpUserId
+                    )
+                ), 
                 ARRAY_A
             );
             if (is_array($comments) && count($comments)) {

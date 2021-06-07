@@ -180,12 +180,12 @@
                         (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                     <?php endif;?>
                 </h4>
-                <div class="param-desc"><?php echo Stephino_Rpg::PLUGIN_NAME;?>: <?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics(true);?></div>
+                <div class="param-desc"><?php echo Stephino_Rpg::PLUGIN_NAME;?>: <?php echo Stephino_Rpg_Utils_Lingo::getOptionsLabel(true);?></div>
             </label>
         </div>
         <div class="col-12 col-lg-8 param-input">
             <a class="btn btn-info w-100" target="_blank" href="<?php echo Stephino_Rpg_Utils_Lingo::escape(Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS);?>">
-                <span><?php echo Stephino_Rpg_Utils_Lingo::getGameMechanics();?></span>
+                <span><?php echo Stephino_Rpg_Utils_Lingo::getOptionsLabel(false, true);?></span>
             </a>
         </div>
     </div>

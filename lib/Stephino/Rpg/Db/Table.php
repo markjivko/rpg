@@ -95,8 +95,12 @@ abstract class Stephino_Rpg_Db_Table {
         // Cache not created
         if (!$useCache || !isset($this->_cache[$objectId])) {
             $this->_cache[$objectId] = $this->getDb()->getWpDb()->get_row(
-                "SELECT * FROM `" . $this->getTableName() . "`"
-                . " WHERE `" . static::COL_ID . "` = '$objectId'", 
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(),
+                    array(
+                        static::COL_ID => $objectId
+                    )
+                ), 
                 ARRAY_A
             );
         }
@@ -126,7 +130,7 @@ abstract class Stephino_Rpg_Db_Table {
         // Go through the data
         foreach ($objectIds as $objectId) {
             // Sanitize the element
-            $objectId = intval($objectId);
+            $objectId = abs((int) $objectId);
             
             // Cache check
             if ($useCache && isset($this->_cache[$objectId])) {
@@ -138,21 +142,16 @@ abstract class Stephino_Rpg_Db_Table {
         }
         
         // Need to fetch more data
+        $objectIdsNeeded = array_unique($objectIdsNeeded);
         if (count($objectIdsNeeded)) {
-            // Prepare the string IDs
-            $dbIdStrings = array_unique(
-                array_map(
-                    function($item) {
-                        return "'$item'";
-                    }, 
-                    $objectIdsNeeded
-                )
-            );
-
             // Get the results
             $dbResults = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `" . $this->getTableName() . "`"
-                . " WHERE `" . static::COL_ID . "` IN ( " . implode(', ', $dbIdStrings) . " )",
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(),
+                    array(
+                        static::COL_ID => $objectIdsNeeded
+                    )
+                ), 
                 ARRAY_A
             );
             
@@ -166,7 +165,7 @@ abstract class Stephino_Rpg_Db_Table {
                     }
                     
                     // Prepare the item ID
-                    $dbItemId = intval($dbRow[static::COL_ID]);
+                    $dbItemId = abs((int) $dbRow[static::COL_ID]);
                     
                     // Append to the results
                     $result[$dbItemId] = $dbRow;
@@ -185,24 +184,32 @@ abstract class Stephino_Rpg_Db_Table {
     /**
      * Update a row by ID
      * 
-     * @param array $fieldValues Associative array of Field => Value pairs
-     * @param int   $id          Table ID column value
+     * @param array $columnValues Associative array of {column name} => {column value} pairs
+     * @param int   $id           Table ID column value
      * @return int|false The number of rows updated, or false on error.
      */
-    public function updateById($fieldValues, $id) {
-        // Must be an array
-        if (!is_array($fieldValues)) {
-            return false;
-        }
+    public function updateById($columnValues, $id) {
+        $result = false;
         
-        // Update the elements
-        return $this->getDb()->getWpDb()->update(
-            $this->getTableName(), 
-            $fieldValues, 
-            array(
-                static::COL_ID => intval($id),
-            )
-        );
+        do {
+            // Must be an array
+            if (!is_array($columnValues)) {
+                break;
+            }
+
+            // Update the elements
+            $result = $this->getDb()->getWpDb()->query(
+                Stephino_Rpg_Utils_Db::update(
+                    $this->getTableName(), 
+                    $columnValues, 
+                    array(
+                        static::COL_ID => abs((int) $id)
+                    )
+                )
+            );
+        } while(false);
+        
+        return $result;
     }
     
     /**
@@ -212,10 +219,12 @@ abstract class Stephino_Rpg_Db_Table {
      * @return int|false The number of rows updated, or false on error.
      */
     public function deleteById($id) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(), 
-            array(
-                static::COL_ID => $id,
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(), 
+                array(
+                    static::COL_ID => abs((int) $id)
+                )
             )
         );
     }

@@ -213,19 +213,21 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
             $timestamp = time();
 
             // Prepare the result
-            $result = $this->getDb()->getWpDb()->insert(
-                $this->getTableName(), 
-                array(
-                    self::COL_PTF_USER_ID       => $userId,
-                    self::COL_PTF_NAME          => $name,
-                    self::COL_PTF_WIDTH         => $tileSetWidth,
-                    self::COL_PTF_HEIGHT        => $tileSetHeight,
-                    self::COL_PTF_CONTENT       => json_encode($tileSetC),
-                    self::COL_PTF_CREATED_TIME  => $timestamp,
-                    self::COL_PTF_MODIFIED_TIME => $timestamp,
-                    self::COL_PTF_REVIEW        => Stephino_Rpg_Cache_User::get()->isGameMaster()
-                        ? self::PTF_REVIEW_APPROVED
-                        : self::PTF_REVIEW_PENDING,
+            $result = $this->getDb()->getWpDb()->query(
+                Stephino_Rpg_Utils_Db::insert(
+                    $this->getTableName(), 
+                    array(
+                        self::COL_PTF_USER_ID       => abs((int) $userId),
+                        self::COL_PTF_NAME          => trim($name),
+                        self::COL_PTF_WIDTH         => abs((int) $tileSetWidth),
+                        self::COL_PTF_HEIGHT        => abs((int) $tileSetHeight),
+                        self::COL_PTF_CONTENT       => json_encode($tileSetC),
+                        self::COL_PTF_CREATED_TIME  => $timestamp,
+                        self::COL_PTF_MODIFIED_TIME => $timestamp,
+                        self::COL_PTF_REVIEW        => Stephino_Rpg_Cache_User::get()->isGameMaster()
+                            ? self::PTF_REVIEW_APPROVED
+                            : self::PTF_REVIEW_PENDING
+                    )
                 )
             );
         }
@@ -242,8 +244,12 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      */
     public function deleteByUser($userId) {
         return $this->getDb()->getWpDb()->query(
-            "DELETE FROM `$this`"
-            . " WHERE  `" . self::COL_PTF_USER_ID . "` = '" . abs((int) $userId) . "'"
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(), 
+                array(
+                    self::COL_PTF_USER_ID => abs((int) $userId)
+                )
+            )
         );
     }
     
@@ -255,8 +261,14 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
      */
     public function getAll($preDefined = false) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . ($preDefined ? " WHERE `" . self::COL_PTF_USER_ID . "` = '0'" : ''),
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                $preDefined
+                    ? array(
+                        self::COL_PTF_USER_ID => 0
+                    )
+                    : null
+            ),
             ARRAY_A
         );
         
@@ -308,26 +320,25 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
                 $limitOffset = abs((int) $limitOffset);
             }
             
-            // Get the rows
-            $result = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `$this`"
-                . " WHERE ("
-                    . " `" . self::COL_PTF_USER_ID . "` = '$userId'"
+            // Prepare the query
+            $query = "SELECT * FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_PTF_USER_ID . "` = $userId"
                     . " OR (" 
                         . " `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'" 
                         . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED  . "'")
                     . " )"
-                . " )"
                 . (null !== $orderBy
-                    ? " ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
+                    ? ' ' . PHP_EOL . "  ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
                     : ''
                 )
                 . (null !== $limitCount
-                    ? " LIMIT " . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
+                    ? ' ' . PHP_EOL . '  LIMIT ' . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
                     : ''
-                ),
-                ARRAY_A
-            );
+                );
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Get the rows
+            $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
         }
         
         return is_array($result) ? $result : array();
@@ -349,17 +360,16 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
         // Sanitize the user ID
         $userId = abs((int) $userId);
         if ($userId > 0) {
-            $dbRow = $this->getDb()->getWpDb()->get_row(
-                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE ("
-                    . " `" . self::COL_PTF_USER_ID  . "` = '$userId'"
+            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_PTF_USER_ID  . "` = $userId"
                     . " OR (" 
                         . " `" . self::COL_PTF_VISIBILITY. "` = '" . self::PTF_VISIBILITY_PUBLIC . "'" 
                         . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'")
-                    . " )"
-                . " )", 
-                ARRAY_A
-            );
+                    . " )";
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Gt the DB row
+            $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
             // Valid result
             if (is_array($dbRow) && isset($dbRow['count'])) {
@@ -414,17 +424,21 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
             
             // Get the rows
             $result = $this->getDb()->getWpDb()->get_results(
-                "SELECT * FROM `$this`"
-                . " WHERE `" . self::COL_PTF_USER_ID . "` = '$userId'"
-                . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'")
-                . (null !== $orderBy
-                    ? " ORDER BY `$orderBy` " . ($orderAsc ? 'ASC' : 'DESC')
-                    : ''
-                )
-                . (null !== $limitCount
-                    ? " LIMIT " . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
-                    : ''
-                ),
+                Stephino_Rpg_Utils_Db::selectAll(
+                    $this->getTableName(),
+                    $viewAll
+                        ? array(
+                            self::COL_PTF_USER_ID => $userId,
+                        )
+                        : array(
+                            self::COL_PTF_USER_ID => $userId,
+                            self::COL_PTF_REVIEW  => self::PTF_REVIEW_APPROVED
+                        ),
+                    $limitCount,
+                    $limitOffset,
+                    $orderBy,
+                    $orderAsc
+                ), 
                 ARRAY_A
             );
         }
@@ -445,12 +459,14 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
         // Sanitize the user ID
         $userId = abs((int) $userId);
         if ($userId > 0) {
-            $dbRow = $this->getDb()->getWpDb()->get_row(
-                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE `" . self::COL_PTF_USER_ID  . "` = '$userId'" 
-                . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'"), 
-                ARRAY_A
-            );
+            // Prepare the query
+            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_PTF_USER_ID  . "` = $userId" 
+                    . ($viewAll ? '' : " AND `" . self::COL_PTF_REVIEW . "` = '" . self::PTF_REVIEW_APPROVED . "'");
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Get the DB row
+            $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
             // Valid result
             if (is_array($dbRow) && isset($dbRow['count'])) {
@@ -473,12 +489,14 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
         // Sanitize the user ID
         $userId = abs((int) $userId);
         if ($userId > 0) {
-            $dbRow = $this->getDb()->getWpDb()->get_row(
-                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE `" . self::COL_PTF_USER_ID  . "` = '$userId'" 
-                . " AND `" . self::COL_PTF_REVIEW  . "` = '" . self::PTF_REVIEW_SUSPENDED . "'",
-                ARRAY_A
-            );
+            // Prepare the query
+            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_PTF_USER_ID  . "` = $userId" 
+                    . " AND `" . self::COL_PTF_REVIEW  . "` = '" . self::PTF_REVIEW_SUSPENDED . "'";
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Get the DB row
+            $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
             // Valid result
             if (is_array($dbRow) && isset($dbRow['count'])) {

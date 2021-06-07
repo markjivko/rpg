@@ -247,7 +247,7 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
      */
     public function setStatueLevel($islandId, $statueLevel) {
         // Sanitize the statue level
-        $statueLevel = intval($statueLevel);
+        $statueLevel = abs((int) $statueLevel);
         if ($statueLevel < 1) {
             $statueLevel = 1;
         }

@@ -62,8 +62,12 @@ class Stephino_Rpg_TimeLapse_Support_ResearchFields extends Stephino_Rpg_TimeLap
      */
     protected function _initData() {
         return $this->getDb()->getWpdb()->get_results(
-            "SELECT * FROM `" . $this->getDb()->tableResearchFields() . "`"
-            . " WHERE `" . $this->getDb()->tableResearchFields() . "`.`" . Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_USER_ID . "` = '" . $this->_userId . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getDb()->tableResearchFields(),
+                array(
+                    Stephino_Rpg_Db_Table_ResearchFields::COL_RESEARCH_FIELD_USER_ID => $this->_userId
+                )
+            ),
             ARRAY_A
         );
     }

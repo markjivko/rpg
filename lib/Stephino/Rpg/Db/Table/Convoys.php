@@ -267,9 +267,11 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         );
         
         // Prepare the payload
-        $result = $this->getDb()->getWpDb()->insert(
-            $this->getTableName(), 
-            $rowData
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                $rowData
+            )
         );
         
         // Insert
@@ -297,18 +299,18 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         // Sanitize the user ID
         $userId = abs((int) $userId);
         if ($userId > 0) {
-            $dbRow = $this->getDb()->getWpDb()->get_row(
-                "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE ("
-                    . " `" . self::COL_CONVOY_FROM_USER_ID  . "` = '$userId'"
-                    . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = '$userId'"
-                . " )", 
-                ARRAY_A
-            );
+            // Prepare the query
+            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_CONVOY_FROM_USER_ID  . "` = $userId"
+                    . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = $userId";
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+            
+            // Get the db row
+            $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
             // Valid result
             if (is_array($dbRow) && isset($dbRow['count'])) {
-                $result = intval($dbRow['count']);
+                $result = abs((int) $dbRow['count']);
             }
         }
         
@@ -328,8 +330,12 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         
         // Get the rows
         $dbRows = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_CONVOY_TO_ISLAND_ID  . "` = '" . intval($islandId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_CONVOY_TO_ISLAND_ID => abs((int) $islandId)
+                )
+            ),
             ARRAY_A
         );
 
@@ -380,14 +386,16 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
             $convoyType = self::CONVOY_TYPE_ATTACK;
         }
         
-        $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_CONVOY_FROM_USER_ID  . "` = '" . intval($userId) . "'"
-                . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = '" . intval($userId) . "'"
-            . " ) AND `" . self::COL_CONVOY_TYPE . "` = '$convoyType'", 
-            ARRAY_A
-        );
+        // Prepare the query
+        $query = "SELECT * FROM `$this` " . PHP_EOL
+            . "WHERE ("
+                . " `" . self::COL_CONVOY_FROM_USER_ID  . "` = " . abs((int) $userId)
+                . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = " . abs((int) $userId)
+            . " ) AND `" . self::COL_CONVOY_TYPE . "` = '$convoyType'";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        // Get the result
+        $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
         
         return is_array($result) && count($result) ? $result : null;
     }
@@ -399,14 +407,14 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
      * @return array[]|null
      */
     public function getByUser($userId) {
-        $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_CONVOY_FROM_USER_ID  . "` = '" . intval($userId) . "'"
-                . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = '" . intval($userId) . "'"
-            . " )", 
-            ARRAY_A
-        );
+        // Prepare the query
+        $query = "SELECT * FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_CONVOY_FROM_USER_ID  . "` = " . abs((int) $userId)
+                . " OR `" . self::COL_CONVOY_TO_USER_ID  . "` = " . abs((int) $userId);
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        // Get the result
+        $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
         
         return is_array($result) && count($result) ? $result : null;
     }
@@ -418,10 +426,12 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
      * @return int|false Number of rows deleted or false on error
      */
     public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_CONVOY_FROM_USER_ID => abs((int) $userId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_CONVOY_FROM_USER_ID => abs((int) $userId)
+                )
             )
         );
     }

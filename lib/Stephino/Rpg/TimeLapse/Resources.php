@@ -628,21 +628,25 @@ class Stephino_Rpg_TimeLapse_Resources extends Stephino_Rpg_TimeLapse_Abstract {
      * @return array
      */
     protected function _initData() {
+        // Prepare table names
+        $tableUsers = $this->getDb()->tableUsers()->getTableName();
+        $tableIslands = $this->getDb()->tableIslands()->getTableName();
+        $tableCities = $this->getDb()->tableCities()->getTableName();
+        $tableBuildings = $this->getDb()->tableBuildings()->getTableName();
+        
+        // Prepare the query
+        $query = "SELECT * FROM `$tableBuildings`" . PHP_EOL
+                . "  INNER JOIN `$tableCities` ON `$tableBuildings`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID . "` = "
+                    . "`$tableCities`.`" . Stephino_Rpg_Db_Table_Cities::COL_ID . "`" . PHP_EOL
+                . "  INNER JOIN `$tableIslands` ON `$tableBuildings`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_ISLAND_ID . "` = "
+                    . "`$tableIslands`.`" . Stephino_Rpg_Db_Table_Islands::COL_ID . "`" . PHP_EOL
+                . "  INNER JOIN `$tableUsers` ON `$tableBuildings`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_USER_ID . "` = "
+                    . "`$tableUsers`.`" . Stephino_Rpg_Db_Table_Users::COL_ID . "` " . PHP_EOL
+            . "WHERE `$tableBuildings`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_USER_ID . "` = {$this->_userId}";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
         // Get the results
-        return $this->getDb()->getWpdb()->get_results(
-            "SELECT * FROM `" . $this->getDb()->tableBuildings() . "`"
-                . " INNER JOIN `" . $this->getDb()->tableCities() . "`"
-                    . " ON `" . $this->getDb()->tableBuildings() . "`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID 
-                        . "` = `" . $this->getDb()->tableCities() . "`.`" . Stephino_Rpg_Db_Table_Cities::COL_ID . "`"
-                . " INNER JOIN `" . $this->getDb()->tableIslands() . "`"
-                    . " ON `" . $this->getDb()->tableBuildings() . "`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_ISLAND_ID 
-                        . "` = `" . $this->getDb()->tableIslands() . "`.`" . Stephino_Rpg_Db_Table_Islands::COL_ID . "`"
-                . " INNER JOIN `" . $this->getDb()->tableUsers() . "`"
-                    . " ON `" . $this->getDb()->tableBuildings() . "`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_USER_ID 
-                        . "` = `" . $this->getDb()->tableUsers() . "`.`" . Stephino_Rpg_Db_Table_Users::COL_ID . "`"
-            . " WHERE `" . $this->getDb()->tableBuildings() . "`.`" . Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_USER_ID . "` = '" . $this->_userId . "'", 
-            ARRAY_A
-        );
+        return $this->getDb()->getWpdb()->get_results($query, ARRAY_A);
     }
     
     /**

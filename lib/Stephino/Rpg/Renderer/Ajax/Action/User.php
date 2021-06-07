@@ -55,7 +55,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_User extends Stephino_Rpg_Renderer_Ajax_
                 break;
             
             default:
-                throw new Exception(__('Invalid trade type', 'stephino-rpg'));
+                throw new Exception(__('Invalid type of transaction', 'stephino-rpg'));
         }
         
         // Trading is disabled

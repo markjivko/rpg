@@ -127,7 +127,7 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
         
         // Validate the city
         if ($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID] != $fromCityId) {
-            throw new Exception(__('Colonizer entity not garrisoned', 'stephino-rpg'));
+            throw new Exception(__('Colonizer entity not present', 'stephino-rpg'));
         }
         
         /* @var $entityConfig Stephino_Rpg_Config_Unit|Stephino_Rpg_Config_Ship */
@@ -309,7 +309,7 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
         
         // Validate the city
         if ($entityRow[Stephino_Rpg_Db_Table_Entities::COL_ENTITY_CITY_ID] != $fromCityId) {
-            throw new Exception(__('Spy entity not garrisoned', 'stephino-rpg'));
+            throw new Exception(__('Spy entity not present', 'stephino-rpg'));
         }
         
         /* @var $entityConfig Stephino_Rpg_Config_Unit */
@@ -529,10 +529,10 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
         } else {
             // Get the attacker island coordinates
             $attIslandCoords = Stephino_Rpg_Utils_Math::getSnakePoint(
-                intval($fromInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID])
+                abs((int) $fromInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID])
             );
             $defIslandCoords = Stephino_Rpg_Utils_Math::getSnakePoint(
-                intval($toInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID])
+                abs((int) $toInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID])
             );
             
             // Each "segment" is 10 times longer than that on the island

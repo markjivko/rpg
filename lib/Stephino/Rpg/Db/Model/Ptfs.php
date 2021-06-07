@@ -117,6 +117,16 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     }
     
     /**
+     * Delete all platformers belonging to this user
+     * 
+     * @param int $userId User ID
+     * @return int|false The number of rows deleted or false on error
+     */
+    public function deleteByUser($userId) {
+        return $this->getDb()->tablePtfs()->deleteByUser($userId);
+    }
+    
+    /**
      * Mark the game as started of finished, updating the corresponding fields; must be used in Time-Lapse mode
      * 
      * @param int     $ptfId    Platformer Id
@@ -178,39 +188,44 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 }
                 Stephino_Rpg_Cache_User::get()->commit();
                 
-                // Prepare the user update
-                if (!$ptfStart) {
-                    $userData = Stephino_Rpg_TimeLapse::get()->userData();
-                    // Update the user
-                    $userUpdate = array(
-                        Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED => $userData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED] + 1
-                    );
-                    
+                // Update stats for public, approved games only
+                if (Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PUBLIC === $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY]
+                    && Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED === $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]) {
+                    // Prepare the user update
+                    if (!$ptfStart) {
+                        $userData = Stephino_Rpg_TimeLapse::get()->userData();
+                        
+                        // Update the user
+                        $userUpdate = array(
+                            Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED => $userData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_PLAYED] + 1
+                        );
+
+                        // Mark the victory
+                        if ($ptfWon) {
+                            $userUpdate[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON] = $userData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON] + 1;
+                        }
+
+                        // Update the user stats
+                        $this->getDb()->tableUsers()->updateById($userUpdate, Stephino_Rpg_TimeLapse::get()->userId());
+                    }
+
+                    // Update the platformer
+                    $ptfUpdate = $ptfStart
+                        ? array(
+                            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED] + 1,
+                        )
+                        : array(
+                            Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED] + 1,
+                        );
+
                     // Mark the victory
                     if (!$ptfStart && $ptfWon) {
-                        $userUpdate[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON] = $userData[Stephino_Rpg_Db_Table_Users::COL_USER_PTF_WON] + 1;
+                        $ptfUpdate[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] = $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] + 1;
                     }
-                    
-                    // Update the user stats
-                    $this->getDb()->tableUsers()->updateById($userUpdate, Stephino_Rpg_TimeLapse::get()->userId());
+
+                    // Update the PTF stats
+                    $this->getDb()->tablePtfs()->updateById($ptfUpdate, $ptfId);
                 }
-
-                // Update the platformer
-                $ptfUpdate = $ptfStart
-                    ? array(
-                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_STARTED] + 1,
-                    )
-                    : array(
-                        Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED => $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED] + 1,
-                    );
-
-                // Mark the victory
-                if (!$ptfStart && $ptfWon) {
-                    $ptfUpdate[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] = $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON] + 1;
-                }
-
-                // Update the PTF stats
-                $this->getDb()->tablePtfs()->updateById($ptfUpdate, $ptfId);
             }
         }
     }
@@ -484,25 +499,25 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             }
             
             // Execute the queries
-            if (count($dbInserts) && null !== $multiInsertQuery = Stephino_Rpg_Utils_Db::getMultiInsert(
-                $dbInserts, 
-                $this->getDb()->tablePtfs()->getTableName()
+            if (count($dbInserts) && null !== $multiInsertQuery = Stephino_Rpg_Utils_Db::multiInsert(
+                $this->getDb()->tablePtfs()->getTableName(),
+                $dbInserts
             )) {
                 $this->getDb()->getWpDb()->query($multiInsertQuery);
             }
             
-            if (count($dbUpdates) && null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $dbUpdates, 
+            if (count($dbUpdates) && null !== $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 $this->getDb()->tablePtfs()->getTableName(), 
-                Stephino_Rpg_Db_Table_Ptfs::COL_ID
+                Stephino_Rpg_Db_Table_Ptfs::COL_ID,
+                $dbUpdates
             )) {
                 $this->getDb()->getWpDb()->query($multiUpdateQuery);
             }
             
-            if (count($dbDeletes) && null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::getMultiDelete(
-                $dbDeletes, 
+            if (count($dbDeletes) && null !== $multiDeleteQuery = Stephino_Rpg_Utils_Db::multiDelete(
                 $this->getDb()->tablePtfs()->getTableName(), 
-                Stephino_Rpg_Db_Table_Ptfs::COL_ID
+                Stephino_Rpg_Db_Table_Ptfs::COL_ID,
+                $dbDeletes
             )) {
                 $this->getDb()->getWpDb()->query($multiDeleteQuery);
             }
@@ -519,7 +534,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         return array(
             1 => array(
                 esc_html__('Void', 'stephino-rpg'),
-                esc_html__('An empty tile', 'stephino-rpg'),
+                esc_html__('An empty slot', 'stephino-rpg'),
             ),
             8 => array(
                 esc_html__('Pipe', 'stephino-rpg'),
@@ -553,7 +568,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         $tileSet = null;
 
         // This is a pre-defined platformer
-        if (0 === intval($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID])) {
+        if (0 === abs((int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID])) {
             // Prepare the file name
             $preDefPtfId = abs((int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_CONTENT]);
 
@@ -964,6 +979,9 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 }
             }
         }
+        
+        // Reset the pointer
+        reset($ptfsList);
         
         return $ptfsList;
     }

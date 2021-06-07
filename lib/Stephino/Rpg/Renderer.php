@@ -35,12 +35,13 @@ class Stephino_Rpg_Renderer {
         if (is_callable($callable)) {
             call_user_func($callable);
         }
+        
     }
     
     /**
      * AJAX interface - displays JSON XHR requests and cached CSS and HTML content
      */
-    public static function interfaceAjax() {
+    public static function interfaceAjax() {        
         // Prepare the header
         while(@ob_end_clean());
         
@@ -56,6 +57,9 @@ class Stephino_Rpg_Renderer {
         
         // Prepare the call method
         $callMethod = Stephino_Rpg_Renderer_Ajax::CONTROLLER_HTML;
+        if (Stephino_Rpg_Log::check()) {
+            $callStart = microtime(true);
+        }
         
         // Start the buffer
         ob_start();
@@ -63,13 +67,12 @@ class Stephino_Rpg_Renderer {
         // Custom error handler
         set_error_handler(array(Stephino_Rpg_Log::class, 'error'));
         
-        
         try {
             // Sanitize the method name
             if (isset($_REQUEST) && isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
                 $callMethod = preg_replace('%\W+%', '', trim($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]));
             }
-
+            
             // Invalid method
             if (!strlen($callMethod)) {
                 throw new Exception(__('Invalid method specified', 'stephino-rpg'));
@@ -88,9 +91,9 @@ class Stephino_Rpg_Renderer {
             // Run the User-facing Cron Tasks, but only on the XHR and HTML threads
             if (!in_array(strtolower($callMethod), Stephino_Rpg_Renderer_Ajax::PUBLIC_CONTROLLERS)) {
                 // The admin should be able to edit the config no matter what
-                if (!preg_match('%^admin%i', $callMethod)) {
+                if (0 !== strpos(strtolower($callMethod), 'admin')) {
                     // Using time-lapse workers to fetch DB data from local memory instead of performing new SELECT queries
-                    Stephino_Rpg_Task_Cron::player(true, !!preg_match('%^dialog\w+%i', $callMethod));
+                    Stephino_Rpg_Task_Cron::player(true, 0 === strpos(strtolower($callMethod), 'dialog'));
                 }
             }
 
@@ -152,6 +155,11 @@ class Stephino_Rpg_Renderer {
             
             // Invalid result
             $result[Stephino_Rpg_Renderer_Ajax::CALL_RESPONSE_STATUS] = false;
+        }
+        
+        // Log stalling methods
+        if (Stephino_Rpg_Log::check() && ($callTime = microtime(true) - $callStart) >= 0.05) {
+            Stephino_Rpg_Log::warning("*** $callMethod: " . number_format($callTime * 1000, 4) . "ms");
         }
         
         // Store the content

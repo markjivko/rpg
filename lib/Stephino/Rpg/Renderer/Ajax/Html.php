@@ -208,10 +208,11 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                     intval($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID])
                 );
                 $viewAttrs = $reduceAttributes(array(
-                    'island-id' => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
-                    'island-x'  => $islandCoords[0],
-                    'island-y'  => $islandCoords[1],
-                    'city-id'   => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
+                    'island-id'      => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID],
+                    'island-x'       => $islandCoords[0],
+                    'island-y'       => $islandCoords[1],
+                    'city-id'        => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
+                    'city-config-id' => (int) $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID],
                 ));
                 break;
 

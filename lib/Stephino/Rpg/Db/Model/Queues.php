@@ -383,10 +383,10 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
         $result = true;
         
         // Sanitize the integers
-        $userId = intval($userId);
-        $itemId = intval($itemId);
+        $userId = abs((int) $userId);
+        $itemId = abs((int) $itemId);
         $itemQuantity = intval($itemQuantity);
-        $queueDuration = intval($queueDuration);
+        $queueDuration = abs((int) $queueDuration);
         
         // Validate the values
         if ($userId <= 0 || $itemId <= 0) {
@@ -550,7 +550,7 @@ class Stephino_Rpg_Db_Model_Queues extends Stephino_Rpg_Db_Model {
 
                     // Counter breached
                     if ($queueCount >= $queueMax) {
-                        throw new Exception(__('Max. queue reached', 'stephino-rpg'));
+                        throw new Exception(__('Maximum queue reached', 'stephino-rpg'));
                     }
                 }
             }

@@ -17,7 +17,7 @@
 /* @var $viewAttrs string */
 
 ?><!doctype html>
-<html <?php language_attributes(); ?>>
+<html lang="<?php echo Stephino_Rpg_Config::lang(true);?>">
     <head>
         <?php wp_head(); ?>
         <link rel="shortcut icon" type="image/png" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.png'); ?>" />

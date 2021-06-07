@@ -73,12 +73,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Entity extends Stephino_Rpg_Renderer_Aja
             $queueAction = self::QUEUE_ACTION_RECRUIT;
         }
         
-        // Check affordability
-        $entityCount = 1;
-        if (self::QUEUE_ACTION_RECRUIT === $queueAction && count($affordList) && $entityCount > min($affordList)) {
-            throw new Exception(__('Not enough resources', 'stephino-rpg'));
-        }
-        
         // Prepare the template and title
         $dialogTemplate = null;
         $dialogTitle = null;
@@ -113,7 +107,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Entity extends Stephino_Rpg_Renderer_Aja
                 
             case self::QUEUE_ACTION_DEQUEUE:
                 $dialogTemplate = self::TEMPLATE_DEQUEUE;
-                $dialogTitle = __('Dequeue', 'stephino-rpg');
+                $dialogTitle = __('Cancel', 'stephino-rpg');
                 break;
         }
         

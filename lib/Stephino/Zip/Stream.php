@@ -174,7 +174,7 @@ class Stephino_Zip_Stream implements Stephino_Zip_StreamInterface {
         if (false === fwrite($this->_stream, $string)) {
             throw new RuntimeException();
         }
-        return mb_strlen($string);
+        return strlen($string);
     }
 
     /**

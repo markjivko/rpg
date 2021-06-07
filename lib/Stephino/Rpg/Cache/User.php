@@ -15,17 +15,22 @@ class Stephino_Rpg_Cache_User {
     /**
      * Selected language
      */
-    const KEY_LANG       = 'lang';
+    const KEY_LANG = 'lang';
     
     /**
      * Changelog read (binds to current game version)
      */
-    const KEY_CHL        = 'chl';
+    const KEY_CHL = 'chl';
     
     /**
      * Announcement read
      */
-    const KEY_ANN        = 'ann';
+    const KEY_ANN = 'ann';
+    
+    /**
+     * Message pruning timestamp
+     */
+    const KEY_MPT = 'mpt';
     
     /**
      * User is a Game Master

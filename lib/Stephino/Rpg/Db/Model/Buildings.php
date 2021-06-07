@@ -69,7 +69,7 @@ class Stephino_Rpg_Db_Model_Buildings extends Stephino_Rpg_Db_Model {
         // Need to update the city level as well
         if(null !== $buildingId && $buildingConfig->isMainBuilding()) {
             if (false === $this->getDb()->tableCities()->updateById(
-                array(Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL => intval($buildingLevel)), 
+                array(Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL => abs((int) $buildingLevel)), 
                 $cityId
             )) {
                 throw new Exception(
@@ -169,7 +169,7 @@ class Stephino_Rpg_Db_Model_Buildings extends Stephino_Rpg_Db_Model {
             
             // Update building level
             if (false === $this->getDb()->tableBuildings()->updateById(
-                array(Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL => intval($buildingLevel)), 
+                array(Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL => abs((int) $buildingLevel)), 
                 $buildingId
             )) {
                 throw new Exception(
@@ -183,7 +183,7 @@ class Stephino_Rpg_Db_Model_Buildings extends Stephino_Rpg_Db_Model {
             // Need to update the city level as well
             if ($buildingConfig->isMainBuilding()) {
                 if (false === $this->getDb()->tableCities()->updateById(
-                    array(Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL => intval($buildingLevel)), 
+                    array(Stephino_Rpg_Db_Table_Cities::COL_CITY_LEVEL => abs((int) $buildingLevel)), 
                     $cityId
                 )) {
                     throw new Exception(

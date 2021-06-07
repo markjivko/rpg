@@ -48,16 +48,15 @@ class Stephino_Rpg_Utils_Lingo {
      * @param string $newLocale
      */
     public static function setLocale($newLocale) {
-        global $locale, $l10n;
+        global $l10n;
         $allowedLanguages = self::ALLOWED_LANGS;
         
         // Valid locale
         if (isset($allowedLanguages[$newLocale])) {
-            // Set the locale
-            $locale = $newLocale;
-
             // Reset the localization dictionary
-            $l10n = null;
+            if (is_array($l10n)) {
+                unset($l10n[Stephino_Rpg::PLUGIN_SLUG]);
+            }
 
             // Short-circuit language determination
             add_filter(
@@ -68,7 +67,7 @@ class Stephino_Rpg_Utils_Lingo {
             );
 
             // Re-load the text domain
-            load_plugin_textdomain('stephino-rpg', false, 'stephino-rpg/languages');
+            load_plugin_textdomain(Stephino_Rpg::PLUGIN_SLUG, false, Stephino_Rpg::PLUGIN_SLUG . '/languages');
         }
     }
     
@@ -265,19 +264,23 @@ class Stephino_Rpg_Utils_Lingo {
     }
     
     /**
-     * Get the i18n and HTML escaped "Game Mechanics" or "Labels" text, depending on the current user language
+     * Get "Game Mechanics" or "Translations"
      * 
-     * @param boolean $titleMode (optional) Title mode - use the current language instead of "translations"; default <b>false</b>
-     * @return string
+     * @param boolean $showLanguage (optional) Use the current language instead of "Translations"; default <b>false</b>
+     * @param boolean $showLocket   (optional) Append the Locket HTML character if the plugin is not unlocked; default <b>false</b>
+     * @return string "Game Mechanics", "Translations" or the current language
      */
-    public static function getGameMechanics($titleMode = false) {
-        return null === Stephino_Rpg_Config::lang() 
-            ? 'Game Mechanics' 
-            : (
-                $titleMode
-                    ? self::ALLOWED_LANGS[Stephino_Rpg_Config::lang(true)]
-                    : esc_html__('Translations', 'stephino-rpg')
-            );
+    public static function getOptionsLabel($showLanguage = false, $showLocket = false) {
+        return (
+            null === Stephino_Rpg_Config::lang() 
+                ? esc_html__('Game Mechanics', 'stephino-rpg') 
+                : (
+                    $showLanguage
+                        ? self::getLanguage()
+                        : esc_html__('Translations', 'stephino-rpg')
+                )
+            ) 
+            . ($showLocket ? (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;') : '');
     }
     
     /**

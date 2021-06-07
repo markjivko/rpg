@@ -34,10 +34,15 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Messages extends Stephino_Rpg_Renderer_A
      * @throws Exception
      */
     public static function ajaxList($data) {
-        // Message cleanup
-        Stephino_Rpg_Db::get()->modelMessages()->prune(
-            Stephino_Rpg_TimeLapse::get()->userId()
-        );
+        // Last message pruning was more than 24 hours ago
+        if (time() - Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_MPT, 0) >= 86400) {
+            Stephino_Rpg_Cache_User::get()->write(Stephino_Rpg_Cache_User::KEY_MPT, time())->commit();
+            
+            // Message cleanup
+            Stephino_Rpg_Db::get()->modelMessages()->prune(
+                Stephino_Rpg_TimeLapse::get()->userId()
+            );
+        }
         
         // Prepare the message type
         $messageType = isset($data[self::REQUEST_MESSAGE_TYPE]) ? $data[self::REQUEST_MESSAGE_TYPE] : null;

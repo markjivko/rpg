@@ -139,16 +139,18 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
         }
         
         // Prepare the result
-        $result = $this->getDb()->getWpDb()->insert(
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
             $this->getTableName(), 
-            array(
-                self::COL_MESSAGE_TO      => abs((int) $to),
-                self::COL_MESSAGE_FROM    => abs((int) $from),
-                self::COL_MESSAGE_TYPE    => $type,
-                self::COL_MESSAGE_SUBJECT => trim($subject),
-                self::COL_MESSAGE_CONTENT => trim($content),
-                self::COL_MESSAGE_READ    => $isRead ? 1 : 0,
-                self::COL_MESSAGE_TIME    => null === $time ? time() : abs((int) $time),
+                array(
+                    self::COL_MESSAGE_TO      => abs((int) $to),
+                    self::COL_MESSAGE_FROM    => abs((int) $from),
+                    self::COL_MESSAGE_TYPE    => $type,
+                    self::COL_MESSAGE_SUBJECT => trim($subject),
+                    self::COL_MESSAGE_CONTENT => trim($content),
+                    self::COL_MESSAGE_READ    => $isRead ? 1 : 0,
+                    self::COL_MESSAGE_TIME    => null === $time ? time() : abs((int) $time),
+                )
             )
         );
         
@@ -227,7 +229,10 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
             }
             
             // Get the multi-insert
-            if (count($payload) && null !== $multiInsert = Stephino_Rpg_Utils_Db::getMultiInsert($payload, $this->getTableName())) {
+            if (count($payload) && null !== $multiInsert = Stephino_Rpg_Utils_Db::multiInsert(
+                    $this->getTableName(), 
+                    $payload
+                )) {
                 $result = $this->getDb()->getWpDb()->query($multiInsert);
             }
         }
@@ -243,16 +248,18 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return array|null
      */
     public function getInvoice($userId, $paymentId) {
-        $query = "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_FROM . "` = '" . abs((int) $userId) . "'"
-                . " AND `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TO . "` = '0'"
-                . " AND `" . self::COL_MESSAGE_SUBJECT . "` = '" . preg_replace('%[^\w\-]+%i', '', $paymentId) . "'"
-            . " )";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
-        
-        return $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
+        return $this->getDb()->getWpDb()->get_row(
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_MESSAGE_FROM    => abs((int) $userId),
+                    self::COL_MESSAGE_TYPE    => self::MESSAGE_TYPE_INVOICE,
+                    self::COL_MESSAGE_TO      => 0,
+                    self::COL_MESSAGE_SUBJECT => preg_replace('%[^\w\-]+%i', '', $paymentId),
+                )
+            ), 
+            ARRAY_A
+        );
     }
     
     /**
@@ -263,15 +270,15 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return array|null
      */
     public function getAllInvoices($startTime, $endTime) {
-        $query = "SELECT * FROM `" . $this->getTableName() . "`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TO  . "` = '0'"
-                . " AND `" . self::COL_MESSAGE_TIME  . "` >= '" . abs((int) $startTime) . "'"
-                . " AND `" . self::COL_MESSAGE_TIME  . "` <= '" . abs((int) $endTime) . "'"
-            . " )";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        // Prepare the query
+        $query = "SELECT * FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
+                . " AND `" . self::COL_MESSAGE_TO  . "` = 0"
+                . " AND `" . self::COL_MESSAGE_TIME  . "` >= " . abs((int) $startTime)
+                . " AND `" . self::COL_MESSAGE_TIME  . "` <= " . abs((int) $endTime);
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
         
+        // Get the result
         $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
         
         return is_array($result) && count($result) ? $result : null;
@@ -284,16 +291,17 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return int|false Number of rows affected or false on error
      */
     public function deleteInvoicePending($userId) {
-        $query = "DELETE FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_FROM . "` = '" . abs((int) $userId) . "'"
-                . " AND `" . self::COL_MESSAGE_TYPE . "` = '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TO . "` = '0'"
-                . " AND `" . self::COL_MESSAGE_READ . "` = '0'"
-            . " )";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
-        
-        return $this->getDb()->getWpDb()->query($query);
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(), 
+                array(
+                    self::COL_MESSAGE_FROM => abs((int) $userId),
+                    self::COL_MESSAGE_TYPE => self::MESSAGE_TYPE_INVOICE,
+                    self::COL_MESSAGE_TO   => 0,
+                    self::COL_MESSAGE_READ => 0
+                )
+            )
+        );
     }
     
     /**
@@ -308,13 +316,13 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
         // Sanitize the user ID
         $userId = abs((int) $userId);
         if ($userId) {
-            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE ("
-                    . " `" . self::COL_MESSAGE_FROM . "` = '$userId'"
-                    . " AND `" . self::COL_MESSAGE_TIME . "` >= '" . (time() - 86400) . "'"
-                . " )";
-            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+            // Prepare the query
+            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_MESSAGE_FROM . "` = $userId"
+                    . " AND `" . self::COL_MESSAGE_TIME . "` >= " . (time() - 86400);
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
             
+            // Get the DB row
             $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
             // Valid result
@@ -352,19 +360,20 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
         }
         
         // Get the list of unread messages
-        $query = "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-                . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'"
-            . " )"
-            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC"
-            . (null !== $limitCount
-                ? " LIMIT " . (null !== $limitOffset ? ($limitOffset . ', ') : '') . $limitCount
-                : ''
-            );
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
-        
-        $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
+        $result = $this->getDb()->getWpDb()->get_results(
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(),
+                array(
+                    self::COL_MESSAGE_TO   => abs((int) $userId),
+                    self::COL_MESSAGE_TYPE => $messageType
+                ),
+                $limitCount,
+                $limitOffset,
+                self::COL_MESSAGE_TIME,
+                false
+            ), 
+            ARRAY_A
+        );
         
         return is_array($result) ? $result : array();
     }
@@ -388,12 +397,10 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
         $userId = abs((int) $userId);
         if ($userId > 0) {
             // Get the number of messages by type
-            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this`"
-                . " WHERE ("
-                    . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-                    . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'"
-                . " )";
-            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+            $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+                . "WHERE `" . self::COL_MESSAGE_TO . "` = " . abs((int) $userId)
+                    . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'";
+            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
             
             $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
 
@@ -414,18 +421,19 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return array|null
      */
     public function getInboxMessage($userId, $messageId) {
-        $usersTableName = $this->getDb()->tableUsers()->getTableName();
-        $query = "SELECT * FROM `$this`"
-            . " LEFT JOIN `$usersTableName`"
-            . " ON `$usersTableName`.`" . Stephino_Rpg_Db_Table_Users::COL_ID . "` = `$this`.`" . self::COL_MESSAGE_FROM . "`"
-            . " LEFT JOIN `" . $this->getDb()->getWpDb()->prefix . "users`"
-            . " ON `" . $this->getDb()->getWpDb()->prefix . "users`.`ID` =  `$usersTableName`.`" . Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID . "`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-                . " AND `" . self::COL_ID . "` = '" . abs((int) $messageId) . "'"
-            . " )"
-            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        $tableUsers = $this->getDb()->tableUsers()->getTableName();
+        $dbPrefix = $this->getDb()->getWpDb()->prefix;
+        
+        // Prepare the query
+        $query = "SELECT * FROM `$this`" . PHP_EOL
+            . "  LEFT JOIN `$tableUsers`"
+                . " ON `$tableUsers`.`" . Stephino_Rpg_Db_Table_Users::COL_ID . "` = `$this`.`" . self::COL_MESSAGE_FROM . "`" . PHP_EOL
+            . "  LEFT JOIN `{$dbPrefix}users`" 
+                . " ON `{$dbPrefix}users`.`ID` = `$tableUsers`.`" . Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID . "` " . PHP_EOL
+            . "WHERE `" . self::COL_MESSAGE_TO . "` = " . abs((int) $userId)
+                . " AND `" . self::COL_ID . "` = " . abs((int) $messageId) . PHP_EOL
+            . "  ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
         
         return $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
     }
@@ -437,15 +445,20 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return array
      */
     public function getInboxAllUnread($userId) {
-        $query = "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-                . " AND `" . self::COL_MESSAGE_READ . "` = '0'"
-            . " )"
-            . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
-        
-        return $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
+        return $this->getDb()->getWpDb()->get_results(
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(),
+                array(
+                    self::COL_MESSAGE_TO   => abs((int) $userId),
+                    self::COL_MESSAGE_READ => 0
+                ),
+                null,
+                null,
+                self::COL_MESSAGE_TIME,
+                false
+            ), 
+            ARRAY_A
+        );
     }
     
     /**
@@ -456,14 +469,16 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows updated or false on error
      */
     public function readInboxMessage($userId, $messageId) {
-        return $this->getDb()->getWpDb()->update(
-            $this->getTableName(), 
-            array(
-                self::COL_MESSAGE_READ => 1,
-            ), 
-            array(
-                self::COL_MESSAGE_TO => $userId,
-                self::COL_ID         => $messageId,
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::update(
+                $this->getTableName(), 
+                array(
+                    self::COL_MESSAGE_READ => 1
+                ), 
+                array(
+                    self::COL_MESSAGE_TO => abs((int) $userId),
+                    self::COL_ID         => abs((int) $messageId)
+                )
             )
         );
     }
@@ -475,12 +490,10 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return int|false Number of rows deleted or false on error
      */
     public function deleteAll($userId) {
-        $query = "DELETE FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-                . " OR `" . self::COL_MESSAGE_FROM . "` = '" . abs((int) $userId) . "'"
-            . " )";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        $query = "DELETE FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_MESSAGE_TO . "` = " . abs((int) $userId)
+                . " OR `" . self::COL_MESSAGE_FROM . "` = " . abs((int) $userId);
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
         
         return $this->getDb()->getWpDb()->query($query);
     }
@@ -492,12 +505,10 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return int|false Number of rows deleted or false on error
      */
     public function deleteAllExpired($days) {
-        $query = "DELETE FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_MESSAGE_TYPE . "` != '" . self::MESSAGE_TYPE_INVOICE . "'"
-                . " AND `" . self::COL_MESSAGE_TIME . "` <= '" . (time() - 86400 * abs((int) $days)) . "'"
-            . " )";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        $query = "DELETE FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_MESSAGE_TYPE . "` != '" . self::MESSAGE_TYPE_INVOICE . "'"
+                . " AND `" . self::COL_MESSAGE_TIME . "` <= " . (time() - 86400 * abs((int) $days));
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
         
         return $this->getDb()->getWpDb()->query($query);
     }
@@ -509,17 +520,19 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @param int $inboxLimit Inbox size limit
      */
     public function deleteInboxOverflow($userId, $inboxLimit) {
-        $query = "DELETE FROM `$this`"
-            . " WHERE `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-            . " AND `" . self::COL_ID . "` NOT IN"
-            . " (SELECT `" . self::COL_ID . "` FROM"
-                . " (SELECT `" . self::COL_ID . "` FROM `$this`"
-                    . " WHERE `" . self::COL_MESSAGE_TO . "` = '" . abs((int) $userId) . "'"
-                    . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC"
-                    . " LIMIT " . abs((int) $inboxLimit)
-                . " ) x"
+        $query = "DELETE FROM `$this` " . PHP_EOL
+            . "WHERE (" 
+                . " `" . self::COL_MESSAGE_TO . "` = " . abs((int) $userId)
+                . " AND `" . self::COL_ID . "` NOT IN"
+                . " (SELECT `" . self::COL_ID . "` FROM"
+                    . " (SELECT `" . self::COL_ID . "` FROM `$this`"
+                        . " WHERE `" . self::COL_MESSAGE_TO . "` = " . abs((int) $userId)
+                        . " ORDER BY `" . self::COL_MESSAGE_TIME . "` DESC"
+                        . " LIMIT " . abs((int) $inboxLimit)
+                    . " ) x"
+                . " )"
             . " )";
-        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info($query);
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
         
         return $this->getDb()->getWpDb()->query($query);
     }
@@ -527,16 +540,22 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     /**
      * Delete all inbox messages for this user by message type
      * 
-     * @param int    $userId       User ID
+     * @param int    $userId      User ID
      * @param string $messageType Message type
      * @return int|false Number of rows deleted or false on error
      */
     public function deleteInboxByType($userId, $messageType) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(), 
-            array(
-                self::COL_MESSAGE_TO   => abs((int) $userId),
-                self::COL_MESSAGE_TYPE => $messageType
+        if (!in_array($messageType, self::MESSAGE_TYPES)) {
+            $messageType = self::MESSAGE_TYPE_DIPLOMACY;
+        }
+        
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(), 
+                array(
+                    self::COL_MESSAGE_TO   => abs((int) $userId),
+                    self::COL_MESSAGE_TYPE => $messageType
+                )
             )
         );
     }
@@ -549,11 +568,13 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteInboxById($userId, $messageId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(), 
-            array(
-                self::COL_MESSAGE_TO => abs((int) $userId),
-                self::COL_ID         => abs((int) $messageId)
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(), 
+                array(
+                    self::COL_MESSAGE_TO => abs((int) $userId),
+                    self::COL_ID         => abs((int) $messageId)
+                )
             )
         );
     }

@@ -193,6 +193,69 @@ class Stephino_Rpg_Renderer_Ajax_Action {
     }
     
     /**
+     * 
+     * @param int $cityId City ID
+     * int[]|null Building Configuration IDs or Null if invalid City ID provided
+     */
+    public static function getBuildingUnlk($cityId) {
+        $cityId = abs((int) $cityId);
+        
+        // Prepare the list
+        $buildingsUnlocked = null;
+
+        // Go through the available buildings list
+        if ($cityId > 0) {
+            $buildingsUnlocked = array();
+            $buildingsInCity = array();
+            
+            // Go through the buildings
+            if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
+                foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData() as $dbRow) {
+                    if ($cityId !== (int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID]) {
+                        continue;
+                    }
+                    
+                    // Get the configuration ID
+                    $buildingConfigId = (int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID];
+        
+                    // Invalid building configuration
+                    if (null === Stephino_Rpg_Config::get()->buildings()->getById($buildingConfigId)) {
+                        continue;
+                    }
+        
+                    // Building already under construction
+                    if (null !== self::getBuildingQueue($dbRow[Stephino_Rpg_Db_Table_Buildings::COL_ID])) {
+                        continue;
+                    }
+                    $buildingsInCity[] = $buildingConfigId;
+                }
+            }
+            
+            // Find new buildings ready for construction
+            foreach (Stephino_Rpg_Config::get()->buildings()->getAll() as $buildingConfig) {
+                if (in_array($buildingConfig->getId(), $buildingsInCity)) {
+                    continue;
+                }
+                
+                // Requirements trait not set
+                if (!is_array($requirements = self::getRequirements($buildingConfig, $cityId))) {
+                    continue;
+                }
+                
+                // Requirements not met
+                if (!$requirements[1]) {
+                    continue;
+                }
+                
+                // Building ready
+                $buildingsUnlocked[] = $buildingConfig->getId();
+            }
+        }
+        
+        return $buildingsUnlocked;
+    }
+    
+    /**
      * Get the list of upgradeable buildings from a city
      * 
      * @param int $cityId City ID
@@ -3031,10 +3094,10 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         
         // Update the user resources
         if (count($updatesUser[$userDataId])) {
-            $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $updatesUser, 
+            $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 Stephino_Rpg_Db::get()->tableUsers()->getTableName(), 
-                Stephino_Rpg_Db_Table_Users::COL_ID
+                Stephino_Rpg_Db_Table_Users::COL_ID,
+                $updatesUser
             );
             if (null !== $multiUpdateQuery) {
                 Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
@@ -3043,10 +3106,10 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         
         // Update the city resources
         if (count($updatesCity[$cityDataId])) {
-            $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $updatesCity, 
+            $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 Stephino_Rpg_Db::get()->tableCities()->getTableName(), 
-                Stephino_Rpg_Db_Table_Cities::COL_ID
+                Stephino_Rpg_Db_Table_Cities::COL_ID,
+                $updatesCity
             );
             if (null !== $multiUpdateQuery) {
                 Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);

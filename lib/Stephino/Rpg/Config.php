@@ -101,7 +101,8 @@ class Stephino_Rpg_Config {
         };
         
         // Forced locale mode
-        if (null !== $forcedLocale && isset(Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS[$forcedLocale])) {
+        $allowedLanguages = Stephino_Rpg_Utils_Lingo::ALLOWED_LANGS;
+        if (null !== $forcedLocale && isset($allowedLanguages[$forcedLocale])) {
             self::$_locale = $forcedLocale;
             self::$_lang = $getCode($forcedLocale);
         } else {
@@ -109,10 +110,22 @@ class Stephino_Rpg_Config {
             if (null === self::$_locale) {
                 self::$_lang = null;
                 self::$_locale = Stephino_Rpg_Utils_Lingo::LANG_EN;
-                if (is_array($userData = Stephino_Rpg_TimeLapse::get()->userData())) {
+                
+                // Either an AJAX request or an Admin page
+                $rightPage = Stephino_Rpg_Utils_Sanitizer::isAjax()
+                    || 0 === strpos(Stephino_Rpg_Utils_Sanitizer::getPage(), Stephino_Rpg::PLUGIN_SLUG);
+                
+                // Load the user language
+                if ($rightPage && is_array($userData = Stephino_Rpg_TimeLapse::get()->userData())) {
                     if (0 != $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID]) {
+                        // Get the user-stored locale
+                        $userLocale = Stephino_Rpg_Cache_User::get()->read(
+                            Stephino_Rpg_Cache_User::KEY_LANG,
+                            Stephino_Rpg_Utils_Lingo::LANG_EN
+                        );
+                        
                         // Valid language found
-                        if (null !== $langCode = $getCode(get_user_locale())) {
+                        if (null !== $langCode = $getCode($userLocale)) {
                             // Get all available locales; "en" => "en_US"
                             $locales = array_combine(
                                 array_map(
@@ -504,6 +517,14 @@ class Stephino_Rpg_Config {
      */
     protected function __construct() {
         do {
+            // Force-load user locale for all AJAX requests
+            Stephino_Rpg_Utils_Sanitizer::isAjax() && Stephino_Rpg_Utils_Lingo::setLocale(
+                Stephino_Rpg_Cache_User::get()->read(
+                    Stephino_Rpg_Cache_User::KEY_LANG,
+                    Stephino_Rpg_Utils_Lingo::LANG_EN
+                )
+            );
+            
             // Pro Plugin Detected
             if (Stephino_Rpg::get()->isPro()) {
                 Stephino_Rpg_Pro_Config::get()->init($this->_data);

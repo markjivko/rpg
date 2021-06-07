@@ -100,12 +100,15 @@ class Stephino_Rpg_Db_Model_Invoices extends Stephino_Rpg_Db_Model {
      * @throws Exception
      */
     public function create($userId, Stephino_Rpg_Config_PremiumPackage $packageConfig) {
+        if (!function_exists('curl_version')) {
+            throw new Exception(sprintf(__('%s is not enabled on your server', 'stephino-rpg'), '<b>cURL</b>'));
+        }
         if (!class_exists('\Stephino\PayPal\Api\Payment')) {
             throw new Exception(__('Plugin not activated', 'stephino-rpg'));
         }
         
         // Sanitize the user ID
-        $userId = intval($userId);
+        $userId = abs((int) $userId);
         if ($userId <= 0) {
             throw new Exception(__('Invalid user ID', 'stephino-rpg'));
         }

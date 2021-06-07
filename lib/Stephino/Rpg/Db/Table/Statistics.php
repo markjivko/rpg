@@ -69,12 +69,14 @@ class Stephino_Rpg_Db_Table_Statistics extends Stephino_Rpg_Db_Table {
      * @return int|null New STats ID or Null on error
      */
     public function create($reportDate, $playersActive, $playersTotal) {
-        $result = $this->getDb()->getWpDb()->insert(
-            $this->getTableName(), 
-            array(
-                self::COL_STAT_DATE         => trim($reportDate),
-                self::COL_STAT_USERS_ACTIVE => json_encode($playersActive),
-                self::COL_STAT_USERS_TOTAL  => json_encode($playersTotal),
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                array(
+                    self::COL_STAT_DATE         => trim($reportDate),
+                    self::COL_STAT_USERS_ACTIVE => json_encode($playersActive),
+                    self::COL_STAT_USERS_TOTAL  => json_encode($playersTotal)
+                )
             )
         );
         
@@ -90,19 +92,21 @@ class Stephino_Rpg_Db_Table_Statistics extends Stephino_Rpg_Db_Table {
      * @return array|null
      */
     public function getByDate($startDate, $endDate) {
+        $regexCleanDate = '%(?:[^\d\-]+|\-{2,})%';
+        
         // Prepare the dates
-        $startDate = preg_replace('%[^\d\-]+%', '', trim($startDate));
-        $endDate = preg_replace('%[^\d\-]+%', '', trim($endDate));
+        $startDate = preg_replace($regexCleanDate, '', trim($startDate));
+        $endDate = preg_replace($regexCleanDate, '', trim($endDate));
+        
+        // Prepare the query
+        $query = "SELECT * FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_STAT_DATE . "` >= '$startDate'"
+                . " AND `" . self::COL_STAT_DATE . "` <= '$endDate' " . PHP_EOL
+            . "  ORDER BY `" . self::COL_STAT_DATE . "` ASC";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
         
         // Get the rows
-        $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE ("
-                . " `" . self::COL_STAT_DATE . "` >= '{$startDate}'"
-                . " AND `" . self::COL_STAT_DATE . "` <= '{$endDate}'"
-            . " ) ORDER BY `" . self::COL_STAT_DATE . "` ASC",
-            ARRAY_A
-        );
+        $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
 
         return is_array($result) && count($result) ? $result : null;
     }

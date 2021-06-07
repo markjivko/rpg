@@ -164,7 +164,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_A
         
         // Invalid trade type
         if (!in_array($tradeType, array(self::TRADE_BUY, self::TRADE_SELL))) {
-            throw new Exception(__('Invalid trade type', 'stephino-rpg'));
+            throw new Exception(__('Invalid type of transaction', 'stephino-rpg'));
         }
         
         // Prepare the resources
@@ -225,7 +225,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_A
                 
                 // Selling resources
                 if (self::TRADE_SELL == $tradeType) {
-                    // Not enough resources
                     if (floor($cityData[$tradeResKey]) < $tradeResValue) {
                         $tradeResValue = floor($cityData[$tradeResKey]);
                     }
@@ -274,10 +273,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_A
         
         // Update the city resources
         if (isset($updatesCity[$cityDataId]) && count($updatesCity[$cityDataId])) {
-            $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                $updatesCity, 
+            $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                 Stephino_Rpg_Db::get()->tableCities()->getTableName(), 
-                Stephino_Rpg_Db_Table_Cities::COL_ID
+                Stephino_Rpg_Db_Table_Cities::COL_ID,
+                $updatesCity
             );
             if (null !== $multiUpdateQuery) {
                 Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
@@ -510,10 +509,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_A
 
                 // Update the user resources
                 if (count($updatesUser)) {
-                    $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                        $updatesUser, 
+                    $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                         Stephino_Rpg_Db::get()->tableUsers()->getTableName(), 
-                        Stephino_Rpg_Db_Table_Users::COL_ID
+                        Stephino_Rpg_Db_Table_Users::COL_ID,
+                        $updatesUser
                     );
                     if (null !== $multiUpdateQuery) {
                         Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);
@@ -522,10 +521,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Building extends Stephino_Rpg_Renderer_A
 
                 // Update the city resources
                 if (count($updatesCity)) {
-                    $multiUpdateQuery = Stephino_Rpg_Utils_Db::getMultiUpdate(
-                        $updatesCity, 
+                    $multiUpdateQuery = Stephino_Rpg_Utils_Db::multiUpdate(
                         Stephino_Rpg_Db::get()->tableCities()->getTableName(), 
-                        Stephino_Rpg_Db_Table_Cities::COL_ID
+                        Stephino_Rpg_Db_Table_Cities::COL_ID,
+                        $updatesCity
                     );
                     if (null !== $multiUpdateQuery) {
                         Stephino_Rpg_Db::get()->getWpDb()->query($multiUpdateQuery);

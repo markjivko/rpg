@@ -101,7 +101,8 @@
                             class="btn btn-danger w-100" 
                             data-html="true"
                             title="<b><?php echo number_format($premiumPackageConfig->getCostFiat(), 2);?></b> <?php 
-                                echo Stephino_Rpg_Db_Model_Invoices::CURRENCIES[Stephino_Rpg_Config::get()->core()->getPayPalCurrency()];
+                                $currencies = Stephino_Rpg_Db_Model_Invoices::CURRENCIES;
+                                echo $currencies[Stephino_Rpg_Config::get()->core()->getPayPalCurrency()];
                             ?>"
                             data-click="premiumPackageBuy" 
                             data-click-args="<?php echo $premiumPackageConfig->getId();?>,<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_RES_FIAT;?>">

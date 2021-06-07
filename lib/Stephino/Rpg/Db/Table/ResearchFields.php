@@ -70,12 +70,14 @@ class Stephino_Rpg_Db_Table_ResearchFields extends Stephino_Rpg_Db_Table {
      */
     public function create($userId, $researchFieldConfigId, $researchFieldLevel) {
         // Execute the query
-        $result = $this->getDb()->getWpDb()->insert(
-            $this->getTableName(), 
-            array(
-                self::COL_RESEARCH_FIELD_USER_ID   => abs((int) $userId),
-                self::COL_RESEARCH_FIELD_CONFIG_ID => abs((int) $researchFieldConfigId),
-                self::COL_RESEARCH_FIELD_LEVEL     => abs((int) $researchFieldLevel),
+        $result = $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::insert(
+                $this->getTableName(), 
+                array(
+                    self::COL_RESEARCH_FIELD_USER_ID   => abs((int) $userId),
+                    self::COL_RESEARCH_FIELD_CONFIG_ID => abs((int) $researchFieldConfigId),
+                    self::COL_RESEARCH_FIELD_LEVEL     => abs((int) $researchFieldLevel)
+                )
             )
         );
 
@@ -92,9 +94,13 @@ class Stephino_Rpg_Db_Table_ResearchFields extends Stephino_Rpg_Db_Table {
      */
     public function getByUserAndConfig($userId, $researchFieldConfigId) {
         return $this->getDb()->getWpDb()->get_row(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_RESEARCH_FIELD_USER_ID . "` = '" . intval($userId) . "'"
-            . " AND `" . self::COL_RESEARCH_FIELD_CONFIG_ID . "` = '" . intval($researchFieldConfigId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_RESEARCH_FIELD_USER_ID   => abs((int) $userId),
+                    self::COL_RESEARCH_FIELD_CONFIG_ID => abs((int) $researchFieldConfigId)
+                )
+            ),
             ARRAY_A
         );
     }
@@ -107,8 +113,12 @@ class Stephino_Rpg_Db_Table_ResearchFields extends Stephino_Rpg_Db_Table {
      */
     public function getByUser($userId) {
         $result = $this->getDb()->getWpDb()->get_results(
-            "SELECT * FROM `$this`"
-            . " WHERE `" . self::COL_RESEARCH_FIELD_USER_ID . "` = '" . abs((int) $userId) . "'",
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_RESEARCH_FIELD_USER_ID => abs((int) $userId)
+                )
+            ),
             ARRAY_A
         );
         return is_array($result) && count($result) ? $result : null;
@@ -121,10 +131,12 @@ class Stephino_Rpg_Db_Table_ResearchFields extends Stephino_Rpg_Db_Table {
      * @return int|false The number of rows deleted or false on error
      */
     public function deleteByUser($userId) {
-        return $this->getDb()->getWpDb()->delete(
-            $this->getTableName(),
-            array(
-                self::COL_RESEARCH_FIELD_USER_ID => abs((int) $userId),
+        return $this->getDb()->getWpDb()->query(
+            Stephino_Rpg_Utils_Db::delete(
+                $this->getTableName(),
+                array(
+                    self::COL_RESEARCH_FIELD_USER_ID => abs((int) $userId)
+                )
             )
         );
     }
