@@ -34,29 +34,103 @@
 class Stephino_Rpg_Parsedown {
     
     /**
+     * Enable line breaks with \ syntax
+     * 
+     * @var boolean
+     */
+    protected $_optionBreaksEnabled = false;
+    
+    /**
+     * Convert plain-text urls to anchors
+     * 
+     * @var boolean
+     */
+    protected $_optionUrlsLinked = false;
+    
+    /**
+     * Safe mode: no raw HTML, sanitize a and img attributes
+     * 
+     * @var boolean
+     */
+    protected $_optionSafeMode = false;
+    
+    /**
+     * headers are ignored if there is no space between # and the first character
+     * 
+     * @var boolean
+     */
+    protected $_optionHeaderStrictMode = false;
+    
+    /**
+     * Replace anchors with strong elements
+     * 
+     * @var boolean
+     */
+    protected $_optionLinksRemoved = false;
+    
+    /**
+     * Replace images with strong elements
+     * 
+     * @var boolean
+     */
+    protected $_optionImagesRemoved = false;
+    
+    /**
      * Singleton instances
      * 
      * @var Stephino_Rpg_Parsedown[]
      */
     protected static $_instances = array();
     
+    /**
+     * Definition data, holds references
+     * 
+     * @var array
+     */
     protected $_definitionData = array();
-    protected $_specialCharacters = array(
+    
+    /**
+     * Special characters
+     * 
+     * @var string[]
+     */
+    const SPECIAL_CHARACTERS = array(
         '\\', '`', '*', '_', '{', '}', '[', ']', '(', ')', '>', '#', '+', '-', '.', '!', '|', '~'
     );
-    protected $_strongRegex = array(
+    
+    /**
+     * Strong element RegExes
+     * 
+     * @var string[]
+     */
+    const REGEX_STRONG = array(
         '*' => '/^[*]{2}((?:\\\\\*|[^*]|[*][^*]*+[*])+?)[*]{2}(?![*])/s',
         '_' => '/^__((?:\\\\_|[^_]|_[^_]*+_)+?)__(?!_)/us',
     );
-    protected $_emRegex = array(
+    
+    /**
+     * Emphasis element RegExes
+     * 
+     * @var string[]
+     */
+    const REGEX_EM = array(
         '*' => '/^[*]((?:\\\\\*|[^*]|[*][*][^*]+?[*][*])+?)[*](?![*])/s',
         '_' => '/^_((?:\\\\_|[^_]|__[^_]*__)+?)_(?!_)\b/us',
     );
-    protected $_regexHtmlAttribute = '[a-zA-Z_:][\w:.-]*+(?:\s*+=\s*+(?:[^"\'=<>`\s]+|"[^"]*+"|\'[^\']*+\'))?+';
-    protected $_voidElements = array(
-        'area', 'base', 'br', 'col', 'command', 'embed', 'hr', 'img', 'input', 'link', 'meta', 'param', 'source',
-    );
-    protected $_textLevelElements = array(
+    
+    /**
+     * HTML attribute RegEx
+     * 
+     * @var string
+     */
+    const REGEX_HTML_ATTR = '[a-zA-Z_:][\w:.-]*+(?:\s*+=\s*+(?:[^"\'=<>`\s]+|"[^"]*+"|\'[^\']*+\'))?+';
+    
+    /**
+     * Text elements
+     * 
+     * @var string[]
+     */
+    const TEXT_ELEMENTS = array(
         'a', 'br', 'bdo', 'abbr', 'blink', 'nextid', 'acronym', 'basefont',
         'b', 'em', 'big', 'cite', 'small', 'spacer', 'listing',
         'i', 'rp', 'del', 'code', 'strike', 'marquee',
@@ -67,12 +141,13 @@ class Stephino_Rpg_Parsedown {
         'var', 'span',
         'wbr', 'time',
     );
-    protected $_breaksEnabled = false;
-    protected $_markupEscaped = false;
-    protected $_urlsLinked = true;
-    protected $_safeMode = false;
-    protected $_strictMode = false;
-    protected $_safeLinksWhitelist = array(
+    
+    /**
+     * Allowed link types
+     * 
+     * @var string[]
+     */
+    const SAFE_URL_SCHEMES = array(
         'http://',
         'https://',
         'ftp://',
@@ -89,7 +164,13 @@ class Stephino_Rpg_Parsedown {
         'news:',
         'steam:',
     );
-    protected $_blockTypes = array(
+    
+    /**
+     * Block types
+     * 
+     * @var array
+     */
+    const BLOCK_TYPES = array(
         '#' => array('Header'),
         '*' => array('Rule', 'List'),
         '+' => array('List'),
@@ -114,10 +195,22 @@ class Stephino_Rpg_Parsedown {
         '|' => array('Table'),
         '~' => array('FencedCode'),
     );
-    protected $_unmarkedBlockTypes = array(
+    
+    /**
+     * Unmarked block types
+     * 
+     * @var string[]
+     */
+    const BLOCK_TYPES_UNMARKED = array(
         'Code',
     );
-    protected $_inlineTypes = array(
+    
+    /**
+     * Inline types
+     * 
+     * @var array
+     */
+    const INLINE_TYPES = array(
         '!' => array('Image'),
         '&' => array('SpecialCharacter'),
         '*' => array('Emphasis'),
@@ -129,8 +222,7 @@ class Stephino_Rpg_Parsedown {
         '~' => array('Strikethrough'),
         '\\' => array('EscapeSequence'),
     );
-    protected $_inlineMarkerList = '!*_&[:<`~\\';
-
+    
     /**
      * Get a Singleton instance of Stephino_Rpg_Parsedown
      * 
@@ -151,16 +243,6 @@ class Stephino_Rpg_Parsedown {
      * @return string HTML Text
      */
     public function parse($text) {
-        return $this->text($text);
-    }
-    
-    /**
-     * Parse MarkDown-formatted text into HTML
-     * 
-     * @param string $text
-     * @return string HTML Text
-     */
-    public function text($text) {
         return trim($this->_elements($this->_textElements($text)), "\n");
     }
     
@@ -176,59 +258,71 @@ class Stephino_Rpg_Parsedown {
     }
     
     /**
-     * Set breaks enabled
+     * Breaks with \ syntax
      * 
-     * @param boolean $breaksEnabled Breaks enabled
+     * @param boolean $breaksEnabled Breaks enabled; default <b>true</b>
      * @return Stephino_Rpg_Parsedown
      */
-    public function setBreaksEnabled($breaksEnabled) {
-        $this->_breaksEnabled = $breaksEnabled;
-        return $this;
-    }
-
-    /**
-     * Ignore markups
-     * 
-     * @param boolean $markupEscaped Markup escaped
-     * @return Stephino_Rpg_Parsedown
-     */
-    public function setMarkupEscaped($markupEscaped) {
-        $this->_markupEscaped = (boolean) $markupEscaped;
+    public function setBreaksEnabled($breaksEnabled = true) {
+        $this->_optionBreaksEnabled = $breaksEnabled;
         return $this;
     }
 
     /**
      * Convert URLs to anchors
      * 
-     * @param boolean $urlsLinked URLs linked
+     * @param boolean $urlsLinked URLs linked; default <b>true</b>
      * @return Stephino_Rpg_Parsedown
      */
-    public function setUrlsLinked($urlsLinked) {
-        $this->_urlsLinked = (boolean) $urlsLinked;
+    public function setUrlsLinked($urlsLinked = true) {
+        $this->_optionUrlsLinked = (boolean) $urlsLinked;
         return $this;
     }
 
     /**
-     * Set safe mode: ignore markups and comments and sanitize elements
+     * Replace all anchors with strong elements
      * 
-     * @param boolean $safeMode Safe mode
+     * @param boolean $removeLinks Remove links; default <b>true</b>
      * @return Stephino_Rpg_Parsedown
      */
-    public function setSafeMode($safeMode) {
-        $this->_safeMode = (bool) $safeMode;
+    public function setLinksRemoved($removeLinks = true) {
+        $this->_optionLinksRemoved = (boolean) $removeLinks;
+        return $this;
+    }
+    
+    /**
+     * Replace all images with strong elements
+     * 
+     * @param boolean $removeImages Remove images; default <b>true</b>
+     * @return Stephino_Rpg_Parsedown
+     */
+    public function setImagesRemoved($removeImages = true) {
+        $this->_optionImagesRemoved = (boolean) $removeImages;
+        return $this;
+    }
+    
+    /**
+     * Ignore markups and comments and sanitize elements
+     * 
+     * @param boolean $safeMode Safe mode; default <b>true</b>
+     * @return Stephino_Rpg_Parsedown
+     */
+    public function setSafeMode($safeMode = true) {
+        $this->_optionSafeMode = (bool) $safeMode;
         return $this;
     }
 
     /**
-     * Set headers strict mode: headers are ignored if there is no space between # and the first character
+     * Headers are ignored if there is no space between # and the first character
      * 
-     * @param boolean $strictMode Strict mode
+     * @param boolean $strictMode Strict mode; default <b>true</b>
      * @return Stephino_Rpg_Parsedown
      */
-    public function setStrictMode($strictMode) {
-        $this->_strictMode = (bool) $strictMode;
+    public function setStrictMode($strictMode = true) {
+        $this->_optionHeaderStrictMode = (bool) $strictMode;
         return $this;
     }
+    
     
     protected static function _pregReplaceElements($regexp, $elements, $text) {
         $newElements = array();
@@ -319,11 +413,12 @@ class Stephino_Rpg_Parsedown {
             }
 
             $marker = $text[0];
-            $blockTypes = $this->_unmarkedBlockTypes;
-
-            if (isset($this->_blockTypes[$marker])) {
-                foreach ($this->_blockTypes[$marker] as $blockType) {
-                    $blockTypes [] = $blockType;
+            $blockTypes = self::BLOCK_TYPES_UNMARKED;
+            $allBlockTypes = self::BLOCK_TYPES;
+            
+            if (isset($allBlockTypes[$marker])) {
+                foreach ($allBlockTypes[$marker] as $blockType) {
+                    $blockTypes[] = $blockType;
                 }
             }
 
@@ -429,7 +524,7 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _blockComment($line) {
-        if ($this->_markupEscaped or $this->_safeMode) {
+        if ($this->_optionSafeMode) {
             return;
         }
 
@@ -530,7 +625,7 @@ class Stephino_Rpg_Parsedown {
             return;
         }
         $text = trim($line['text'], '#');
-        if ($this->_strictMode and isset($text[0]) and $text[0] !== ' ') {
+        if ($this->_optionHeaderStrictMode and isset($text[0]) and $text[0] !== ' ') {
             return;
         }
         $text = trim($text, ' ');
@@ -731,12 +826,12 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _blockMarkup($line) {
-        if ($this->_markupEscaped or $this->_safeMode) {
+        if ($this->_optionSafeMode) {
             return;
         }
-        if (preg_match('/^<[\/]?+(\w*)(?:[ ]*+' . $this->_regexHtmlAttribute . ')*+[ ]*+(\/)?>/', $line['text'], $matches)) {
+        if (preg_match('/^<[\/]?+(\w*)(?:[ ]*+' . self::REGEX_HTML_ATTR . ')*+[ ]*+(\/)?>/', $line['text'], $matches)) {
             $element = strtolower($matches[1]);
-            if (in_array($element, $this->_textLevelElements)) {
+            if (in_array($element, self::TEXT_ELEMENTS)) {
                 return;
             }
             return array(
@@ -927,12 +1022,16 @@ class Stephino_Rpg_Parsedown {
         $elements = array();
         $nonNestables = (empty($nonNestables) ? array() : array_combine($nonNestables, $nonNestables));
 
+        // Prepare the marker list
+        $inlineTypes = self::INLINE_TYPES;
+        $inlineMarkerList = implode('', array_keys($inlineTypes));
+        
         // $excerpt is based on the first occurrence of a marker
-        while ($excerpt = strpbrk($text, $this->_inlineMarkerList)) {
+        while ($excerpt = strpbrk($text, $inlineMarkerList)) {
             $marker = $excerpt[0];
             $markerPosition = strlen($text) - strlen($excerpt);
             $Excerpt = array('text' => $excerpt, 'context' => $text);
-            foreach ($this->_inlineTypes[$marker] as $inlineType) {
+            foreach ($inlineTypes[$marker] as $inlineType) {
                 // Check to see if the current inline type is nestable in the current context
                 if (isset($nonNestables[$inlineType])) {
                     continue;
@@ -953,7 +1052,9 @@ class Stephino_Rpg_Parsedown {
                 }
 
                 // Cause the new element to 'inherit' our non nestables
-                $inline['element']['nonNestables'] = isset($inline['element']['nonNestables']) ? array_merge($inline['element']['nonNestables'], $nonNestables) : $nonNestables;
+                $inline['element']['nonNestables'] = isset($inline['element']['nonNestables']) 
+                    ? array_merge($inline['element']['nonNestables'], $nonNestables) 
+                    : $nonNestables;
 
                 // The text that comes before the inline
                 $unmarkedText = substr($text, 0, $inline['position']);
@@ -996,7 +1097,7 @@ class Stephino_Rpg_Parsedown {
         );
 
         $inline['element']['elements'] = self::_pregReplaceElements(
-            $this->_breaksEnabled 
+            $this->_optionBreaksEnabled 
                 ? '/[ ]*+\n/' 
                 : '/(?:[ ]*+\\\\|[ ]{2,}+)\n/', 
             array(
@@ -1032,17 +1133,29 @@ class Stephino_Rpg_Parsedown {
             if (!isset($matches[2])) {
                 $url = "mailto:$url";
             }
-            return array(
-                'extent' => strlen($matches[0]),
-                'element' => array(
-                    'name' => 'a',
-                    'text' => $matches[1],
-                    'attributes' => array(
-                        'href' => $url,
-                        'target' => '_blank',
+            
+            return $this->_optionLinksRemoved
+                ? array(
+                    'extent' => strlen($matches[0]),
+                    'element' => array(
+                        'name' => 'strong',
+                        'text' => $matches[1],
+                        'attributes' => array(
+                            'title' => $url,
+                        ),
                     ),
-                ),
-            );
+                )
+                : array(
+                    'extent' => strlen($matches[0]),
+                    'element' => array(
+                        'name' => 'a',
+                        'text' => $matches[1],
+                        'attributes' => array(
+                            'href' => $url,
+                            'target' => '_blank',
+                        ),
+                    ),
+                );
         }
     }
 
@@ -1051,9 +1164,9 @@ class Stephino_Rpg_Parsedown {
             return;
         }
         $marker = $excerpt['text'][0];
-        if ($excerpt['text'][1] === $marker and preg_match($this->_strongRegex[$marker], $excerpt['text'], $matches)) {
+        if ($excerpt['text'][1] === $marker and preg_match(self::REGEX_STRONG[$marker], $excerpt['text'], $matches)) {
             $emphasis = 'strong';
-        } elseif (preg_match($this->_emRegex[$marker], $excerpt['text'], $matches)) {
+        } elseif (preg_match(self::REGEX_EM[$marker], $excerpt['text'], $matches)) {
             $emphasis = 'em';
         } else {
             return;
@@ -1072,7 +1185,7 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _inlineEscapeSequence($excerpt) {
-        if (isset($excerpt['text'][1]) and in_array($excerpt['text'][1], $this->_specialCharacters)) {
+        if (isset($excerpt['text'][1]) and in_array($excerpt['text'][1], self::SPECIAL_CHARACTERS)) {
             return array(
                 'element' => array('rawHtml' => $excerpt['text'][1]),
                 'extent' => 2,
@@ -1102,6 +1215,19 @@ class Stephino_Rpg_Parsedown {
         );
         $inline['element']['attributes'] += $link['element']['attributes'];
         unset($inline['element']['attributes']['href']);
+        
+        // Remove images
+        if ($this->_optionImagesRemoved) {
+            $inline['element']['name'] = 'strong';
+            unset($inline['element']['attributes']['src']);
+            unset($inline['element']['attributes']['alt']);
+            $inline['element']['handler'] = array(
+                'function' => '_lineElements',
+                'argument' => '🎨 ' . $link['element']['handler']['argument'],
+                'destination' => 'elements',
+            );
+        }
+        
         return $inline;
     }
 
@@ -1120,6 +1246,7 @@ class Stephino_Rpg_Parsedown {
                 'target' => '_blank',
             ),
         );
+        
         $extent = 0;
         $remainder = $excerpt['text'];
         if (preg_match('/\[((?:[^][]++|(?R))*+)\]/', $remainder, $matches)) {
@@ -1156,6 +1283,13 @@ class Stephino_Rpg_Parsedown {
             $element['attributes']['title'] = $Definition['title'];
         }
 
+        // Remove links
+        if ($this->_optionLinksRemoved) {
+            $element['name'] = 'strong';
+            $element['attributes']['title'] = $element['attributes']['href'];
+            unset($element['attributes']['target']);
+        }
+        
         return array(
             'extent' => $extent,
             'element' => $element,
@@ -1163,7 +1297,7 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _inlineMarkup($excerpt) {
-        if ($this->_markupEscaped or $this->_safeMode or strpos($excerpt['text'], '>') === false) {
+        if ($this->_optionSafeMode or strpos($excerpt['text'], '>') === false) {
             return;
         }
 
@@ -1181,7 +1315,7 @@ class Stephino_Rpg_Parsedown {
             );
         }
 
-        if ($excerpt['text'][1] !== ' ' and preg_match('/^<\w[\w-]*+(?:[ ]*+' . $this->_regexHtmlAttribute . ')*+[ ]*+\/?>/s', $excerpt['text'], $matches)) {
+        if ($excerpt['text'][1] !== ' ' and preg_match('/^<\w[\w-]*+(?:[ ]*+' . self::REGEX_HTML_ATTR . ')*+[ ]*+\/?>/s', $excerpt['text'], $matches)) {
             return array(
                 'element' => array('rawHtml' => $matches[0]),
                 'extent' => strlen($matches[0]),
@@ -1220,7 +1354,7 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _inlineUrl($excerpt) {
-        if (!$this->_urlsLinked or !isset($excerpt['text'][2]) or $excerpt['text'][2] !== '/') {
+        if (!$this->_optionUrlsLinked or !isset($excerpt['text'][2]) or $excerpt['text'][2] !== '/') {
             return;
         }
 
@@ -1228,18 +1362,28 @@ class Stephino_Rpg_Parsedown {
             and preg_match('/\bhttps?+:[\/]{2}[^\s<]+\b\/*+/ui', $excerpt['context'], $matches, PREG_OFFSET_CAPTURE)
         ) {
             $url = $matches[0][0];
-            return array(
-                'extent' => strlen($matches[0][0]),
-                'position' => $matches[0][1],
-                'element' => array(
-                    'name' => 'a',
-                    'text' => $url,
-                    'attributes' => array(
-                        'href' => $url,
-                        'target' => '_blank',
+            
+            return $this->_optionLinksRemoved
+                ? array(
+                    'extent' => strlen($matches[0][0]),
+                    'position' => $matches[0][1],
+                    'element' => array(
+                        'name' => 'strong',
+                        'text' => $url,
                     ),
-                ),
-            );
+                )
+                : array(
+                    'extent' => strlen($matches[0][0]),
+                    'position' => $matches[0][1],
+                    'element' => array(
+                        'name' => 'a',
+                        'text' => $url,
+                        'attributes' => array(
+                            'href' => $url,
+                            'target' => '_blank',
+                        ),
+                    ),
+                );
         }
     }
 
@@ -1248,14 +1392,19 @@ class Stephino_Rpg_Parsedown {
             $url = $matches[1];
             return array(
                 'extent' => strlen($matches[0]),
-                'element' => array(
-                    'name' => 'a',
-                    'text' => $url,
-                    'attributes' => array(
-                        'href' => $url,
-                        'target' => '_blank',
+                'element' => $this->_optionLinksRemoved
+                    ? array(
+                        'name' => 'strong',
+                        'text' => $url,
+                    )
+                    : array(
+                        'name' => 'a',
+                        'text' => $url,
+                        'attributes' => array(
+                            'href' => $url,
+                            'target' => '_blank',
+                        ),
                     ),
-                ),
             );
         }
     }
@@ -1334,7 +1483,7 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _element($element) {
-        if ($this->_safeMode) {
+        if ($this->_optionSafeMode) {
             $element = $this->_sanitiseElement($element);
         }
 
@@ -1363,7 +1512,7 @@ class Stephino_Rpg_Parsedown {
         elseif (isset($element['rawHtml'])) {
             $text = $element['rawHtml'];
             $allowRawHtmlInSafeMode = isset($element['allowRawHtmlInSafeMode']) && $element['allowRawHtmlInSafeMode'];
-            $permitRawHtml = !$this->_safeMode || $allowRawHtmlInSafeMode;
+            $permitRawHtml = !$this->_optionSafeMode || $allowRawHtmlInSafeMode;
         }
 
         $hasContent = isset($text) || isset($element['element']) || isset($element['elements']);
@@ -1423,7 +1572,7 @@ class Stephino_Rpg_Parsedown {
     protected function _sanitiseElement($element) {
         static $goodAttribute = '/^[a-zA-Z0-9][a-zA-Z0-9-_]*+$/';
         static $safeUrlNameToAtt = array(
-            'a' => 'href',
+            'a'   => 'href',
             'img' => 'src',
         );
         if (!isset($element['name'])) {
@@ -1450,7 +1599,7 @@ class Stephino_Rpg_Parsedown {
     }
 
     protected function _filterUnsafeUrlInAttribute($element, $attribute) {
-        foreach ($this->_safeLinksWhitelist as $scheme) {
+        foreach (self::SAFE_URL_SCHEMES as $scheme) {
             if (self::_striAtStart($element['attributes'][$attribute], $scheme)) {
                 return $element;
             }

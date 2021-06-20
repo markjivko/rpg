@@ -273,7 +273,7 @@
             <?php endif;?>
         </div>
     <?php endforeach; ?>
-    <?php if (!Stephino_Rpg_Cache_User::get()->isGameMaster() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
+    <?php if (!Stephino_Rpg_Cache_User::get()->isElevated() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
         <div class="col-12 framed mb-4">
             <div class="col-12 mb-4">
                 <div class="card card-body bg-dark mb-4"><?php echo esc_html__('Install this WordPress plugin for free and host your own game!', 'stephino-rpg');?></div>

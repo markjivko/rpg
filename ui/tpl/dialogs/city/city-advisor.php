@@ -38,9 +38,16 @@
                 </span>
             </div>
         <?php endif;?>
-        <button class="item-level-upgrade btn btn-default" data-click="cityRenameButton">
-            <span><?php echo esc_html__('Rename', 'stephino-rpg');?></span>
-        </button>
+        <div class="col-12 row no-gutters">
+            <input 
+                type="text" 
+                autocomplete="off"
+                class="form-control text-center" 
+                data-change="cityRename" 
+                data-effect="charCounter"
+                maxlength="<?php echo Stephino_Rpg_Db_Model_Cities::MAX_LENGTH_NAME;?>"
+                value="<?php echo esc_attr($cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_NAME]); ?>" />
+        </div>
         <?php if (!$cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_IS_CAPITAL] && is_array($costData) && count($costData)):?>
             <button 
                 class="btn btn-default" 

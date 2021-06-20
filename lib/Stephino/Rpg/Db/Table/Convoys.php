@@ -17,6 +17,7 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
     const CONVOY_TYPE_SPY         = 's';
     const CONVOY_TYPE_COLONIZER   = 'c';
     const CONVOY_TYPE_TRANSPORTER = 't';
+    const CONVOY_TYPE_SENTRY      = 'y';
     
     // Convoy types
     const CONVOY_TYPES = array(
@@ -24,6 +25,7 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         self::CONVOY_TYPE_SPY,
         self::CONVOY_TYPE_COLONIZER,
         self::CONVOY_TYPE_TRANSPORTER,
+        self::CONVOY_TYPE_SENTRY,
     );
     
     /**
@@ -181,6 +183,7 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SPY</li>
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER</li>
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER</li>
+     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY</li>
      * </ul>
      * @return array|null Array of [<i>(int)</i>New convoy ID, <i>(array)</i> sanitized <b>$convoyEntities</b>] or Null on error
      */
@@ -246,7 +249,7 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         }
         
         // Invalid convoy entities payload
-        if (!count($convoyPayload[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES])) {
+        if (!count($convoyPayload[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES]) && self::CONVOY_TYPE_SENTRY !== $convoyType) {
             return null;
         }
         
@@ -282,6 +285,14 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
             // Store in the time-lapse data set
             Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Convoys::KEY)->addRow($rowData);
         }
+        
+        // Mark the sentry as active (challenge in progress)
+        $this->getDb()->tableUsers()->updateById(
+            array(
+                Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE => 1
+            ), 
+            $fromUserId
+        );
         
         // Get the new convoy ID and sanitized entities
         return (false !== $result ? array($this->getDb()->getWpDb()->insert_id, $convoyPayload[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_ENTITIES]) : null);
@@ -374,6 +385,7 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
      * @param int    $userId     User ID
      * @param string $convoyType (optional) Convoy Type; default <b>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK</b><br/>One of <ul>
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_ATTACK</li>
+     *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY</li>
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SPY</li>
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER</li>
      *     <li>Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER</li>
@@ -398,6 +410,25 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         $result = $this->getDb()->getWpDb()->get_results($query, ARRAY_A);
         
         return is_array($result) && count($result) ? $result : null;
+    }
+    
+    /**
+     * Get the sentry convoy sent by this user
+     * 
+     * @param int $userId Sentry owner ID
+     * @return array|null
+     */
+    public function getSentryFromUser($userId) {
+        return $this->getDb()->getWpDb()->get_row(
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(), 
+                array(
+                    self::COL_CONVOY_FROM_USER_ID => abs((int) $userId),
+                    self::COL_CONVOY_TYPE         => self::CONVOY_TYPE_SENTRY
+                )
+            ), 
+            ARRAY_A
+        );
     }
     
     /**

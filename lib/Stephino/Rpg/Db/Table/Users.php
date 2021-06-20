@@ -116,7 +116,7 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     const COL_USER_BATTLE_DEFEATS = 'user_battle_defeats';
     
     /**
-     * Battles: Draws
+     * Battles: Impasses
      * 
      * @var int
      */
@@ -142,6 +142,48 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
      * @var int
      */
     const COL_USER_PTF_WON = 'user_ptf_won';
+    
+    /**
+     * Sentry: name
+     * 
+     * @var string
+     */
+    const COL_USER_SENTRY_NAME = 'user_sentry_name';
+    
+    /**
+     * Sentry: attack level
+     * 
+     * @var int
+     */
+    const COL_USER_SENTRY_LEVEL_ATTACK = 'user_sentry_lvl_att';
+    
+    /**
+     * Sentry: defense level
+     * 
+     * @var int
+     */
+    const COL_USER_SENTRY_LEVEL_DEFENSE = 'user_sentry_lvl_def';
+    
+    /**
+     * Sentry: looting level
+     * 
+     * @var int
+     */
+    const COL_USER_SENTRY_LEVEL_LOOTING = 'user_sentry_lvl_ltn';
+    
+    /**
+     * Sentry: version
+     * 
+     * @var int
+     */
+    const COL_USER_SENTRY_VERSION = 'user_sentry_version';
+    
+    /**
+     * Sentry is on a challenge
+     * 
+     * @var int 0|1, default 0
+     */
+    const COL_USER_SENTRY_ACTIVE = 'user_sentry_active';
     
     /**
      * Current Game User data
@@ -175,6 +217,12 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     `" . self::COL_USER_LAST_TICK_AJAX . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_BANNED . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_USER_GAME_SETTINGS . "` text NOT NULL DEFAULT '',
+    `" . self::COL_USER_SENTRY_NAME . "` varchar(128) NOT NULL DEFAULT '',
+    `" . self::COL_USER_SENTRY_LEVEL_ATTACK . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
+    `" . self::COL_USER_SENTRY_LEVEL_DEFENSE . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
+    `" . self::COL_USER_SENTRY_LEVEL_LOOTING . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
+    `" . self::COL_USER_SENTRY_VERSION . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
+    `" . self::COL_USER_SENTRY_ACTIVE . "` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
     UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
 );";
     }
@@ -393,6 +441,68 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
         }
         
         return is_array($result) && count($result) ? $result : null;
+    }
+    
+    /**
+     * Get all inactive sentries excluding this user, in ascending order of defense level
+     * 
+     * @param int $excludeUserId Excluded User ID
+     * @param int $limitCount    (optional) Query limit; default <b>null</b>
+     * @param int $limitOffset   (optional) Query limit offset; default <b>null</b>
+     * @return array
+     */
+    public function getSentries($excludeUserId, $limitCount = null, $limitOffset = null) {
+        $result = $this->getDb()->getWpDb()->get_results(
+            Stephino_Rpg_Utils_Db::selectAll(
+                $this->getTableName(),
+                array(
+                    self::COL_USER_SENTRY_ACTIVE => 0,
+                ),
+                $limitCount,
+                $limitOffset,
+                self::COL_USER_SENTRY_LEVEL_DEFENSE
+            ),
+            ARRAY_A
+        );
+        
+        if (is_array($result)) {
+            foreach ($result as $key => $dbRow) {
+                if ((int) $excludeUserId === (int) $dbRow[Stephino_Rpg_Db_Table_Users::COL_ID]) {
+                    unset($result[$key]);
+                }
+            }
+        }
+        
+        return is_array($result) ? $result : array();
+    }
+    
+    /**
+     * Get the total number of inactive snetries
+     * 
+     * @param int $excludeUserId Excluded User ID
+     * @return int
+     */
+    public function getSentriesCount($excludeUserId) {
+        $excludeUserId = abs((int) $excludeUserId);
+        
+        // Prepare the result
+        $result = 0;
+        
+        // Prepare the query
+        $query = "SELECT COUNT(`" . self::COL_ID . "`) as `count` FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_USER_SENTRY_ACTIVE . "` = 0"
+                . " AND `" . self::COL_ID . "` != $excludeUserId";
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        // Get the DB row
+        $dbRow = $this->getDb()->getWpDb()->get_row($query, ARRAY_A);
+        
+        // Valid result
+        if (is_array($dbRow) && isset($dbRow['count'])) {
+            $result = intval($dbRow['count']);
+        }
+        
+        return $result;
     }
     
     /**

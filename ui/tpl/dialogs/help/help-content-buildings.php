@@ -98,7 +98,7 @@ $depResearchAreas = array_filter(
                     list($marketInfoName, $polynomialBase, $marketInfoKey) = $marketInfo;
             ?>
                 <div class="col-12 col-sm-6 res res-<?php echo $marketInfoKey;?>">
-                    <div class="icon" data-html="true" title="<b>1</b> <?php echo Stephino_Rpg_Utils_Lingo::escape($marketInfoName);?>"></div>
+                    <div class="icon" data-html="true" title="<b>1</b> <?php echo esc_attr($marketInfoName);?>"></div>
                     <span
                         data-html="true" 
                         data-placement="bottom">

@@ -23,7 +23,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Premium extends Stephino_Rpg_Renderer_Aj
      * @throws Exception
      */
     public static function ajaxPackageList() {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         if (!count(Stephino_Rpg_Config::get()->premiumPackages()->getAll())) {
             throw new Exception(__('No premium packages available', 'stephino-rpg'));

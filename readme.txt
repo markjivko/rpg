@@ -2,7 +2,7 @@
 Contributors: stephino
 Plugin link: https://stephino.com
 Donate link: https://gum.co/stephino-rpg
-Tags: game, games, rpg, fun, competition, platformer, pwa, strategy, mmorpg, gutenberg
+Tags: game, games, rpg, fun, competition, platformer, pwa, strategy, gutenberg
 Requires at least: 5.0
 Tested up to: 5.7
 Requires PHP: 5.6
@@ -70,12 +70,12 @@ Using progressive web apps, game assets are automatically stored in the browser 
 This results in 2ms fetch times and no requests made to your server, minimizing band width and drastically improving player experience.
 Image sprites are used to reduce the number of requests to your server further and all PNG files have been compressed with pngquant.
 
-= Game Masters =
-You can promote players to the rank of Game Master, allowing them to moderate platformer games, access the Admin Console and more.
-Game Admins (WordPress site super-admins) cannot be demoted and implicitly have Game Master abilities.
+= Game masters =
+You can promote players to the rank of game master, allowing them to moderate platformer games, access the Admin Console and more.
+Game admins (WordPress site super-admins) cannot be demoted and implicitly have game master abilities.
 
 = Command Line Interface =
-As a Game Master, you have complete control over your game.
+As a game master, you have complete control over your game.
 Just press **Alt+Ctrl+C** to toggle the console and type **help** to list all available commands.
 You can add resources to players, change building levels, fast-forward the game and more.
 
@@ -125,7 +125,7 @@ You can optionally enable new players registration from 'Settings > General > Me
 
 = How to get started? =
 Just follow the short tutorial and the advice of the **Upgrade Advisor**.
-The Codex is also available to learn more about how the game works (**Settings** > **Help**).
+The Codex is also available to learn more about how the game works (**Settings** > **Codex**).
 You can also click on the question mark (?) symbols to learn more.
 
 For more information and real-time support from other players, please head on to [Discord](https://discord.gg/32gFsSm).
@@ -140,7 +140,6 @@ Since there is a 10MB upload limit on WordPress.org, the music and other assets 
 = Where is the project roadmap? =
 **Roadmaps are bad**. Instead, features are suggested and discussed on [Discord](https://discord.gg/32gFsSm). 
 The most requested feature gets implemented in the next release (usually).
-Releases (usually) happen at least twice per month.
 
 == Screenshots ==
 
@@ -153,7 +152,28 @@ Releases (usually) happen at least twice per month.
 
 == Changelog ==
 
-= [0.3.8] 2021-06-07 =
+= [0.3.9] 2021-06-20 =
+* Enhancements
+  * **Sentries**: you can now earn extra Diamonds and even loot your enemies before any military units are ready!
+  * Robots also send sentries when they initiate military attacks
+  * Sentry designs can be customized (625 unique combinations)
+  * Added *Game Masters* permissions to `Game Mechanics > Core`
+  * Private messages between players now support Markdown syntax; images and links are removed
+
+* Bug fixes
+  * Fixed building level change bug in tutorial
+  * Fixed heartbeat for countdown methods
+  * Fixed fast-advancing robots glitch
+
+* Additional changes
+  * Improved tutorial; included references to Game Arena and Sentries
+  * Added automatic resource migration for themes
+  * Multiple label changes for better i18n
+  * The "Game Mechanics" label is immutable
+  * The "Tidy up" action skips messages from other players and important discoveries
+  * Made the discovery messages pop-out more so players don't miss them
+
+= [0.3.8] 2021-06-09 =
 * Enhancements
   * Language selection is now bound to the game, leaving your site language settings intact
   * Improved DB queries debugging
@@ -206,7 +226,7 @@ Releases (usually) happen at least twice per month.
   * **Themes**: you can now safely edit your own themes directly from the browser with auto-update enabled
   * Chat Room: Messages can be deleted by authors; removed "message sent" sound and other improvements
   * **Messages i18n**: messages are now stored as JSON configuration objects instead of plain HTML, resulting in a much smaller database footprint and dynamic templating of messages
-  * **Game Masters**: Promote/demote players to game masters, allowing them more control over the game i.e. console, Game Arena and others; game masters can promote/demote other players including themselves but not super-admins; super-admins are the only ones allowed to access administrative parts of the game, such as the `Dashboard`, `Themes`, `Game Mechanics` etc.
+  * **Game masters**: Promote/demote players to game masters, allowing them more control over the game i.e. console, Game Arena and others; game masters can promote/demote other players including themselves but not super-admins; super-admins are the only ones allowed to access administrative parts of the game, such as the `Dashboard`, `Themes`, `Game Mechanics` etc.
   * **Item unlocked** notifications
 * Bug fixes
   * Multisite (MU): Network Admin menu

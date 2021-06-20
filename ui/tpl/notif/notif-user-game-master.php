@@ -20,9 +20,9 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 1)):
             <div class="col-12">
                 <?php 
                     if ($gameMaster) {
-                        echo __('Congratulations! You are now a Game Master.', 'stephino-rpg');
+                        echo __('Congratulations! You are now a game master.', 'stephino-rpg');
                     } else {
-                        echo __('You are no longer a Game Master.', 'stephino-rpg');
+                        echo __('You are no longer a game master.', 'stephino-rpg');
                     }
                 ?>
             </div>

@@ -37,7 +37,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
         }
         
         // Prepare the destination city ID
-        $destinationCityId = current($commonArgs);
+        $destinationCityId = abs((int) current($commonArgs));
         
         // Get the destination city information
         if (null === $destinationCityInfo = Stephino_Rpg_Db::get()->tableCities()->getById($destinationCityId)) {
@@ -73,7 +73,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Transport extends Stephino_Rpg_Renderer_
      * </ul>
      */
     public static function ajaxReview($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         // Origin city info
         $originCityId = isset($data[self::REQUEST_FROM_CITY_ID]) ? intval($data[self::REQUEST_FROM_CITY_ID]) : null;

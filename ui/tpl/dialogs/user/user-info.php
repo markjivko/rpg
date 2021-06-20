@@ -31,32 +31,43 @@
             <span 
                 data-effect="help"
                 data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ADMIN;?>">
-                <?php echo esc_html__('Game Admin', 'stephino-rpg');?>
+                <?php echo esc_html__('Game admin', 'stephino-rpg');?>
             </span>
         </div>
-    <?php elseif (Stephino_Rpg_Cache_User::get()->isGameMaster((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+    <?php elseif (Stephino_Rpg_Cache_User::get()->isElevated(null, (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
         <div class="col-12 text-right">
             <span 
                 data-effect="help"
                 data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER;?>">
-                <?php echo esc_html__('Game Master', 'stephino-rpg');?>
+                <?php echo esc_html__('Game master', 'stephino-rpg');?>
             </span>
         </div>
     <?php endif;?>
-    <div class="col-6 col-lg-4">
+    <div class="col-6 col-lg-4 user-icon">
         <div class="user-icon-frame">
             <?php if (is_numeric($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
                 <a rel="noreferrer" target="_blank" href="https://en.gravatar.com/">
                     <?php echo get_avatar($userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID], 256, 'wavatar');?>
                 </a>
             <?php else:?>
-                <img src="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/ui/512-robot.png')); ?>" />
+                <img src="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(Stephino_Rpg_Theme::FOLDER_IMG_UI . '/512-robot.png')); ?>" />
             <?php endif;?>
         </div>
+        <?php if (Stephino_Rpg_Config::get()->core()->getSentryEnabled()):?>
+            <div 
+                class="user-icon-sentry" 
+                data-click="dialog"
+                data-click-args="dialogSentryInfo,<?php echo (int) $userData[Stephino_Rpg_Db_Table_Users::COL_ID];?>"
+                data-effect="sentryBackground" 
+                data-effect-args="<?php echo (int) $userData[Stephino_Rpg_Db_Table_Users::COL_ID];?>,<?php echo (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_VERSION];?>">
+                <span>
+                    <?php echo esc_html($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME]);?>
+                </span>
+            </div>
+        <?php endif;?>
         <h4 class="label w-100 footer-label">
             <span>
                 <span title="<?php echo esc_attr__('Total score', 'stephino-rpg');?>: <b><?php echo number_format($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?></b>" data-html="true">
-                    <div class="icon-score"></div> 
                     <b><?php echo Stephino_Rpg_Utils_Lingo::isuFormat($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?></b>
                 </span>
             </span>
@@ -72,7 +83,7 @@
             <div class="col-12">
                 <div class="icon-attack icon-attack-<?php echo Stephino_Rpg_TimeLapse_Convoys::ATTACK_VICTORY_BITTER;?>"></div>
                 <b><?php echo number_format($userData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS]);?></b>
-                <?php echo esc_html(_n('draw', 'draws', $userData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS], 'stephino-rpg'));?>
+                <?php echo esc_html(_n('impasse', 'impasses', $userData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS], 'stephino-rpg'));?>
             </div>
             <div class="col-12">
                 <div class="icon-attack icon-attack-<?php echo Stephino_Rpg_TimeLapse_Convoys::ATTACK_DEFEAT_CRUSHING;?>"></div>
@@ -100,8 +111,8 @@
             <div class="card card-body bg-dark">
                 <?php 
                     echo esc_html(
-                        strlen($userDescription) > Stephino_Rpg_Renderer_Ajax_Action_Settings::MAX_LENGTH_USER_DESC 
-                            ? (substr($userDescription, 0, Stephino_Rpg_Renderer_Ajax_Action_Settings::MAX_LENGTH_USER_DESC) . '...')
+                        strlen($userDescription) > Stephino_Rpg_Db_Model_Users::MAX_LENGTH_BIO 
+                            ? (substr($userDescription, 0, Stephino_Rpg_Db_Model_Users::MAX_LENGTH_BIO) . '...')
                             : $userDescription
                     );
                 ?>
@@ -137,7 +148,7 @@
         <?php endif;?>
     </div>
 <?php endif;?>
-<?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+<?php if (Stephino_Rpg_Cache_User::get()->isElevated()):?>
     <div class="col-12 align-items-center mt-2 framed">
         <div class="col-12 text-center mb-2">
             <h5 <?php if ($userData[Stephino_Rpg_Db_Table_Users::COL_USER_BANNED]):?>class="text-danger"<?php endif;?>>
@@ -219,25 +230,30 @@
                     <?php endforeach;?>
                 </ul>
             </div>
-            <div class="col-12 mt-2">
-                <?php if ((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID] > 0 
+            <?php 
+                // Can promote/demote
+                if (Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_PROMOTE)
+                    // Human player
+                    && (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID] > 0 
+                    // Not a Game admin
                     && !Stephino_Rpg_Cache_User::get()->isGameAdmin((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+                <div class="col-12 mt-2">
                     <div class="col">
                         <button
                             class="btn btn-warning w-100"
                             data-click="userToggleGm"
                             data-click-args="<?php echo (int) $userData[Stephino_Rpg_Db_Table_Users::COL_ID];?>">
                             <span>
-                                <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster((int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
+                                <?php if (Stephino_Rpg_Cache_User::get()->isElevated(null, (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID])):?>
                                     <?php echo esc_html__('Demote', 'stephino-rpg');?>
                                 <?php else:?>
-                                    <?php echo esc_html__('Promote to Game Master', 'stephino-rpg');?>
+                                    <?php echo esc_html__('Promote to game master', 'stephino-rpg');?>
                                 <?php endif;?>
                             </span>
                         </button>
                     </div>
-                <?php endif;?>
-            </div>
+                </div>
+            <?php endif;?>
         </div>
     </div>
 <?php endif;?>
@@ -247,7 +263,7 @@
             <div class="col-12">
                 <div class="framed">
                     <h5>
-                        <span><?php echo esc_html__('Contact', 'stephino-rpg');?></span>
+                        <span><?php echo esc_html__('Private message', 'stephino-rpg');?></span>
                     </h5>
                     <div class="row no-gutters p-3">
                         <div data-role="label-success" class="d-none mb-2 p-2 w-100 text-center"><?php echo esc_html__('Message sent', 'stephino-rpg');?></div>
@@ -258,16 +274,16 @@
                             name="message-subject" 
                             class="form-control mb-2" 
                             placeholder="<?php echo esc_attr__('Subject', 'stephino-rpg');?> (<?php 
-                                    echo sprintf(esc_attr__('max. %d characters', 'stephino-rpg'), Stephino_Rpg_Renderer_Ajax_Action_Message::MAX_MESSAGE_SUBJECT_LENGTH);
+                                    echo sprintf(esc_attr__('max. %d characters', 'stephino-rpg'), Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_SUBJECT);
                             ?>)" 
-                            maxlength="<?php echo Stephino_Rpg_Renderer_Ajax_Action_Message::MAX_MESSAGE_SUBJECT_LENGTH;?>" />
+                            maxlength="<?php echo Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_SUBJECT;?>" />
                         <textarea 
                             name="message-content" 
                             class="form-control mb-2" 
                             placeholder="<?php echo esc_html__('Message', 'stephino-rpg');?> (<?php 
-                                    echo sprintf(esc_attr__('max. %d characters', 'stephino-rpg'), Stephino_Rpg_Renderer_Ajax_Action_Message::MAX_MESSAGE_CONTENT_LENGTH);
-                               ?>)" 
-                            maxlength="<?php echo Stephino_Rpg_Renderer_Ajax_Action_Message::MAX_MESSAGE_CONTENT_LENGTH;?>"></textarea>
+                                    echo sprintf(esc_attr__('max. %d characters', 'stephino-rpg'), Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_CONTENT);
+                               ?>), **Markdown**" 
+                            maxlength="<?php echo Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_CONTENT;?>"></textarea>
                         <button
                             class="btn btn-default w-100"
                             data-click="userSendMessage" data-click-multi="true"
@@ -296,7 +312,7 @@
                             autocomplete="off"
                             class="form-control" 
                             data-effect="charCounter"
-                            maxlength="<?php echo Stephino_Rpg_Renderer_Ajax_Action_Settings::MAX_LENGTH_USER_NAME;?>"
+                            maxlength="<?php echo Stephino_Rpg_Db_Model_Users::MAX_LENGTH_NAME;?>"
                             data-change="settingsUpdate" 
                             name="<?php echo Stephino_Rpg_WordPress::USER_META_NICKNAME;?>" 
                             id="input-<?php echo Stephino_Rpg_WordPress::USER_META_NICKNAME;?>" 
@@ -315,7 +331,7 @@
                             class="form-control" 
                             rows="3" 
                             data-effect="charCounter"
-                            maxlength="<?php echo Stephino_Rpg_Renderer_Ajax_Action_Settings::MAX_LENGTH_USER_DESC;?>"
+                            maxlength="<?php echo Stephino_Rpg_Db_Model_Users::MAX_LENGTH_BIO;?>"
                             data-change="settingsUpdate" 
                             name="<?php echo Stephino_Rpg_WordPress::USER_META_DESCRIPTION;?>" 
                             id="input-<?php echo Stephino_Rpg_WordPress::USER_META_DESCRIPTION;?>"><?php 
@@ -323,7 +339,7 @@
                                     substr(
                                         Stephino_Rpg_Utils_Lingo::getUserDescription($userData), 
                                         0, 
-                                        Stephino_Rpg_Renderer_Ajax_Action_Settings::MAX_LENGTH_USER_DESC
+                                        Stephino_Rpg_Db_Model_Users::MAX_LENGTH_BIO
                                     )
                                 );
                             ?></textarea>

@@ -15,12 +15,26 @@
 if (!isset($productionTitle)) {
     $productionTitle = esc_html__('Production', 'stephino-rpg');
 }
+if (!isset($productionTitleHelp)) {
+    $productionTitleHelp = Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CITY_RES;
+}
 if (!isset($militaryTitle)) {
     $militaryTitle = esc_html__('Military capabilities', 'stephino-rpg');
 }
+
 // Refund mode
 if (!isset($productionRefundMode)) {
     $productionRefundMode = false;
+}
+
+// Hourly mode
+if (!isset($productionHourly)) {
+    $productionHourly = true;
+}
+
+// Hide zero values
+if (!isset($productionHideZero)) {
+    $productionHideZero = false;
 }
 ?>
 <?php 
@@ -51,11 +65,15 @@ if (!isset($productionRefundMode)) {
                         <?php if ($splitProdKey):?>
                             <span><?php echo $splitProdTitle;?></span>
                         <?php else:?>
-                            <span 
-                                data-effect="help"
-                                data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CITY_RES;?>">
+                            <?php if (is_string($productionTitleHelp) && strlen($productionTitleHelp)):?>
+                                <span 
+                                    data-effect="help"
+                                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo $productionTitleHelp;?>">
+                                    <?php echo $splitProdTitle;?>
+                                </span>
+                            <?php else:?>
                                 <?php echo $splitProdTitle;?>
-                            </span>
+                            <?php endif;?>
                         <?php endif;?>
                     </h5>
                 </div>
@@ -67,9 +85,12 @@ if (!isset($productionRefundMode)) {
                         if ($productionRefundMode) {
                             $prodValue *= -1;
                         }
+                        if ($productionHideZero && 0 == $prodValue) {
+                            continue;
+                        }
                 ?>
                     <div class="col-6 col-lg-4 res res-<?php echo $prodAjaxKey;?>">
-                        <div class="icon" data-html="true" title="<?php echo Stephino_Rpg_Utils_Lingo::escape($prodName);?>"></div>
+                        <div class="icon" data-html="true" title="<?php echo esc_attr($prodName);?>"></div>
                         <span>
                             <?php 
                                 if (null !== $prodAbundance):
@@ -81,7 +102,7 @@ if (!isset($productionRefundMode)) {
                                     data-effect="help"
                                     data-effect-args="<?php echo $abundanceConfigKey;?>,<?php echo $abundaceConfigId;?>">
                                     <b><?php echo Stephino_Rpg_Utils_Lingo::isuFormat($prodValue);?></b>
-                                </span>&nbsp;/h <span class="d-lg-none"><?php echo $prodName;?></span>
+                                </span><?php if ($productionHourly):?>&nbsp;/h <?php endif;?><span class="d-lg-none"><?php echo $prodName;?></span>
                             <?php else:?>
                                 <span 
                                     title="<b><?php echo number_format($prodValue) . ' ' . $prodName;?></b>"
@@ -92,7 +113,7 @@ if (!isset($productionRefundMode)) {
                                             Stephino_Rpg_Config_Building::RES_MILITARY_ATTACK,
                                             Stephino_Rpg_Config_Building::RES_MILITARY_DEFENSE,
                                         ))):
-                                    ?>&nbsp;/h<?php endif;?>
+                                    ?><?php if ($productionHourly):?>&nbsp;/h<?php endif;?><?php endif;?>
                                 </span>
                                 <span class="d-lg-none"><?php echo $prodName;?></span>
                             <?php endif;?>

@@ -406,6 +406,20 @@ abstract class Stephino_Rpg_TimeLapse_Abstract {
                                             $itemData
                                         );
                                         break;
+                                    
+                                    case Stephino_Rpg_TimeLapse_Convoys::ACTION_CHALLENGE:
+                                        $notifTemplate = Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_CHALLENGE;
+                                        $notifData = array(
+                                            // sentryReturned
+                                            $itemData[0],
+                                            // payloadArray (challenge type, levels, challenge successful)
+                                            $itemData[1],
+                                            // fromCityId
+                                            (int) $itemData[2][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_CITY_ID],
+                                            // toCityId
+                                            (int) $itemData[2][Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID],
+                                        );
+                                        break;
                                 }
                                 break;
                         }

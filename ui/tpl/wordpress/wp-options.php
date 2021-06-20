@@ -39,7 +39,7 @@
             <div class="info">
                 <?php echo Stephino_Rpg::PLUGIN_NAME;?> 
                 <span class="version">v. <?php echo Stephino_Rpg::PLUGIN_VERSION;?>
-                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?><b>DEMO</b><?php endif;?>
+                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isElevated()):?><b>DEMO</b><?php endif;?>
                 </span>
                 <?php echo Stephino_Rpg_Utils_Lingo::getOptionsLabel(true);?>
                 <?php if (!Stephino_Rpg::get()->isPro() && strlen(Stephino_Rpg::PLUGIN_URL_PRO)):?>

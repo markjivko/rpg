@@ -37,7 +37,7 @@ if (!is_array($userRatings)) {
     <head>
         <?php wp_head(); ?>
         <link rel="shortcut icon" type="image/png" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.png'); ?>" />
-        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/ui/192.png')); ?>">
+        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(Stephino_Rpg_Theme::FOLDER_IMG_UI . '/192.png')); ?>">
         <!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
         <meta charset="utf-8" />
         <meta http-equiv="x-ua-compatible" content="IE=edge">

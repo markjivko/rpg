@@ -23,6 +23,10 @@ class Stephino_Rpg_Db_Model_Users extends Stephino_Rpg_Db_Model {
     const LEADER_BOARD_USER_LIVE    = 'lb_user_live';
     const LEADER_BOARD_USER_JOINED  = 'lb_user_joined';
     
+    // Maximum lengths
+    const MAX_LENGTH_NAME = 60;
+    const MAX_LENGTH_BIO  = 250;
+
     /**
      * Delete a user and all associated data: <ul>
      * <li>cities

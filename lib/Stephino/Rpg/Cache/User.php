@@ -33,7 +33,7 @@ class Stephino_Rpg_Cache_User {
     const KEY_MPT = 'mpt';
     
     /**
-     * User is a Game Master
+     * User is a Game master
      */
     const KEY_GAME_MASTER = 'gm';
     
@@ -66,6 +66,12 @@ class Stephino_Rpg_Cache_User {
      * Platformer game won
      */
     const PTF_DATA_WON = 2;
+    
+    // Elevated permissions
+    const PERM_PROMOTE  = 'promote';
+    const PERM_MOD_PTFS = 'mod-ptfs';
+    const PERM_MOD_CHAT = 'mod-chat';
+    const PERM_CLI      = 'cli';
     
     /**
      * Singleton instance
@@ -200,8 +206,8 @@ class Stephino_Rpg_Cache_User {
     }
     
     /**
-     * Check whether this user is a Game Admin (WordPress-level super-admin)<br/><br/>
-     * Players &lt; Game Masters &lt; <b>Game Admins</b>
+     * Check whether this user is a Game admin (WordPress-level super-admin)<br/><br/>
+     * Players &lt; Game masters &lt; <b>Game admins</b>
      * 
      * @param int $wpUserId (optional) WordPress user ID; default <b>null</b> for the current user
      * @return boolean
@@ -216,8 +222,7 @@ class Stephino_Rpg_Cache_User {
     }
     
     /**
-     * Check whether this user is <b>at least</b> a Game Master<br/><br/>
-     * Players &lt; <b>Game Masters &lt; Game Admins</b>
+     * Check whether this user is a Game master
      * 
      * @param int   $wpUserId         (optional) WordPress User ID; default <b>null</b>
      * @param array $userGameSettings (optional) Game settings array; used only if <b>$wpUserId</b> is provided; default <b>null</b>
@@ -225,11 +230,6 @@ class Stephino_Rpg_Cache_User {
      */
     public function isGameMaster($wpUserId = null, $userGameSettings = null) {
         do {
-            // A super-admin
-            if ($result = $this->isGameAdmin($wpUserId)) {
-                break;
-            }
-                
             // Get the GM status for the provided user
             if (null !== $wpUserId) {
                 // Get more info about the user
@@ -246,6 +246,64 @@ class Stephino_Rpg_Cache_User {
             
             // Get the GM status for the current user
             $result = $this->read(self::KEY_GAME_MASTER, false);
+        } while(false);
+        
+        return $result;
+    }
+    
+    /**
+     * Check whether this user is elevated (Game master or Game admin), optionally validating a GM permission<br/>
+     * Game admins automatically get all permissions
+     * 
+     * @param string $permission (optional) Elevated permission to verify for Game masters (does not apply to game admins), one of <ul>
+     * <li>Stephino_Rpg_Cache_User::ELEVATED_PROMOTE</li>
+     * <li>Stephino_Rpg_Cache_User::ELEVATED_MOD_PTFS</li>
+     * <li>Stephino_Rpg_Cache_User::ELEVATED_MOD_CHAT</li>
+     * <li>Stephino_Rpg_Cache_User::ELEVATED_CLI</li>
+     * </ul>default <b>null</b>
+     * @param int $wpUserId (optional) WordPress User ID; default <b>null</b>
+     * @return boolean
+     */
+    public function isElevated($permission = null, $wpUserId = null) {
+        $result = true;
+        
+        do {
+            // Game admin, all permissions granted
+            if ($this->isGameAdmin($wpUserId)) {
+                break;
+            }
+            
+            // Game master
+            if ($this->isGameMaster($wpUserId)) {
+                // Unknown permission or NULL (any) granted
+                $gmPermissionGranted = true;
+                
+                // Check known permissions
+                switch ($permission) {
+                    case self::PERM_PROMOTE:
+                        $gmPermissionGranted = Stephino_Rpg_Config::get()->core()->getGmPromote();
+                        break;
+                    
+                    case self::PERM_MOD_CHAT:
+                        $gmPermissionGranted = Stephino_Rpg_Config::get()->core()->getGmModChat();
+                        break;
+                    
+                    case self::PERM_MOD_PTFS:
+                        $gmPermissionGranted = Stephino_Rpg_Config::get()->core()->getGmModPtfs();
+                        break;
+                    
+                    case self::PERM_CLI:
+                        $gmPermissionGranted = Stephino_Rpg_Config::get()->core()->getGmCli();
+                        break;
+                }
+                
+                // Game master permission confirmed
+                if ($gmPermissionGranted) {
+                    break;
+                }
+            }
+            
+            $result = false;
         } while(false);
         
         return $result;

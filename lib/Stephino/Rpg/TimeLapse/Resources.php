@@ -596,6 +596,10 @@ class Stephino_Rpg_TimeLapse_Resources extends Stephino_Rpg_TimeLapse_Abstract {
                     Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DEFEATS,
                     Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK,
                     Stephino_Rpg_Db_Table_Users::COL_USER_LAST_TICK_AJAX,
+                    Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_LEVEL_ATTACK,
+                    Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_LEVEL_DEFENSE,
+                    Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_LEVEL_LOOTING,
+                    Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE,
                 )
             ),
             $this->getDb()->tableCities()->getTableName() => array(

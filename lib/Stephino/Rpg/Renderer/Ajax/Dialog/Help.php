@@ -32,6 +32,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
     const CORE_SECTION_RULES        = 'rules';
     const CORE_SECTION_SCORE        = 'score';
     const CORE_SECTION_ROBOTS       = 'robots';
+    const CORE_SECTION_SENTRIES         = 'sentries';
     const CORE_SECTION_GAME_ARENA   = 'game-arena';
     const CORE_SECTION_GAME_ADMIN   = 'game-admin';
     const CORE_SECTION_GAME_MASTER  = 'game-master';
@@ -73,7 +74,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Help extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxItem($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         // Get the item type and ID
         $itemType = isset($data[self::REQUEST_ITEM_TYPE]) ? $data[self::REQUEST_ITEM_TYPE] : null;

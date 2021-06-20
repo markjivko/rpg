@@ -65,13 +65,13 @@ class Stephino_Rpg_About {
         if ($asArray) {
             return array_map(
                 function($item) {
-                    return Stephino_Rpg_Parsedown::instance()->text($item);
+                    return Stephino_Rpg_Parsedown::instance()->parse($item);
                 }, 
                 self::markDown()
             );
         }
         
-        return Stephino_Rpg_Parsedown::instance()->text(
+        return Stephino_Rpg_Parsedown::instance()->parse(
             implode(
                 PHP_EOL . PHP_EOL, 
                 self::markDown()

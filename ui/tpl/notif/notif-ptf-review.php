@@ -28,7 +28,7 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 4)):
                         echo sprintf(
                             esc_html__('%s has received the following review: %s', 'stephino-rpg'),
                             '<span data-click="dialog" data-click-args="dialogUserArenaPlay,' . abs((int) $ptfId) . '">'
-                                . Stephino_Rpg_Utils_Lingo::escape($ptfName)
+                                . esc_html($ptfName)
                             . '</span>',
                             '<b>' . esc_html($ptfLabel) . '</b>'
                         );
@@ -36,7 +36,7 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 4)):
                         echo sprintf(
                             esc_html__('%s was marked as under review by a game master', 'stephino-rpg'),
                             '<span data-click="dialog" data-click-args="dialogUserArenaPlay,' . abs((int) $ptfId) . '">'
-                                . Stephino_Rpg_Utils_Lingo::escape($ptfName)
+                                . esc_html($ptfName)
                             . '</span>'
                         );
                     }

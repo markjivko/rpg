@@ -42,6 +42,7 @@ if (!isset($costDiscount)) {
 if (!isset($costTimeContraction)) {
     $costTimeContraction = null;
 }
+$costAfforded = true;
 ?>
 <?php 
     if (
@@ -67,12 +68,15 @@ if (!isset($costTimeContraction)) {
                     }
             ?>
                 <div class="col-6 col-lg-4 res res-<?php echo $costInfoKey;?>" data-click="resource" data-click-args="<?php echo $costInfoKey;?>">
-                    <div class="icon" data-html="true" title="<?php echo Stephino_Rpg_Utils_Lingo::escape($costInfoName);?>"></div>
+                    <div class="icon" data-html="true" title="<?php echo esc_attr($costInfoName);?>"></div>
                     <span
                         data-html="true" 
                         title="<?php echo number_format($costInfoValue, 1);?>"
                         data-placement="bottom"
-                        <?php if (!$costRefundMode && isset($cityData[$costKey]) && $cityData[$costKey] < $costInfoValue):?>
+                        <?php 
+                            if (!$costRefundMode && isset($cityData[$costKey]) && $cityData[$costKey] < $costInfoValue):
+                                $costAfforded = false;
+                        ?>
                             class="text-danger"
                         <?php endif;?>>
                         <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($costInfoValue);?>
@@ -91,36 +95,38 @@ if (!isset($costTimeContraction)) {
                 </div>
             <?php endif;?>
         </div>
-        <div class="col-12 row no-gutters mb-4">
-            <?php 
-                if (null !== $costDiscount):
-                    list($discountPercent, $discountAjaxKey, $discountConfigId) = $costDiscount;
-            ?>
+        <?php if (null !== $costDiscount || (is_array($costTimeContraction) && count($costTimeContraction) >= 2)):?>
+            <div class="col-12 row no-gutters mb-4">
+                <?php 
+                    if (null !== $costDiscount):
+                        list($discountPercent, $discountAjaxKey, $discountConfigId) = $costDiscount;
+                ?>
+                        <div class="badge badge-default">
+                            <?php if (Stephino_Rpg_Config_PremiumModifiers::KEY == $discountAjaxKey):?>
+                                &#11088;
+                            <?php endif;?>
+                            <span 
+                                data-effect="help"
+                                data-effect-args="<?php echo $discountAjaxKey;?>,<?php echo $discountConfigId;?>">
+                                <b><?php echo $discountPercent;?></b>% <?php echo esc_html__('discount applied', 'stephino-rpg');?>
+                            </span>
+                        </div>
+                <?php endif;?>
+                <?php 
+                    if (is_array($costTimeContraction) && count($costTimeContraction) >= 2):
+                        list($ctcAmount, $ctcPremiumConfigId) = $costTimeContraction;
+                        if ($ctcAmount > 1 && $ctcPremiumConfigId > 0):
+                ?>
                     <div class="badge badge-default">
-                        <?php if (Stephino_Rpg_Config_PremiumModifiers::KEY == $discountAjaxKey):?>
-                            &#11088;
-                        <?php endif;?>
+                        &#11088;
                         <span 
                             data-effect="help"
-                            data-effect-args="<?php echo $discountAjaxKey;?>,<?php echo $discountConfigId;?>">
-                            <b><?php echo $discountPercent;?></b>% <?php echo esc_html__('discount applied', 'stephino-rpg');?>
+                            data-effect-args="<?php echo Stephino_Rpg_Config_PremiumModifiers::KEY;?>,<?php echo $ctcPremiumConfigId;?>">
+                            <b><?php echo $ctcAmount;?>&times;</b> <?php echo esc_html__('faster than normal', 'stephino-rpg');?>
                         </span>
                     </div>
-            <?php endif;?>
-            <?php 
-                if (is_array($costTimeContraction) && count($costTimeContraction) >= 2):
-                    list($ctcAmount, $ctcPremiumConfigId) = $costTimeContraction;
-                    if ($ctcAmount > 1 && $ctcPremiumConfigId > 0):
-            ?>
-                <div class="badge badge-default">
-                    &#11088;
-                    <span 
-                        data-effect="help"
-                        data-effect-args="<?php echo Stephino_Rpg_Config_PremiumModifiers::KEY;?>,<?php echo $ctcPremiumConfigId;?>">
-                        <b><?php echo $ctcAmount;?>&times;</b> <?php echo esc_html__('faster than normal', 'stephino-rpg');?>
-                    </span>
-                </div>
-            <?php endif; endif;?>
-        </div>
+                <?php endif; endif;?>
+            </div>
+        <?php endif;?>
     </div>
 <?php endif;?>

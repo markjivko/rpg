@@ -42,6 +42,8 @@ This RPG allows for infinite gameplay but it also has a finite storyline. Please
     'core.metricStorageDescription'       => __('Stockpile capacity for each resource', 'stephino-rpg'),
     'core.militaryAttackName'             => __('Attack', 'stephino-rpg'),
     'core.militaryDefenseName'            => __('Defense', 'stephino-rpg'),
+    'core.configSentryName'               => __('Sentry', 'stephino-rpg'),
+    'core.configSentriesName'             => __('Sentries', 'stephino-rpg'),
     'core.configGovernmentName'           => __('Government', 'stephino-rpg'),
     'core.configGovernmentsName'          => __('Governments', 'stephino-rpg'),
     'core.configIslandName'               => __('Island', 'stephino-rpg'),
@@ -234,34 +236,27 @@ Get an overview of your city and expand to allow more citizens to settle here.',
     'modifiers.33.name'                   => __('Ship: Drone', 'stephino-rpg'),
     'modifiers.34.name'                   => __('Ship: Tank', 'stephino-rpg'),
     'modifiers.35.name'                   => __('Ship: Transporter', 'stephino-rpg'),
-    'tutorials.1.name'                    => __('Hello!', 'stephino-rpg'),
+    'tutorials.1.name'                    => __('Welcome', 'stephino-rpg'),
     'tutorials.1.description'             => __('My name is **Moosk** and I will be your guide.
 
 Let\'s begin exploring the rich world of **Mors**!
 
 Click **Next** to continue.', 'stephino-rpg'),
-    'tutorials.2.name'                    => __('First steps', 'stephino-rpg'),
-    'tutorials.2.description'             => __('This is your city. It is your job to lead it to prosperity.
+    'tutorials.2.name'                    => __('Upgrade Advisor', 'stephino-rpg'),
+    'tutorials.2.description'             => __('If at any moment you are not sure what to do next, you can always consult with your **Upgrade Advisor**.', 'stephino-rpg'),
+    'tutorials.3.name'                    => __('Our empire begins', 'stephino-rpg'),
+    'tutorials.3.description'             => __('As your **Upgrade Advisor**, I recommend upgrading this item first.
+You can later check the **city progress** to better organize your actions.', 'stephino-rpg'),
+    'tutorials.4.name'                    => __('Premium modifiers', 'stephino-rpg'),
+    'tutorials.4.description'             => __('Help your empire grow faster with premium modifiers bought exclusively with **Diamonds**.', 'stephino-rpg'),
+    'tutorials.5.name'                    => __('Choose wisely', 'stephino-rpg'),
+    'tutorials.5.description'             => __('You can enable one or more premium modifiers for multiple days but choose carefully, **Diamonds** are not easy to obtain.', 'stephino-rpg'),
+    'tutorials.6.name'                    => __('The Game Arena', 'stephino-rpg'),
+    'tutorials.6.description'             => __('You can earn more **Diamonds** by playing short games or passively from the games you create!', 'stephino-rpg'),
+    'tutorials.7.name'                    => __('The Sentry', 'stephino-rpg'),
+    'tutorials.7.description'             => __('Improve your **Sentry** and earn **Diamonds** by attacking and looting other players!
 
-City resources are listed on the top part of your screen. 
-
-Click on any of them to learn more and when you are ready click **Next** to continue.', 'stephino-rpg'),
-    'tutorials.3.name'                    => __('Settings', 'stephino-rpg'),
-    'tutorials.3.description'             => __('Fine-tune your experience by editing your game settings.
-
-If you need more information, the **Help** menu is available here as well.', 'stephino-rpg'),
-    'tutorials.4.name'                    => __('Navigation', 'stephino-rpg'),
-    'tutorials.4.description'             => __('Quickly visit other cities or islands with the navigation panel.', 'stephino-rpg'),
-    'tutorials.5.name'                    => __('What next?', 'stephino-rpg'),
-    'tutorials.5.description'             => __('If you\'re not sure what to do next, just click on the city name, in the upper-left corner of your screen.
-
-I will be your **Upgrade Advisor** from now on.', 'stephino-rpg'),
-    'tutorials.6.name'                    => __('Our empire begins', 'stephino-rpg'),
-    'tutorials.6.description'             => __('As your **Upgrade Advisor**, I recommend upgrading this item first.
-
-You can later check the **city progress** to better organize your actions.
-
-Thank you for joining me!', 'stephino-rpg'),
+Here is a small reward to get things started.', 'stephino-rpg'),
     'premiumModifiers.1.name'             => __('Wormhole', 'stephino-rpg'),
     'premiumModifiers.1.description'      => __('Open a gateway to another dimension and gather methane and oxygen at 100% capacity in all cities and generate extra resources every hour!', 'stephino-rpg'),
     'premiumModifiers.2.name'             => __('Nanobots', 'stephino-rpg'),

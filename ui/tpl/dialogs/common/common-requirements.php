@@ -65,7 +65,7 @@
                             data-click="<?php echo $itemCardFn;?>" 
                             data-click-args="<?php echo $itemCardArgs;?>"
                         <?php endif;?>>
-                        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>(<?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getId();?>)<?php endif;?>
+                        <?php if (Stephino_Rpg_Cache_User::get()->isElevated()):?>(<?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getId();?>)<?php endif;?>
                         <?php echo $requirements[Stephino_Rpg_Config_Building::KEY][0]->getName(true);?>
                     </span>
                     <?php if (null !== $requirements[Stephino_Rpg_Config_Building::KEY][1]):?>
@@ -94,7 +94,7 @@
                             data-click="<?php echo $itemCardFn;?>"
                             data-click-args="<?php echo $itemCardArgs;?>"
                         <?php endif;?>>
-                        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>(<?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getId();?>)<?php endif;?>
+                        <?php if (Stephino_Rpg_Cache_User::get()->isElevated()):?>(<?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getId();?>)<?php endif;?>
                         <?php echo $requirements[Stephino_Rpg_Config_ResearchField::KEY][0]->getName(true);?>
                     </span>
                     <?php if (null !== $requirements[Stephino_Rpg_Config_ResearchField::KEY][1]):?>

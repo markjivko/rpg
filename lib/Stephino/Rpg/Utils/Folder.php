@@ -96,13 +96,13 @@ class Stephino_Rpg_Utils_Folder {
     public function copy($sourceDir, $destinationDir) {
         // Verify the source folder
         if (!$this->_fileSystem->is_dir($sourceDir)) {
-            throw new Excaption('Could not find "' . $sourceDir . '"');
+            throw new Exception('Could not find "' . $sourceDir . '"');
         }
         
         // Create the destination folder
         if (!$this->_fileSystem->is_dir($destinationDir)) {
 			if (!$this->_fileSystem->mkdir($destinationDir)) {
-				throw new Excaption('Could not create "' . $destinationDir . '"');
+				throw new Exception('Could not create "' . $destinationDir . '"');
 			}
 		}
         

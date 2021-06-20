@@ -35,6 +35,8 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     const DEFAULT_LABEL_METRIC_STORAGE        = 'Storage';
     const DEFAULT_LABEL_MILITARY_ATTACK       = 'Attack';
     const DEFAULT_LABEL_MILITARY_DEFENSE      = 'Defense';
+    const DEFAULT_LABEL_CONFIG_SENTRY         = 'Sentry';
+    const DEFAULT_LABEL_CONFIG_SENTRIES       = 'Sentries';
     const DEFAULT_LABEL_CONFIG_GOVERNMENT     = 'Government';
     const DEFAULT_LABEL_CONFIG_GOVERNMENTS    = 'Governments';
     const DEFAULT_LABEL_CONFIG_ISLAND         = 'Island';
@@ -133,6 +135,104 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_languages = null;
     
     /**
+     * Sentries enabled
+     * 
+     * @var boolean
+     */
+    protected $_sentryEnabled = true;
+    
+    /**
+     * Over Powered yield
+     * 
+     * @var int
+     */
+    protected $_sentryOPYield = 20;
+    
+    /**
+     * Points earned for sentry challenges
+     * 
+     * @var int
+     */
+    protected $_sentryScore = 6;
+    
+    /**
+     * Sentry: reward in Gems
+     * 
+     * @var int|null
+     */
+    protected $_sentryReward = null;
+    
+    /**
+     * Sentry: maximum level; 0 for no limit
+     * 
+     * @var int
+     */
+    protected $_sentryMaxLevel = 0;
+    
+    /**
+     * Sentry: reward polynomial factor
+     * 
+     * @var string|null
+     */
+    protected $_sentryRewardPoly = null;
+    
+    /**
+     * Sentry: loot in Research Points
+     * 
+     * @var int|null
+     */
+    protected $_sentryLootResearch = null;
+    
+    /**
+     * Sentry: loot in Gold
+     *  
+     * @var int|null
+     */
+    protected $_sentryLootGold = null;
+    
+    /**
+     * Sentry: loot polynomial factor
+     * 
+     * @var string|null
+     */
+    protected $_sentryLootPoly = null;
+    
+    /**
+     * Sentry: challenge cost in Research Points
+     * 
+     * @var int|null
+     */
+    protected $_sentryCostResearch = null;
+    
+    /**
+     * Sentry: challenge cost in Gold
+
+     * @var int|null
+     */
+    protected $_sentryCostGold = null;
+    
+    /**
+     * Sentry: challenge cost polynomial factor
+     * 
+     * @var string|null
+     */
+    protected $_sentryCostPoly = null;
+    
+    /**
+     * Sentry: challenge time in seconds
+     * 
+     * @var int
+     */
+    protected $_sentryCostTime = 1;
+    
+    /**
+     * Sentry: challenge time polynomial factor
+     * 
+     * @var string|null
+     */
+    protected $_sentryCostTimePoly = null;
+    
+    /**
      * Platformer Enabled
      * 
      * @var boolean
@@ -172,7 +272,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * 
      * @var int
      */
-    protected $_ptfScore = 5;
+    protected $_ptfScore = 6;
     
     /**
      * Maximum number of suspended games per player
@@ -560,6 +660,34 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     protected $_maxQueueResearchFields = 3;
     
     /**
+     * Game Master: Promote/demote players
+     * 
+     * @var boolean
+     */
+    protected $_gmPromote = true;
+    
+    /**
+     * Game Master: Moderate PTFs
+     * 
+     * @var boolean
+     */
+    protected $_gmModPtfs = true;
+    
+    /**
+     * Game Master: Moderate the Chat Room
+     * 
+     * @var boolean
+     */
+    protected $_gmModChat = true;
+    
+    /**
+     * Game Master: Access the CLI
+     * 
+     * @var boolean
+     */
+    protected $_gmCli = true;
+    
+    /**
      * Get the list of mandatory buildings for a city
      * 
      * @return Stephino_Rpg_Config_Building[]
@@ -805,9 +933,371 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Enable platformer mini-games, allowing users to earn rewards by playing and designing their own levels
+     * Enable {x}, allowing users to earn rewards by attacking each other
      * 
      * @section User Content
+     * @placeholder core.configSentriesName,Sentries
+     * @return boolean {x}
+     */
+    public function getSentryEnabled() {
+        return (boolean) $this->_sentryEnabled;
+    }
+    
+    /**
+     * Set the "Sentry Enabled" parameter
+     * 
+     * @param boolean $sentryEnabled Sentry Enabled
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryEnabled($sentryEnabled) {
+        $this->_sentryEnabled = (boolean) $sentryEnabled;
+        
+        return $this;
+    }
+    
+    /**
+     * When over-powered (100% chance of success) you will only earn this much (%) of the loot and reward<br/><br/>
+     * Chance of success (%) => yield (%)
+     * <ul class="info">
+     * <li><b>0%-50%</b> => yield <b>100%</b></li>
+     * <li><b>51%-99%</b> => yield (<b>100% to N%</b>), linear decrease</li>
+     * <li><b>100%</b> => yield <b>N%</b></li>
+     * </ul>
+     *
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @default 6
+     * @ref 1,99
+     * @return int {x}: Over-Power Yield
+     */
+    public function getSentryOPYield() {
+        return null === $this->_sentryOPYield ? 20 : $this->_sentryOPYield;
+    }
+    
+    /**
+     * Set the "Sentry OP Penalty" parameter
+     * 
+     * @param int $opPenalty OP Penalty
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryOPYield($opPenalty) {
+        $this->_sentryOPYield = (null === $opPenalty ? 20 : intval($opPenalty));
+
+        // Minimum and maximum
+        if ($this->_sentryOPYield < 1) {
+            $this->_sentryOPYield = 1;
+        }
+        if ($this->_sentryOPYield > 99) {
+            $this->_sentryOPYield = 99;
+        }
+
+        return $this;
+    }
+
+    /**
+     * {x} maximum reachable level<br/>
+     * <b>0</b> means no limit
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @ref 0,500
+     * @default 50
+     * @return int|null {x}: max. level
+     */
+    public function getSentryMaxLevel() {
+        return (null === $this->_sentryMaxLevel ? 50 : $this->_sentryMaxLevel);
+    }
+    
+    /**
+     * Set the "Sentry Max Level" parameter
+     * 
+     * @param int $sentryMaxLevel Sentry Max Level
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryMaxLevel($sentryMaxLevel) {
+        $this->_sentryMaxLevel = (null === $sentryMaxLevel ? 0 : intval($sentryMaxLevel));
+
+        // Minimum
+        if ($this->_sentryMaxLevel < 0) {
+            $this->_sentryMaxLevel = 0;
+        }
+        if ($this->_sentryMaxLevel > 500) {
+            $this->_sentryMaxLevel = 500;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} successful challenge reward in {x2}
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries,core.resourceGemName,Gems
+     * @ref 0
+     * @return int|null {x}: reward in {x2}
+     */
+    public function getSentryReward() {
+        return $this->_sentryReward;
+    }
+    
+    /**
+     * Set the "Sentry Reward" parameter
+     * 
+     * @param int $sentryReward Sentry Reward
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryReward($sentryReward) {
+        $this->_sentryReward = (null === $sentryReward ? null : intval($sentryReward));
+
+        // Minimum
+        if (null !== $this->_sentryReward && $this->_sentryReward < 0) {
+            $this->_sentryReward = 0;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} reward polynomial factor
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @return poly|null {x}: reward polynomial
+     */
+    public function getSentryRewardPoly() {
+        return $this->_sentryRewardPoly;
+    }
+    
+    /**
+     * Set the "Sentry Reward Poly" parameter
+     * 
+     * @param string|null Reward Polynomial
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryRewardPoly($sentryRewardPoly) {
+        $this->_sentryRewardPoly = $this->_sanitizePoly($sentryRewardPoly);
+
+        return $this;
+    }
+    
+    /**
+     * {x} successful challenge loot in {x2}
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries,core.resourceResearchName,Research points
+     * @ref 0
+     * @return int|null {x}: loot in {x2}
+     */
+    public function getSentryLootResearch() {
+        return $this->_sentryLootResearch;
+    }
+    
+    /**
+     * Set the "Sentry Loot Research" parameter
+     * 
+     * @param int $sentryLootResearch Sentry loot in research points
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryLootResearch($sentryLootResearch) {
+        $this->_sentryLootResearch = (null === $sentryLootResearch ? null : intval($sentryLootResearch));
+
+        // Minimum
+        if (null !== $this->_sentryLootResearch && $this->_sentryLootResearch < 0) {
+            $this->_sentryLootResearch = 0;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} successful challenge loot in {x2}
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries,core.resourceGoldName,Gold
+     * @ref 0
+     * @return int|null {x}: loot in {x2}
+     */
+    public function getSentryLootGold() {
+        return $this->_sentryLootGold;
+    }
+    
+    /**
+     * Set the "Sentry Loot Gold" parameter
+     * 
+     * @param int $sentryLootGold Sentry loot in gold
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryLootGold($sentryLootGold) {
+        $this->_sentryLootGold = (null === $sentryLootGold ? null : intval($sentryLootGold));
+
+        // Minimum
+        if (null !== $this->_sentryLootGold && $this->_sentryLootGold < 0) {
+            $this->_sentryLootGold = 0;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} successful challenge loot polynomial factor
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @return poly|null {x}: loot polynomial
+     */
+    public function getSentryLootPoly() {
+        return $this->_sentryLootPoly;
+    }
+    
+    /**
+     * Set the "Sentry Loot Poly" parameter
+     * 
+     * @param int $sentryLootPoly Sentry loot polynomial
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryLootPoly($sentryLootPoly) {
+        $this->_sentryLootPoly = $this->_sanitizePoly($sentryLootPoly);
+
+        return $this;
+    }
+    
+    /**
+     * {x} challenge cost in {x2}
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries,core.resourceResearchName,Research points
+     * @ref 0
+     * @return int|null {x}: cost in {x2}
+     */
+    public function getSentryCostResearch() {
+        return $this->_sentryCostResearch;
+    }
+    
+    /**
+     * Set the "Sentry Cost Research" parameter
+     * 
+     * @param int $sentryCostResearch Sentry challenge cost in research points
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryCostResearch($sentryCostResearch) {
+        $this->_sentryCostResearch = (null === $sentryCostResearch ? null : intval($sentryCostResearch));
+
+        // Minimum
+        if (null !== $this->_sentryCostResearch && $this->_sentryCostResearch < 0) {
+            $this->_sentryCostResearch = 0;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} challenge cost in {x2}
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries,core.resourceGoldName,Gold
+     * @ref 0
+     * @return int|null {x}: cost in {x2}
+     */
+    public function getSentryCostGold() {
+        return $this->_sentryCostGold;
+    }
+    
+    /**
+     * Set the "Sentry Cost Gold" parameter
+     * 
+     * @param int $sentryCostGold Sentry challenge cost in gold
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryCostGold($sentryCostGold) {
+        $this->_sentryCostGold = (null === $sentryCostGold ? null : intval($sentryCostGold));
+
+        // Minimum
+        if (null !== $this->_sentryCostGold && $this->_sentryCostGold < 0) {
+            $this->_sentryCostGold = 0;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} challenge cost polynomial factor
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @return poly|null {x}: cost polynomial
+     */
+    public function getSentryCostPoly() {
+        return $this->_sentryCostPoly;
+    }
+    
+    /**
+     * Set the "Sentry Cost Poly" parameter
+     * 
+     * @param int $costPoly Sentry challenge cost polynomial
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryCostPoly($costPoly) {
+        $this->_sentryCostPoly = $this->_sanitizePoly($costPoly);
+
+        return $this;
+    }
+    
+    /**
+     * Time required to complete a challenge in seconds
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @ref 1
+     * @default 1
+     * @return int {x}: challenge time
+     */
+    public function getSentryCostTime() {
+        return (null === $this->_sentryCostTime ? 1 : $this->_sentryCostTime);
+    }
+    
+    /**
+     * Set the "Sentry Cost Time" parameter
+     * 
+     * @param int $sentryCostTime Sentry challenge time
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryCostTime($sentryCostTime) {
+        $this->_sentryCostTime = (null === $sentryCostTime ? 1 : intval($sentryCostTime));
+
+        // Minimum
+        if ($this->_sentryCostTime < 1) {
+            $this->_sentryCostTime = 1;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * {x} challenge time polynomial factor
+     * 
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @return poly|null {x}: challenge time polynomial
+     */
+    public function getSentryCostTimePoly() {
+        return $this->_sentryCostTimePoly;
+    }
+    
+    /**
+     * Set the "Sentry Cost Time Poly" parameter
+     * 
+     * @param int $costTime Sentry challenge cost time polynomial
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryCostTimePoly($costTime) {
+        $this->_sentryCostTimePoly = $this->_sanitizePoly($costTime);
+
+        return $this;
+    }
+    
+    /**
+     * Enable platformer mini-games, allowing users to earn rewards by playing and designing their own levels
+     * 
      * @return boolean Platformer
      */
     public function getPtfEnabled() {
@@ -955,12 +1445,12 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * Points earned for winning platformer levels along with the platformer reward
      *
      * @depends ptfEnabled
-     * @default 5
+     * @default 6
      * @ref -5000,5000
      * @return int Platformer Points
      */
     public function getPtfScore() {
-        return null === $this->_ptfScore ? 5 : $this->_ptfScore;
+        return null === $this->_ptfScore ? 6 : $this->_ptfScore;
     }
     
     /**
@@ -970,7 +1460,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setPtfScore($ptfScore) {
-        $this->_ptfScore = (null === $ptfScore ? 5 : intval($ptfScore));
+        $this->_ptfScore = (null === $ptfScore ? 6 : intval($ptfScore));
 
         // Minimum and maximum
         if ($this->_ptfScore < -5000) {
@@ -1017,7 +1507,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     
     /**
      * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
-     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.8&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.9&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
      * @sensitive true
      * @return boolean Chat Room
@@ -1238,7 +1728,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      *
      * @default 10
      * @ref -5000,5000
-     * @return int Battle Points: Draw
+     * @return int Battle Points: Impasse
      */
     public function getScoreBattleDraw() {
         return null === $this->_scoreBattleDraw ? 10 : $this->_scoreBattleDraw;
@@ -1290,6 +1780,39 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         }
         if ($this->_scoreBattleVictory > 5000) {
             $this->_scoreBattleVictory = 5000;
+        }
+
+        return $this;
+    }
+    
+    /**
+     * Points earned for winning challenges
+     *
+     * @depends sentryEnabled
+     * @placeholder core.configSentriesName,Sentries
+     * @default 6
+     * @ref -5000,5000
+     * @return int {x}: points
+     */
+    public function getSentryScore() {
+        return null === $this->_sentryScore ? 6 : $this->_sentryScore;
+    }
+    
+    /**
+     * Set the "Sentry Score" parameter
+     * 
+     * @param int $sentryScore Score
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setSentryScore($sentryScore) {
+        $this->_sentryScore = (null === $sentryScore ? 6 : intval($sentryScore));
+
+        // Minimum and maximum
+        if ($this->_sentryScore < -5000) {
+            $this->_sentryScore = -5000;
+        }
+        if ($this->_sentryScore > 5000) {
+            $this->_sentryScore = 5000;
         }
 
         return $this;
@@ -1517,7 +2040,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Enable the use of the game console for site Admins with <b>Alt+Ctrl+C<b/>
+     * Enable the use of the game console for game masters and game admins with <b>Alt+Ctrl+C<b/>
      * 
      * @return boolean Enable console
      */
@@ -2599,6 +3122,94 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         if ($this->_maxQueueResearchFields < 1) {
             $this->_maxQueueResearchFields = 1;
         }
+        
+        return $this;
+    }
+    
+    /**
+     * Game masters can promote and demote other players
+     * 
+     * @section Game masters
+     * @return boolean Promote/demote
+     */
+    public function getGmPromote() {
+        return (null === $this->_gmPromote ? true : $this->_gmPromote);
+    }
+    
+    /**
+     * Set the "GM Promote" parameter
+     * 
+     * @param boolean $gmPromote GMs can promote
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setGmPromote($gmPromote) {
+        $this->_gmPromote = (boolean) $gmPromote;
+        
+        return $this;
+    }
+    
+    /**
+     * Game masters can moderate the Game Arena
+     * 
+     * @depends ptfEnabled
+     * @return boolean Moderate Game Arena
+     */
+    public function getGmModPtfs() {
+        return (null === $this->_gmModPtfs ? true : $this->_gmModPtfs);
+    }
+    
+    /**
+     * Set the "GM Mod Ptfs" parameter
+     * 
+     * @param boolean $gmModPtfs GMs can moderate platformers
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setGmModPtfs($gmModPtfs) {
+        $this->_gmModPtfs = (boolean) $gmModPtfs;
+        
+        return $this;
+    }
+    
+    /**
+     * Game masters can moderate the Chat Room
+     * 
+     * @depends chatRoom
+     * @return boolean Moderate Chat
+     */
+    public function getGmModChat() {
+        return (null === $this->_gmModChat ? true : $this->_gmModChat);
+    }
+    
+    /**
+     * Set the "GM Mod Chat" parameter
+     * 
+     * @param boolean $gmModChat GMs can moderate the chat room
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setGmModChat($gmModChat) {
+        $this->_gmModChat = (boolean) $gmModChat;
+        
+        return $this;
+    }
+    
+    /**
+     * Game masters can access the game console (<b>Alt+Ctrl+C</b>)
+     * 
+     * @depends consoleEnabled
+     * @return boolean Access to console
+     */
+    public function getGmCli() {
+        return (null === $this->_gmCli ? true : $this->_gmCli);
+    }
+    
+    /**
+     * Set the "GM Cli" parameter
+     * 
+     * @param boolean $gmCli GMs can access the command line interface
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setGmCli($gmCli) {
+        $this->_gmCli = (boolean) $gmCli;
         
         return $this;
     }

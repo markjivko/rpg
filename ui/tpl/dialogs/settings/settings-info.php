@@ -115,7 +115,7 @@
     </div>
     <div class="col-12 col-lg-8 param-input">
         <button class="btn btn-info w-100" data-click="helpDialog" data-click-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,0">
-            <span><?php echo esc_html__('Help', 'stephino-rpg');?></span>
+            <span><?php echo esc_html__('Codex', 'stephino-rpg');?></span>
         </button>
         <button class="btn btn-info w-100" data-click="dialog" data-click-args="dialogSettingsAbout">
             <span><?php echo esc_html__('About', 'stephino-rpg');?></span>
@@ -176,7 +176,7 @@
             <label for="input-admin">
                 <h4 class="text-left p-0 mb-0">
                     <?php echo esc_html__('My rules', 'stephino-rpg');?>
-                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+                    <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameAdmin()):?>
                         (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                     <?php endif;?>
                 </h4>
@@ -184,12 +184,14 @@
             </label>
         </div>
         <div class="col-12 col-lg-8 param-input">
-            <a class="btn btn-info w-100" target="_blank" href="<?php echo Stephino_Rpg_Utils_Lingo::escape(Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS);?>">
+            <a class="btn btn-info w-100" target="_blank" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getAdminUrl() . '-' . Stephino_Rpg_Renderer_Html::TEMPLATE_OPTIONS);?>">
                 <span><?php echo Stephino_Rpg_Utils_Lingo::getOptionsLabel(false, true);?></span>
             </a>
         </div>
     </div>
-    <?php if(Stephino_Rpg_Config::get()->core()->getConsoleEnabled()):?>
+<?php endif;?>
+<?php if (Stephino_Rpg_Config::get()->core()->getConsoleEnabled()):?>
+    <?php if (Stephino_Rpg::get()->isDemo() || Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_CLI)): ?>
         <div data-name="admin-console" class="row">
             <div class="col-6 col-lg-4">
                 <label for="input-admin-console">
@@ -198,7 +200,7 @@
                             data-effect="help"
                             data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE;?>">
                             <?php echo esc_html__('Console', 'stephino-rpg');?>
-                            <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+                            <?php if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_CLI)):?>
                                 (<?php echo esc_html__('demo', 'stephino-rpg');?>)
                             <?php endif;?>
                         </span>
@@ -213,30 +215,30 @@
             </div>
         </div>
     <?php endif;?>
-    <?php if (!Stephino_Rpg::get()->isPro() && Stephino_Rpg_Cache_User::get()->isGameMaster()): ?>
-        <div data-name="admin-buy" class="row">
-            <div class="col-6 col-lg-4">
-                <label for="input-admin-buy">
-                    <h4 class="text-left p-0 mb-0"><?php echo esc_html__('Unlock Game', 'stephino-rpg');?></h4>
-                    <div class="param-desc"><?php 
-                        echo sprintf(
-                            esc_html__('Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!', 'stephino-rpg'),
-                            '<b>' . Stephino_Rpg::PLUGIN_NAME . ' Pro</b>'
-                        );
-                    ?></div>
-                </label>
-            </div>
-            <div class="col-12 col-lg-8 param-input">
-                <?php if (strlen(Stephino_Rpg::PLUGIN_URL_PRO)):?>
-                    <a class="btn btn-warning w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_PRO);?>">
-                        <span><?php echo esc_html__('Unlock Game', 'stephino-rpg');?></span>
-                    </a>
-                <?php endif;?>
-            </div>
-        </div>
-    <?php endif;?>
 <?php endif;?>
-<?php if (!Stephino_Rpg_Cache_User::get()->isGameMaster() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
+<?php if (!Stephino_Rpg::get()->isPro() && Stephino_Rpg_Cache_User::get()->isGameAdmin()): ?>
+    <div data-name="admin-buy" class="row">
+        <div class="col-6 col-lg-4">
+            <label for="input-admin-buy">
+                <h4 class="text-left p-0 mb-0"><?php echo esc_html__('Unlock Game', 'stephino-rpg');?></h4>
+                <div class="param-desc"><?php 
+                    echo sprintf(
+                        esc_html__('Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!', 'stephino-rpg'),
+                        '<b>' . Stephino_Rpg::PLUGIN_NAME . ' Pro</b>'
+                    );
+                ?></div>
+            </label>
+        </div>
+        <div class="col-12 col-lg-8 param-input">
+            <?php if (strlen(Stephino_Rpg::PLUGIN_URL_PRO)):?>
+                <a class="btn btn-warning w-100" target="_blank" href="<?php echo esc_url(Stephino_Rpg::PLUGIN_URL_PRO);?>">
+                    <span><?php echo esc_html__('Unlock Game', 'stephino-rpg');?></span>
+                </a>
+            <?php endif;?>
+        </div>
+    </div>
+<?php endif;?>
+<?php if (!Stephino_Rpg_Cache_User::get()->isElevated() && Stephino_Rpg_Config::get()->core()->getShowWpLink()): ?>
     <div data-name="admin-download" class="row">
         <hr />
         <div class="col-6 col-lg-4">

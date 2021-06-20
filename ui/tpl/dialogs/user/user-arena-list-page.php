@@ -32,7 +32,7 @@
     ?>
         <div class="col-6 col-md-4 col-lg-3" data-click="dialog" data-click-args="dialogUserArenaPlay,<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_ID];?>">
             <div class="ptf-card">
-                <?php if ($userId == $authorId || Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+                <?php if ($userId == $authorId || Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS)):?>
                     <div data-role="ptf-labels">
                         <?php if (Stephino_Rpg_Db_Table_Ptfs::PTF_VISIBILITY_PRIVATE === $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY]): ?>
                             <span class="badge badge-warning"><?php echo esc_html__('Private', 'stephino-rpg');?></span>
@@ -77,11 +77,11 @@
                     &#x1f3c6; <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_FINISHED_WON]);?>
                 </div>
                 <div data-role="ptf-name" title="<?php echo esc_attr($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME]);?>">
-                    <?php echo Stephino_Rpg_Utils_Lingo::escape($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME]);?>
+                    <?php echo esc_html($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_NAME]);?>
                 </div>
                 <?php if (null !== $authorName):?>
                     <div data-role="ptf-author">
-                        <?php echo esc_html__('by', 'stephino-rpg');?> <b><?php echo Stephino_Rpg_Utils_Lingo::escape($authorName);?></b>
+                        <?php echo esc_html__('by', 'stephino-rpg');?> <b><?php echo esc_html($authorName);?></b>
                     </div>
                 <?php endif;?>
                 <div data-role="ptf-won" title="<?php echo esc_attr__('Win rate', 'stephino-rpg');?>">

@@ -203,7 +203,7 @@ class Stephino_Rpg_WordPress {
                 array(Stephino_Rpg_Renderer::class, Stephino_Rpg_Renderer::INTERFACE_HTML)
             );
 
-            // Game Mechanics / Translations
+            // Game Mechanics
             add_submenu_page(
                 Stephino_Rpg::PLUGIN_SLUG, 
                 Stephino_Rpg_Utils_Lingo::getGameName() . ' - ' . Stephino_Rpg_Utils_Lingo::getOptionsLabel(),
@@ -381,16 +381,14 @@ class Stephino_Rpg_WordPress {
         // Init action
         add_action('init', function() {
             do {
-                // Only on our AJAX thread
+                // Not an AJAX thread
                 if (!Stephino_Rpg_Utils_Sanitizer::isAjax()) {
                     break;
                 }
                 
-                // Don't run with dialogs
-                if (isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
-                    if (0 === strpos(strtolower($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]), 'dialog')) {
-                        break;
-                    }
+                // A dialog AJAX request
+                if (0 === strpos(strtolower(Stephino_Rpg_Utils_Sanitizer::getMethod()), 'dialog')) {
+                    break;
                 }
             
                 // Run the time-lapse for robots

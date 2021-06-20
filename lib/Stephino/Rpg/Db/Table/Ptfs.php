@@ -26,12 +26,6 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     const PTF_REVIEW_REJECTED_CONTENT_IMPOSSIBLE = 'rci';
     const PTF_REVIEW_SUSPENDED                   = 's';
     
-    // Minimum dimentions
-    const PTF_MIN_WIDTH  = 26;
-    const PTF_MIN_HEIGHT = 15;
-    const PTF_MAX_WIDTH  = 250;
-    const PTF_MAX_HEIGHT = 150;
-    
     // Allowed visibility values
     const PTF_VISIBILITIES = array(
         self::PTF_VISIBILITY_PRIVATE,
@@ -178,8 +172,8 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     `" . self::COL_PTF_USER_ID . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_PTF_NAME . "` varchar(64) NOT NULL DEFAULT '',
     `" . self::COL_PTF_CONTENT . "` text NOT NULL DEFAULT '',
-    `" . self::COL_PTF_WIDTH . "` int(3) UNSIGNED NOT NULL DEFAULT '" . self::PTF_MIN_WIDTH . "',
-    `" . self::COL_PTF_HEIGHT . "` int(3) UNSIGNED NOT NULL DEFAULT '" . self::PTF_MIN_HEIGHT . "',
+    `" . self::COL_PTF_WIDTH . "` int(3) UNSIGNED NOT NULL DEFAULT '" . Stephino_Rpg_Db_Model_Ptfs::PTF_MIN_WIDTH . "',
+    `" . self::COL_PTF_HEIGHT . "` int(3) UNSIGNED NOT NULL DEFAULT '" . Stephino_Rpg_Db_Model_Ptfs::PTF_MIN_HEIGHT . "',
     `" . self::COL_PTF_VERSION . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
     `" . self::COL_PTF_CREATED_TIME . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_PTF_MODIFIED_TIME . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
@@ -224,7 +218,7 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
                         self::COL_PTF_CONTENT       => json_encode($tileSetC),
                         self::COL_PTF_CREATED_TIME  => $timestamp,
                         self::COL_PTF_MODIFIED_TIME => $timestamp,
-                        self::COL_PTF_REVIEW        => Stephino_Rpg_Cache_User::get()->isGameMaster()
+                        self::COL_PTF_REVIEW        => Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS)
                             ? self::PTF_REVIEW_APPROVED
                             : self::PTF_REVIEW_PENDING
                     )

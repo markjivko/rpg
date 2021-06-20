@@ -23,10 +23,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
     const REQUEST_PASSWORD = 'password';
     const REQUEST_LANGUAGE = 'language';
     
-    // Maximum lengths
-    const MAX_LENGTH_USER_NAME = 60;
-    const MAX_LENGTH_USER_DESC = 250;
-    
     /**
      * Update the current user's WordPress account password
      * 
@@ -43,10 +39,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         if (strlen($newPassword) < 6) {
             throw new Exception(__('Passwords must be at least 6 characters long', 'stephino-rpg'));
         }
-        
+
         // Get the current user
         $currentUser = wp_get_current_user();
-        
+
         // Invalid user
         if (0 == $currentUser->ID) {
             throw new Exception(__('You are logged out', 'stephino-rpg'));
@@ -73,21 +69,36 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
      * @throws Exception
      */
     public static function ajaxLanguage($data) {
+        // Logged out
+        if (0 == $wpUserId = get_current_user_id()) {
+            throw new Exception(__('You are logged out', 'stephino-rpg'));
+        }
+        
         // Sanitize the language
-        $locale = isset($data[self::REQUEST_LANGUAGE]) ? trim($data[self::REQUEST_LANGUAGE]) : null;
-        if (null === $locale || !strlen($locale)) {
+        if (!strlen($lang = isset($data[self::REQUEST_LANGUAGE]) ? trim($data[self::REQUEST_LANGUAGE]) : '')) {
             throw new Exception(__('Language missing', 'stephino-rpg'));
         }
         
         // Validate it
-        $allowedLanguages = array_keys(Stephino_Rpg_Utils_Lingo::getLanguages());
-        if (!in_array($locale, $allowedLanguages)) {
+        if (!in_array($lang, array_keys(Stephino_Rpg_Utils_Lingo::getLanguages()))) {
             throw new Exception(__('Language not defined', 'stephino-rpg'));
+        }
+        
+        // Could be called from Admin before game init and the user cache is not available
+        if (null === $userId = Stephino_Rpg_TimeLapse::get()->userId()) {
+            // Initalize the World
+            Stephino_Rpg_Task_Initializer::initWorld();
+
+            // Initialize the current user (must be logged in)
+            Stephino_Rpg_Task_Initializer::initUser();
+            
+            // Reset the workspace
+            Stephino_Rpg_TimeLapse::setWorkspace($wpUserId);
         }
         
         // Commit to user cache
         Stephino_Rpg_Cache_User::get()
-            ->write(Stephino_Rpg_Cache_User::KEY_LANG, $locale)
+            ->write(Stephino_Rpg_Cache_User::KEY_LANG, $lang)
             ->commit();
     }
     
@@ -101,6 +112,11 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
      * @throws Exception
      */
     public static function ajaxUpdate($data) {
+        // Logged out
+        if (0 == $wpUserId = get_current_user_id()) {
+            throw new Exception(__('You are logged out', 'stephino-rpg'));
+        }
+        
         // Sanitize the key
         $dataKey = isset($data[self::REQUEST_KEY]) ? trim($data[self::REQUEST_KEY]) : null;
         if (null === $dataKey || !strlen($dataKey)) {
@@ -116,14 +132,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         // Prepare the result
         $result = null;
         
-        // Get the current user
-        $currentUser = wp_get_current_user();
-        
-        // Invalid user
-        if (0 == $currentUser->ID) {
-            throw new Exception(__('Invalid user', 'stephino-rpg'));
-        }
-        
         // Update the value
         switch ($dataKey) {
             case Stephino_Rpg_WordPress::USER_META_NICKNAME:
@@ -137,7 +145,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
                 
                 // Validate the length
                 if (strlen($dataValue) > (Stephino_Rpg_WordPress::USER_META_NICKNAME === $dataKey 
-                    ? self::MAX_LENGTH_USER_NAME : self::MAX_LENGTH_USER_DESC)) {
+                    ? Stephino_Rpg_Db_Model_Users::MAX_LENGTH_NAME : Stephino_Rpg_Db_Model_Users::MAX_LENGTH_BIO)) {
                     throw new Exception(
                         Stephino_Rpg_WordPress::USER_META_NICKNAME === $dataKey 
                             ? __('Nickname is too long', 'stephino-rpg')
@@ -146,10 +154,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
                 }
                 
                 // Prepare the result
-                $result = update_user_meta($currentUser->ID, $dataKey, $dataValue);
+                $result = update_user_meta($wpUserId, $dataKey, $dataValue);
                 
                 // Get the updated value
-                $dataValue = html_entity_decode(get_user_meta($currentUser->ID, $dataKey, true));
+                $dataValue = html_entity_decode(get_user_meta($wpUserId, $dataKey, true));
                 break;
             
             case Stephino_Rpg_Cache_User::KEY_VOL_MUSIC:
@@ -187,8 +195,13 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
      * @throws Exception
      */
     public static function ajaxConsole($data) {
+        // Logged out
+        if (0 == get_current_user_id()) {
+            throw new Exception(__('You are logged out', 'stephino-rpg'));
+        }
+        
         // Not allowed
-        if (!Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster()) {
+        if (!Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_CLI)) {
             throw new Exception(__('Insufficient privileges', 'stephino-rpg'));
         }
         
@@ -260,7 +273,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Settings extends Stephino_Rpg_Renderer_A
         }
         
         // Help mode for players
-        if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isGameMaster() && !preg_match($allowedMethodsRegex, $methodArguments[0])) {
+        if (Stephino_Rpg::get()->isDemo() && !Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_CLI) && !preg_match($allowedMethodsRegex, $methodArguments[0])) {
             echo '<span class="badge badge-info">(DEMO) ' . esc_html__('Commands are read-only for non-admins', 'stephino-rpg') . '</span><br/>';
             array_unshift($methodArguments, 'help');
         }

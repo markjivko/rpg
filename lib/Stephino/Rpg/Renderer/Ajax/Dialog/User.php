@@ -90,6 +90,19 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Game Arena player is suspended
         $ptfSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId);
         
+        // Prepare the new sentry name
+        if (Stephino_Rpg_Config::get()->core()->getSentryEnabled()
+            && !strlen($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME])) {
+            $newSentryName = Stephino_Rpg_Utils_Lingo::generateSentryName();
+            $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME] = $newSentryName;
+            Stephino_Rpg_Db::get()->tableUsers()->updateById(
+                array(
+                    Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME => $newSentryName
+                ), 
+                $userData[Stephino_Rpg_Db_Table_Users::COL_ID]
+            );
+        }
+        
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
         
@@ -132,14 +145,8 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
                 throw new Exception(__('Invalid type of transaction', 'stephino-rpg'));
         }
         
-        // Prepare the user data
-        $userData = null;
-        if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
-            $userData = current(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData());
-        }
-        
         // Invalid user data
-        if (!is_array($userData)) {
+        if (!is_array($userData = Stephino_Rpg_TimeLapse::get()->userData())) {
             throw new Exception(__('User not initialized', 'stephino-rpg'));
         }
         
@@ -218,7 +225,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // View all games
-        $ptfViewAll = ($arenaAuthorId == $userId || Stephino_Rpg_Cache_User::get()->isGameMaster());
+        $ptfViewAll = ($arenaAuthorId == $userId || Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS));
         
         // Pagination data
         $pagination = (new Stephino_Rpg_Utils_Pagination(
@@ -262,7 +269,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxArenaList($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
@@ -288,7 +295,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         $userGamesCreated = 0;
         
         // Player authorship limits
-        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
+        if (!Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS)) {
             if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 $userCanCreate = false;
             } else {
@@ -300,7 +307,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Account suspended
-        $userSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isGameMaster());
+        $userSuspended = Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS));
 
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_LIST);
         return Stephino_Rpg_Renderer_Ajax::wrap(
@@ -321,7 +328,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxArenaPlay($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
@@ -348,7 +355,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Editing rights
         $ptfEditable = Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
             $userId, 
-            Stephino_Rpg_Cache_User::get()->isGameMaster(),
+            Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS),
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
         );
@@ -370,7 +377,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxArenaEdit($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         if (!Stephino_Rpg_Config::get()->core()->getPtfEnabled()) {
             throw new Exception(__('The arena is not available', 'stephino-rpg'));
@@ -384,7 +391,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         $userId = Stephino_Rpg_TimeLapse::get()->userId();
         
         // Account suspended
-        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isGameMaster())) {
+        if (Stephino_Rpg_Db::get()->modelPtfs()->playerIsSuspended($userId, Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS))) {
             throw new Exception(__('Your game arena publisher account was suspended', 'stephino-rpg'));
         }
         
@@ -408,7 +415,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         // Editing rights
         if (!Stephino_Rpg_Db::get()->modelPtfs()->playerCanEdit(
             $userId, 
-            Stephino_Rpg_Cache_User::get()->isGameMaster(),
+            Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS),
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_USER_ID], 
             $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_REVIEW]
         )) {
@@ -421,6 +428,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
         require self::dialogTemplatePath(self::TEMPLATE_ARENA_EDIT);
         return Stephino_Rpg_Renderer_Ajax::wrap(
             array(
+                self::RESULT_DATA  => Stephino_Rpg_Db::get()->modelPtfs()->getTileList(),
                 self::RESULT_TITLE => __('Game Creator', 'stephino-rpg'),
             )
         );
@@ -435,7 +443,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxCities($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
@@ -502,18 +510,14 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_User extends Stephino_Rpg_Renderer_Ajax_
     
     /**
      * Leader board
+     * 
+     * @throws Exception
      */
     public static function ajaxLeaderBoard() {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
-        
-        // Prepare the user data
-        $userData = null;
-        if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
-            $userData = current(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData());
-        }
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         // Invalid user data
-        if (!is_array($userData)) {
+        if (!is_array($userData = Stephino_Rpg_TimeLapse::get()->userData())) {
             throw new Exception(__('User not initialized', 'stephino-rpg'));
         }
         

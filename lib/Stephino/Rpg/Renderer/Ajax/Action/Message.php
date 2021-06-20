@@ -19,10 +19,6 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
     const REQUEST_MESSAGE_SUBJECT = 'messageSubject';
     const REQUEST_MESSAGE_CONTENT = 'messageContent';
     
-    // Messaging maximum values
-    const MAX_MESSAGE_SUBJECT_LENGTH = 200;
-    const MAX_MESSAGE_CONTENT_LENGTH = 2000;
-    
     /**
      * Delete a received message
      * 
@@ -100,21 +96,21 @@ class Stephino_Rpg_Renderer_Ajax_Action_Message extends Stephino_Rpg_Renderer_Aj
         }
         
         // Subject too long
-        if (strlen($messageSubject) > self::MAX_MESSAGE_SUBJECT_LENGTH) {
+        if (strlen($messageSubject) > Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_SUBJECT) {
             throw new Exception(
                 sprintf(
                     __('Subject maximum lenght of %d characters exceeded', 'stephino-rpg'),
-                    self::MAX_MESSAGE_SUBJECT_LENGTH
+                    Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_SUBJECT
                 )
             );
         }
         
         // Message
-        if (strlen($messageContent) > self::MAX_MESSAGE_CONTENT_LENGTH) {
+        if (strlen($messageContent) > Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_CONTENT) {
             throw new Exception(
                 sprintf(
                     __('Content maximum lenght of %d characters exceeded', 'stephino-rpg'),
-                    self::MAX_MESSAGE_CONTENT_LENGTH
+                    Stephino_Rpg_Db_Model_Messages::MAX_LENGTH_CONTENT
                 )
             );
         }

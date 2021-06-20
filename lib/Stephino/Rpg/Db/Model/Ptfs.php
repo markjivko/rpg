@@ -47,6 +47,12 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
     const PTF_EXTRA_REWARD  = 'ptf_x_reward';
     const PTF_EXTRA_PREVIEW = 'ptf_x_preview';
     
+    // Minimum dimensions
+    const PTF_MIN_WIDTH  = 26;
+    const PTF_MIN_HEIGHT = 15;
+    const PTF_MAX_WIDTH  = 250;
+    const PTF_MAX_HEIGHT = 150;
+    
     /**
      * Create a platformer with this author; checks the author limit
      * 
@@ -61,7 +67,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         // Player authorship limits
-        if (!Stephino_Rpg_Cache_User::get()->isGameMaster()) {
+        if (!Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS)) {
             // Not allowed to create mini-games
             if (0 === Stephino_Rpg_Config::get()->core()->getPtfAuthorLimit()) {
                 throw new Exception(__('You cannot create games', 'stephino-rpg'));
@@ -77,11 +83,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         }
         
         // Prepare the platformer name
-        $ptfName = $this->getDb()->modelIslands()->generateName(
-            mt_rand(-100, 100), 
-            mt_rand(-100, 100),
-            false
-        );
+        $ptfName = Stephino_Rpg_Utils_Lingo::generateIslandName();
         if (strlen($ptfName) < 3 || strlen($ptfName) > 64) {
             $ptfName = md5(mt_rand(1, 999));
         }
@@ -90,7 +92,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
         $tileSetC = Stephino_Rpg_Utils_Math::getIntListZip(
             array_fill(
                 0, 
-                Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH * Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT, 
+                self::PTF_MIN_WIDTH * self::PTF_MIN_HEIGHT, 
                 1
             )
         );
@@ -100,8 +102,8 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
             array(
                 self::PTF_DEF_VERSION => 1,
                 self::PTF_DEF_NAME    => $ptfName,
-                self::PTF_DEF_WIDTH   => Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH,
-                self::PTF_DEF_HEIGHT  => Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT,
+                self::PTF_DEF_WIDTH   => self::PTF_MIN_WIDTH,
+                self::PTF_DEF_HEIGHT  => self::PTF_MIN_HEIGHT,
             ), 
             $tileSetC
         );
@@ -302,8 +304,8 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
      * @param array   $ptfDef    Associative array containing the following keys:<ul>
      * <li><b>Stephino_Rpg_Db_Model_Platformers::PTF_DEF_NAME</b>    => (string) Platformer name [3,64] characters long</li>
      * <li><b>Stephino_Rpg_Db_Model_Platformers::PTF_DEF_VERSION</b> => (int) Platformer version [1,]</li>
-     * <li><b>Stephino_Rpg_Db_Model_Platformers::PTF_DEF_WIDTH</b>   => (int) Platformer width [Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH,Stephino_Rpg_Db_Table_Ptfs::PTF_MAX_WIDTH]</li>
-     * <li><b>Stephino_Rpg_Db_Model_Platformers::PTF_DEF_HEIGHT</b>  => (int) Platformer height [Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT,Stephino_Rpg_Db_Table_Ptfs::PTF_MAX_HEIGHT]</li>
+     * <li><b>Stephino_Rpg_Db_Model_Platformers::PTF_DEF_WIDTH</b>   => (int) Platformer width [self::PTF_MIN_WIDTH,self::PTF_MAX_WIDTH]</li>
+     * <li><b>Stephino_Rpg_Db_Model_Platformers::PTF_DEF_HEIGHT</b>  => (int) Platformer height [self::PTF_MIN_HEIGHT,self::PTF_MAX_HEIGHT]</li>
      * </ul>
      * @param array   $tileSetC  <b>Compressed</b> unassociative array of integers
      * @param boolean $checkGate (optional) Fail if the gate tile was not placed; default <b>false</b>
@@ -334,22 +336,22 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
 
         // Validate width
         $preDefPtfWidth  = abs((int) $ptfDef[self::PTF_DEF_WIDTH]);
-        if ($preDefPtfWidth < Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH) {
+        if ($preDefPtfWidth < self::PTF_MIN_WIDTH) {
             throw new Exception(
                 sprintf(
                     __('Width must be greater than %d', 'stephino-rpg'),
-                    Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH
+                    self::PTF_MIN_WIDTH
                 )
             );
         }
         
         // Validate height
         $preDefPtfHeight = abs((int) $ptfDef[self::PTF_DEF_HEIGHT]);
-        if ($preDefPtfHeight < Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT) {
+        if ($preDefPtfHeight < self::PTF_MIN_HEIGHT) {
             throw new Exception(
                 sprintf(
                     __('Height must be greater than %d', 'stephino-rpg'),
-                    Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT
+                    self::PTF_MIN_HEIGHT
                 )
             );
         }
@@ -599,8 +601,8 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                 $ptfWidth  = (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_WIDTH];
                 
                 // Only keep the top-left square
-                for ($i = 0; $i < Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT; $i++) {
-                    for ($j = 0; $j < Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT; $j++) {
+                for ($i = 0; $i < self::PTF_MIN_HEIGHT; $i++) {
+                    for ($j = 0; $j < self::PTF_MIN_HEIGHT; $j++) {
                         $previewTileSet[] = $tileSet[$i * $ptfWidth + $j];
                     }
                 }
@@ -671,7 +673,7 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
                     array(
                         'name'        => 'stephino-rpg-tiles',
                         'image'       => Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(
-                            Stephino_Rpg_Theme::FOLDER_IMG_UI . '/ptf-tiles.png?ver=' . Stephino_Rpg::PLUGIN_VERSION
+                            Stephino_Rpg_Theme::FOLDER_IMG_UI . '/' . Stephino_Rpg_Db_Model_Ptfs::NAME . '/ptf-tiles.png?ver=' . Stephino_Rpg::PLUGIN_VERSION
                         ),
                         'imagewidth'  => self::TILE_SIDE * self::TILE_SET_HORIZONTAL,
                         'imageheight' => self::TILE_SIDE * self::TILE_SET_VERTICAL,
@@ -696,8 +698,8 @@ class Stephino_Rpg_Db_Model_Ptfs extends Stephino_Rpg_Db_Model {
      */
     public function getViewBox($getString = false) {
         $viewBox = array(
-            self::TILE_SIDE * Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH,
-            self::TILE_SIDE * Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT,
+            self::TILE_SIDE * self::PTF_MIN_WIDTH,
+            self::TILE_SIDE * self::PTF_MIN_HEIGHT,
         );
         return $getString ? implode(' ', $viewBox) : $viewBox;
     }

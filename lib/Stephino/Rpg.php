@@ -22,13 +22,13 @@ class Stephino_Rpg {
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.3.8';
+    const PLUGIN_VERSION          = '0.3.9';
     
     // Pro Plugin minimum compatible version
     const PLUGIN_VERSION_PRO      = '0.2.1';
     
     // DataBase version
-    const PLUGIN_VERSION_DB       = '0.2.3';
+    const PLUGIN_VERSION_DB       = '0.3.0';
     
     // Firebase version
     const PLUGIN_VERSION_FIREBASE = '8.4.3';
@@ -52,11 +52,12 @@ class Stephino_Rpg {
     const OPTION_CACHE            = 'stephino_rpg_cache';
     
     // Folders
-    const FOLDER_THEMES = 'themes';
-    const FOLDER_UI_CSS = 'ui/css';
-    const FOLDER_UI_IMG = 'ui/img';
-    const FOLDER_UI_JS  = 'ui/js';
-    const FOLDER_UI_TPL = 'ui/tpl';
+    const FOLDER_THEMES   = 'themes';
+    const FOLDER_SENTRIES = 'sentries';
+    const FOLDER_UI_CSS   = 'ui/css';
+    const FOLDER_UI_IMG   = 'ui/img';
+    const FOLDER_UI_JS    = 'ui/js';
+    const FOLDER_UI_TPL   = 'ui/tpl';
     
     /**
      * Singleton instance of Stephino_Rpg

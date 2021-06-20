@@ -31,21 +31,41 @@
                         <?php echo esc_html__('Total score', 'stephino-rpg');?>
                     </span>
                 </th>
+                <?php if (Stephino_Rpg_Config::get()->core()->getSentryEnabled()):?>
+                    <th>
+                        <span 
+                            data-effect="help"
+                            data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_SENTRIES;?>">
+                            <?php echo Stephino_Rpg_Config::get()->core()->getConfigSentryName(true);?>
+                        </span>
+                    </th>
+                <?php endif;?>
                 <th><?php echo esc_html__('Battles', 'stephino-rpg');?></th>
                 <?php if (Stephino_Rpg_Config::get()->core()->getPtfEnabled()):?>
-                    <th><?php echo esc_html__('Game arena', 'stephino-rpg');?></th>
+                    <th>
+                        <span 
+                            data-effect="help"
+                            data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
+                            <?php echo esc_html__('Game arena', 'stephino-rpg');?>
+                        </spa>
+                    </th>
                 <?php endif;?>
                 <th><?php echo esc_html__('Online', 'stephino-rpg');?></th>
             </tr>
         </thead>
         <tbody>
-            <?php foreach ($leaderBoard as $lbKey => $lbUserData): ?>
+            <?php 
+                foreach ($leaderBoard as $lbKey => $lbUserData): 
+                    $colSpan = 5;
+                    Stephino_Rpg_Config::get()->core()->getPtfEnabled() && $colSpan++;
+                    Stephino_Rpg_Config::get()->core()->getSentryEnabled() && $colSpan++;
+            ?>
                 <?php if (null === $lbUserData):?>
-                    <tr><td colspan="<?php echo (Stephino_Rpg_Config::get()->core()->getPtfEnabled() ? 6 : 5);?>" class="text-center">...</td></tr>
+                    <tr><td colspan="<?php echo $colSpan;?>" class="text-center">...</td></tr>
                 <?php else:?>
                     <tr <?php if ($lbKey + 1 === $userPlace):?>class="framed active"<?php endif;?>
                         data-click="userViewProfile"
-                        data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($lbUserData[Stephino_Rpg_Db_Table_Users::COL_ID]);?>">
+                        data-click-args="<?php echo intval($lbUserData[Stephino_Rpg_Db_Table_Users::COL_ID]);?>">
                         <th width="50"><?php echo $lbKey + 1;?></td>
                         <td width="200" class="td-ellipsis"><?php echo Stephino_Rpg_Utils_Lingo::getUserName($lbUserData);?></td>
                         <td width="150">
@@ -53,11 +73,24 @@
                                 <?php echo Stephino_Rpg_Utils_Lingo::isuFormat($lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE]);?>
                             </span>
                         </td>
+                        <?php 
+                            if (Stephino_Rpg_Config::get()->core()->getSentryEnabled()):
+                                $sentryChallengeColumns = Stephino_Rpg_Db::get()->modelSentries()->getColumns();
+                        ?>
+                            <td>
+                                <?php foreach (Stephino_Rpg_Db::get()->modelSentries()->getLabels() as $challengeType => $challengeLabel):?>
+                                    <span title="<?php echo esc_attr($challengeLabel);?>" data-html="true"><?php 
+                                        echo (Stephino_Rpg_Db_Model_Sentries::CHALLENGE_ATTACK != $challengeType ? ' / ' : '')
+                                            . $lbUserData[$sentryChallengeColumns[$challengeType]];
+                                    ?></span>
+                                <?php endforeach;?>
+                            </td>
+                        <?php endif;?>
                         <td>
                             <span class="tb-v" title="<?php echo esc_attr__('Victories', 'stephino-rpg');?>">
                                 <?php echo $lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_VICTORIES];?>
                             </span> /
-                            <span class="tb-w" title="<?php echo esc_attr__('Draws', 'stephino-rpg');?>">
+                            <span class="tb-w" title="<?php echo esc_attr__('Impasses', 'stephino-rpg');?>">
                                 <?php echo $lbUserData[Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS];?>
                             </span> /
                             <span class="tb-d" title="<?php echo esc_attr__('Defeats', 'stephino-rpg');?>">

@@ -17,12 +17,12 @@
 /* @var $viewAttrs string */
 
 ?><!doctype html>
-<html lang="<?php echo Stephino_Rpg_Config::lang(true);?>">
+<html lang="<?php echo (null === Stephino_Rpg_Config::lang() ? 'en' : Stephino_Rpg_Config::lang());?>">
     <head>
         <?php wp_head(); ?>
         <link rel="shortcut icon" type="image/png" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.png'); ?>" />
         <link rel="manifest" id="stephino_rpg_manifest" />
-        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl('img/ui/192.png')); ?>">
+        <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(Stephino_Rpg_Theme::FOLDER_IMG_UI . '/192.png')); ?>">
         <!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
         <?php if (Stephino_Rpg_Renderer_Ajax::VIEW_PWA == $viewName):?><meta http-equiv="refresh" content="5" /><?php endif;?>
         <meta charset="utf-8" />
@@ -104,9 +104,10 @@
         </div>
 
         <!-- Map -->
-        <div data-role="map-holder" <?php echo $viewAttrs; ?>>
+        <a class="skip-link" href="#map-holder"><?php echo Stephino_Rpg::PLUGIN_NAME;?></a>
+        <main id="#map-holder" data-role="map-holder" <?php echo $viewAttrs; ?>>
             <div data-role="map" class="map"></div>
-        </div>
+        </main>
 
         <!-- Bottom Bar -->
         <div class="bottom-bar container-fluid">
@@ -114,6 +115,9 @@
                 <div class="col bar-info">
                     <?php if (count(Stephino_Rpg_Config::get()->premiumModifiers()->getAll())):?>
                         <div data-role="premium-modifiers" data-html="true" title="&#11088; <?php echo esc_html__('Modifiers', 'stephino-rpg');?>"><span></span></div>
+                    <?php endif;?>
+                    <?php if (Stephino_Rpg_Config::get()->core()->getSentryEnabled()):?>
+                        <div data-role="sentry" data-btn-dialog="dialogSentryInfo" data-html="true" title="<?php echo Stephino_Rpg_Config::get()->core()->getConfigSentryName(true);?>"><span></span></div>
                     <?php endif;?>
                     <span class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_RES_GEM;?>"></span>
                     <span class="res res-<?php echo Stephino_Rpg_Renderer_Ajax::RESULT_RES_GOLD;?>"></span>

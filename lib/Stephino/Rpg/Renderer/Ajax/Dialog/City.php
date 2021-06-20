@@ -13,9 +13,8 @@
 class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_Dialog {
     
     // Dialog templates
-    const TEMPLATE_QUEUES       = 'city/city-queues';
-    const TEMPLATE_RENAME       = 'city/city-rename';
     const TEMPLATE_ADVISOR      = 'city/city-advisor';
+    const TEMPLATE_QUEUES       = 'city/city-queues';
     const TEMPLATE_MOVE_CAPITAL = 'city/city-move-capital';
     const TEMPLATE_GARRISON     = 'city/city-garrison';
     const TEMPLATE_INFO         = 'city/city-info';
@@ -25,48 +24,6 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
     
     // Result tags
     const RESULT_CITY_CONFIG_ID = 'cityConfigId';
-    
-    /**
-     * Show the city renaming dialog
-     * 
-     * @param array $data Data containing <ul>
-     * <li><b>cityId</b> (int) City ID</li>
-     * </ul>
-     */
-    public static function ajaxRename($data) {
-        // Prepare the city ID
-        $cityId = isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null;
-        
-        // Get our city information
-        $cityInfo = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);
-        
-        // Get the city configuration
-        $cityConfig = Stephino_Rpg_Config::get()->cities()->getById(
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_CONFIG_ID]
-        );
-        
-        // Invalid city configuration
-        if (null === $cityConfig) {
-            throw new Exception(
-                sprintf(
-                    __('Invalid configuration (%s)', 'stephino-rpg'),
-                    Stephino_Rpg_Config::get()->core()->getConfigCityName()
-                )
-            );
-        }
-        
-        // Show the dialog
-        require self::dialogTemplatePath(self::TEMPLATE_RENAME);
-        
-        return Stephino_Rpg_Renderer_Ajax::wrap(
-            array(
-                self::RESULT_TITLE => $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_IS_CAPITAL] 
-                    ? __('Rename Metropolis', 'stephino-rpg') 
-                    : __('Rename', 'stephino-rpg'),
-            ),
-            $cityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID]
-        );
-    }
     
     /**
      * Show the city advisor dialog
@@ -274,7 +231,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxWorkforce($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         // Prepare the city ID
         $cityId = isset($data[self::REQUEST_CITY_ID]) ? intval($data[self::REQUEST_CITY_ID]) : null;
@@ -314,13 +271,13 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
      * @throws Exception
      */
     public static function ajaxStages($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         if (!is_array($commonArgs = isset($data[self::REQUEST_COMMON_ARGS]) ? $data[self::REQUEST_COMMON_ARGS] : array())) {
             $commonArgs = array();
         }
         
         // Prepare the city ID
-        $cityId = current($commonArgs);
+        $cityId = abs((int) current($commonArgs));
         
         // Get our city information
         $cityInfo = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);
@@ -358,7 +315,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Prepare the city ID
-        $cityId = current($commonArgs);
+        $cityId = abs((int) current($commonArgs));
         
         // Get the city information
         if (null === $cityData = Stephino_Rpg_Db::get()->tableCities()->getById($cityId)) {
@@ -414,7 +371,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Prepare the city ID
-        $cityId = current($commonArgs);
+        $cityId = abs((int) current($commonArgs));
         
         // Get our city information
         $cityInfo = Stephino_Rpg_Renderer_Ajax_Action::getCityInfo($cityId);

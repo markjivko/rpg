@@ -182,7 +182,9 @@ class Stephino_Rpg_Task_Robot {
                             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
                             $unlockObject->getId()
                         );
-                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued building: {$unlockObject->getName()}");
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                            "{$this->_logTag} Queued building: {$unlockObject->getName()}"
+                        );
                     } 
                     
                     // Research fields queue
@@ -196,10 +198,12 @@ class Stephino_Rpg_Task_Robot {
                             $cityData[Stephino_Rpg_Db_Table_Users::COL_ID],
                             $unlockObject->getId()
                         );
-                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued research field: {$unlockObject->getName()}");
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                            "{$this->_logTag} Queued research field: {$unlockObject->getName()}"
+                        );
                     }
                 } catch (Exception $exc) {
-                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
                         "Task_Robot._queueAdvisor, " . get_class($unlockObject) . " ({$unlockObject->getId()}): {$exc->getMessage()}"
                     );
                 }
@@ -226,7 +230,7 @@ class Stephino_Rpg_Task_Robot {
                     if (null !== $buildingConfig = Stephino_Rpg_Config::get()->buildings()->getById($buildingConfigId)) {
                         // Prepare the cost data
                         $costData = Stephino_Rpg_Renderer_Ajax_Action::getCostData(
-                            $buildingConfig->getId(),
+                            $buildingConfig,
                             $buildingLevel,
                             true
                         );
@@ -239,10 +243,12 @@ class Stephino_Rpg_Task_Robot {
                             $cityData[Stephino_Rpg_Db_Table_Cities::COL_ID],
                             $buildingConfig->getId()
                         );
-                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Queued random building: {$buildingConfig->getName()}");
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                            "{$this->_logTag} Queued random building: {$buildingConfig->getName()}"
+                        );
                     }
                 } catch (Exception $exc) {
-                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                    Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
                         "Task_Robot._queueAdvisor, Building ($buildingConfigId): {$exc->getMessage()}"
                     );
                 }
@@ -325,7 +331,7 @@ class Stephino_Rpg_Task_Robot {
                     "{$this->_logTag} Queued military entity: {$entityCount} x {$entityConfig->getName()}"
                 );
             } catch (Exception $exc) {
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
                     "Task_Robot._queueEntities, Entity/$entityType ({$entityConfig->getId()}) x {$entityCount}: {$exc->getMessage()}"
                 );
             }
@@ -401,7 +407,9 @@ class Stephino_Rpg_Task_Robot {
                         Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_WORKERS, 
                         $buildingWorkers
                     );
-                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info("{$this->_logTag} Assigned {$buildingWorkers} / {$buildingWorkersMax} workers to building #{$buildingId}");
+                Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                    "{$this->_logTag} Assigned {$buildingWorkers} / {$buildingWorkersMax} workers to building #{$buildingId}"
+                );
             }
         }
     }
@@ -423,6 +431,44 @@ class Stephino_Rpg_Task_Robot {
             if ($currentTime - Stephino_Rpg_Cache_User::get()->read(Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_TIME, 0) 
                 < 3600 * Stephino_Rpg_Config::get()->core()->getRobotsTimeout()) {
                 break;
+            }
+            
+            // Store the current time
+            Stephino_Rpg_Cache_User::get()->write(Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_TIME, $currentTime);
+            
+            // Prepare the sentry challenge
+            if (Stephino_Rpg_Config::get()->core()->getSentryEnabled()) {
+                $attUserId = Stephino_Rpg_TimeLapse::get()->userId();
+                $defUserId = null;
+                
+                // Either a robot or a player
+                if (is_array($randomPlayers = $this->_db->tableUsers()->getRandom(3, !!mt_rand(0, 1)))) {
+                    // Get the first player from the list
+                    $defUserRow = current($randomPlayers);
+
+                    // Store ths user ID
+                    $defUserId = (int) $defUserRow[Stephino_Rpg_Db_Table_Users::COL_ID];
+                }
+                
+                // Valid opponent found
+                if (null !== $defUserId) {
+                    // Prepare a random sentry challenge
+                    $sentryChallenges = array_keys($this->_db->modelSentries()->getColumns());
+                    shuffle($sentryChallenges);
+
+                    // Create the sentry convoy
+                    try {
+                        $this->_db->modelConvoys()->createSentryChallenge(
+                            $attUserId, 
+                            $defUserId, 
+                            current($sentryChallenges)
+                        );
+                    } catch (Exception $exc) {
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                            "Task_Robot._militaryAttach(sentry) from user #$attUserId to user #$defUserId: {$exc->getMessage()}"
+                        );
+                    }
+                }
             }
             
             // Get the revenge list
@@ -530,14 +576,9 @@ class Stephino_Rpg_Task_Robot {
                             $defCityId, 
                             $attackArmy
                         );
-                        
-                        Stephino_Rpg_Cache_User::get()->write(
-                            Stephino_Rpg_Cache_User::KEY_ROBOT_ATT_TIME, 
-                            $currentTime
-                        );
                     } catch (Exception $exc) {
-                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                            "Task_Robot._militaryAttack, from city #$cityId to city #$defCityId: {$exc->getMessage()}"
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::info(
+                            "Task_Robot._militaryAttack from city #$cityId to city #$defCityId: {$exc->getMessage()}"
                         );
                     }
                 }

@@ -309,6 +309,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                         Stephino_Rpg_Config::get()->core()->getFirebaseWebApiKey(),
                         (int) $userInfo[Stephino_Rpg_Db_Table_Users::COL_ID],
                         Stephino_Rpg_Utils_Lingo::getUserName($userInfo),
+                        Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_CHAT),
                     );
 
                     // Include the necessary components
@@ -349,7 +350,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                     'events_sprite'  => Stephino_Rpg_Utils_Media::getEventsSprite(),
                     'discord_url'    => esc_url(Stephino_Rpg::PLUGIN_URL_DISCORD),
                     'symbol_capital' => Stephino_Rpg_Renderer_Ajax_Html::SYMBOL_CAPITAL,
-                    'is_admin'       => Stephino_Rpg_Cache_User::get()->isGameMaster(),
+                    'is_admin'       => Stephino_Rpg_Cache_User::get()->isGameAdmin(),
                     'is_demo'        => Stephino_Rpg::get()->isDemo(),
                     'is_pro'         => Stephino_Rpg::get()->isPro(),
                     'ptf_size'       => Stephino_Rpg_Db::get()->modelPtfs()->getViewBox(),

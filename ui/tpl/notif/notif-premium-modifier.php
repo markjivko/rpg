@@ -31,7 +31,7 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 1)):
         <?php 
             // Prepare the name
             $i18nPremiumName = '<span data-effect="help" data-effect-args="' . Stephino_Rpg_Config_PremiumModifiers::KEY . ',' . abs((int) $premiumModifierConfigId) . '">'
-                . Stephino_Rpg_Utils_Lingo::escape($premiumModifierName)
+                . esc_html($premiumModifierName)
             . '</span>';
             echo sprintf(esc_html__('You have just activated the %s premium modifier', 'stephino-rpg'), $i18nPremiumName);
         ?>

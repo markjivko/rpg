@@ -21,6 +21,7 @@ class Stephino_Rpg_Utils_Media {
      * File names
      */
     const IMAGE_512              = '512';
+    const IMAGE_512_ABOVE        = '512-above';
     const IMAGE_512_VACANT       = '512-vacant';
     const IMAGE_512_VACANT_ABOVE = '512-vacant-above';
     
@@ -58,6 +59,111 @@ class Stephino_Rpg_Utils_Media {
      * @var string[]
      */
     protected static $_cacheAdminUrls = array();
+    
+    /**
+     * Cache for sentry assets
+     * 
+     * @var string[]
+     */
+    protected static $_cacheSentryAssets = null;
+    
+    /**
+     * Get a list of assets
+     * 
+     * @return array Associative array of 
+     * <ul>
+     * <li>
+     *     (<b>int</b>) Asset index => array(
+     *         <ul>
+     *             <li>(<b>int</b>) Asset ID, ...</li>
+     *         </ul>
+     *     ), ...
+     * </li>
+     * </ul> OR empty array on error
+     */
+    public static function getSentryAssets() {
+        // Cache not initialized
+        if (null === self::$_cacheSentryAssets) {
+            // Prepare the result
+            self::$_cacheSentryAssets = array();
+
+            // Prepare the file list
+            $filesList = Stephino_Rpg_Utils_Folder::get()->fileSystem()->dirlist(
+                Stephino_Rpg_Utils_Themes::getActive()->getFilePath(
+                    Stephino_Rpg_Theme::FOLDER_IMG_UI . '/' . Stephino_Rpg_Db_Model_Sentries::NAME
+                ),
+                false,
+                true
+            );
+
+            // Walk through the files
+            if (is_array($filesList)) {
+                // Don't need a recursive function, expecting 1 level deep directory
+                foreach ($filesList as $assetIndex) {
+                    // Where each directory is numeric
+                    if ('d' === $assetIndex['type'] && preg_match('%^\d+$%', $assetIndex['name'])) {
+                        self::$_cacheSentryAssets[$assetIndex['name']] = array();
+                        // And files are numeric as well (i.e. "1.png")
+                        foreach ($assetIndex['files'] as $assetId) {
+                            if ('f' === $assetId['type'] && preg_match('%^\d+\.png$%', $assetId['name'])) {
+                                self::$_cacheSentryAssets[$assetIndex['name']][] = (int) basename($assetId['name'], '.png');
+                            }
+                        }
+                        
+                        // Sort
+                        sort(self::$_cacheSentryAssets[$assetIndex['name']]);
+                        
+                        // Discard index association
+                        self::$_cacheSentryAssets[$assetIndex['name']] = array_values(self::$_cacheSentryAssets[$assetIndex['name']]);
+                    }
+                }
+            }
+        }
+        
+        return self::$_cacheSentryAssets;
+    }
+    
+    /**
+     * Get the sentry definition array for this user
+     * 
+     * @return array Associative array of Asset Index => Asset ID OR empty array on error
+     */
+    public static function getSentryDefinition($userId) {
+        // Prepare the data
+        $result = array();
+        
+        // Get the file path
+        $sentryDefinitionPath = Stephino_Rpg_Db::get()->modelSentries()->getFilePath(
+            $userId,
+            Stephino_Rpg_Db_Model_Sentries::FILE_DEFINITION
+        );
+        
+        // Prepare the sentry assets
+        $sentryAssets = self::getSentryAssets();
+        
+        // Prepare the definition
+        $sentryDefintion = array();
+        if (Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_file($sentryDefinitionPath)) {
+            $sentryDefintion = @json_decode(
+                Stephino_Rpg_Utils_Folder::get()->fileSystem()->get_contents($sentryDefinitionPath), 
+                true
+            );
+            if (!is_array($sentryDefintion)) {
+                $sentryDefintion = array();
+            }
+        }
+        
+        // Validate the local definition
+        foreach ($sentryAssets as $assetIndex => $assetIds) {
+            if (isset($sentryDefintion[$assetIndex]) && in_array($sentryDefintion[$assetIndex], $assetIds)) {
+                $result[$assetIndex] = $sentryDefintion[$assetIndex];
+            } else {
+                $result[$assetIndex] = reset($assetIds);
+            }
+        }
+        
+        return $result;
+    }
     
     /**
      * Get the Avatar URL for a user

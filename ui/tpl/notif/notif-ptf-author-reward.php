@@ -25,9 +25,9 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 5)):
                 <?php 
                     echo sprintf(
                         esc_html__('%s has won your game, %s', 'stephino-rpg'),
-                        '<span data-click="userViewProfile" data-click-args="' . abs((int) $playerId) . '"><b>' . Stephino_Rpg_Utils_Lingo::escape($playerName) . '</b></span>',
+                        '<span data-click="userViewProfile" data-click-args="' . abs((int) $playerId) . '"><b>' . esc_html($playerName) . '</b></span>',
                         '<span data-click="dialog" data-click-args="dialogUserArenaPlay,' . abs((int) $ptfId) . '">'
-                            . Stephino_Rpg_Utils_Lingo::escape($ptfName)
+                            . esc_html($ptfName)
                         . '</span>'
                     );
                 ?>

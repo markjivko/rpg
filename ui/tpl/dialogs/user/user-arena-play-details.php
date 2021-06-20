@@ -48,7 +48,7 @@ $ptfApproved = (Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED === $ptfRow[Step
                 data-effect-args="<?php echo round($ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_RATING], 2);?>"></div>
         </div>
     </div>
-    <?php if (($ptfOwn || Stephino_Rpg_Cache_User::get()->isGameMaster())):?>
+    <?php if (($ptfOwn || Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS))):?>
         <div class="row text-center mb-2">
             <div class="col-12">
                 <div class="d-inline-block" data-role="ptf-visibility">
@@ -181,7 +181,7 @@ $ptfApproved = (Stephino_Rpg_Db_Table_Ptfs::PTF_REVIEW_APPROVED === $ptfRow[Step
                 </button>
             </div>
         <?php endif;?>
-        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+        <?php if (Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_MOD_PTFS)):?>
             <div class="col-12 col-md">
                 <div class="dropdown">
                     <button class="btn w-100 dropdown-toggle" type="button" id="ddReview" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -369,10 +369,10 @@ CSS;
         // Prepare the known common backgrounds
         $files = array(
             Stephino_Rpg_Renderer_Ajax_Cells::CELL_DATA_TYPE_ISLAND => array(
-                '.island' => '512.png',
+                '.island' => Stephino_Rpg_Utils_Media::IMAGE_512 . '.png',
             ),
             Stephino_Rpg_Renderer_Ajax_Cells::CELL_DATA_TYPE_STATUE => array(
-                '.statue' => '512-above.png',
+                '.statue' => Stephino_Rpg_Utils_Media::IMAGE_512_ABOVE . '.png',
             ),
         );
         

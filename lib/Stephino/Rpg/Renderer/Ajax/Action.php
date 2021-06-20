@@ -193,9 +193,10 @@ class Stephino_Rpg_Renderer_Ajax_Action {
     }
     
     /**
+     * Get vacant lots unlocked
      * 
      * @param int $cityId City ID
-     * int[]|null Building Configuration IDs or Null if invalid City ID provided
+     * return int[]|null Building Configuration IDs or Null if invalid City ID provided
      */
     public static function getBuildingUnlk($cityId) {
         $cityId = abs((int) $cityId);
@@ -253,6 +254,39 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         }
         
         return $buildingsUnlocked;
+    }
+    
+    /**
+     * Get building levels and media backgrounds in this city
+     * 
+     * @param int $cityId City ID
+     * @return int[] Associative array of Building Configuration ID => array(Building Level, Building Background image level)
+     */
+    public static function getBuildingLvls($cityId) {
+        $result = array();
+        
+        $cityId = abs((int) $cityId);
+        if (is_array(Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData())) {
+            foreach (Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)->getData() as $dbRow) {
+                if ($cityId !== (int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CITY_ID]) {
+                    continue;
+                }
+                
+                // Building constructed
+                if ((int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL] > 0) {
+                    $result[(int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID]] = array(
+                        (int) $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL],
+                        Stephino_Rpg_Utils_Media::getClosestBackgroundId(
+                            Stephino_Rpg_Config_Buildings::KEY,
+                            $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_CONFIG_ID],
+                            $dbRow[Stephino_Rpg_Db_Table_Buildings::COL_BUILDING_LEVEL]
+                        )
+                    );
+                }
+            }
+        }
+        
+        return $result;
     }
     
     /**
@@ -1596,6 +1630,75 @@ class Stephino_Rpg_Renderer_Ajax_Action {
     }
     
     /**
+     * Get the production/looting data for sentry quests
+     * 
+     * @param int $sentryLevelLooting Looting ability level
+     * @param int $gemRewardLevel  Challenge level - for gem rewards
+     * @return array
+     */
+    public static function getProductionDataSentry($sentryLevelLooting = 1, $gemRewardLevel = null, $successRate = 100) {
+        $result = array();
+        
+        // Santize the success rate
+        $successRate = $successRate < 0 ? 0 : ($successRate > 100 ? 100 : floatval($successRate));
+        
+        // Adjust the yeld; 50 and lower => 1.0, 100 => 0.2
+        $yieldPercent = Stephino_Rpg_Db::get()->modelSentries()->getYield($successRate) / 100;
+
+        // Loot values
+        $lootValues = array(
+            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD     => $yieldPercent * Stephino_Rpg_Utils_Config::getPolyValue(
+                Stephino_Rpg_Config::get()->core()->getSentryLootPoly(),
+                $sentryLevelLooting, 
+                Stephino_Rpg_Config::get()->core()->getSentryLootGold()
+            ),
+            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH => $yieldPercent * Stephino_Rpg_Utils_Config::getPolyValue(
+                Stephino_Rpg_Config::get()->core()->getSentryLootPoly(),
+                $sentryLevelLooting, 
+                Stephino_Rpg_Config::get()->core()->getSentryLootResearch()
+            ),
+        );
+        
+        // Gem reward
+        if (is_int($gemRewardLevel) && $gemRewardLevel > 0) {
+            $lootValues[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM] = intval(
+                $yieldPercent * Stephino_Rpg_Utils_Config::getPolyValue(
+                    Stephino_Rpg_Config::get()->core()->getSentryRewardPoly(),
+                    $gemRewardLevel, 
+                    Stephino_Rpg_Config::get()->core()->getSentryReward()
+                )
+            );
+        }
+        
+        // Get the resources
+        foreach (self::getResourceData() as $productionKey => $productionValue) {
+            if (!isset($lootValues[$productionKey])) {
+                continue;
+            }
+            
+            // Prepare the name and AJAX key
+            list($prodName, $prodAjaxKey) = $productionValue;
+            
+            // Store the result
+            $result[$productionKey] = array(
+                // Configuration name
+                $prodName,
+
+                // Final value
+                $lootValues[$productionKey],
+
+                // AJAX Key
+                $prodAjaxKey,
+
+                // Abundance factor
+                null
+            );
+        }
+            
+        return $result;
+    }
+    
+    /**
      * Get the production data
      * 
      * @param Stephino_Rpg_Config_Item_Single $itemConfig            Configuration item that implements a Modifier
@@ -1759,6 +1862,54 @@ class Stephino_Rpg_Renderer_Ajax_Action {
     }
     
     /**
+     * Get the cost data for a sentry
+     * 
+     * @param int $sentryLevel Sentry attribute level; default <b>0</b>
+     * @return array
+     */
+    public static function getCostDataSentry($sentryLevel = 0) {
+        $result = array();
+        
+        // Get the costs
+        foreach (self::getResourceData() as $costKey => $costValue) {
+            list($unitName, $unitAjaxKey) = $costValue;
+
+            // Prepare the value
+            $unitValue = null;
+
+            // Go through the known keys
+            switch ($costKey) {
+                case Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD:
+                    $unitValue = Stephino_Rpg_Config::get()->core()->getSentryCostGold();
+                    break;
+
+                case Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH:
+                    $unitValue = Stephino_Rpg_Config::get()->core()->getSentryCostResearch();
+                    break;
+            }
+
+            // Valid field
+            if (null !== $unitValue) {
+                // Ajust the value to the desired level
+                $unitPolyValue = Stephino_Rpg_Utils_Config::getPolyValue(
+                    Stephino_Rpg_Config::get()->core()->getSentryCostPoly(),
+                    $sentryLevel + 1, 
+                    $unitValue
+                );
+
+                // Store the cost data
+                $result[$costKey] = array(
+                    $unitName,
+                    round($unitPolyValue, 2),
+                    $unitAjaxKey
+                );
+            }
+        }
+        
+        return $result;
+    }
+    
+    /**
      * Get the cost data for the next level based on the current level
      * 
      * @param Stephino_Rpg_Config_Trait_Cost $itemConfig    Configuration item that uses a Cost trait
@@ -1851,7 +2002,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
                         $unitPolyValue *= (100 - $costDiscount[0]) / 100;
                     }
                     
-                    // Store the cost data as an integer
+                    // Store the cost data
                     $result[$costKey] = array(
                         $unitName,
                         round($unitPolyValue, 2),
@@ -1888,7 +2039,7 @@ class Stephino_Rpg_Renderer_Ajax_Action {
         $queueData = null;
        
         // Invalid input
-        if (!is_numeric($buildingOrCityId)) {
+        if (!is_numeric($buildingOrCityId) || null === Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)) {
             return $queueData;
         }
         

@@ -43,11 +43,6 @@ class Stephino_Rpg_Renderer_Ajax {
     const FILE_PTF_MAIN = 'ptf-main';
     const FILE_PTF_LIST = 'ptf-list';
     
-    // Modal sizes
-    const MODAL_SIZE_LARGE  = true;
-    const MODAL_SIZE_NORMAL = null;
-    const MODAL_SIZE_SMALL  = false;
-    
     /**
      * Available AJAX controllers
      * 
@@ -110,6 +105,7 @@ class Stephino_Rpg_Renderer_Ajax {
     const RESULT_NAVIGATION        = 'navigation';
     const RESULT_BUILDING_UPGS     = 'building_upgs';
     const RESULT_BUILDING_UNLK     = 'building_unlk';
+    const RESULT_BUILDING_LVLS     = 'building_lvls';
     const RESULT_SETTINGS          = 'settings';
     const RESULT_MODAL_SIZE        = 'modal_size';
     const RESULT_SET_TLCD          = 'tlcd';
@@ -145,13 +141,6 @@ class Stephino_Rpg_Renderer_Ajax {
     protected static $_tutorialStep = null;
     
     /**
-     * Modal Size: false for "md", null for normal, true for "xl"
-     *
-     * @var boolean|null
-     */
-    protected static $_modalSize = null;
-    
-    /**
      * Wrap the final result
      * 
      * @param mixed  $result      AJAX method result to return
@@ -161,24 +150,30 @@ class Stephino_Rpg_Renderer_Ajax {
      * @return array Associative array of AJAX result
      */
     public static function wrap($result, $resCityId = null, $navIdValue = null, $navIdColumn = Stephino_Rpg_Db_Table_Cities::COL_ID) {
-        // Prepare the final result
-        $wrappedResult = array(
-            self::RESULT_SETTINGS      => self::getSettings(),
-            self::RESULT_RESOURCES     => self::getResources($resCityId),
-            self::RESULT_ENTITIES      => self::getEntities($resCityId),
-            self::RESULT_MODAL_SIZE    => self::getModalSize(),
-            self::RESULT_PREMIUM       => self::getQueues(null, true),
-            self::RESULT_QUEUES        => self::getQueues($resCityId),
-            self::RESULT_MESSAGES      => self::_getMessages(),
-            self::RESULT_CONVOYS       => self::_getConvoys(),
-            self::RESULT_TUTORIAL      => self::_getTutorial(),
-            self::RESULT_NAVIGATION    => self::_getNavigation($navIdValue, $navIdColumn),
-        );
+        $wrappedResult = array();
         
-        // City-level information
-        if (null !== $resCityId) {
-            $wrappedResult[self::RESULT_BUILDING_UPGS] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUpgs($resCityId);
-            $wrappedResult[self::RESULT_BUILDING_UNLK] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUnlk($resCityId);
+        // Timelapse initialized
+        if (null !== Stephino_Rpg_TimeLapse::get()->worker(Stephino_Rpg_TimeLapse_Resources::KEY)) {
+            // Prepare the final result
+            $wrappedResult = array(
+                self::RESULT_SETTINGS      => self::getSettings(),
+                self::RESULT_RESOURCES     => self::getResources($resCityId),
+                self::RESULT_ENTITIES      => self::getEntities($resCityId),
+                self::RESULT_MODAL_SIZE    => Stephino_Rpg_Renderer_Ajax_Dialog::getModalSize(),
+                self::RESULT_PREMIUM       => self::getQueues(null, true),
+                self::RESULT_QUEUES        => self::getQueues($resCityId),
+                self::RESULT_MESSAGES      => self::_getMessages(),
+                self::RESULT_CONVOYS       => self::_getConvoys(),
+                self::RESULT_TUTORIAL      => self::_getTutorial(),
+                self::RESULT_NAVIGATION    => self::_getNavigation($navIdValue, $navIdColumn),
+            );
+
+            // City-level information and not a cells method
+            if (null !== $resCityId && 0 !== strpos(strtolower(Stephino_Rpg_Utils_Sanitizer::getMethod()), 'cells')) {
+                $wrappedResult[self::RESULT_BUILDING_UPGS] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUpgs($resCityId);
+                $wrappedResult[self::RESULT_BUILDING_UNLK] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingUnlk($resCityId);
+                $wrappedResult[self::RESULT_BUILDING_LVLS] = Stephino_Rpg_Renderer_Ajax_Action::getBuildingLvls($resCityId);
+            }
         }
         
         // Append our details
@@ -266,32 +261,6 @@ class Stephino_Rpg_Renderer_Ajax {
      */
     public static function setTutorialStep($tutorialStep) {
         self::$_tutorialStep = (null === $tutorialStep ? null : intval($tutorialStep));
-    }
-    
-    /**
-     * Get the dialog size<ul>
-     *     <li><b>false</b> for "md"</li>
-     *     <li><b>null</b> for normal</li>
-     *     <li><b>true</b> for "xl"</li>
-     * </ul>
-     * 
-     * @return boolean|null
-     */
-    public static function getModalSize() {
-        return self::$_modalSize;
-    }
-    
-    /**
-     * Set the modal size<ul>
-     *     <li><b>self::MODAL_SIZE_SMALL</b> for "md"</li>
-     *     <li><b>self::MODAL_SIZE_NORMAL</b> for normal</li>
-     *     <li><b>self::MODAL_SIZE_LARGE</b> for "xl"</li>
-     * </ul>
-     * 
-     * @param boolean|null $modalSize Dialog size flag
-     */
-    public static function setModalSize($modalSize = null) {
-        self::$_modalSize = (null === $modalSize ? null : (boolean) $modalSize);
     }
     
     /**

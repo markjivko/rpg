@@ -32,7 +32,7 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 1)):
             echo sprintf(
                 esc_html__('Thank you for purchasing %s', 'stephino-rpg'),
                 '<span data-click="dialog" data-click-args="dialogPremiumPackageList">'
-                    . Stephino_Rpg_Utils_Lingo::escape($premiumPackageName)
+                    . esc_html($premiumPackageName)
                 . '</span>'
             );
         ?>

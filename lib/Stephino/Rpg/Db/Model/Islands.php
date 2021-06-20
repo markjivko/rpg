@@ -18,95 +18,6 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
     const NAME = 'islands';
     
     /**
-     * Generate an island name based on the coordinates.<br/>
-     * Each name is unique. Cardinal points, Greek letters and Roman numerals are used.
-     * 
-     * @param int     $coordX    X coordinate
-     * @param int     $coordY    Y coordinate
-     * @param boolean $useGeoTag (optional) Use Geo tag (ex. NE); default <b>true</b>
-     * @return string
-     */
-    public function generateName($coordX, $coordY, $useGeoTag = true) {
-        // Prepare the Geo Tag
-        $geoTag = ($coordY >= 0 ? 'N' : 'S') . ($coordX <= 0 ? 'W' : 'E');
-        if (0 == $coordX) {
-            $geoTag = $coordY >= 0 ? 'N' : 'S';
-        } else if (0 == $coordY) {
-            $geoTag = $coordX <= 0 ? 'W' : 'E';
-        }
-
-        do {
-            // Prepare the island idenfier
-            $islandIdentifier = '';
-            
-            // Prepare the file handler
-            if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath('txt/' . self::NAME . '.txt'))) {
-                $fileHandler = new SplFileObject($filePath, 'r');
-                $fileHandler->seek(PHP_INT_MAX);
-
-                // Get the number of rows
-                $fileRows = $fileHandler->key() + 1; 
-                
-                // Valid number of rows
-                if ($fileRows >= 1) {
-                    // Prepare a random row
-                    $randomRow = mt_rand(1, $fileRows);
-
-                    // Rewind
-                    $fileHandler->rewind();
-
-                    // Go through all the rows
-                    while($fileHandler->valid()) {
-                        // Store the identifier
-                        $islandIdentifier = $fileHandler->fgets();
-
-                        // Reached our row
-                        if ($fileHandler->key() == $randomRow - 1) {
-                            // Trim the line
-                            $islandIdentifier = trim($islandIdentifier);
-                            break;
-                        }
-                    }
-                }
-                
-                // Valid identifier found
-                if (strlen($islandIdentifier)) {
-                    break;
-                }
-            }
-            
-            // Get the absolute values
-            $coordX = abs((int) $coordX);
-            $coordY = abs((int) $coordY);
-
-            // Prepare the letters
-            $letters = array(
-                'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta',
-                'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho',
-                'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega'
-            );
-
-            // Prepare the count
-            $lettersCount = count($letters);
-
-            // Prepare the multipler
-            $xMultiplier = intval($coordX / $lettersCount);
-            $yMultiplier = intval($coordY / $lettersCount);
-
-            // Prepare the letters
-            $xLetter = $letters[$coordX % $lettersCount] . ($xMultiplier > 0 ? ('-' . Stephino_Rpg_Utils_Lingo::arabicToRoman($xMultiplier)) : '');
-            $yLetter = $letters[$coordY % $lettersCount] . ($yMultiplier > 0 ? ('-' . Stephino_Rpg_Utils_Lingo::arabicToRoman($yMultiplier)) : '');
-            
-            // Store the island name
-            $islandIdentifier = "$xLetter-$yLetter";
-            
-        } while(false);
-        
-        // Final island name
-        return $useGeoTag ? "$geoTag $islandIdentifier" : $islandIdentifier;
-    }
-    
-    /**
      * Create a new island
      * 
      * @param string $islandName           (optional) Island name; default <b>null</b>, auto-generated
@@ -195,7 +106,7 @@ class Stephino_Rpg_Db_Model_Islands extends Stephino_Rpg_Db_Model {
         
         // Get a new island name
         if (null === $islandName) {
-            $islandName = $this->generateName($coordX, $coordY);
+            $islandName = Stephino_Rpg_Utils_Lingo::generateIslandName(true, $coordX, $coordY);
         }
         
         // Update the coordinates and name

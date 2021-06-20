@@ -29,9 +29,24 @@
                 <?php endif;?>:
             </b>
         <?php endif;?>
-        <?php echo Stephino_Rpg_Utils_Lingo::escape($messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]);?>
+        <?php echo esc_html($messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]);?>
     </h4>
 </div>
 <div class="col-12 text-center">
-    <?php echo $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_CONTENT]; ?>
+    <?php 
+        if (0 === (int) $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_FROM]):
+            echo $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_CONTENT];
+        else:
+    ?>
+        <div class="card card-body bg-dark">
+            <?php 
+                echo Stephino_Rpg_Parsedown::instance()
+                    ->setSafeMode()
+                    ->setUrlsLinked()
+                    ->setLinksRemoved()
+                    ->setImagesRemoved()
+                    ->parse($messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_CONTENT]);
+            ?>
+        </div>
+    <?php endif;?>
 </div>

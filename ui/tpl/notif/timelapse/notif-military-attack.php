@@ -54,8 +54,8 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 6)):
             <?php 
                 echo sprintf(
                     $cityWalls
-                        ? __('%s: defences remained intact', 'stephino-rpg')
-                        : __('%s: defences were destroyed', 'stephino-rpg'),
+                        ? __('%s: defenses remained intact', 'stephino-rpg')
+                        : __('%s: defenses were destroyed', 'stephino-rpg'),
                     Stephino_Rpg_Config::get()->core()->getConfigCityName(true)
                 );
             ?>

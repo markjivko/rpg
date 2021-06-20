@@ -34,6 +34,7 @@ class Stephino_Rpg_Db {
      */
     const MODELS = array(
         Stephino_Rpg_Db_Model_Users::class,
+        Stephino_Rpg_Db_Model_Sentries::class,
         Stephino_Rpg_Db_Model_Messages::class,
         Stephino_Rpg_Db_Model_Ptfs::class,
         Stephino_Rpg_Db_Model_Convoys::class,
@@ -146,7 +147,7 @@ class Stephino_Rpg_Db {
                 if (Stephino_Rpg::PLUGIN_VERSION != $storedVersion || Stephino_Rpg::PLUGIN_VERSION_DB != $storedVersionDb) {
                     Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_VERSION, Stephino_Rpg::PLUGIN_VERSION);
                     Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_VERSION_DB, Stephino_Rpg::PLUGIN_VERSION_DB);
-
+                    
                     // Get the Upgrade tool
                     require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
 
@@ -174,6 +175,9 @@ class Stephino_Rpg_Db {
                         // Reload the model
                         self::$_instances[$key]->modelPtfs()->reload();
                     }
+                    
+                    // Perform migration tasks
+                    Stephino_Rpg_Utils_Themes::getActive()->migrate();
                 }
             }
         }
@@ -394,6 +398,15 @@ class Stephino_Rpg_Db {
      */
     public function modelUsers() {
         return $this->_modelInstances[Stephino_Rpg_Db_Model_Users::NAME];
+    }
+    
+    /**
+     * The "Sentries" model
+     * 
+     * @return Stephino_Rpg_Db_Model_Sentries
+     */
+    public function modelSentries() {
+        return $this->_modelInstances[Stephino_Rpg_Db_Model_Sentries::NAME];
     }
     
     /**

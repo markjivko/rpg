@@ -20,7 +20,6 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
     const TEMPLATE_NOTIF_PREMIUM_PACKAGE               = 'notif-premium-package';
     const TEMPLATE_NOTIF_TUTORIAL_REWARDS              = 'notif-tutorial-rewards';
     const TEMPLATE_NOTIF_USER_GAME_MASTER              = 'notif-user-game-master';
-    const TEMPLATE_NOTIF_USER_CONTACT                  = 'notif-user-contact';
     const TEMPLATE_TIMELAPSE_LIST_ENTITIES             = 'timelapse/list-entities';
     const TEMPLATE_TIMELAPSE_LIST_RESOURCES            = 'timelapse/list-resources';
     const TEMPLATE_TIMELAPSE_NOTIF_RESEARCH_DONE       = 'timelapse/notif-research-done';
@@ -34,6 +33,14 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
     const TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_COLONY    = 'timelapse/notif-diplomacy-colony';
     const TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_PREMIUM   = 'timelapse/notif-diplomacy-premium';
     const TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_DISCOVERY = 'timelapse/notif-diplomacy-discovery';
+    const TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_CHALLENGE = 'timelapse/notif-diplomacy-challenge';
+    
+    // Maximum lengths
+    const MAX_LENGTH_SUBJECT = 200;
+    const MAX_LENGTH_CONTENT = 2000;
+    
+    // Original message keys
+    const MESSAGE_ORIGINAL_SUBJECT = 'original_subject';
     
     /**
      * Available notification templates
@@ -166,7 +173,7 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
     }
     
     /**
-     * Subject for Game Master toggling
+     * Subject for Game master toggling
      * 
      * @return string
      */
@@ -340,6 +347,36 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
     protected function _subjectTimelapseNotifMilitaryReturn() {
         return __('Our troops have returned', 'stephino-rpg');
     }
+
+    /**
+     * Subject for timelapse: diplomacy: sentry challenge
+     * 
+     * @param boolean    $sentryReturned  Sentry returned from challenge (attacker message)
+     * @param array|null $payloadArray Payload array
+     * @return string
+     */
+    protected function _subjectTimelapseNotifDiplomacyChallenge($sentryReturned = false, $payloadArray = array()) {
+        // Challenge successful flag
+        $challengeSuccessful = false;
+        if (is_array($payloadArray)
+            && isset($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_DATA])
+            && is_array($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_DATA])
+            && isset($payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_DATA][2])) {
+            $challengeSuccessful = !!$payloadArray[Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_DATA][2];
+        }
+        
+        return Stephino_Rpg_Config::get()->core()->getConfigSentryName() . ': ' . (
+            $sentryReturned
+                ? ($challengeSuccessful
+                    ? __('Attack successful', 'stephino-rpg')
+                    : __('Attack failed', 'stephino-rpg')
+                )
+                : ($challengeSuccessful
+                    ? __('Defense failed', 'stephino-rpg')
+                    : __('Defense successful', 'stephino-rpg')
+                )
+            );
+    }
     
     /**
      * Subject for timelapse: diplomacy: colony
@@ -422,7 +459,10 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
                                 preg_split('%[\-\/]%', $notifTemplate)
                             )
                         );
-
+                        
+                        // Store the original subject
+                        $messageData[self::MESSAGE_ORIGINAL_SUBJECT] = $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT];
+                        
                         // Get the message subject
                         if (method_exists($this, $subjectCallback)) {
                             $messageData[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT] = call_user_func_array(
@@ -595,28 +635,13 @@ class Stephino_Rpg_Db_Model_Messages extends Stephino_Rpg_Db_Model {
             throw new Exception(__('Daily message limit reached', 'stephino-rpg'));
         }
         
-        // Start the buffer
-        ob_start();
-
-        try {
-            // Load the template
-            require self::getTemplatePath(self::TEMPLATE_NOTIF_USER_CONTACT);
-        } catch (Exception $exc) {
-            Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning(
-                "Db_Model_Messages.send, sender #$senderId, recipient #$recipientId: {$exc->getMessage()}"
-            );
-        }
-
-        // Override the content with our template
-        $messageContent = trim(preg_replace('%(?:[\r\n\t]+| {2,})%', ' ', ob_get_clean()));
-        
         // Store the message verbatim (no i18n support for direct messages between players)
         return $this->getDb()->tableMessages()->create(
             $senderId, 
             $recipientId, 
             Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY, 
             $messageSubject, 
-            $messageContent
+            trim($messageContent)
         );
     }
     

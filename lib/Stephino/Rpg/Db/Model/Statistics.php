@@ -331,7 +331,7 @@ class Stephino_Rpg_Db_Model_Statistics extends Stephino_Rpg_Db_Model {
          * <li>Stephino_Rpg_Db_Table_Users::COL_ID                    => (int) User ID</li>
          * <li>Stephino_Rpg_Db_Table_Users::COL_USER_SCORE            => (int) Total Score</li>
          * <li>Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_VICTORIES => (int) Total Victories</li>
-         * <li>Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS     => (int) Total Draws</li>
+         * <li>Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DRAWS     => (int) Total Impasses</li>
          * <li>Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DEFEATS   => (int) Total Defeats</li>
          * <li>Stephino_Rpg_Db_Table_Users::COL_USER_BATTLE_DEFEATS   => (int) Total Defeats</li>
          * <li>Stephino_Rpg_Db_Table_Users::COL_USER_WP_ID            => (int) WordPress User ID</li>

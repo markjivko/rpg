@@ -25,7 +25,7 @@ if (Stephino_Rpg_Db_Model_Messages::isValidNotifData($notifData, 1)):
         <div class="card card-body bg-dark" data-effect="typewriter">
             <?php 
                 echo null !== $researchFieldConfig && strlen($researchFieldConfig->getStory())
-                    ? Stephino_Rpg_Utils_Lingo::escape($researchFieldConfig->getStory())
+                    ? esc_html($researchFieldConfig->getStory())
                     : esc_html__('Our records were mysteriously destroyed', 'stephino-rpg');
             ?>
         </div>

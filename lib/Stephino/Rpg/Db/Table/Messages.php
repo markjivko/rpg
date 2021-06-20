@@ -538,7 +538,8 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     }
     
     /**
-     * Delete all inbox messages for this user by message type
+     * Delete all inbox messages created by the system for this user by message type<br/>
+     * For the "Diplomacy" inbox, skip "notif-diplomacy-discovery" messages
      * 
      * @param int    $userId      User ID
      * @param string $messageType Message type
@@ -549,15 +550,18 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
             $messageType = self::MESSAGE_TYPE_DIPLOMACY;
         }
         
-        return $this->getDb()->getWpDb()->query(
-            Stephino_Rpg_Utils_Db::delete(
-                $this->getTableName(), 
-                array(
-                    self::COL_MESSAGE_TO   => abs((int) $userId),
-                    self::COL_MESSAGE_TYPE => $messageType
-                )
-            )
-        );
+        // Prepare the query
+        $query = "DELETE FROM `$this` " . PHP_EOL
+            . "WHERE `" . self::COL_MESSAGE_TO . "` = " . abs((int) $userId)
+            . " AND `" . self::COL_MESSAGE_FROM . "` = 0"
+            . " AND `" . self::COL_MESSAGE_TYPE . "` = '$messageType'"
+            . (self::MESSAGE_TYPE_DIPLOMACY === $messageType 
+                ? (" AND `" . self::COL_MESSAGE_SUBJECT . "` != '" . Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_DISCOVERY . "'" )
+                : ""
+            );
+        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::debug($query . PHP_EOL);
+        
+        return $this->getDb()->getWpDb()->query($query);
     }
     
     /**

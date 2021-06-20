@@ -302,8 +302,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Premium extends Stephino_Rpg_Renderer_Aj
         // Inform the user
         echo sprintf(
             esc_html__('Thank you for buying %s!', 'stephino-rpg'),
-            '<b>' . number_format($gemReward) . '</b> ' 
-                . Stephino_Rpg_Utils_Lingo::escape(Stephino_Rpg_Config::get()->core()->getResourceGemName())
+            '<b>' . number_format($gemReward) . '</b> ' . Stephino_Rpg_Config::get()->core()->getResourceGemName(true)
         );
     }
 }

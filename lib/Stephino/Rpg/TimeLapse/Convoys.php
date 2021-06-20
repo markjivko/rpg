@@ -36,6 +36,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
     // Convoy actions
     const ACTION_COLONIZE  = 'colonize';
     const ACTION_SPY       = 'spy';
+    const ACTION_CHALLENGE = 'challenge';
     const ACTION_TRANSPORT = 'transport';
     const ACTION_ATTACK    = 'attack';
     const ACTION_RETURN    = 'return';
@@ -124,10 +125,17 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                                 // Add resources; transfer payload_data to payload_resources
                                 $newPayload = $this->_transport($dataRow, $buildingData, $supportEntitiesData);
                                 break;
+                            
+                            // Sentry challenge
+                            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY:
+                                // Sentry challenge; transfer resources if successful
+                                $newPayload = $this->_challenge($dataRow, $buildingData);
+                                break;
                         }
                         
-                        // Our adversary has troops to recover OR a peaceful transport
+                        // Our adversary has troops to recover OR a peaceful transport OR sentry challenge
                         if (Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_TRANSPORTER == $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TYPE]
+                            || Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY == $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TYPE]
                             || (isset($newPayload[self::PAYLOAD_ENTITIES]) && count($newPayload[self::PAYLOAD_ENTITIES]))) {
                             // Store the new payload
                             $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_PAYLOAD] = json_encode($newPayload);
@@ -265,6 +273,55 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                                 $this->_addMessage(
                                     Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_MILITARY, 
                                     self::ACTION_SPY, 
+                                    $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID], 
+                                    array(
+                                        // Returned
+                                        true,
+                                        // Payload
+                                        $payloadArray,
+                                        // Convoy Row
+                                        $dataRow
+                                    )
+                                );
+                                break;
+                            
+                            case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY:
+                                // Mark the sentry as inactive
+                                foreach ($buildingData as &$buildingRow) {
+                                    $buildingRow[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE] = 0;
+                                }
+                                
+                                // Mission accomplished
+                                if (isset($payloadArray[self::PAYLOAD_DATA]) && is_array($payloadArray[self::PAYLOAD_DATA])) {
+                                    // Mission successful
+                                    if (isset($payloadArray[self::PAYLOAD_DATA][2]) && $payloadArray[self::PAYLOAD_DATA][2]) {
+                                        // Update the total score
+                                        if (0 !== $sentryScore = Stephino_Rpg_Config::get()->core()->getSentryScore()) {
+                                            foreach ($buildingData as &$buildingRow) {
+                                                $buildingRow[Stephino_Rpg_Db_Table_Users::COL_USER_SCORE] += $sentryScore;
+                                            }
+                                        }
+                                        $levelColumns = $this->getDb()->modelSentries()->getColumns();
+
+                                        // Valid sentry challenge type
+                                        if (isset($levelColumns[$payloadArray[self::PAYLOAD_DATA][0]])) {
+                                            $levelColumn = $levelColumns[$payloadArray[self::PAYLOAD_DATA][0]];
+
+                                            // Increment the level
+                                            if (0 == Stephino_Rpg_Config::get()->core()->getSentryMaxLevel()
+                                                || $buildingRow[$levelColumn] < Stephino_Rpg_Config::get()->core()->getSentryMaxLevel()) {
+                                                foreach ($buildingData as &$buildingRow) {
+                                                    $buildingRow[$levelColumn]++;
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
+                                
+                                // Store the return message
+                                $this->_addMessage(
+                                    Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY, 
+                                    self::ACTION_CHALLENGE, 
                                     $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID], 
                                     array(
                                         // Returned
@@ -539,7 +596,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
             // Get the success rate
             $successRate = isset($payloadArray[self::PAYLOAD_DATA]) ? intval($payloadArray[self::PAYLOAD_DATA]) : 50;
             
-            // Successful mission
+            // Successful spy mission
             if (mt_rand(1, 100) <= $successRate) {
                 // The spy gets to return home
                 $finalConvoyPayload[self::PAYLOAD_ENTITIES] = $payloadArray[self::PAYLOAD_ENTITIES];
@@ -632,6 +689,163 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                 )
             );
         }
+    }
+    
+    /**
+     * Fight the local sentry and loot if necessary
+     * 
+     * @param array  $dataRow             Convoy DataBase row containing these keys: <ul>
+     * <li>Stephino_Rpg_Db_Table_Convoys::COL_ID</li>
+     * <li>Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_TO_CITY_ID</li>
+     * <li>Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_PAYLOAD</li>
+     * <li>Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_FROM_USER_ID</li>
+     * </ul>
+     * @param array  $buildingData        Building data
+     * @return array New payload
+     */
+    protected function _challenge($dataRow, &$buildingData) {
+        $userData = current($buildingData);
+        
+        // Prepare the result
+        $finalConvoyPayload = array();
+        
+        // Get the payload array
+        $payloadArray = @json_decode($dataRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_PAYLOAD], true);
+        
+        // Local sentry is ready to defend
+        $localSentryReady = (0 === (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]);
+        
+        // Transfer all resources and entities locally
+        if (is_array($payloadArray)) {
+            if (isset($payloadArray[self::PAYLOAD_DATA]) && is_array($payloadArray[self::PAYLOAD_DATA]) && count($payloadArray[self::PAYLOAD_DATA]) >= 2) {
+                list($sentryChallenge, $sentryLevels) = $payloadArray[self::PAYLOAD_DATA];
+                
+                do {
+                    // Invalid sentry challenge type
+                    if( !in_array($sentryChallenge, array_keys(Stephino_Rpg_Db::get()->modelSentries()->getColumns()))) {
+                        break;
+                    }
+                    
+                    // Invalid levels
+                    if (!is_array($sentryLevels)) {
+                        break;
+                    }
+                    
+                    // Validate the sentry levels
+                    foreach (array_keys(Stephino_Rpg_Db::get()->modelSentries()->getColumns()) as $pqt) {
+                        if (!isset($sentryLevels[$pqt])) {
+                            break 2;
+                        }
+                        $sentryLevels[$pqt] = (int) $sentryLevels[$pqt];
+                    }
+                        
+                    // Decide the probability of success
+                    $successRate = $this->getDb()->modelSentries()->getSuccessRate(
+                        (int) $sentryLevels[Stephino_Rpg_Db_Model_Sentries::CHALLENGE_ATTACK], 
+                        (int) $sentryLevels[Stephino_Rpg_Db_Model_Sentries::CHALLENGE_DEFENSE], 
+                        (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_LEVEL_ATTACK],
+                        (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_LEVEL_DEFENSE]
+                    );
+
+                    // Successful fight
+                    $challengeWon = !$localSentryReady || (mt_rand(0, 1000) <= $successRate * 10);
+
+                    // Prepare the payload
+                    $finalConvoyPayload = array(
+                        self::PAYLOAD_DATA => array(
+                            $sentryChallenge,
+                            $sentryLevels,
+                            $challengeWon
+                        ),
+                    );
+                    
+                    // Challenge won by attacker
+                    if ($challengeWon) {
+                        // Loot!
+                        $finalConvoyPayload[self::PAYLOAD_RESOURCES] = array();
+                        
+                        // Prepare the loot and the gem reward (optional)
+                        $sentryProductionData = Stephino_Rpg_Renderer_Ajax_Action::getProductionDataSentry(
+                            isset($sentryLevels[Stephino_Rpg_Db_Model_Sentries::CHALLENGE_LOOTING])
+                                ? $sentryLevels[Stephino_Rpg_Db_Model_Sentries::CHALLENGE_LOOTING]
+                                : 0,
+                            $sentryLevels[$sentryChallenge],
+                            $successRate
+                        );
+                        
+                        // Reward available
+                        if (isset($sentryProductionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM])
+                            && $sentryProductionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM][1] > 0) {
+                            $finalConvoyPayload[self::PAYLOAD_RESOURCES][Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM] = $sentryProductionData[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM][1];
+                        }
+
+                        // Prepare the updated resources
+                        $userResources = array(
+                            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD     => null,
+                            Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_RESEARCH => null,
+                        );
+                        
+                        // Update the resources and transfer the loot
+                        foreach ($sentryProductionData as $dbKey => $prodData) {
+                            // Gems are rewarded, not looted
+                            if (Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GEM === $dbKey) {
+                                continue;
+                            }
+                            
+                            // Get the maximum loot
+                            list(, $maxLootSize) = $prodData;
+                            
+                            // Valid loot value provided
+                            if ($maxLootSize > 0) {
+                                foreach($buildingData as &$buildingRow) {
+                                    // Initialize the user left-over resources
+                                    if (null === $userResources[$dbKey]) {
+                                        $userResources[$dbKey] = floatval($buildingRow[$dbKey]);
+
+                                        // Plenty of resources
+                                        if ($userResources[$dbKey] >= $maxLootSize) {
+                                            // Grab all that you can
+                                            $finalConvoyPayload[self::PAYLOAD_RESOURCES][$dbKey] = $maxLootSize;
+
+                                            // Remove from user
+                                            $userResources[$dbKey] -= $maxLootSize;
+                                        } else {
+                                            // Heartless
+                                            $finalConvoyPayload[self::PAYLOAD_RESOURCES][$dbKey] = $userResources[$dbKey];
+
+                                            // Leave them with nothing
+                                            $userResources[$dbKey] = 0;
+                                        }
+                                    }
+
+                                    // Update building row
+                                    $buildingRow[$dbKey] = $userResources[$dbKey];
+                                }
+                            }
+                        }
+                    }
+                } while(false);
+            }
+        }
+        
+        // Notify the current user
+        $this->_addMessage(
+            Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY, 
+            self::ACTION_CHALLENGE, 
+            $dataRow[Stephino_Rpg_Db_Table_Convoys::COL_ID] . '-' . $this->_userId, 
+            array(
+                // Returned
+                false,
+                // Payload
+                $finalConvoyPayload,
+                // Convoy Row
+                $dataRow
+            ),
+            false,
+            $this->_userId
+        );
+        
+        return $finalConvoyPayload;
     }
     
     /**
@@ -1157,9 +1371,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                             foreach($buildingData as $buildingKey => $buildingRow) {
                                 // Initialize the gold transfer
                                 if (null === $defenderGold) {
-                                    $defenderGold = intval(
-                                        $buildingRow[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD]
-                                    );
+                                    $defenderGold = floatval($buildingRow[Stephino_Rpg_Db_Table_Users::COL_USER_RESOURCE_GOLD]);
 
                                     // Plenty of gold
                                     if ($defenderGold >= $maxLootSize) {
@@ -1192,7 +1404,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                                         // Initiate the resource transfer
                                         if (!isset($cityResources[$resourceKey])) {
                                             // Get available resources
-                                            $cityResources[$resourceKey] = intval($buildingRow[$resourceKey]);
+                                            $cityResources[$resourceKey] = floatval($buildingRow[$resourceKey]);
 
                                             // Plenty of resources
                                             if ($cityResources[$resourceKey] >= $maxLootSize) {
@@ -1330,7 +1542,7 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
         // Prepare the attack status for the defender
         $defenderAttackStatus = self::ATTACK_VICTORY_HEROIC;
         
-        // Draw
+        // Impasse
         $attackResult = 0;
         $defenderAttackResult = 0;
         
@@ -1372,12 +1584,12 @@ class Stephino_Rpg_TimeLapse_Convoys extends Stephino_Rpg_TimeLapse_Abstract {
                     $defenderAttackStatus = self::ATTACK_DEFEAT_HEROIC;
                 break;
 
-            // Draw
+            // Impasse
             case self::ATTACK_DEFEAT_BITTER: 
                     $defenderAttackStatus = self::ATTACK_VICTORY_BITTER;
                 break;
 
-            // Draw
+            // Impasse
             case self::ATTACK_VICTORY_BITTER: 
                     $defenderAttackStatus = self::ATTACK_DEFEAT_BITTER;
                 break;

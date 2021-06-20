@@ -22,62 +22,8 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
      */
     const UNKNOWN_CITY = '###';
     
-    /**
-     * Generate a unique (enough) city name; the player can change this anytime
-     * 
-     * @param Stephino_Rpg_Config_City $configCity  City configuration
-     * @param int                        $islandId    Island ID
-     * @param int                        $islandIndex City index on island
-     * @return string
-     */
-    protected function _generateName($configCity, $islandId, $islandIndex) {
-        do {
-            // Prepare the city name
-            $cityName = '';
-            
-            // Prepare the file handler
-            if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath('txt/' . self::NAME . '.txt'))) {
-                $fileHandler = new SplFileObject($filePath, 'r');
-                $fileHandler->seek(PHP_INT_MAX);
-
-                // Get the number of rows
-                $fileRows = $fileHandler->key() + 1; 
-                
-                // Valid number of rows
-                if ($fileRows >= 1) {
-                    // Prepare a random row
-                    $randomRow = mt_rand(1, $fileRows);
-
-                    // Rewind
-                    $fileHandler->rewind();
-
-                    // Go through all the rows
-                    while($fileHandler->valid()) {
-                        // Store the identifier
-                        $cityName = $fileHandler->fgets();
-
-                        // Reached our row
-                        if ($fileHandler->key() == $randomRow - 1) {
-                            // Trim the line
-                            $cityName = trim($cityName);
-                            break;
-                        }
-                    }
-                }
-                
-                // Valid identifier found
-                if (strlen($cityName)) {
-                    break;
-                }
-            }
-            
-            // Store the default city name
-            $cityName = $configCity->getName() . ' ' . $islandId . ':' . $islandIndex;
-            
-        } while(false);
-        
-        return $cityName;  
-    }
+    // Maximum lengths
+    const MAX_LENGTH_NAME = 20;
     
     /**
      * Create a city, adding the first buildings as well; assign tutorial rewards to robots
@@ -206,7 +152,7 @@ class Stephino_Rpg_Db_Model_Cities extends Stephino_Rpg_Db_Model {
         
         // Generate the name
         if (!is_string($cityName) || !strlen($cityName)) {
-            $cityName = $this->_generateName($configCityObject, $islandId, $islandIndex);
+            $cityName = Stephino_Rpg_Utils_Lingo::generateCityName($configCityObject, $islandId, $islandIndex);
         }
         
         // Execute the query

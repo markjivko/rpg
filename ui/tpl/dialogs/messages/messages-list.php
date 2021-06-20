@@ -19,13 +19,24 @@
             class="btn btn-default float-right mb-4" 
             data-click="messageDeleteAll" 
             data-click-args="<?php echo $messageType;?>">
-            <span><?php echo esc_attr__('Delete all', 'stephino-rpg');?></span>
+            <span><?php 
+                echo (Stephino_Rpg_Db_Table_Messages::MESSAGE_TYPE_DIPLOMACY === $messageType
+                    ? esc_attr__('Tidy up', 'stephino-rpg')
+                    : esc_attr__('Delete all', 'stephino-rpg')
+                );
+            ?></span>
         </button>
-        <?php foreach($messageData as $message): ?>
+        <?php 
+            foreach($messageData as $message): 
+                $discoveryMessage = (
+                    0 === (int) $message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_FROM]
+                    && Stephino_Rpg_Db_Model_Messages::TEMPLATE_TIMELAPSE_NOTIF_DIPLOMACY_DISCOVERY === $message[Stephino_Rpg_Db_Model_Messages::MESSAGE_ORIGINAL_SUBJECT]
+                );
+        ?>
             <div class="row col-12 no-gutters framed align-items-center message <?php echo ($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_READ] ? '' : 'active');?>">
                 <div class="col-6 col-lg-8 order-first">
                     <button 
-                        class="btn w-100 btn-default"
+                        class="btn w-100 <?php echo ($discoveryMessage ? 'btn-warning' : 'btn-default');?>"
                         data-click="messageRead" data-click-multi="true"
                         data-click-args="<?php echo $messageType;?>,<?php echo $message[Stephino_Rpg_Db_Table_Messages::COL_ID];?>">
                         <span>
@@ -40,8 +51,10 @@
                                         <i><?php echo esc_html__('Unknown', 'stephino-rpg');?></i>
                                     <?php endif;?>:
                                 </b>
+                            <?php elseif($discoveryMessage):?>
+                                &#x1F4DC;
                             <?php endif;?>
-                            <?php echo Stephino_Rpg_Utils_Lingo::escape($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]);?>
+                            <?php echo esc_html($message[Stephino_Rpg_Db_Table_Messages::COL_MESSAGE_SUBJECT]);?>
                         </span>
                     </button>
                 </div>

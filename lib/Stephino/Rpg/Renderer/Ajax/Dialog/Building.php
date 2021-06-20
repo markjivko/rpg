@@ -190,7 +190,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
         // Show the dialog
         require self::dialogTemplatePath(self::TEMPLATE_INFO);
 
-        $titlePrefix = Stephino_Rpg_Cache_User::get()->isGameMaster() 
+        $titlePrefix = Stephino_Rpg_Cache_User::get()->isElevated() 
             ? "({$buildingConfig->getId()}) " 
             : '';
             
@@ -216,7 +216,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Building extends Stephino_Rpg_Renderer_A
      * @throws Exception
      */
     public static function ajaxTrade($data) {
-        Stephino_Rpg_Renderer_Ajax::setModalSize(Stephino_Rpg_Renderer_Ajax::MODAL_SIZE_LARGE);
+        self::setModalSize(self::MODAL_SIZE_LARGE);
         
         // Get the building information
         /* @var $buildingConfig Stephino_Rpg_Config_Building */

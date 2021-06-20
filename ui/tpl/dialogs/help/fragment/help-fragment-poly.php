@@ -33,7 +33,7 @@ if (isset($polynomialBase) && null !== $polynomialBase):
         <b>
             <span
                 data-effect="poly"
-                <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+                <?php if (Stephino_Rpg_Cache_User::get()->isElevated()):?>
                     data-html="true"
                     data-describe="true"
                 <?php endif;?>

@@ -39,15 +39,26 @@ class Stephino_Rpg_Utils_Sanitizer {
         // Need to exclude public controllers
         if ($result && $excludePublic) {
             // Method specified
-            if (isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
+            if (null !== $methodName = self::getMethod()) {
                 // Public controller
-                if (in_array(strtolower($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]), Stephino_Rpg_Renderer_Ajax::PUBLIC_CONTROLLERS)) {
+                if (in_array(strtolower($methodName), Stephino_Rpg_Renderer_Ajax::PUBLIC_CONTROLLERS)) {
                     $result = false;
                 }
             }
         }
         
         return $result;
+    }
+
+    /**
+     * Get the current method request parameter (_GET or _POST)
+     * 
+     * @return string|null Method request or null if none provided
+     */
+    public static function getMethod() {
+        return isset($_REQUEST) && isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]) 
+            ? preg_replace('%\W+%', '', trim($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]))
+            : null;
     }
     
     /**
@@ -137,7 +148,7 @@ class Stephino_Rpg_Utils_Sanitizer {
         // View data set
         if (null !== $mediaPath) {
             $result = preg_replace(
-                array('%(?:[^\w\.\/\-]+|^\W|\W$)%i', '%(?:\/\.|\/{2,})%'), 
+                array('%(?:[^\w\.\/\-]+|\.{2,}|^\W|\W$)%i', '%(?:\/\.|\/{2,})%'), 
                 array('', '/'), 
                 trim($mediaPath)
             );

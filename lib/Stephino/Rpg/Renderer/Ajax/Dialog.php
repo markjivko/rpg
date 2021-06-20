@@ -28,6 +28,44 @@ class Stephino_Rpg_Renderer_Ajax_Dialog {
     const RESULT_TITLE = 'title';
     const RESULT_DATA  = 'data';
     
+    // Modal sizes
+    const MODAL_SIZE_LARGE  = true;
+    const MODAL_SIZE_NORMAL = null;
+    const MODAL_SIZE_SMALL  = false;
+    
+    /**
+     * Modal Size: false for "md", null for normal, true for "xl"
+     *
+     * @var boolean|null
+     */
+    protected static $_modalSize = null;
+    
+    /**
+     * Get the dialog size<ul>
+     *     <li><b>false</b> for "md"</li>
+     *     <li><b>null</b> for normal</li>
+     *     <li><b>true</b> for "xl"</li>
+     * </ul>
+     * 
+     * @return boolean|null
+     */
+    public static function getModalSize() {
+        return self::$_modalSize;
+    }
+    
+    /**
+     * Set the modal size<ul>
+     *     <li><b>self::MODAL_SIZE_SMALL</b> for "md"</li>
+     *     <li><b>self::MODAL_SIZE_NORMAL</b> for normal</li>
+     *     <li><b>self::MODAL_SIZE_LARGE</b> for "xl"</li>
+     * </ul>
+     * 
+     * @param boolean|null $modalSize Dialog size flag
+     */
+    public static function setModalSize($modalSize = null) {
+        self::$_modalSize = (null === $modalSize ? null : (boolean) $modalSize);
+    }
+    
     /**
      * Get a dialog template path
      * 

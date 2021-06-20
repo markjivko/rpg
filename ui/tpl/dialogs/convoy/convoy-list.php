@@ -34,8 +34,9 @@ $unknownIslandLabel = sprintf(
                         <?php
                             echo sprintf(
                                 $convoyRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_RETREAT_TIME]
-                                    ? esc_html__('Army returing to %s from %s', 'stephino-rpg')
-                                    : esc_html__('Army from %s to %s', 'stephino-rpg'),
+                                    ? esc_html__('%s: returning to %s from %s', 'stephino-rpg')
+                                    : esc_html__('%s: from %s to %s', 'stephino-rpg'),
+                                esc_html__('Army', 'stephino-rpg'),
                                 is_array($fromCityInfo)
                                     ? '<span data-click="dialog" data-click-args="dialogCityInfo,' . $fromCityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID] . '">'
                                             . Stephino_Rpg_Utils_Lingo::getCityName($fromCityInfo)
@@ -52,8 +53,9 @@ $unknownIslandLabel = sprintf(
                         <?php
                             echo sprintf(
                                 $convoyRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_RETREAT_TIME]
-                                    ? esc_html__('Transport returning to %s from %s', 'stephino-rpg')
-                                    : esc_html__('Transport from %s to %s', 'stephino-rpg'),
+                                    ? esc_html__('%s: returning to %s from %s', 'stephino-rpg')
+                                    : esc_html__('%s: from %s to %s', 'stephino-rpg'),
+                                esc_html__('Transporter', 'stephino-rpg'),
                                 is_array($fromCityInfo)
                                     ? '<span data-click="dialog" data-click-args="dialogCityInfo,' . $fromCityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID] . '">'
                                             . Stephino_Rpg_Utils_Lingo::getCityName($fromCityInfo)
@@ -70,8 +72,28 @@ $unknownIslandLabel = sprintf(
                         <?php
                             echo sprintf(
                                 $convoyRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_RETREAT_TIME]
-                                    ? esc_html__('Spy returning to %s from %s', 'stephino-rpg')
-                                    : esc_html__('Spy from %s to %s', 'stephino-rpg'),
+                                    ? esc_html__('%s: returning to %s from %s', 'stephino-rpg')
+                                    : esc_html__('%s: from %s to %s', 'stephino-rpg'),
+                                esc_html__('Spy', 'stephino-rpg'),
+                                is_array($fromCityInfo)
+                                    ? '<span data-click="dialog" data-click-args="dialogCityInfo,' . $fromCityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID] . '">'
+                                            . Stephino_Rpg_Utils_Lingo::getCityName($fromCityInfo)
+                                        . '</span>'
+                                    : $unknownCityLabel,
+                                is_array($toCityInfo)
+                                    ? '<span data-click="dialog" data-click-args="dialogCityInfo,' . $toCityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID] . '">'
+                                            . Stephino_Rpg_Utils_Lingo::getCityName($toCityInfo)
+                                        . '</span>'
+                                    : $unknownCityLabel
+                            );
+                        ?>
+                    <?php break; case Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY: ?>
+                        <?php
+                            echo sprintf(
+                                $convoyRow[Stephino_Rpg_Db_Table_Convoys::COL_CONVOY_RETREAT_TIME]
+                                    ? esc_html__('%s: returning to %s from %s', 'stephino-rpg')
+                                    : esc_html__('%s: from %s to %s', 'stephino-rpg'),
+                                Stephino_Rpg_Config::get()->core()->getConfigSentryName(true),
                                 is_array($fromCityInfo)
                                     ? '<span data-click="dialog" data-click-args="dialogCityInfo,' . $fromCityInfo[Stephino_Rpg_Db_Table_Cities::COL_ID] . '">'
                                             . Stephino_Rpg_Utils_Lingo::getCityName($fromCityInfo)

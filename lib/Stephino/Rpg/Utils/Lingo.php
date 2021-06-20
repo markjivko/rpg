@@ -264,23 +264,20 @@ class Stephino_Rpg_Utils_Lingo {
     }
     
     /**
-     * Get "Game Mechanics" or "Translations"
+     * Get the text "Game Mechanics"
      * 
-     * @param boolean $showLanguage (optional) Use the current language instead of "Translations"; default <b>false</b>
+     * @param boolean $showLanguage (optional) Use the current language instead; default <b>false</b>
      * @param boolean $showLocket   (optional) Append the Locket HTML character if the plugin is not unlocked; default <b>false</b>
-     * @return string "Game Mechanics", "Translations" or the current language
+     * @return string "Game Mechanics" or the current language
      */
     public static function getOptionsLabel($showLanguage = false, $showLocket = false) {
-        return (
-            null === Stephino_Rpg_Config::lang() 
-                ? esc_html__('Game Mechanics', 'stephino-rpg') 
-                : (
-                    $showLanguage
-                        ? self::getLanguage()
-                        : esc_html__('Translations', 'stephino-rpg')
-                )
-            ) 
-            . ($showLocket ? (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;') : '');
+        return (null === Stephino_Rpg_Config::lang() 
+            ? esc_html__('Game Mechanics', 'stephino-rpg') 
+            : ($showLanguage
+                ? self::getLanguage()
+                : esc_html__('Game Mechanics', 'stephino-rpg')
+            )
+        ) . ($showLocket ? (Stephino_Rpg::get()->isPro() ? '' : ' &#x1F512;') : '');
     }
     
     /**
@@ -331,7 +328,7 @@ class Stephino_Rpg_Utils_Lingo {
      * @return string HTML-formatted string
      */
     public static function markdown($text) {
-        return Stephino_Rpg_Parsedown::instance()->text($text);
+        return Stephino_Rpg_Parsedown::instance()->parse($text);
     }
     
     /**
@@ -497,6 +494,208 @@ class Stephino_Rpg_Utils_Lingo {
 
         // The Roman numeral should be built, return it
         return $result;
+    }
+    
+    /**
+     * Generate a unique (enough) city name; the player can change this anytime
+     * 
+     * @param Stephino_Rpg_Config_City $configCity  City configuration
+     * @param int                      $islandId    Island ID
+     * @param int                      $islandIndex City index on island
+     * @return string
+     */
+    public static function generateCityName($configCity, $islandId, $islandIndex) {
+        do {
+            // Prepare the city name
+            $cityName = '';
+            
+            // Prepare the file handler
+            if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath('txt/' . Stephino_Rpg_Db_Model_Cities::NAME . '.txt'))) {
+                $fileHandler = new SplFileObject($filePath, 'r');
+                $fileHandler->seek(PHP_INT_MAX);
+
+                // Get the number of rows
+                $fileRows = $fileHandler->key() + 1; 
+                
+                // Valid number of rows
+                if ($fileRows >= 1) {
+                    // Prepare a random row
+                    $randomRow = mt_rand(1, $fileRows);
+
+                    // Rewind
+                    $fileHandler->rewind();
+
+                    // Go through all the rows
+                    while($fileHandler->valid()) {
+                        // Store the identifier
+                        $cityName = $fileHandler->fgets();
+
+                        // Reached our row
+                        if ($fileHandler->key() == $randomRow - 1) {
+                            // Trim the line
+                            $cityName = trim($cityName);
+                            break;
+                        }
+                    }
+                }
+                
+                // Valid identifier found
+                if (strlen($cityName)) {
+                    break;
+                }
+            }
+            
+            // Store the default city name
+            $cityName = $configCity->getName() . ' ' . $islandId . ':' . $islandIndex;
+            
+        } while(false);
+        
+        return $cityName;  
+    }
+    
+    /**
+     * Generate an island name based on the coordinates.<br/>
+     * Each name is unique. Cardinal points, Greek letters and Roman numerals are used.
+     * 
+     * @param boolean $useGeoTag (optional) Use Geo tag (ex. "NE"); default <b>false</b>
+     * @param int     $coordX    (optional) X coordinate, only if <b>$useGeoTag</b>; default <b>0</b>
+     * @param int     $coordY    (optional) Y coordinate, only if <b>$useGeoTag</b>; default <b>0</b>
+     * @return string
+     */
+    public static function generateIslandName($useGeoTag = false, $coordX = 0, $coordY = 0) {
+        // Prepare the Geo Tag
+        if ($useGeoTag) {
+            $geoTag = ($coordY >= 0 ? 'N' : 'S') . ($coordX <= 0 ? 'W' : 'E');
+            if (0 == $coordX) {
+                $geoTag = $coordY >= 0 ? 'N' : 'S';
+            } else if (0 == $coordY) {
+                $geoTag = $coordX <= 0 ? 'W' : 'E';
+            }
+        }
+
+        do {
+            // Prepare the island idenfier
+            $islandIdentifier = '';
+            
+            // Prepare the file handler
+            if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath('txt/' . Stephino_Rpg_Db_Table_Islands::NAME . '.txt'))) {
+                $fileHandler = new SplFileObject($filePath, 'r');
+                $fileHandler->seek(PHP_INT_MAX);
+
+                // Get the number of rows
+                $fileRows = $fileHandler->key() + 1; 
+                
+                // Valid number of rows
+                if ($fileRows >= 1) {
+                    // Prepare a random row
+                    $randomRow = mt_rand(1, $fileRows);
+
+                    // Rewind
+                    $fileHandler->rewind();
+
+                    // Go through all the rows
+                    while($fileHandler->valid()) {
+                        // Store the identifier
+                        $islandIdentifier = $fileHandler->fgets();
+
+                        // Reached our row
+                        if ($fileHandler->key() == $randomRow - 1) {
+                            // Trim the line
+                            $islandIdentifier = trim($islandIdentifier);
+                            break;
+                        }
+                    }
+                }
+                
+                // Valid identifier found
+                if (strlen($islandIdentifier)) {
+                    break;
+                }
+            }
+            
+            // Get the absolute values
+            $coordX = abs((int) $coordX);
+            $coordY = abs((int) $coordY);
+
+            // Prepare the letters
+            $letters = array(
+                'Alpha', 'Beta', 'Gamma', 'Delta', 'Epsilon', 'Zeta', 'Eta', 'Theta',
+                'Iota', 'Kappa', 'Lambda', 'Mu', 'Nu', 'Xi', 'Omicron', 'Pi', 'Rho',
+                'Sigma', 'Tau', 'Upsilon', 'Phi', 'Chi', 'Psi', 'Omega'
+            );
+
+            // Prepare the count
+            $lettersCount = count($letters);
+
+            // Prepare the multipler
+            $xMultiplier = intval($coordX / $lettersCount);
+            $yMultiplier = intval($coordY / $lettersCount);
+
+            // Prepare the letters
+            $xLetter = $letters[$coordX % $lettersCount] . ($xMultiplier > 0 ? ('-' . self::arabicToRoman($xMultiplier)) : '');
+            $yLetter = $letters[$coordY % $lettersCount] . ($yMultiplier > 0 ? ('-' . self::arabicToRoman($yMultiplier)) : '');
+            
+            // Store the island name
+            $islandIdentifier = "$xLetter-$yLetter";
+            
+        } while(false);
+        
+        // Final island name
+        return $useGeoTag ? "$geoTag $islandIdentifier" : $islandIdentifier;
+    }
+    
+    /**
+     * Generate a sentry name
+     * 
+     * @return string
+     */
+    public static function generateSentryName() {
+        do {
+            // Prepare the sentry name
+            $sentryName = '';
+            
+            // Prepare the file handler
+            if (is_file($filePath = Stephino_Rpg_Utils_Themes::getActive()->getFilePath('txt/' . Stephino_Rpg_Db_Model_Sentries::NAME . '.txt'))) {
+                $fileHandler = new SplFileObject($filePath, 'r');
+                $fileHandler->seek(PHP_INT_MAX);
+
+                // Get the number of rows
+                $fileRows = $fileHandler->key() + 1; 
+                
+                // Valid number of rows
+                if ($fileRows >= 1) {
+                    // Prepare a random row
+                    $randomRow = mt_rand(1, $fileRows);
+
+                    // Rewind
+                    $fileHandler->rewind();
+
+                    // Go through all the rows
+                    while($fileHandler->valid()) {
+                        // Store the identifier
+                        $sentryName = $fileHandler->fgets();
+
+                        // Reached our row
+                        if ($fileHandler->key() == $randomRow - 1) {
+                            // Trim the line
+                            $sentryName = trim($sentryName);
+                            break;
+                        }
+                    }
+                }
+                
+                // Valid identifier found
+                if (strlen($sentryName)) {
+                    break;
+                }
+            }
+            
+            // Sentries.txt missing, use an island name instead
+            $sentryName = self::generateIslandName();
+            
+        } while(false);
+        
+        return $sentryName;  
     }
     
 }

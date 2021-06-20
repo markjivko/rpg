@@ -179,6 +179,20 @@ trait Stephino_Rpg_Config_Trait_Labels {
      * @var string|null
      */
     protected $_militaryDefenseName = null;
+    
+    /**
+     * Config Sentry name
+     * 
+     * @var string|null
+     */
+    protected $_configSentryName = null;
+    
+    /**
+     * Config Sentries name
+     * 
+     * @var string|null
+     */
+    protected $_configSentriesName = null;
 
     /**
      * Config Government name
@@ -310,6 +324,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
      * The Gold resource name
      * 
      * @section Game Labels
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Gold label
      */
     public function getResourceGoldName($escape = false) {
@@ -333,6 +348,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Gold resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Gold description
      */
     public function getResourceGoldDescription($escape = false) {
@@ -354,6 +370,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Gem resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Gem label
      */
     public function getResourceGemName($escape = false) {
@@ -377,6 +394,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Gem resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Gem description
      */
     public function getResourceGemDescription($escape = false) {
@@ -398,6 +416,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Research resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Research name
      */
     public function getResourceResearchName($escape = false) {
@@ -421,6 +440,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Research resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Research description
      */
     public function getResourceResearchDescription($escape = false) {
@@ -442,6 +462,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The First resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Alpha name
      */
     public function getResourceAlphaName($escape = false) {
@@ -465,6 +486,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The First resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Alpha description
      */
     public function getResourceAlphaDescription($escape = false) {
@@ -486,6 +508,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Second resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Beta name
      */
     public function getResourceBetaName($escape = false) {
@@ -509,6 +532,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Second resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Beta description
      */
     public function getResourceBetaDescription($escape = false) {
@@ -530,6 +554,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Third resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Gamma name
      */
     public function getResourceGammaName($escape = false) {
@@ -553,6 +578,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Third resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Gamma description
      */
     public function getResourceGammaDescription($escape = false) {
@@ -574,6 +600,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The first extra resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Extra resource 1 name
      */
     public function getResourceExtra1Name($escape = false) {
@@ -597,6 +624,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The first extra resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Extra resource 1 description
      */
     public function getResourceExtra1Description($escape = false) {
@@ -618,6 +646,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The second extra resource name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Extra resource 2 name
      */
     public function getResourceExtra2Name($escape = false) {
@@ -641,6 +670,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The second extra resource description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Extra resource 2 description
      */
     public function getResourceExtra2Description($escape = false) {
@@ -662,6 +692,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * Population metric name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Population name
      */
     public function getMetricPopulationName($escape = false) {
@@ -685,6 +716,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Population metric description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Population description
      */
     public function getMetricPopulationDescription($escape = false) {
@@ -706,6 +738,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Satisfaction metric name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Satisfaction name
      */
     public function getMetricSatisfactionName($escape = false) {
@@ -729,6 +762,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * The Satisfaction metric description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Satisfaction description
      */
     public function getMetricSatisfactionDescription($escape = false) {
@@ -750,6 +784,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * Storage metric name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Storage name
      */
     public function getMetricStorageName($escape = false) {
@@ -773,6 +808,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * Storage metric description
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string|null Storage description
      */
     public function getMetricStorageDescription($escape = false) {
@@ -794,6 +830,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * Military attack name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Attack name
      */
     public function getMilitaryAttackName($escape = false) {
@@ -817,6 +854,7 @@ trait Stephino_Rpg_Config_Trait_Labels {
     /**
      * Military defense name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Defense name
      */
     public function getMilitaryDefenseName($escape = false) {
@@ -838,8 +876,57 @@ trait Stephino_Rpg_Config_Trait_Labels {
     }
     
     /**
+     * Sentry configuration name
+     * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
+     * @return string Sentry name
+     */
+    public function getConfigSentryName($escape = false) {
+        return null === $this->_configSentryName
+            ? Stephino_Rpg_Config_Core::DEFAULT_LABEL_CONFIG_SENTRY
+            : ($escape ? esc_html($this->_configSentryName) : $this->_configSentryName);
+    }
+    
+    /**
+     * Set the "Config Sentry Name" parameter
+     * 
+     * @param string|null $configSentryName Config Sentry Name
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setConfigSentryName($configSentryName) {
+        $this->_configSentryName = Stephino_Rpg_Utils_Lingo::cleanup($configSentryName);
+        
+        return $this;
+    }
+    
+    /**
+     * Sentries configuration name
+     * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
+     * @return string Sentries name
+     */
+    public function getConfigSentriesName($escape = false) {
+        return null === $this->_configSentriesName
+            ? Stephino_Rpg_Config_Core::DEFAULT_LABEL_CONFIG_SENTRIES
+            : ($escape ? esc_html($this->_configSentriesName) : $this->_configSentriesName);
+    }
+    
+    /**
+     * Set the "Config Sentries Name" parameter
+     * 
+     * @param string|null $configSentriesName Config Sentries Name
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setConfigSentriesName($configSentriesName) {
+        $this->_configSentriesName = Stephino_Rpg_Utils_Lingo::cleanup($configSentriesName);
+        
+        return $this;
+    }
+    
+    /**
      * Government configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Government name
      */
     public function getConfigGovernmentName($escape = false) {
@@ -856,11 +943,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigGovernmentName($configGovernmentName) {
         $this->_configGovernmentName = Stephino_Rpg_Utils_Lingo::cleanup($configGovernmentName);
+        
+        return $this;
     }
 
     /**
      * Governments configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Governments name
      */
     public function getConfigGovernmentsName($escape = false) {
@@ -877,11 +967,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigGovernmentsName($configGovernmentsName) {
         $this->_configGovernmentsName = Stephino_Rpg_Utils_Lingo::cleanup($configGovernmentsName);
+        
+        return $this;
     }
 
     /**
      * Island configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Island name
      */
     public function getConfigIslandName($escape = false) {
@@ -898,11 +991,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigIslandName($configIslandName) {
         $this->_configIslandName = Stephino_Rpg_Utils_Lingo::cleanup($configIslandName);
+        
+        return $this;
     }
 
     /**
      * Islands configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Islands name
      */
     public function getConfigIslandsName($escape = false) {
@@ -919,11 +1015,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigIslandsName($configIslandsName) {
         $this->_configIslandsName = Stephino_Rpg_Utils_Lingo::cleanup($configIslandsName);
+        
+        return $this;
     }
 
     /**
      * Island Statue configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Island Statue name
      */
     public function getConfigIslandStatueName($escape = false) {
@@ -940,11 +1039,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigIslandStatueName($configIslandStatueName) {
         $this->_configIslandStatueName = Stephino_Rpg_Utils_Lingo::cleanup($configIslandStatueName);
+        
+        return $this;
     }
 
     /**
      * Island Statues configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Island Statues name
      */
     public function getConfigIslandStatuesName($escape = false) {
@@ -961,11 +1063,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigIslandStatuesName($configIslandStatuesName) {
         $this->_configIslandStatuesName = Stephino_Rpg_Utils_Lingo::cleanup($configIslandStatuesName);
+        
+        return $this;
     }
 
     /**
      * City configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string City name
      */
     public function getConfigCityName($escape = false) {
@@ -982,11 +1087,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigCityName($configCityName) {
         $this->_configCityName = Stephino_Rpg_Utils_Lingo::cleanup($configCityName);
+        
+        return $this;
     }
 
     /**
      * Cities configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Cities name
      */
     public function getConfigCitiesName($escape = false) {
@@ -1003,11 +1111,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigCitiesName($configCitiesName) {
         $this->_configCitiesName = Stephino_Rpg_Utils_Lingo::cleanup($configCitiesName);
+        
+        return $this;
     }
 
     /**
      * Building configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Building name
      */
     public function getConfigBuildingName($escape = false) {
@@ -1024,11 +1135,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigBuildingName($configBuildingName) {
         $this->_configBuildingName = Stephino_Rpg_Utils_Lingo::cleanup($configBuildingName);
+        
+        return $this;
     }
 
     /**
      * Buildings configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Buildings name
      */
     public function getConfigBuildingsName($escape = false) {
@@ -1045,11 +1159,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigBuildingsName($configBuildingsName) {
         $this->_configBuildingsName = Stephino_Rpg_Utils_Lingo::cleanup($configBuildingsName);
+        
+        return $this;
     }
 
     /**
      * Unit configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Unit name
      */
     public function getConfigUnitName($escape = false) {
@@ -1066,11 +1183,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigUnitName($configUnitName) {
         $this->_configUnitName = Stephino_Rpg_Utils_Lingo::cleanup($configUnitName);
+        
+        return $this;
     }
 
     /**
      * Units configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Units name
      */
     public function getConfigUnitsName($escape = false) {
@@ -1087,11 +1207,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigUnitsName($configUnitsName) {
         $this->_configUnitsName = Stephino_Rpg_Utils_Lingo::cleanup($configUnitsName);
+        
+        return $this;
     }
 
     /**
      * Ship configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Ship name
      */
     public function getConfigShipName($escape = false) {
@@ -1108,11 +1231,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigShipName($configShipName) {
         $this->_configShipName = Stephino_Rpg_Utils_Lingo::cleanup($configShipName);
+        
+        return $this;
     }
 
     /**
      * Ships configuration name
      *
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Ships name
      */
     public function getConfigShipsName($escape = false) {
@@ -1129,11 +1255,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigShipsName($configShipsName) {
         $this->_configShipsName = Stephino_Rpg_Utils_Lingo::cleanup($configShipsName);
+        
+        return $this;
     }
     
     /**
      * Research Field configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Research Field name
      */
     public function getConfigResearchFieldName($escape = false) {
@@ -1150,11 +1279,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigResearchFieldName($configResearchFieldName) {
         $this->_configResearchFieldName = Stephino_Rpg_Utils_Lingo::cleanup($configResearchFieldName);
+        
+        return $this;
     }
 
     /**
      * Research Fields configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Research Fields name
      */
     public function getConfigResearchFieldsName($escape = false) {
@@ -1171,11 +1303,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigResearchFieldsName($configResearchFieldsName) {
         $this->_configResearchFieldsName = Stephino_Rpg_Utils_Lingo::cleanup($configResearchFieldsName);
+        
+        return $this;
     }
     
     /**
      * Research Area configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Research Area name
      */
     public function getConfigResearchAreaName($escape = false) {
@@ -1192,11 +1327,14 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigResearchAreaName($configResearchAreaName) {
         $this->_configResearchAreaName = Stephino_Rpg_Utils_Lingo::cleanup($configResearchAreaName);
+        
+        return $this;
     }
 
     /**
      * Research Areas configuration name
      * 
+     * @param boolean $escape (optional) HTML escape the output; default <b>false</b>
      * @return string Research Areas name
      */
     public function getConfigResearchAreasName($escape = false) {
@@ -1213,6 +1351,8 @@ trait Stephino_Rpg_Config_Trait_Labels {
      */
     public function setConfigResearchAreasName($configResearchAreasName) {
         $this->_configResearchAreasName = Stephino_Rpg_Utils_Lingo::cleanup($configResearchAreasName);
+        
+        return $this;
     }
 }
 

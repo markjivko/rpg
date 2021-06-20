@@ -28,67 +28,125 @@
     );
 ?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ADMIN == $itemId ? 'framed active' : '');?>">
-    <h6 class="heading"><span><?php echo esc_html__('Game Admins', 'stephino-rpg');?></span></h6>
+    <h6 class="heading"><span><?php echo esc_html__('Game admins', 'stephino-rpg');?></span></h6>
     <ul>
         <?php if (Stephino_Rpg_Cache_User::get()->isGameAdmin()):?>
-            <li><b><?php echo esc_html__('You are a Game Admin', 'stephino-rpg');?></b></li>
+            <li><b><?php echo esc_html__('You are a game admin', 'stephino-rpg');?>!</b></li>
         <?php endif;?>
-        <li><?php echo esc_html__('Decide the rules of the game, as they are presented here', 'stephino-rpg');?></li>
+        <li><?php echo esc_html__('They decide the rules of the game, as they are presented here', 'stephino-rpg');?></li>
         <li>
             <?php 
                 echo sprintf(
-                    esc_html__('Have full control over all players and %s', 'stephino-rpg'),
+                    esc_html__('They have full control over all players and %s', 'stephino-rpg'),
                     '<span'
                         . ' data-effect="helpMenuItem"'
                         . ' data-effect-args="' . Stephino_Rpg_Config_Core::KEY . ',' . Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER . '">'
-                            . esc_html__('Game Masters', 'stephino-rpg')
+                            . esc_html__('Game masters', 'stephino-rpg')
                     . '</span>'
                 );
             ?>
         </li>
-        <li><?php echo esc_html__('Cannot be demoted', 'stephino-rpg');?></li>
+        <li><?php echo esc_html__('They cannot be demoted', 'stephino-rpg');?></li>
     </ul>
 </div>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_MASTER == $itemId ? 'framed active' : '');?>">
-    <h6 class="heading"><span><?php echo esc_html__('Game Masters', 'stephino-rpg');?></span></h6>
+    <h6 class="heading"><span><?php echo esc_html__('Game masters', 'stephino-rpg');?></span></h6>
     <ul>
         <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
-            <li><b><?php echo esc_html__('You are a Game Master', 'stephino-rpg');?></b></li>
+            <li><b><?php echo esc_html__('You are a game master', 'stephino-rpg');?>!</b></li>
         <?php endif;?>
-        <li><?php echo esc_html__('Promote and demote other players and game masters, including themselves', 'stephino-rpg');?></li>
-        <?php if ($configObject->getConsoleEnabled()):?>
+        <li><?php echo esc_html__('They get access to extra information about players', 'stephino-rpg');?></li>
+        <li>
+            <?php 
+                echo $configObject->getGmPromote()
+                    ? esc_html__('They promote and demote other players and game masters, including themselves', 'stephino-rpg')
+                    : esc_html__('They cannot promote or demote other players', 'stephino-rpg');
+            ?>
+        </li>
+        <?php if ($configObject->getChatRoom() && $configObject->getGmModChat()):?>
+            <li><?php echo esc_html__('They can moderate the chat room', 'stephino-rpg');?></li>
+        <?php endif;?>
+        <?php if ($configObject->getPtfEnabled() && $configObject->getGmModPtfs()):?>
+            <li>
+                <span 
+                    data-effect="helpMenuItem"
+                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
+                    <?php echo esc_html__('Game arena', 'stephino-rpg');?>
+                </span>: <?php echo esc_html__('They can review, edit and delete games', 'stephino-rpg');?>
+            </li>
+        <?php endif;?>
+        <?php if ($configObject->getConsoleEnabled() && $configObject->getGmCli()):?>
             <li>
                 <span
                     data-effect="helpMenuItem"
                     data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE;?>">
                     <?php echo esc_html__('Game console', 'stephino-rpg');?>
-                </span>: <?php echo esc_html__('Control all game resources, including the flow of time', 'stephino-rpg');?>
-            </li>
-        <?php endif;?>
-        <?php if ($configObject->getPtfEnabled()):?>
-            <li>
-                <span 
-                    data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
-                    <?php echo esc_html__('Game arena', 'stephino-rpg');?>
-                </span>: <?php echo esc_html__('Review all games', 'stephino-rpg');?>
-            </li>
-            <li>
-                <span 
-                    data-effect="helpMenuItem"
-                    data-effect-args="<?php echo Stephino_Rpg_Config_Core::KEY;?>,<?php echo Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_ARENA;?>">
-                    <?php echo esc_html__('Game arena', 'stephino-rpg');?>
-                </span>: <?php echo esc_html__('Edit and delete any game created by players', 'stephino-rpg');?>
+                </span>: <?php echo esc_html__('They can control all game resources, including the flow of time', 'stephino-rpg');?>
             </li>
         <?php endif;?>
     </ul>
 </div>
+<?php if ($configObject->getSentryEnabled()):?>
+    <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_SENTRIES == $itemId ? 'framed active' : '');?>">
+        <h6 class="heading"><span><?php echo $configObject->getConfigSentriesName(true);?></span></h6>
+        <ul>
+            <li>
+                <?php echo esc_html__('Challenge other players in order to improve your abilities', 'stephino-rpg');?>:
+                <ul>
+                    <?php foreach (Stephino_Rpg_Db::get()->modelSentries()->getLabels() as $labelName):?>
+                    <li><?php echo esc_html($labelName);?></li>
+                    <?php endforeach;?>
+                </ul>
+            </li>
+            <li>
+                <?php 
+                    echo $configObject->getSentryMaxLevel() > 0
+                        ? sprintf(
+                            __('The maximum level you can achieve for each ability is %s', 'stephino-rpg'), 
+                            '<b>' . $configObject->getSentryMaxLevel() . '</b>'
+                        )
+                        : __('There is no limit to how much you can improve your abilities', 'stephino-rpg');
+                ?>
+            </li>
+            <?php if ($configObject->getSentryLootGold() > 0 || $configObject->getSentryLootResearch() > 0):?>
+                <li>
+                    <?php echo esc_html__('You can take loot from your enemies if you win the challenge', 'stephino-rpg');?>
+                </li>
+            <?php endif;?>
+            <?php if ($configObject->getSentryReward() > 0):?>
+                <li>
+                    <?php echo sprintf(
+                        esc_html__('You will also earn rewards (%s)', 'stephino-rpg'),
+                        '<b>' . $configObject->getResourceGemName(true) . '</b>'
+                    );?>
+                </li>
+            <?php endif;?>
+            <?php if ($configObject->getSentryLootGold() > 0 || $configObject->getSentryLootResearch() > 0 || $configObject->getSentryReward() > 0):?>
+                <li>
+                    <?php 
+                        echo sprintf(
+                            esc_html__('%s chance of success or lower: you will receive the entire reward', 'stephino-rpg'),
+                            '<b>50%</b>'
+                        );?><br/>
+                    <?php 
+                        echo sprintf(
+                            esc_html__('%s chance of success: your final reward will be reduced to %s', 'stephino-rpg'),
+                            '<b>100%</b>',
+                            '<b>' . $configObject->getSentryOPYield() . '%</b>'
+                        );
+                    ?>
+                </li>
+            <?php endif;?>
+            <li><?php echo esc_html__('If leave your base when you are attacked you automatically lose', 'stephino-rpg');?></li>
+        </ul>
+    </div>
+<?php endif;?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_GAME_RES == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Common resources', 'stephino-rpg');?></span></h6>
     <div class="col-12 text-center">
         <?php 
             echo sprintf(
-                esc_html__('These resources are generated by and accessible to: %s', 'stephino-rpg'),
+                esc_html__('These resources are accessible everywhere', 'stephino-rpg'),
                 $configObject->getConfigCitiesName(true)
             );
         ?>
@@ -249,7 +307,7 @@
         </div>
     <?php endif;?>
 </div>
-<?php if ((Stephino_Rpg::get()->isDemo() || Stephino_Rpg_Cache_User::get()->isGameMaster()) && $configObject->getConsoleEnabled()):?>
+<?php if ($configObject->getConsoleEnabled() && (Stephino_Rpg::get()->isDemo() || Stephino_Rpg_Cache_User::get()->isElevated(Stephino_Rpg_Cache_User::PERM_CLI))):?>
 <div class="col-12 p-2 <?php echo (Stephino_Rpg_Renderer_Ajax_Dialog_Help::CORE_SECTION_CONSOLE == $itemId ? 'framed active' : '');?>">
     <h6 class="heading"><span><?php echo esc_html__('Game console', 'stephino-rpg');?></span></h6>
     <ul>
@@ -323,7 +381,7 @@
             <li>
                 <?php 
                     echo sprintf(
-                        esc_html__('%s for each draw', 'stephino-rpg'),
+                        esc_html__('%s for each impasse', 'stephino-rpg'),
                         '<b>' . ($configObject->getScoreBattleDraw() > 0 ? '+' : '') . $configObject->getScoreBattleDraw() . '</b> '
                             . _n('point', 'points', $configObject->getScoreBattleDraw(), 'stephino-rpg')
                     );
@@ -348,6 +406,18 @@
                         esc_html__('%s for each game arena victory', 'stephino-rpg'),
                         '<b>' . ($configObject->getPtfScore() > 0 ? '+' : '') . $configObject->getPtfScore() . '</b> '
                             . _n('point', 'points', $configObject->getPtfScore(), 'stephino-rpg')
+                    );
+                ?>
+            </li>
+        <?php endif;?>
+        <?php if ($configObject->getSentryEnabled() && 0 != $configObject->getSentryScore()):?>
+            <li>
+                <?php 
+                    echo sprintf(
+                        esc_html__('%s for each challenge you win (%s)', 'stephino-rpg'),
+                        '<b>' . ($configObject->getSentryScore() > 0 ? '+' : '') . $configObject->getSentryScore() . '</b> '
+                            . _n('point', 'points', $configObject->getSentryScore(), 'stephino-rpg'),
+                        '<b>' . $configObject->getConfigSentriesName(true) . '</b>'
                     );
                 ?>
             </li>
@@ -489,8 +559,18 @@
                     }
                 ?>
             </li>
+        <?php if ($configObject->getSentryEnabled() && Stephino_Rpg_Config_Core::ROBOT_AGG_LOW !== $configObject->getRobotsAggression()):?>
             <li>
-                <?php echo esc_html__('Robots fervor', 'stephino-rpg');?>: <b><?php echo $configObject->getRobotsFervor();?>%</b>
+                <?php 
+                    echo sprintf(
+                        esc_html__('Robots will challenge other players with %s'),
+                        '</b>' . $configObject->getConfigSentriesName(true) . '</b>'
+                    );
+                ?>
+            </li>
+        <?php endif;?>
+            <li>
+                <?php echo esc_html__('The fervor of robots', 'stephino-rpg');?>: <b><?php echo $configObject->getRobotsFervor();?>%</b>
             </li>
         <?php else:?>
             <li><?php echo esc_html__('Robots are disabled', 'stephino-rpg');?></li>
@@ -634,7 +714,7 @@
                 }
             ?>
         </li>
-        <?php if (Stephino_Rpg_Cache_User::get()->isGameMaster()):?>
+        <?php if (Stephino_Rpg_Cache_User::get()->isElevated()):?>
             <li>
                 <?php 
                     echo sprintf(

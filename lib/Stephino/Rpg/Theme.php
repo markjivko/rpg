@@ -40,11 +40,10 @@ class Stephino_Rpg_Theme {
     const FOLDER_AUDIO     = 'audio';
     const FOLDER_CSS       = 'css';
     const FOLDER_I18N      = 'i18n';
+    const FOLDER_TXT       = 'txt';
     const FOLDER_IMG       = 'img';
-    const FOLDER_IMG_PH    = 'img/ph';
     const FOLDER_IMG_STORY = 'img/story';
     const FOLDER_IMG_UI    = 'img/ui';
-    const FOLDER_TXT       = 'txt';
     
     // Fles
     const FILE_ABOUT        = 'about.json';
@@ -81,6 +80,20 @@ class Stephino_Rpg_Theme {
      * @var Stephino_Rpg_Theme[]|null[]
      */
     protected static $_instances = array();
+    
+    /**
+     * Base upload directory (WordPress)
+     * 
+     * @var string
+     */
+    protected $_baseDir = null;
+    
+    /**
+     * Base upload URL (WordPress)
+     * 
+     * @var string
+     */
+    protected $_baseUrl = null;
     
     /**
      * Theme slug
@@ -166,6 +179,13 @@ class Stephino_Rpg_Theme {
             throw new Exception('Invalid theme slug');
         }
         
+        // Prepare the upload directory
+        $uploadDir = wp_upload_dir();
+        
+        // Store the paths
+        $this->_baseDir = rtrim($uploadDir['basedir'], '/\\');
+        $this->_baseUrl = rtrim($uploadDir['baseurl'], '/\\');
+        
         // Store the slug
         $this->_themeSlug = $themeSlug;
         
@@ -178,9 +198,8 @@ class Stephino_Rpg_Theme {
                 Stephino_Rpg::get()->isPro()
             ) . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . self::THEME_DEFAULT;
         } else {
-            $uploadDir = wp_upload_dir();
-            $this->_themePath = rtrim($uploadDir['basedir'], '/\\') . '/' . Stephino_Rpg::PLUGIN_SLUG . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . $this->getThemeSlug();
-            $this->_themeUrl  = rtrim($uploadDir['baseurl'], '/\\') . '/' . Stephino_Rpg::PLUGIN_SLUG . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . $this->getThemeSlug();
+            $this->_themePath = $this->_baseDir . '/' . Stephino_Rpg::PLUGIN_SLUG . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . $this->getThemeSlug();
+            $this->_themeUrl  = $this->_baseUrl . '/' . Stephino_Rpg::PLUGIN_SLUG . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . $this->getThemeSlug();
             
             // Enforce HTTPS
             if (is_ssl()) {
@@ -276,8 +295,10 @@ class Stephino_Rpg_Theme {
     }
     
     /**
-     * Check the current configuration against local resources, adding and removing files and folders as needed<br/>
+     * Check the current configuration against local resources, adding and removing audio and img/story files and folders as needed<br/>
      * Only works if the current theme is active, non-default, the PRO plugin is present and the configuration language is English
+     * 
+     * @return Stephino_Rpg_Theme
      */
     public function checkResources() {
         // Game Mechanics save of active non-default theme
@@ -402,12 +423,15 @@ class Stephino_Rpg_Theme {
                 }
             }
         }
+        
+        return $this;
     }
     
     /**
      * Activate the current theme
      * 
      * @throws Exception
+     * @return Stephino_Rpg_Theme
      */
     public function activate() {
         if (!Stephino_Rpg::get()->isPro()) {
@@ -490,6 +514,57 @@ class Stephino_Rpg_Theme {
         
         // Cache reset
         Stephino_Rpg_Cache_Game::get()->write(Stephino_Rpg_Cache_Game::KEY_MEDIA_CHANGED, time());
+        return $this->migrate();
+    }
+    
+    /**
+     * Make sure all files and folders are present in the current theme and copy them from the default if missing
+     * Called on version change and theme activation
+     * 
+     * @return Stephino_Rpg_Theme
+     */
+    public function migrate() {
+        if (Stephino_Rpg::get()->isPro() && !$this->isDefault()) {
+            // Migration folders
+            $migrateFolders = array(
+                // @since 0.3.9
+                self::FOLDER_IMG_UI . '/' . Stephino_Rpg_Db_Model_Sentries::NAME,
+                self::FOLDER_IMG_UI . '/' . Stephino_Rpg_Db_Model_Ptfs::NAME,
+                self::FOLDER_IMG_UI . '/login',
+            );
+            
+            // Migration files
+            $migrateFiles = array(
+                // @since 0.3.9
+                self::FOLDER_TXT . '/' . Stephino_Rpg_Db_Model_Sentries::NAME . '.txt',
+            );
+
+            // Check folders
+            foreach ($migrateFolders as $mRelativePath) {
+                if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_dir($mAbsolutePath = $this->getFilePath($mRelativePath))) {
+                    try {
+                        Stephino_Rpg_Utils_Folder::get()->copy(
+                            STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . $mRelativePath, 
+                            $mAbsolutePath
+                        );
+                    } catch (Exception $exc) {
+                        Stephino_Rpg_Log::check() && Stephino_Rpg_Log::warning($exc->getMessage());
+                    }
+                }
+            }
+            
+            // Check files
+            foreach ($migrateFiles as $mRelativePath) {
+                if (!Stephino_Rpg_Utils_Folder::get()->fileSystem()->is_file($mAbsolutePath = $this->getFilePath($mRelativePath))) {
+                    Stephino_Rpg_Utils_Folder::get()->fileSystem()->copy(
+                        STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . self::THEME_DEFAULT . '/' . $mRelativePath, 
+                        $mAbsolutePath
+                    );
+                }
+            }
+        }
+        
+        return $this;
     }
     
     /**
@@ -704,23 +779,34 @@ class Stephino_Rpg_Theme {
      * @return string
      */
     public function getFilePath($relativePath = null, $forceLocal = false) {
-        // Clean-up the path
-        $relativePath = Stephino_Rpg_Utils_Sanitizer::getMediaPath($relativePath);
-        
-        // Prepare the path ending
-        $pathTail = strlen($relativePath) ? ('/' . $relativePath) : '';
-        
-        // Prepare the file path
-        $result = $this->_themePath . $pathTail;
-        
-        // Pro resources that are stored locally instead of stephino-rpg-pro
-        if ($forceLocal 
-            || ($this->getThemeSlug() === self::THEME_DEFAULT 
-                && Stephino_Rpg::get()->isPro() 
-                && strlen($relativePath) 
-                && $this->_isLocalResource($relativePath)
-            )) {
-            $result = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . self::THEME_DEFAULT . $pathTail;
+        // A sentry file
+        if (preg_match('%^\/?' . Stephino_Rpg::FOLDER_SENTRIES . '\/(\d+)\.png$%i', $relativePath, $sentryMatches)
+            && Stephino_Rpg_Config::get()->core()->getSentryEnabled()) {
+            // Initialize the icon file
+            $result = Stephino_Rpg_Db::get()->modelSentries()->getFilePath(
+                $sentryMatches[1], 
+                Stephino_Rpg_Db_Model_Sentries::FILE_ICON,
+                true
+            );
+        } else {
+            // Clean-up the path
+            $relativePath = Stephino_Rpg_Utils_Sanitizer::getMediaPath($relativePath);
+
+            // Prepare the path ending
+            $pathTail = strlen($relativePath) ? ('/' . $relativePath) : '';
+
+            // Prepare the file path
+            $result = $this->_themePath . $pathTail;
+
+            // Pro resources that are stored locally instead of stephino-rpg-pro
+            if ($forceLocal 
+                || ($this->getThemeSlug() === self::THEME_DEFAULT 
+                    && Stephino_Rpg::get()->isPro() 
+                    && strlen($relativePath) 
+                    && $this->_isLocalResource($relativePath)
+                )) {
+                $result = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . self::THEME_DEFAULT . $pathTail;
+            }
         }
         
         return $result;

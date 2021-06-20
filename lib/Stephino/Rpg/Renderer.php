@@ -69,8 +69,8 @@ class Stephino_Rpg_Renderer {
         
         try {
             // Sanitize the method name
-            if (isset($_REQUEST) && isset($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD])) {
-                $callMethod = preg_replace('%\W+%', '', trim($_REQUEST[Stephino_Rpg_Renderer_Ajax::CALL_METHOD]));
+            if (null !== $requestMethod = Stephino_Rpg_Utils_Sanitizer::getMethod()) {
+                $callMethod = $requestMethod;
             }
             
             // Invalid method

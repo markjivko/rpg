@@ -16,7 +16,92 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
      * Convoys Model Name
      */
     const NAME = 'convoys';
-
+    
+    /**
+     * Create a sentry challenge convoy (sentry training)
+     * 
+     * @param int    $fromUserId      Origin user ID
+     * @param int    $toUserId        Destination user ID
+     * @param string $sentryChallenge Challenge type
+     * @return int New sentry sentry challenge ID
+     * @throws Exception
+     */
+    public function createSentryChallenge($fromUserId, $toUserId, $sentryChallenge) {
+        // Validate the challenge type
+        if (!in_array($sentryChallenge, array_keys($this->getDb()->modelSentries()->getColumns()))) {
+            throw new Exception(__('Invalid challenge type', 'stephino-rpg'));
+        }
+        
+        // Validate the user IDs
+        $fromUserId = abs((int) $fromUserId);
+        $toUserId   = abs((int) $toUserId);
+        
+        // Invalid IDs
+        if (0 === $fromUserId || 0 === $toUserId || $fromUserId === $toUserId) {
+            throw new Exception(__('Invalid user ID', 'stephino-rpg'));
+        }
+        
+        // Prepare the sentry info
+        if (!is_array($fromUserData = $this->getDb()->tableUsers()->getById($fromUserId, true))) {
+            throw new Exception(__('Origin user not found', 'stephino-rpg'));
+        }
+        
+        // Sentry already in a challenge
+        if (1 === (int) $fromUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+            throw new Exception(__('Challenge is in progress...', 'stephino-rpg'));
+        }
+        
+        // Origin information
+        if (!is_array($fromCities = $this->getDb()->tableCities()->getByUser($fromUserId))) {
+            throw new Exception(__('Origin not found', 'stephino-rpg'));
+        }
+        $challengeFromInfo = reset($fromCities);
+        
+        // Destination information
+        if (!is_array($toCities = $this->getDb()->tableCities()->getByUser($toUserId))) {
+            throw new Exception(__('Destination not found', 'stephino-rpg'));
+        }
+        $challengeToInfo = reset($toCities);
+        
+        // Prepare the sentry levels
+        $sentryLevels = $this->getDb()->modelSentries()->getLevels($fromUserData);
+        
+        // Prepare the challenge duration
+        $challengeDuration = Stephino_Rpg_Utils_Config::getPolyValue(
+            Stephino_Rpg_Config::get()->core()->getSentryCostTimePoly(),
+            $sentryLevels[$sentryChallenge] + 1, 
+            Stephino_Rpg_Config::get()->core()->getSentryCostTime()
+        );
+        
+        // Add the convoy
+        $convoyCreateResult = $this->getDb()->tableConvoys()->create(
+            $challengeFromInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID], 
+            $challengeFromInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID], 
+            $challengeFromInfo[Stephino_Rpg_Db_Table_Cities::COL_ID], 
+            $challengeToInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID], 
+            $challengeToInfo[Stephino_Rpg_Db_Table_Cities::COL_CITY_ISLAND_ID], 
+            $challengeToInfo[Stephino_Rpg_Db_Table_Cities::COL_ID],
+            $challengeDuration,
+            true,
+            $challengeDuration + time(),
+            0,
+            array(
+                Stephino_Rpg_TimeLapse_Convoys::PAYLOAD_DATA => array(
+                    $sentryChallenge,
+                    $sentryLevels
+                ),
+            ),
+            Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_SENTRY
+        );
+        
+        // DB Error
+        if (null === $convoyCreateResult) {
+            throw new Exception(__('Could not initiate the challenge', 'stephino-rpg'));
+        }
+        
+        return $convoyCreateResult[0];
+    }
+    
     /**
      * Create an attack convoy
      * 

@@ -15,7 +15,6 @@
 /* @var $ptfRow array*/
 /* @var $tileSetC array*/
 ?>
-<script type="text/javascript">var stephino_rpg_ptf_tiles = <?php echo json_encode(Stephino_Rpg_Db::get()->modelPtfs()->getTileList());?>;</script>
 <div data-role="ptf-embed" class="framed ptf-creator" data-game-id="<?php echo $ptfId;?>" style="position: relative; overflow: hidden;">
     <svg viewBox="0 0 <?php echo Stephino_Rpg_Db::get()->modelPtfs()->getViewBox(true);?>" style="display: block; width: 100%; position: relative; z-index: 0;"></svg>
     <div data-tile-set="<?php echo implode(',', $tileSetC);?>"
@@ -23,7 +22,7 @@
          data-tile-set-height="<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT];?>"
          data-tile-side="<?php echo Stephino_Rpg_Db_Model_Ptfs::TILE_SIDE;?>"
          data-effect="ptfCreator" 
-         data-effect-args="canvas,<?php echo Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH;?>,<?php echo Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT;?>"></div>
+         data-effect-args="canvas,<?php echo Stephino_Rpg_Db_Model_Ptfs::PTF_MIN_WIDTH;?>,<?php echo Stephino_Rpg_Db_Model_Ptfs::PTF_MIN_HEIGHT;?>"></div>
     <div data-effect="ptfCreator" class="ptf-nav ptf-nav-w" data-effect-args="nav,w">W</div>
     <div data-effect="ptfCreator" class="ptf-nav ptf-nav-a" data-effect-args="nav,a">A</div>
     <div data-effect="ptfCreator" class="ptf-nav ptf-nav-s" data-effect-args="nav,s">S</div>
@@ -73,8 +72,8 @@
                         name="<?php echo Stephino_Rpg_Db_Table_Ptfs::COL_PTF_WIDTH;?>" 
                         id="input_<?php echo Stephino_Rpg_Db_Table_Ptfs::COL_PTF_WIDTH;?>"
                         value="<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_WIDTH];?>"
-                        min="<?php echo Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_WIDTH;?>" 
-                        max="<?php echo Stephino_Rpg_Db_Table_Ptfs::PTF_MAX_WIDTH;?>" />
+                        min="<?php echo Stephino_Rpg_Db_Model_Ptfs::PTF_MIN_WIDTH;?>" 
+                        max="<?php echo Stephino_Rpg_Db_Model_Ptfs::PTF_MAX_WIDTH;?>" />
                 </div>
             </div>
             <div data-name="<?php echo Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT;?>" class="row">
@@ -95,8 +94,8 @@
                         name="<?php echo Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT;?>" 
                         id="input_<?php echo Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT;?>"
                         value="<?php echo (int) $ptfRow[Stephino_Rpg_Db_Table_Ptfs::COL_PTF_HEIGHT];?>"
-                        min="<?php echo Stephino_Rpg_Db_Table_Ptfs::PTF_MIN_HEIGHT;?>" 
-                        max="<?php echo Stephino_Rpg_Db_Table_Ptfs::PTF_MAX_HEIGHT;?>" />
+                        min="<?php echo Stephino_Rpg_Db_Model_Ptfs::PTF_MIN_HEIGHT;?>" 
+                        max="<?php echo Stephino_Rpg_Db_Model_Ptfs::PTF_MAX_HEIGHT;?>" />
                 </div>
             </div>
             <div data-name="<?php echo Stephino_Rpg_Db_Table_Ptfs::COL_PTF_VISIBILITY;?>" class="row">

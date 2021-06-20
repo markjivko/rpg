@@ -14,7 +14,7 @@
 <div class="row">
     <div class="col-12 text-center">
         <div class="framed">
-            <img class="city-icon" src="<?php echo Stephino_Rpg_Utils_Lingo::escape($islandIconUrl);?>"/>
+            <img class="city-icon" src="<?php echo esc_attr($islandIconUrl);?>"/>
         </div>
         <?php if (count(Stephino_Rpg_Utils_Config::getEntitiesByCapability(Stephino_Rpg_Db_Table_Convoys::CONVOY_TYPE_COLONIZER))):?>
             <button

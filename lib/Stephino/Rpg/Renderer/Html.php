@@ -255,7 +255,7 @@ class Stephino_Rpg_Renderer_Html {
                             'game_ver'   => Stephino_Rpg_Utils_Media::getPwaVersion(false, false),
                             'game_lang'  => Stephino_Rpg_Config::lang(),
                             'app_name'   => Stephino_Rpg_Utils_Lingo::getGameName(),
-                            'is_admin'   => Stephino_Rpg_Cache_User::get()->isGameMaster(),
+                            'is_admin'   => Stephino_Rpg_Cache_User::get()->isElevated(),
                             'is_demo'    => Stephino_Rpg::get()->isDemo(),
                             'is_pro'     => Stephino_Rpg::get()->isPro(),
                             'i18n'       => $i18nStrings

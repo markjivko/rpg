@@ -16,7 +16,7 @@
 <div class="row align-items-center">
     <div class="col-6">
         <div>
-            <img class="city-icon" src="<?php echo Stephino_Rpg_Utils_Lingo::escape($cityIconUrl);?>'"/>
+            <img class="city-icon" src="<?php echo esc_attr($cityIconUrl);?>'"/>
         </div>
         <h4 class="label w-100 footer-label">
             <span>
@@ -55,7 +55,7 @@
                 <button
                     class="btn btn-default w-100"
                     data-click="userViewProfile"
-                    data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID]);?>">
+                    data-click-args="<?php echo intval($cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID]);?>">
                     <span>
                         <?php if (Stephino_Rpg_TimeLapse::get()->userId() == $cityData[Stephino_Rpg_Db_Table_Cities::COL_CITY_USER_ID]):?>
                             <?php echo esc_html__('View my profile', 'stephino-rpg');?>
@@ -86,7 +86,7 @@
                         <button
                             class="btn w-100"
                             data-click="cityAttackPrepareButton"
-                            data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]);?>">
+                            data-click-args="<?php echo intval($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]);?>">
                             <span><?php 
                                 echo sprintf(
                                     esc_html__('Attack %s', 'stephino-rpg'),
@@ -99,7 +99,7 @@
                         <button
                             class="btn w-100"
                             data-click="citySpyReviewButton"
-                            data-click-args="<?php echo Stephino_Rpg_Utils_Lingo::escape($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]);?>">
+                            data-click-args="<?php echo intval($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]);?>">
                             <span><?php echo esc_html__('Send spy', 'stephino-rpg');?></span>
                         </button>
                     <?php endif;?>
@@ -108,7 +108,7 @@
                     <button 
                         class="btn w-100"
                         data-click="dialog"
-                        data-click-args="dialogTransportPrepare,<?php echo Stephino_Rpg_Utils_Lingo::escape($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]);?>">
+                        data-click-args="dialogTransportPrepare,<?php echo intval($cityData[Stephino_Rpg_Db_Table_Cities::COL_ID]);?>">
                         <span><?php echo esc_html__('Send goods', 'stephino-rpg');?></span>
                     </button>
                 <?php endif;?>

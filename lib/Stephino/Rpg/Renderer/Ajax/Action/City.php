@@ -18,14 +18,10 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
     const REQUEST_CITY_GOVERNMENT_ID = 'cityGovernmentId';
     
     // PNG file names
-    const IMAGE_512  = '512';
     const IMAGE_FULL = 'full';
     
     // Data keys
     const CELL_CONFIG_CITY_BKG = 'cityBkg';
-    
-    // Configuration
-    const MAX_LENGTH_CITY_NAME = 20;
     
     /**
      * Rename a city
@@ -58,11 +54,11 @@ class Stephino_Rpg_Renderer_Ajax_Action_City extends Stephino_Rpg_Renderer_Ajax_
         }
         
         // Name is too long
-        if (strlen($cityName) > self::MAX_LENGTH_CITY_NAME) {
+        if (strlen($cityName) > Stephino_Rpg_Db_Model_Cities::MAX_LENGTH_NAME) {
             throw new Exception(
                 sprintf(
                     __('The name is too long, please keep it shorter than %d characters', 'stephino-rpg'), 
-                    self::MAX_LENGTH_CITY_NAME
+                    Stephino_Rpg_Db_Model_Cities::MAX_LENGTH_NAME
                 )
             );
         }
