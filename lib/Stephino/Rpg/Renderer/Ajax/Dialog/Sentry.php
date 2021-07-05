@@ -61,13 +61,13 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Sentry extends Stephino_Rpg_Renderer_Aja
             // Mark the sentry as different from our own
             if ($userId !== Stephino_Rpg_TimeLapse::get()->userId()) {
                 $sentryOwn = false;
+                
+                // Try to get the user data
+                if (!is_array($sentryOwnerData = Stephino_Rpg_Db::get()->tableUsers()->getById($userId, true))) {
+                    throw new Exception(__('User not found', 'stephino-rpg'));
+                }
             }
-            
-            // Try to get the user data
-            if (!is_array($sentryOwnerData = Stephino_Rpg_Db::get()->tableUsers()->getById($userId))) {
-                throw new Exception(__('User not found', 'stephino-rpg'));
-            }
-            
+
             // Custom challenge
             if (isset($commonArgs[1]) && in_array($commonArgs[1], array_keys(Stephino_Rpg_Db::get()->modelSentries()->getColumns()))) {
                 $sentryChallenge = $commonArgs[1];
@@ -90,21 +90,22 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Sentry extends Stephino_Rpg_Renderer_Aja
             $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME]    = $newSentryName;
         }
         
-        // Sentry active flag out of sync
-        if ((null === $sentryConvoy && 1 === (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE])
-            || (null !== $sentryConvoy && 0 === (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE])) {
-            $newSentryActive = (null === $sentryConvoy ? 0 : 1);
-            
-            $sentryOwnerUpdates[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE] = $newSentryActive;
-            $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]    = $newSentryActive;
-        }
-        
         // Updates made
         if (count($sentryOwnerUpdates)) {
             Stephino_Rpg_Db::get()->tableUsers()->updateById(
                 $sentryOwnerUpdates, 
                 (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_ID]
             );
+        }
+        
+        // Engaged in a batttle
+        $opponentData = null;
+        if ($sentryOwn && 0 !== (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+            $opponentData = Stephino_Rpg_Db::get()->tableUsers()->getById(
+                (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE],
+                true
+            );
+            self::setModalSize(self::MODAL_SIZE_LARGE);
         }
         
         require self::dialogTemplatePath(self::TEMPLATE_SENTRY_INFO);
@@ -168,7 +169,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Sentry extends Stephino_Rpg_Renderer_Aja
         }
         
         // Sentry already in a challenge
-        if (1 === (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+        if (0 !== (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
             throw new Exception(__('Challenge is in progress...', 'stephino-rpg'));
         }
         
@@ -241,7 +242,7 @@ class Stephino_Rpg_Renderer_Ajax_Dialog_Sentry extends Stephino_Rpg_Renderer_Aja
         }
         
         // Sentry already in a challenge
-        if (1 === (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+        if (0 !== (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
             throw new Exception(__('Challenge is in progress...', 'stephino-rpg'));
         }
         

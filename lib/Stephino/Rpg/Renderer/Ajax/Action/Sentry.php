@@ -163,7 +163,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Sentry extends Stephino_Rpg_Renderer_Aja
         }
         
         // Sentry already in a challenge
-        if (1 === (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+        if (0 !== (int) $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
             throw new Exception(__('Challenge is in progress...', 'stephino-rpg'));
         }
         
@@ -183,7 +183,7 @@ class Stephino_Rpg_Renderer_Ajax_Action_Sentry extends Stephino_Rpg_Renderer_Aja
         }
         
         // Cannot attack an inactive opponent
-        if (1 === (int) $opponentData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+        if (0 !== (int) $opponentData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
             throw new Exception(__('Opponent cannot be attacked for now', 'stephino-rpg'));
         }
         

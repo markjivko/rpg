@@ -110,7 +110,9 @@ class Stephino_Rpg_Db_Table_Messages extends Stephino_Rpg_Db_Table {
     `" . self::COL_MESSAGE_CONTENT . "` text NOT NULL DEFAULT '',
     `" . self::COL_MESSAGE_READ . "` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_MESSAGE_TIME . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_MESSAGE_TO . "` (`" . self::COL_MESSAGE_TO . "`), 
+    KEY `" . self::COL_MESSAGE_FROM . "` (`" . self::COL_MESSAGE_FROM . "`)
 );";
     }
     

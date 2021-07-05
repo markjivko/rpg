@@ -106,7 +106,9 @@ class Stephino_Rpg_Db_Table_Queues extends Stephino_Rpg_Db_Table {
     `" . self::COL_QUEUE_QUANTITY . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_QUEUE_DURATION . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_QUEUE_TIME . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_QUEUE_USER_ID . "` (`" . self::COL_QUEUE_USER_ID . "`), 
+    KEY `" . self::COL_QUEUE_CITY_ID . "` (`" . self::COL_QUEUE_CITY_ID . "`)
 );";
     }
     

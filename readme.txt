@@ -4,7 +4,7 @@ Plugin link: https://stephino.com
 Donate link: https://gum.co/stephino-rpg
 Tags: game, games, rpg, fun, competition, platformer, pwa, strategy, gutenberg
 Requires at least: 5.0
-Tested up to: 5.7
+Tested up to: 5.8
 Requires PHP: 5.6
 Stable tag: trunk
 License: GPLv3
@@ -13,6 +13,8 @@ License URI: https://www.gnu.org/licenses/gpl-3.0.txt
 Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on WordPress.
 
 == Description ==
+
+[youtube https://youtu.be/KABh8CwpSM4]
 
 Stephino RPG is a browser-based multi-player strategy role-playing game.
 
@@ -23,11 +25,14 @@ You can form cities, attack and spy on other players and robots, send resources 
 Create your own platformer mini-games and play games created by others to earn rewards.
 
 = Demo and Support =
+
 You can [access the Demo](https://stephino.com) by simply logging in with a Google or Twitter account.
 
 Real-time support and feedback are available on [Discord](https://discord.gg/32gFsSm).
 
 We strongly believe in the right to be forgotten so when you're done testing the game just click on the "Delete Account" button from the game settings.
+
+A free Desktop Client is available [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/Stephino/RPG-Client-Desktop).
 
 = Artificial Intelligence =
 You can play this game by yourself or against robots or other players.
@@ -152,6 +157,22 @@ The most requested feature gets implemented in the next release (usually).
 
 == Changelog ==
 
+= [0.4.1] 2021-07-05 =
+* Enhancements
+  * Desktop Client available for free on [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/Stephino/RPG-Client-Desktop)
+* Bug fixes
+  * Multiple Rest API fixes for the Steam Client
+
+= [0.4.0] 2021-06-29 =
+* Enhancements
+  * Added first `REST API` methods to detect plugin version and perform frictionless authentication for remote clients
+  * Improved sentry combat dialog
+  * Prepared for WordPress v.**5.8**
+* Bug fixes
+  * Sentries: fixed default values migration for secondary themes
+* Additional changes
+  * Updated table indexes for faster queries
+
 = [0.3.9] 2021-06-20 =
 * Enhancements
   * **Sentries**: you can now earn extra Diamonds and even loot your enemies before any military units are ready!
@@ -159,12 +180,10 @@ The most requested feature gets implemented in the next release (usually).
   * Sentry designs can be customized (625 unique combinations)
   * Added *Game Masters* permissions to `Game Mechanics > Core`
   * Private messages between players now support Markdown syntax; images and links are removed
-
 * Bug fixes
   * Fixed building level change bug in tutorial
   * Fixed heartbeat for countdown methods
   * Fixed fast-advancing robots glitch
-
 * Additional changes
   * Improved tutorial; included references to Game Arena and Sentries
   * Added automatic resource migration for themes
@@ -180,13 +199,11 @@ The most requested feature gets implemented in the next release (usually).
   * Improved media handler performance
   * Compatible with PHP version 5.6.4+
   * Added `gift-to-all (gold|gem|research) {resource value}` CLI command to send gifts to all your players
-
 * Bug fixes
   * Fixed tutorial issues
   * Fixed colonization race condition bug
   * Fixed recruitment dialog bug
   * Fixed unlocked vacant lot transition bug
-
 * Additional changes
   * More robust Game Mechanics save procedure
   * Detect language change and reload on heartbeat
@@ -200,7 +217,6 @@ The most requested feature gets implemented in the next release (usually).
 * Bug fixes
   * Fixed uninstall bug
   * Fixed Game Mechanics "Add" button functionality
-  
 * Additional changes
   * Added "Delete all" button for messages
   * Several UI fixes

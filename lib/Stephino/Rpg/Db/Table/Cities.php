@@ -168,7 +168,9 @@ class Stephino_Rpg_Db_Table_Cities extends Stephino_Rpg_Db_Table {
     `" . self::COL_CITY_METRIC_STORAGE . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_CITY_METRIC_POPULATION . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_CITY_METRIC_SATISFACTION . "` decimal(24,4) UNSIGNED NOT NULL DEFAULT '0',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_CITY_USER_ID . "` (`" . self::COL_CITY_USER_ID . "`), 
+    KEY `" . self::COL_CITY_ISLAND_ID . "` (`" . self::COL_CITY_ISLAND_ID . "`)
 );";
     }
     

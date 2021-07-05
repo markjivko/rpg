@@ -1,13 +1,13 @@
 # Copyright (c) 2021 Stephino
 # 
-# Robert Staughton Lynd | Knowledge is power only if man knows what facts not to bother with.
+# Brad Garrett | Humor is healing.
 # 
 # Distributed under the GNU General Public License v3 or later.
 msgid ""
 msgstr ""
-"Project-Id-Version: Stephino Rpg v.0.3.9\n"
-"POT-Creation-Date: 2021-06-20 08:08:11+00:00\n"
-"PO-Revision-Date: 2021-06-20 08:08:11+00:00\n"
+"Project-Id-Version: Stephino Rpg v.0.4.1\n"
+"POT-Creation-Date: 2021-07-05 06:40:36+00:00\n"
+"PO-Revision-Date: 2021-07-05 06:40:36+00:00\n"
 "Last-Translator: Stephino\n"
 "Language-Team: Stephino\n"
 "MIME-Version: 1.0\n"
@@ -179,8 +179,8 @@ msgstr ""
 
 #: lib/Stephino/Rpg/Db/Model/Convoys.php:32
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:172
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:193
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:250
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:194
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:251
 #@ stephino-rpg
 msgid "Invalid challenge type"
 msgstr ""
@@ -200,8 +200,8 @@ msgstr ""
 
 #: lib/Stephino/Rpg/Db/Model/Convoys.php:51
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:167
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:172
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:245
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:173
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:246
 #@ stephino-rpg
 msgid "Challenge is in progress..."
 msgstr ""
@@ -1156,9 +1156,9 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:91
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:153
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:37
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:125
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:162
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:231
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:126
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:163
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:232
 #@ stephino-rpg
 msgid "This feature is not available"
 msgstr ""
@@ -1168,9 +1168,9 @@ msgstr ""
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:162
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/User.php:79
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:51
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:130
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:167
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:240
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:131
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:168
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:241
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:150
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:202
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:284
@@ -1187,13 +1187,13 @@ msgid "Image is missing"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:177
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:255
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:256
 #@ stephino-rpg
 msgid "Opponent not found"
 msgstr ""
 
 #: lib/Stephino/Rpg/Renderer/Ajax/Action/Sentry.php:182
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:260
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:261
 #@ stephino-rpg
 msgid "You cannot fight yourself"
 msgstr ""
@@ -1909,25 +1909,25 @@ msgstr ""
 msgid "Modifiers"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:68
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:67
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:59
 #: lib/Stephino/Rpg/Renderer/Ajax/Dialog/User.php:463
 #@ stephino-rpg
 msgid "User not found"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:113
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:114
 #@ stephino-rpg
 msgid "Details"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:145
-#: ui/tpl/dialogs/sentry/sentry-info.php:32
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:146
+#: ui/tpl/dialogs/sentry/sentry-info.php:33
 #@ stephino-rpg
 msgid "Customize"
 msgstr ""
 
-#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:269
+#: lib/Stephino/Rpg/Renderer/Ajax/Dialog/Sentry.php:270
 #@ stephino-rpg
 msgid "Challenge"
 msgstr ""
@@ -2407,44 +2407,76 @@ msgstr ""
 msgid "Free"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:180 lib/Stephino/Rpg/WordPress.php:238
+#: lib/Stephino/Rpg/WordPress/RestApi.php:190
+#@ stephino-rpg
+msgid "Too many new accounts"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress/RestApi.php:216
+#@ stephino-rpg
+msgid "Could not create new account"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress/RestApi.php:240
+#@ stephino-rpg
+msgid "Please re-enter your password"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress/RestApi.php:251
+#, php-format
+#@ stephino-rpg
+msgid "Welcome to %s!"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress/RestApi.php:252
+#, php-format
+#@ stephino-rpg
+msgid "Welcome back to %s!"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress/RestApi.php:256
+#@ stephino-rpg
+msgid "Please sign in"
+msgstr ""
+
+#: lib/Stephino/Rpg/WordPress.php:181 lib/Stephino/Rpg/WordPress.php:239
 #@ stephino-rpg
 msgid "Play"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:189 lib/Stephino/Rpg/WordPress.php:190
-#: lib/Stephino/Rpg/WordPress.php:246 ui/tpl/wordpress/wp-dashboard.php:27
+#: lib/Stephino/Rpg/WordPress.php:190 lib/Stephino/Rpg/WordPress.php:191
+#: lib/Stephino/Rpg/WordPress.php:247 ui/tpl/wordpress/wp-dashboard.php:27
 #@ stephino-rpg
 msgid "Dashboard"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:199 lib/Stephino/Rpg/WordPress.php:200
-#: lib/Stephino/Rpg/WordPress.php:254 ui/tpl/wordpress/wp-themes.php:30
+#: lib/Stephino/Rpg/WordPress.php:200 lib/Stephino/Rpg/WordPress.php:201
+#: lib/Stephino/Rpg/WordPress.php:255 ui/tpl/wordpress/wp-themes.php:30
 #@ stephino-rpg
 msgid "Themes"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:309
+#: lib/Stephino/Rpg/WordPress.php:310
 #, php-format
 #@ stephino-rpg
 msgid "Upgrade Pro to version %s"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:310
-#: ui/tpl/dialogs/settings/settings-info.php:223
-#: ui/tpl/dialogs/settings/settings-info.php:235
+#: lib/Stephino/Rpg/WordPress.php:311
+#: ui/tpl/dialogs/settings/settings-info.php:225
+#: ui/tpl/dialogs/settings/settings-info.php:237
 #: ui/tpl/wordpress/wp-dashboard.php:125 ui/tpl/wordpress/wp-notice.php:49
 #: ui/tpl/wordpress/wp-options.php:46
 #@ stephino-rpg
 msgid "Unlock Game"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:351
+#: lib/Stephino/Rpg/WordPress.php:352
 #@ stephino-rpg
 msgid "Log In"
 msgstr ""
 
-#: lib/Stephino/Rpg/WordPress.php:352
+#: lib/Stephino/Rpg/WordPress.php:353
 #@ stephino-rpg
 msgid "or"
 msgstr ""
@@ -5464,14 +5496,14 @@ msgid "Activate premium modifier"
 msgstr ""
 
 #: ui/tpl/dialogs/premium/premium-modifiers.php:279
-#: ui/tpl/dialogs/settings/settings-info.php:247
+#: ui/tpl/dialogs/settings/settings-info.php:249
 #@ stephino-rpg
 msgid "Install this WordPress plugin for free and host your own game!"
 msgstr ""
 
 #: ui/tpl/dialogs/premium/premium-modifiers.php:282
-#: ui/tpl/dialogs/settings/settings-info.php:246
-#: ui/tpl/dialogs/settings/settings-info.php:252
+#: ui/tpl/dialogs/settings/settings-info.php:248
+#: ui/tpl/dialogs/settings/settings-info.php:254
 #@ stephino-rpg
 msgid "Free Install"
 msgstr ""
@@ -5518,15 +5550,15 @@ msgstr ""
 
 #: ui/tpl/dialogs/sentry/sentry-challenge-list.php:57
 #: ui/tpl/dialogs/sentry/sentry-challenge-prepare.php:73
-#: ui/tpl/dialogs/sentry/sentry-info.php:81
+#: ui/tpl/dialogs/sentry/sentry-info.php:114
 #@ stephino-rpg
 msgid "Chance of success"
 msgstr ""
 
 #: ui/tpl/dialogs/sentry/sentry-challenge-list.php:76
 #: ui/tpl/dialogs/sentry/sentry-challenge-prepare.php:157
-#: ui/tpl/dialogs/sentry/sentry-info.php:142
-#: ui/tpl/dialogs/sentry/sentry-info.php:151
+#: ui/tpl/dialogs/sentry/sentry-info.php:175
+#: ui/tpl/dialogs/sentry/sentry-info.php:184
 #@ stephino-rpg
 msgid "Fight"
 msgstr ""
@@ -5558,17 +5590,17 @@ msgstr ""
 msgid "Cost of challenge"
 msgstr ""
 
-#: ui/tpl/dialogs/sentry/sentry-info.php:119
+#: ui/tpl/dialogs/sentry/sentry-info.php:152
 #@ stephino-rpg
 msgid "Returning home"
 msgstr ""
 
-#: ui/tpl/dialogs/sentry/sentry-info.php:120
+#: ui/tpl/dialogs/sentry/sentry-info.php:153
 #@ stephino-rpg
 msgid "Attacking"
 msgstr ""
 
-#: ui/tpl/dialogs/sentry/sentry-info.php:158
+#: ui/tpl/dialogs/sentry/sentry-info.php:191
 #@ stephino-rpg
 msgid "Not back from mission yet"
 msgstr ""
@@ -5673,44 +5705,44 @@ msgstr ""
 msgid "My account"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:163
+#: ui/tpl/dialogs/settings/settings-info.php:164
 #@ stephino-rpg
 msgid "Log Out"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:167
+#: ui/tpl/dialogs/settings/settings-info.php:169
 #@ stephino-rpg
 msgid "Delete account"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:178
+#: ui/tpl/dialogs/settings/settings-info.php:180
 #@ stephino-rpg
 msgid "My rules"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:180
-#: ui/tpl/dialogs/settings/settings-info.php:204
+#: ui/tpl/dialogs/settings/settings-info.php:182
+#: ui/tpl/dialogs/settings/settings-info.php:206
 #@ stephino-rpg
 msgid "demo"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:202
+#: ui/tpl/dialogs/settings/settings-info.php:204
 #@ stephino-rpg
 msgid "Console"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:208
+#: ui/tpl/dialogs/settings/settings-info.php:210
 #, php-format
 #@ stephino-rpg
 msgid "Show the in-game console %s"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:213
+#: ui/tpl/dialogs/settings/settings-info.php:215
 #@ stephino-rpg
 msgid "Command Line Interface"
 msgstr ""
 
-#: ui/tpl/dialogs/settings/settings-info.php:226
+#: ui/tpl/dialogs/settings/settings-info.php:228
 #, php-format
 #@ stephino-rpg
 msgid "Buy %s to unlock the Game Mechanics, enable PayPal micro-transactions and more!"

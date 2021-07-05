@@ -158,16 +158,16 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * Sentry: reward in Gems
      * 
-     * @var int|null
+     * @var int
      */
-    protected $_sentryReward = null;
+    protected $_sentryReward = 200;
     
     /**
      * Sentry: maximum level; 0 for no limit
      * 
      * @var int
      */
-    protected $_sentryMaxLevel = 0;
+    protected $_sentryMaxLevel = 50;
     
     /**
      * Sentry: reward polynomial factor
@@ -179,16 +179,16 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * Sentry: loot in Research Points
      * 
-     * @var int|null
+     * @var int
      */
-    protected $_sentryLootResearch = null;
+    protected $_sentryLootResearch = 250;
     
     /**
      * Sentry: loot in Gold
      *  
-     * @var int|null
+     * @var int
      */
-    protected $_sentryLootGold = null;
+    protected $_sentryLootGold = 2500;
     
     /**
      * Sentry: loot polynomial factor
@@ -200,16 +200,16 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * Sentry: challenge cost in Research Points
      * 
-     * @var int|null
+     * @var int
      */
-    protected $_sentryCostResearch = null;
+    protected $_sentryCostResearch = 50;
     
     /**
      * Sentry: challenge cost in Gold
 
-     * @var int|null
+     * @var int
      */
-    protected $_sentryCostGold = null;
+    protected $_sentryCostGold = 500;
     
     /**
      * Sentry: challenge cost polynomial factor
@@ -223,7 +223,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * 
      * @var int
      */
-    protected $_sentryCostTime = 1;
+    protected $_sentryCostTime = 7;
     
     /**
      * Sentry: challenge time polynomial factor
@@ -329,6 +329,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @var int
      */
     protected $_messageMaxAge = 30;
+    
+    /**
+     * Rest API: New accounts limit
+     * 
+     * @var int
+     */
+    protected $_restAuthHourly = 20;
     
     /**
      * Points earned for a defeat
@@ -940,7 +947,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return boolean {x}
      */
     public function getSentryEnabled() {
-        return (boolean) $this->_sentryEnabled;
+        return null === $this->_sentryEnabled ? true : (boolean) $this->_sentryEnabled;
     }
     
     /**
@@ -966,7 +973,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      *
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries
-     * @default 6
+     * @default 20
      * @ref 1,99
      * @return int {x}: Over-Power Yield
      */
@@ -975,13 +982,13 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     }
     
     /**
-     * Set the "Sentry OP Penalty" parameter
+     * Set the "Sentry OP Yield" parameter
      * 
-     * @param int $opPenalty OP Penalty
+     * @param int $opYyeld OP Yield
      * @return Stephino_Rpg_Config_Core
      */
-    public function setSentryOPYield($opPenalty) {
-        $this->_sentryOPYield = (null === $opPenalty ? 20 : intval($opPenalty));
+    public function setSentryOPYield($opYyeld) {
+        $this->_sentryOPYield = (null === $opYyeld ? 20 : intval($opYyeld));
 
         // Minimum and maximum
         if ($this->_sentryOPYield < 1) {
@@ -1002,7 +1009,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @placeholder core.configSentriesName,Sentries
      * @ref 0,500
      * @default 50
-     * @return int|null {x}: max. level
+     * @return int {x}: max. level
      */
     public function getSentryMaxLevel() {
         return (null === $this->_sentryMaxLevel ? 50 : $this->_sentryMaxLevel);
@@ -1015,7 +1022,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryMaxLevel($sentryMaxLevel) {
-        $this->_sentryMaxLevel = (null === $sentryMaxLevel ? 0 : intval($sentryMaxLevel));
+        $this->_sentryMaxLevel = (null === $sentryMaxLevel ? 50 : intval($sentryMaxLevel));
 
         // Minimum
         if ($this->_sentryMaxLevel < 0) {
@@ -1034,10 +1041,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries,core.resourceGemName,Gems
      * @ref 0
-     * @return int|null {x}: reward in {x2}
+     * @default 200
+     * @return int {x}: reward in {x2}
      */
     public function getSentryReward() {
-        return $this->_sentryReward;
+        return null === $this->_sentryReward ? 200 : $this->_sentryReward;
     }
     
     /**
@@ -1047,10 +1055,10 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryReward($sentryReward) {
-        $this->_sentryReward = (null === $sentryReward ? null : intval($sentryReward));
+        $this->_sentryReward = (null === $sentryReward ? 200 : intval($sentryReward));
 
         // Minimum
-        if (null !== $this->_sentryReward && $this->_sentryReward < 0) {
+        if ($this->_sentryReward < 0) {
             $this->_sentryReward = 0;
         }
         
@@ -1086,10 +1094,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries,core.resourceResearchName,Research points
      * @ref 0
-     * @return int|null {x}: loot in {x2}
+     * @default 250
+     * @return int {x}: loot in {x2}
      */
     public function getSentryLootResearch() {
-        return $this->_sentryLootResearch;
+        return null === $this->_sentryLootResearch ? 250 : $this->_sentryLootResearch;
     }
     
     /**
@@ -1099,10 +1108,10 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryLootResearch($sentryLootResearch) {
-        $this->_sentryLootResearch = (null === $sentryLootResearch ? null : intval($sentryLootResearch));
+        $this->_sentryLootResearch = (null === $sentryLootResearch ? 250 : intval($sentryLootResearch));
 
         // Minimum
-        if (null !== $this->_sentryLootResearch && $this->_sentryLootResearch < 0) {
+        if ($this->_sentryLootResearch < 0) {
             $this->_sentryLootResearch = 0;
         }
         
@@ -1115,10 +1124,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries,core.resourceGoldName,Gold
      * @ref 0
-     * @return int|null {x}: loot in {x2}
+     * @default 2500
+     * @return int {x}: loot in {x2}
      */
     public function getSentryLootGold() {
-        return $this->_sentryLootGold;
+        return null === $this->_sentryLootGold ? 2500 : $this->_sentryLootGold;
     }
     
     /**
@@ -1128,10 +1138,10 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryLootGold($sentryLootGold) {
-        $this->_sentryLootGold = (null === $sentryLootGold ? null : intval($sentryLootGold));
+        $this->_sentryLootGold = (null === $sentryLootGold ? 2500 : intval($sentryLootGold));
 
         // Minimum
-        if (null !== $this->_sentryLootGold && $this->_sentryLootGold < 0) {
+        if ($this->_sentryLootGold < 0) {
             $this->_sentryLootGold = 0;
         }
         
@@ -1167,10 +1177,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries,core.resourceResearchName,Research points
      * @ref 0
-     * @return int|null {x}: cost in {x2}
+     * @default 50
+     * @return int {x}: cost in {x2}
      */
     public function getSentryCostResearch() {
-        return $this->_sentryCostResearch;
+        return null === $this->_sentryCostResearch ? 50 : $this->_sentryCostResearch;
     }
     
     /**
@@ -1180,10 +1191,10 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryCostResearch($sentryCostResearch) {
-        $this->_sentryCostResearch = (null === $sentryCostResearch ? null : intval($sentryCostResearch));
+        $this->_sentryCostResearch = (null === $sentryCostResearch ? 50 : intval($sentryCostResearch));
 
         // Minimum
-        if (null !== $this->_sentryCostResearch && $this->_sentryCostResearch < 0) {
+        if ($this->_sentryCostResearch < 0) {
             $this->_sentryCostResearch = 0;
         }
         
@@ -1196,10 +1207,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries,core.resourceGoldName,Gold
      * @ref 0
-     * @return int|null {x}: cost in {x2}
+     * @default 500
+     * @return int {x}: cost in {x2}
      */
     public function getSentryCostGold() {
-        return $this->_sentryCostGold;
+        return null === $this->_sentryCostGold ? 500 : $this->_sentryCostGold;
     }
     
     /**
@@ -1209,10 +1221,10 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryCostGold($sentryCostGold) {
-        $this->_sentryCostGold = (null === $sentryCostGold ? null : intval($sentryCostGold));
+        $this->_sentryCostGold = (null === $sentryCostGold ? 500 : intval($sentryCostGold));
 
         // Minimum
-        if (null !== $this->_sentryCostGold && $this->_sentryCostGold < 0) {
+        if ($this->_sentryCostGold < 0) {
             $this->_sentryCostGold = 0;
         }
         
@@ -1248,11 +1260,11 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @depends sentryEnabled
      * @placeholder core.configSentriesName,Sentries
      * @ref 1
-     * @default 1
+     * @default 7
      * @return int {x}: challenge time
      */
     public function getSentryCostTime() {
-        return (null === $this->_sentryCostTime ? 1 : $this->_sentryCostTime);
+        return (null === $this->_sentryCostTime ? 7 : $this->_sentryCostTime);
     }
     
     /**
@@ -1262,7 +1274,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
      * @return Stephino_Rpg_Config_Core
      */
     public function setSentryCostTime($sentryCostTime) {
-        $this->_sentryCostTime = (null === $sentryCostTime ? 1 : intval($sentryCostTime));
+        $this->_sentryCostTime = (null === $sentryCostTime ? 7 : intval($sentryCostTime));
 
         // Minimum
         if ($this->_sentryCostTime < 1) {
@@ -1507,7 +1519,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     
     /**
      * Enable the chat room so users can interact in real-time with <b>Google Firebase</b><br/><br/>
-     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.3.9&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
+     * <a class="info thickbox" href="/wp-content/plugins/stephino-rpg/ui/help/firebase-rules.html?ver=0.4.1&TB_iframe=true&width=980&height=800" target="_blank"><b>&#x1f449; Getting Started</b></a>
      * 
      * @sensitive true
      * @return boolean Chat Room
@@ -1686,6 +1698,38 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
         }
         if ($this->_messageMaxAge > 365) {
             $this->_messageMaxAge = 365;
+        }
+        
+        return $this;
+    }
+    
+    /**
+     * Limit the number of accounts that can be created from the same IP in one hour<br/>
+     * Used for REST API clients
+     * 
+     * @default 20
+     * @ref 1,100
+     * @return int Rest API: New accounts limit
+     */
+    public function getRestAuthHourly() {
+        return null === $this->_restAuthHourly ? 20 : $this->_restAuthHourly;
+    }
+    
+    /**
+     * Set the "Rest Auth Hourly" parameter
+     * 
+     * @param int|null $restAuthHourly Rest Auth Hourly
+     * @return Stephino_Rpg_Config_Core
+     */
+    public function setRestAuthHourly($restAuthHourly) {
+        $this->_restAuthHourly = (null === $restAuthHourly ? 20 : intval($restAuthHourly));
+        
+        // Minimum and maximum
+        if ($this->_restAuthHourly < 1) {
+            $this->_restAuthHourly = 1;
+        }
+        if ($this->_restAuthHourly > 100) {
+            $this->_restAuthHourly = 100;
         }
         
         return $this;
@@ -3129,7 +3173,7 @@ class Stephino_Rpg_Config_Core extends Stephino_Rpg_Config_Item_Single {
     /**
      * Game masters can promote and demote other players
      * 
-     * @section Game masters
+     * @section Game Masters
      * @return boolean Promote/demote
      */
     public function getGmPromote() {

@@ -12,6 +12,7 @@
 !defined('STEPHINO_RPG_ROOT') && exit();
 
 /* @var $userData array */
+/* @var $opponentData array|null */
 /* @var $sentryOwnerData array */
 /* @var $sentryChallenge string|null */
 /* @var $sentryConvoy array|null */
@@ -32,23 +33,55 @@ $sentryChallengeIcons   = Stephino_Rpg_Db::get()->modelSentries()->getIcons();
                 <span><?php echo esc_html__('Customize', 'stephino-rpg');?></span>
             </button>
         <?php endif;?>
-        <div data-role="sentry-frame"
-            data-effect="sentryBackground" 
-            data-effect-args="<?php echo (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_ID];?>,<?php echo (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_VERSION];?>"></div>
+        <?php if (is_array($opponentData)):?>
+            <div 
+                data-effect="sentryVs" 
+                data-effect-args="<?php 
+                    echo implode(',', array_map('intval', array(
+                        $userData[Stephino_Rpg_Db_Table_Users::COL_ID],
+                        $userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_VERSION],
+                        $opponentData[Stephino_Rpg_Db_Table_Users::COL_ID],
+                        $opponentData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_VERSION],
+                        0
+                    )));
+                ?>"></div>
+        <?php else:?>
+            <div data-role="sentry-frame"
+                data-effect="sentryBackground" 
+                data-effect-args="<?php echo (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_ID];?>,<?php echo (int) $sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_VERSION];?>"></div>
+        <?php endif;?>
     </div>
     <div class="row align-items-center">
         <h5 class="d-flex justify-content-center">
             <?php if ($sentryOwn):?>
-            <div class="col-12 col-md-6">
-                <input 
-                    type="text" 
-                    autocomplete="off"
-                    class="form-control text-center" 
-                    data-change="sentryRename" 
-                    data-effect="charCounter"
-                    maxlength="<?php echo Stephino_Rpg_Db_Model_Sentries::MAX_LENGTH_NAME;?>"
-                    value="<?php echo esc_attr($sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME]); ?>" />
-            </div>
+                <?php if (is_array($opponentData)):?>
+                    <h5>
+                        <?php echo esc_html($userData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME]);?> &bullet;
+                        <span
+                            data-click="userViewProfile"
+                            data-click-args="<?php echo (int) $userData[Stephino_Rpg_Db_Table_Users::COL_ID];?>">
+                            <b><?php echo Stephino_Rpg_Utils_Lingo::getUserName($userData);?></b>
+                        </span>
+                        vs.
+                        <?php echo esc_html($opponentData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME]);?> &bullet;
+                        <span
+                            data-click="userViewProfile"
+                            data-click-args="<?php echo (int) $opponentData[Stephino_Rpg_Db_Table_Users::COL_ID];?>">
+                            <b><?php echo Stephino_Rpg_Utils_Lingo::getUserName($opponentData);?></b>
+                        </span>
+                    </h5>
+                <?php else:?>
+                    <div class="col-12 col-md-6">
+                        <input 
+                            type="text" 
+                            autocomplete="off"
+                            class="form-control text-center" 
+                            data-change="sentryRename" 
+                            data-effect="charCounter"
+                            maxlength="<?php echo Stephino_Rpg_Db_Model_Sentries::MAX_LENGTH_NAME;?>"
+                            value="<?php echo esc_attr($sentryOwnerData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_NAME]); ?>" />
+                    </div>
+                <?php endif;?>
             <?php else:?>
                 <span 
                     data-effect="help"

@@ -80,7 +80,10 @@ class Stephino_Rpg_Db_Table_Buildings extends Stephino_Rpg_Db_Table {
     `" . self::COL_BUILDING_CONFIG_ID . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_BUILDING_LEVEL . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_BUILDING_WORKERS . "` bigint(20) UNSIGNED NOT NULL DEFAULT '0',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_BUILDING_USER_ID . "` (`" . self::COL_BUILDING_USER_ID . "`), 
+    KEY `" . self::COL_BUILDING_CITY_ID . "` (`" . self::COL_BUILDING_CITY_ID . "`), 
+    KEY `" . self::COL_BUILDING_ISLAND_ID . "` (`" . self::COL_BUILDING_ISLAND_ID . "`)
 );";
     }
     

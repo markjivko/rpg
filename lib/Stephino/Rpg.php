@@ -22,13 +22,13 @@ class Stephino_Rpg {
     const PLUGIN_VARNAME          = 'stephino_rpg';
     
     // Plugin version
-    const PLUGIN_VERSION          = '0.3.9';
+    const PLUGIN_VERSION          = '0.4.1';
     
     // Pro Plugin minimum compatible version
     const PLUGIN_VERSION_PRO      = '0.2.1';
     
     // DataBase version
-    const PLUGIN_VERSION_DB       = '0.3.0';
+    const PLUGIN_VERSION_DB       = '0.3.2';
     
     // Firebase version
     const PLUGIN_VERSION_FIREBASE = '8.4.3';

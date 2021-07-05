@@ -179,9 +179,9 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     const COL_USER_SENTRY_VERSION = 'user_sentry_version';
     
     /**
-     * Sentry is on a challenge
+     * Sentry is on a challenge with this user ID or 0 for inactive sentry
      * 
-     * @var int 0|1, default 0
+     * @var int
      */
     const COL_USER_SENTRY_ACTIVE = 'user_sentry_active';
     
@@ -222,7 +222,7 @@ class Stephino_Rpg_Db_Table_Users extends Stephino_Rpg_Db_Table {
     `" . self::COL_USER_SENTRY_LEVEL_DEFENSE . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
     `" . self::COL_USER_SENTRY_LEVEL_LOOTING . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
     `" . self::COL_USER_SENTRY_VERSION . "` int(11) UNSIGNED NOT NULL DEFAULT '1',
-    `" . self::COL_USER_SENTRY_ACTIVE . "` tinyint(1) UNSIGNED NOT NULL DEFAULT '0',
+    `" . self::COL_USER_SENTRY_ACTIVE . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
 );";
     }

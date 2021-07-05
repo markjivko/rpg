@@ -184,7 +184,8 @@ class Stephino_Rpg_Db_Table_Ptfs extends Stephino_Rpg_Db_Table {
     `" . self::COL_PTF_RATING_COUNT . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_PTF_VISIBILITY . "` char(1) NOT NULL DEFAULT '" . self::PTF_VISIBILITY_PRIVATE . "',
     `" . self::COL_PTF_REVIEW . "` varchar(3) NOT NULL DEFAULT '" . self::PTF_REVIEW_APPROVED . "',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_PTF_USER_ID . "` (`" . self::COL_PTF_USER_ID . "`)
 );";
     }
     

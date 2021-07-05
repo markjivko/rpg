@@ -38,7 +38,7 @@ class Stephino_Rpg_Renderer_Ajax_Js {
         if (Stephino_Rpg_Renderer_Ajax::VIEW_PTF == $view) {
             return self::_getGamePtf();
         }
-            
+        
         // Prepare the result
         $result = '';
 

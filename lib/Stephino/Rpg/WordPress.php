@@ -55,7 +55,8 @@ class Stephino_Rpg_WordPress {
             ->_metaChages()
             ->_registerHooks()
             ->_registerRobotsCron()
-            ->_registerWidgets();
+            ->_registerWidgets()
+            ->_registerRestApi();
     }
     
     /**
@@ -441,6 +442,19 @@ class Stephino_Rpg_WordPress {
 
             // Define the shortcode
             add_shortcode('stephino-rpg', $gameRender);
+        });
+        
+        return $this;
+    }
+    
+    /**
+     * Register the REST API endpoints for this plugin
+     * 
+     * @return Stephino_Rpg_WordPress
+     */
+    protected function _registerRestApi() {
+        add_action('rest_api_init', function () {
+            (new Stephino_Rpg_WordPress_RestApi())->register_routes();
         });
         
         return $this;

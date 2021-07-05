@@ -87,7 +87,10 @@ class Stephino_Rpg_Db_Table_Entities extends Stephino_Rpg_Db_Table {
     `" . self::COL_ENTITY_TYPE . "` char(1) NOT NULL DEFAULT '" . self::ENTITY_TYPE_UNIT . "',
     `" . self::COL_ENTITY_CONFIG_ID . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_ENTITY_COUNT . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_ENTITY_USER_ID . "` (`" . self::COL_ENTITY_USER_ID . "`),
+    KEY `" . self::COL_ENTITY_CITY_ID . "` (`" . self::COL_ENTITY_CITY_ID . "`), 
+    KEY `" . self::COL_ENTITY_ISLAND_ID . "` (`" . self::COL_ENTITY_ISLAND_ID . "`)
 );";
     }
     

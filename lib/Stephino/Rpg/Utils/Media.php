@@ -268,7 +268,7 @@ class Stephino_Rpg_Utils_Media {
      * Get the PWA app version
      * 
      * @boolean $includeProVersion (optional) Include the Pro plugin version; default <b>false</b>
-     * @boolean $includeHash       (optional) Include 12 characters last change hash; default <b>truee</b>
+     * @boolean $includeHash       (optional) Include 12 characters last change hash; default <b>true</b>
      * @return string
      */
     public static function getPwaVersion($includeProVersion = false, $includeHash = true) {

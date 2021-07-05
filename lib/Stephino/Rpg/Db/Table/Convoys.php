@@ -149,7 +149,11 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
     `" . self::COL_CONVOY_TIME . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_CONVOY_RETREAT_TIME . "` int(11) UNSIGNED NOT NULL DEFAULT '0',
     `" . self::COL_CONVOY_PAYLOAD . "` text NOT NULL DEFAULT '',
-    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`)
+    UNIQUE KEY `" . self::COL_ID . "` (`" . self::COL_ID . "`), 
+    KEY `" . self::COL_CONVOY_FROM_USER_ID . "` (`" . self::COL_CONVOY_FROM_USER_ID . "`), 
+    KEY `" . self::COL_CONVOY_TO_USER_ID . "` (`" . self::COL_CONVOY_TO_USER_ID . "`), 
+    KEY `" . self::COL_CONVOY_FROM_CITY_ID . "` (`" . self::COL_CONVOY_FROM_CITY_ID . "`), 
+    KEY `" . self::COL_CONVOY_TO_CITY_ID . "` (`" . self::COL_CONVOY_TO_CITY_ID . "`)
 );";
     }
     
@@ -289,7 +293,7 @@ class Stephino_Rpg_Db_Table_Convoys extends Stephino_Rpg_Db_Table {
         // Mark the sentry as active (challenge in progress)
         $this->getDb()->tableUsers()->updateById(
             array(
-                Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE => 1
+                Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE => abs((int) $toUserId)
             ), 
             $fromUserId
         );

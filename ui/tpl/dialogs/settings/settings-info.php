@@ -159,9 +159,11 @@
         <button class="btn btn-info w-100" data-click="userViewProfile" data-click-args="<?php echo Stephino_Rpg_TimeLapse::get()->userId();?>">
             <span><?php echo esc_html__('Profile', 'stephino-rpg');?></span>
         </button>
-        <button class="btn btn-danger w-100" data-click="settingsLogOut">
-            <span><?php echo esc_html__('Log Out', 'stephino-rpg');?></span>
-        </button>
+        <?php if (!isset($_SERVER['HTTP_USER_AGENT']) || !preg_match('%\bstephino\-rpg\b%', $_SERVER['HTTP_USER_AGENT'])):?>
+            <button class="btn btn-danger w-100" data-click="settingsLogOut">
+                <span><?php echo esc_html__('Log Out', 'stephino-rpg');?></span>
+            </button>
+        <?php endif;?>
         <?php if (!Stephino_Rpg_Cache_User::get()->isGameAdmin()):?>
             <button class="btn btn-info w-100" data-click="settingsDeleteAccount" data-click-multi="true">
                 <span><?php echo esc_html__('Delete account', 'stephino-rpg');?></span>

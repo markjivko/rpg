@@ -47,7 +47,7 @@ class Stephino_Rpg_Db_Model_Convoys extends Stephino_Rpg_Db_Model {
         }
         
         // Sentry already in a challenge
-        if (1 === (int) $fromUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
+        if (0 !== (int) $fromUserData[Stephino_Rpg_Db_Table_Users::COL_USER_SENTRY_ACTIVE]) {
             throw new Exception(__('Challenge is in progress...', 'stephino-rpg'));
         }
         
