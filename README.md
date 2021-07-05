@@ -26,7 +26,7 @@ Real-time support and feedback are available on [Discord](https://discord.gg/32g
 
 We strongly believe in the right to be forgotten so when you're done testing the game just click on the "Delete Account" button from the game settings.
 
-A free Desktop Client is available [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/Stephino/RPG-Client-Desktop).
+A free Desktop Client is available on [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/Stephino/RPG-Client-Desktop).
 
 ### Artificial Intelligence
 
