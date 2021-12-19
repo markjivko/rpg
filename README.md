@@ -1,4 +1,4 @@
-# RPG (Game)
+# Strategy Role-Playing Game
 
 Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on WordPress.
 
