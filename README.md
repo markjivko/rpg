@@ -50,7 +50,7 @@ Design your own platformer mini-levels and play games created by others to earn 
 The game can be played on any mobile device in landscape mode and on the desktop.
 It functions as a progressive web application, handling offline mode and file requests in a way that mimics truly native applications.
 
-### Optimized CPU usag
+### Optimized CPU usage
 All game resource and queue changes, convoy updates and robot actions are computed on-demand with time-lapse procedures that are optimized for speed and memory usage.
 Database interactions are optimized with minimal and fast select queries and multi-insert and multi-update queries in order provide a seamless real-time experience for all players.
 Optional performance optimizations are available in the Game Mechanics.
