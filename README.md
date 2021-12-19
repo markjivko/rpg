@@ -1,16 +1,10 @@
-<p align="center">
-    <a href="https://wordpress.org/plugins/stephino-rpg">
-        <img src="https://repository-images.githubusercontent.com/330349397/837e4b00-d982-11eb-9f6d-ad49da7a5665"/>
-    </a>
-</p>
+# RPG (Game)
 
-# Stephino RPG (Game)
-
-Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on [WordPress](https://wordpress.org/plugins/stephino-rpg).
+Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on WordPress.
 
 ## Description
 
-Stephino RPG is a browser-based multi-player strategy role-playing game.
+RPG is a browser-based multi-player strategy role-playing game.
 
 The main goal is to expand your empire and complete research activities in order to uncover the history of your species.
 
@@ -18,11 +12,7 @@ You can form cities, attack and spy on other players and robots, send resources 
 
 Create your own platformer mini-games and play games created by others to earn rewards.
 
-### Demo and Support
-
-You can [access the Demo](https://stephino.com) by simply logging in with a Google or Twitter account.
-
-Real-time support and feedback are available on [Discord](https://discord.gg/32gFsSm).
+### Desktop version
 
 We strongly believe in the right to be forgotten so when you're done testing the game just click on the "Delete Account" button from the game settings.
 
@@ -51,7 +41,7 @@ System messages are translated just-in-time, meaning users can switch their lang
 Game language settings are separate from your WordPress language options.
 
 ### WordPress Multi-site read
-You can enable Stephino RPG on your entire network and run different games on each sub-site, similar to the concept of "realms". 
+You can enable RPG on your entire network and run different games on each sub-site, similar to the concept of "realms". 
 
 ### Platformer
 Design your own platformer mini-levels and play games created by others to earn gems!
@@ -112,10 +102,3 @@ For more information and real-time support from other players, please head on to
 #### How do I embed this?
 You can use either the **[stephino-rpg]** shortcode or the **Stephino RPG** Gutenberg block anywhere you want.
 Unauthenticated players will be greeted with a login page.
-
-#### Where is the music?
-Since there is a 10MB upload limit on WordPress.org, the music and other assets such as video files and other effects have been moved to the PRO plugin.
-
-#### Where is the project roadmap?
-**Roadmaps are bad**. Instead, features are suggested and discussed on [Discord](https://discord.gg/32gFsSm). 
-The most requested feature gets implemented in the next release (usually).
