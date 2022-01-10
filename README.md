@@ -16,7 +16,7 @@ Create your own platformer mini-games and play games created by others to earn r
 
 We strongly believe in the right to be forgotten so when you're done testing the game just click on the "Delete Account" button from the game settings.
 
-A free Desktop Client is available on [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/Stephino/RPG-Client-Desktop).
+A free Desktop Client is available on [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/markjivko/RPG-Client-Desktop).
 
 ### Artificial Intelligence
 
@@ -97,8 +97,6 @@ Just follow the short tutorial and the advice of the **Upgrade Advisor**.
 The Codex is also available to learn more about how the game works (**Settings** > **Codex**).
 You can also click on the question mark (?) symbols to learn more.
 
-For more information and real-time support from other players, please head on to [Discord](https://discord.gg/32gFsSm).
-
 #### How do I embed this?
-You can use either the **[stephino-rpg]** shortcode or the **Stephino RPG** Gutenberg block anywhere you want.
+You can use either the **[rpg]** shortcode or the **Role-playing game** Gutenberg block anywhere you want.
 Unauthenticated players will be greeted with a login page.
