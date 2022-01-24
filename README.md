@@ -35,7 +35,7 @@ Robots can also perform military activities:
  * Estimate the best time for attack
  * Systematically attack other players
 
-### Internationalizatio
+### Internationalization
 Each player is free to choose their own language. 
 System messages are translated just-in-time, meaning users can switch their language at any time and the inbox gets translated as well.
 Game language settings are separate from your WordPress language options.
