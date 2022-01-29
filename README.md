@@ -1,5 +1,11 @@
 # Strategy Role-Playing Game
 
+<p align="center">
+    <a href="https://markjivko.com/fervoare/">
+        <img src="https://repository-images.githubusercontent.com/330349397/cd271d59-0f17-481a-879a-3c9cac1a9c4f"/>
+    </a>
+</p>
+
 Host a stunning browser-based multiplayer RPG (Role-Playing Game) for the first time ever on WordPress.
 
 ## Description
