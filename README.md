@@ -2,7 +2,7 @@
 
 <p align="center">
     <a href="https://www.youtube.com/watch?v=KABh8CwpSM4">
-        <img src="https://repository-images.githubusercontent.com/330349397/cd271d59-0f17-481a-879a-3c9cac1a9c4f"/>
+        <img src="https://repository-images.githubusercontent.com/330349397/487e2bad-8a02-4284-bf28-404ae273421f"/>
     </a>
 </p>
 
