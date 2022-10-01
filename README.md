@@ -22,7 +22,7 @@ Create your own platformer mini-games and play games created by others to earn r
 
 We strongly believe in the right to be forgotten so when you're done testing the game just click on the "Delete Account" button from the game settings.
 
-A free Desktop Client is available on [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/markjivko/RPG-Client-Desktop).
+A free Desktop Client is available on [Steam](https://store.steampowered.com/app/909060) and [GitHub](https://github.com/markjivko/rpg-Client-Desktop).
 
 ### Artificial Intelligence
 
