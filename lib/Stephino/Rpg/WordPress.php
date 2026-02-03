@@ -50,6 +50,9 @@ class Stephino_Rpg_WordPress {
      * Perform all the WordPress integration actions
      */
     protected function __construct() {
+        // Initialize upgrade routines
+        Stephino_Rpg_Upgrade::init();
+        
         $this->_registerAjax()
             ->_registerPages()
             ->_metaChages()
@@ -75,7 +78,7 @@ class Stephino_Rpg_WordPress {
                         remove_all_actions('admin_notices');
                         
                         // Prepare the PWA Manifest and shortcut icon
-                        echo '<link rel="manifest" id="stephino_rpg_manifest" />';
+                        echo '<link rel="manifest" id="wp_rpg_manifest" />';
                         echo '<link rel="shortcut icon" type="image/png" href="' . esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/' . Stephino_Rpg::FOLDER_UI_IMG . '/icon.png') . '" />';
                     }, 1);
 
