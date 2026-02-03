@@ -244,7 +244,7 @@ class Stephino_Rpg_Theme {
                     require $i18nPath;
 
                     // Reload the array
-                    $i18nData = $stephino_rpg_i18n;
+                    $i18nData = $wp_rpg_i18n;
                 }
             } else {
                 // Stored remotely for other themes
@@ -695,18 +695,18 @@ class Stephino_Rpg_Theme {
                 Stephino_Rpg_Utils_Lingo::setLocale($locale);
                 
                 // Reload the array
-                $stephino_rpg_i18n = null;
+                $wp_rpg_i18n = null;
                 require $i18nPath;
                 
                 // Export the values
-                if (is_array($stephino_rpg_i18n)) {
+                if (is_array($wp_rpg_i18n)) {
                     // Get the language code
                     $langCode = preg_replace('%_\w+$%i', '', $locale);
 
                     // Create the translations file
                     Stephino_Rpg_Utils_Folder::get()->fileSystem()->put_contents(
                         $destinationDir . '/'. self::FOLDER_I18N . '/config_' . $langCode . '.json',
-                        json_encode($stephino_rpg_i18n, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
+                        json_encode($wp_rpg_i18n, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES)
                     );
                 }
             }

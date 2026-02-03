@@ -74,7 +74,7 @@ class Stephino_Rpg_WordPress_RestApi extends WP_REST_Controller {
                     );
                 } catch (Exception $exc) {
                     $result = new WP_Error(
-                        'stephino_rpg_exc', 
+                        'wp_rpg_exc', 
                         $exc->getMessage(), 
                         array('status' => 400)
                     );
@@ -186,7 +186,7 @@ class Stephino_Rpg_WordPress_RestApi extends WP_REST_Controller {
                 // QoS: don't allow more than this number of new accounts from the same IP within 1 hour
                 if ($transientData[0] > Stephino_Rpg_Config::get()->core()->getRestAuthHourly()) {
                     $resultError = new WP_Error(
-                        'stephino_rpg_exc', 
+                        'wp_rpg_exc', 
                         __('Too many new accounts', 'stephino-rpg'), 
                         array('status' => 400)
                     );
@@ -212,7 +212,7 @@ class Stephino_Rpg_WordPress_RestApi extends WP_REST_Controller {
                 // Store the object accordingly
                 if ($userIdOrError instanceof WP_Error) {
                     $resultError = new WP_Error(
-                        'stephino_rpg_exc', 
+                        'wp_rpg_exc', 
                         __('Could not create new account', 'stephino-rpg'), 
                         array('status' => 400)
                     );
@@ -236,7 +236,7 @@ class Stephino_Rpg_WordPress_RestApi extends WP_REST_Controller {
                 } else {
                     $resultUser = false;
                     $resultError = new WP_Error(
-                        'stephino_rpg_exc', 
+                        'wp_rpg_exc', 
                         __('Please re-enter your password', 'stephino-rpg'), 
                         array('status' => 400)
                     );

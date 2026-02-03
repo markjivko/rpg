@@ -14,7 +14,7 @@
 /**
  * Array of configuration translations
  */
-$stephino_rpg_i18n = array(
+$wp_rpg_i18n = array(
     'core.description'                    => __('As you fight against other players for dominance over the resources of Mors and expand your empire, an archaeological expedition of planetary proportions is afoot. With each new technological finding you uncover bits and pieces of the true story of your origin and ultimately the dark secret that should have never been revealed.
 
 This RPG allows for infinite gameplay but it also has a finite storyline. Please don\'t reveal the ending to new players.', 'stephino-rpg'),

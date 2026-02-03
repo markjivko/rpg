@@ -338,7 +338,7 @@ class Stephino_Rpg_Renderer_Ajax_Html {
         // Add the inline script
         wp_add_inline_script(
             Stephino_Rpg::PLUGIN_SLUG, 
-            'var stephino_rpg_data = ' . json_encode(array(
+            'var wp_rpg_data = ' . json_encode(array(
                     'game_chat'      => $gameChatData,
                     'game_url'       => Stephino_Rpg_Utils_Media::getAdminUrl(),
                     'ajax_url'       => Stephino_Rpg_Utils_Media::getAdminUrl(true, false),
@@ -401,11 +401,11 @@ class Stephino_Rpg_Renderer_Ajax_Html {
                 Stephino_Rpg::PLUGIN_SLUG . '-script-game',
                 'document.addEventListener(\'DOMContentLoaded\', function() {'
                     . 'window.setTimeout(function() {window.location.reload();}, 7500);'
-                    . 'stephino_rpg_tools && stephino_rpg_tools.toast.show(' 
+                    . 'wp_rpg_tools && wp_rpg_tools.toast.show(' 
                         . json_encode(esc_html__('Internet connection lost', 'stephino-rpg')) 
                     . ', false);'
                     . 'window.setTimeout(function() {'
-                        . 'stephino_rpg_tools && stephino_rpg_tools.toast.show('
+                        . 'wp_rpg_tools && wp_rpg_tools.toast.show('
                             . json_encode(esc_html__('Retrying in 3 seconds...', 'stephino-rpg')) 
                         . ', false);}'
                     . ', 4500);'

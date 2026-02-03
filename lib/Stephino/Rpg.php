@@ -19,7 +19,7 @@ class Stephino_Rpg {
     const PLUGIN_NAME             = 'Stephino RPG';
     
     // Plugin variable name
-    const PLUGIN_VARNAME          = 'stephino_rpg';
+    const PLUGIN_VARNAME          = 'wp_rpg';
     
     // Plugin version
     const PLUGIN_VERSION          = '0.4.1';
@@ -49,7 +49,7 @@ class Stephino_Rpg {
     const PLUGIN_CRON_PUBLIC      = false;
     
     // Plugin cache key
-    const OPTION_CACHE            = 'stephino_rpg_cache';
+    const OPTION_CACHE            = 'wp_rpg_cache';
     
     // Folders
     const FOLDER_THEMES   = 'themes';
