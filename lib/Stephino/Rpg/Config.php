@@ -326,11 +326,11 @@ class Stephino_Rpg_Config {
         // Load language-specific labels
         if (null !== self::lang() && count($result)) {
             if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . Stephino_Rpg_Theme::THEME_DEFAULT . '/' . Stephino_Rpg_Theme::FILE_I18N)) {
-                $stephino_rpg_i18n = null;
+                $wp_rpg_i18n = null;
                 
                 // Load the file directly
                 require $i18nPath;
-                if (is_array($stephino_rpg_i18n)) {
+                if (is_array($wp_rpg_i18n)) {
                     /**
                      * Replace strings in an array at the "x.y.z" position
                      * 
@@ -359,7 +359,7 @@ class Stephino_Rpg_Config {
                     };
                 
                     // Replace internationalized values
-                    foreach ($stephino_rpg_i18n as $i18nKey => $i18nValue) {
+                    foreach ($wp_rpg_i18n as $i18nKey => $i18nValue) {
                         // Language override
                         if (is_array($userLabels) && isset($userLabels[$i18nKey])) {
                             $i18nValue = $userLabels[$i18nKey];
@@ -571,19 +571,19 @@ class Stephino_Rpg_Config {
         // Keep only the i18n parameters and values
         if ($i18nOnly) {
             if (is_file($i18nPath = STEPHINO_RPG_ROOT . '/' . Stephino_Rpg::FOLDER_THEMES . '/' . Stephino_Rpg_Theme::THEME_DEFAULT . '/' . Stephino_Rpg_Theme::FILE_I18N)) {
-                $stephino_rpg_i18n = null;
+                $wp_rpg_i18n = null;
                 
                 // Load the file directly
                 require $i18nPath;
-                if (is_array($stephino_rpg_i18n)) {
-                    $stephino_rpg_i18n_keys = array_keys($stephino_rpg_i18n);
+                if (is_array($wp_rpg_i18n)) {
+                    $wp_rpg_i18n_keys = array_keys($wp_rpg_i18n);
                     foreach ($result as $configSection => &$configInfo) {
                         foreach ($configInfo as $ciKey => &$ciValue) {
                             if (in_array($ciKey, array(Stephino_Rpg_Config_Item_Abstract::DEF_KEY_PARAMS, Stephino_Rpg_Config_Item_Abstract::DEF_KEY_VALUE))) {
                                 if (Stephino_Rpg_Config_Core::KEY === $configSection) {
                                     foreach (array_keys($ciValue) as $configItem) {
                                         $keyPath = $configSection . '.' . $configItem;
-                                        if (!isset($stephino_rpg_i18n[$keyPath])) {
+                                        if (!isset($wp_rpg_i18n[$keyPath])) {
                                             unset($ciValue[$configItem]);
                                         }
                                     }
@@ -592,7 +592,7 @@ class Stephino_Rpg_Config {
                                         foreach ($ciValue as $ciValueId => $ciValueData) {
                                             foreach (array_keys($ciValueData) as $configItem) {
                                                 $keyPath = $configSection . '.' . $ciValueId . '.' . $configItem;
-                                                if ('id' !== $configItem && !isset($stephino_rpg_i18n[$keyPath])) {
+                                                if ('id' !== $configItem && !isset($wp_rpg_i18n[$keyPath])) {
                                                     unset($ciValue[$ciValueId][$configItem]);
                                                     unset($configInfo[Stephino_Rpg_Config_Item_Abstract::DEF_KEY_PARAMS][$configItem]);
                                                 }
@@ -603,7 +603,7 @@ class Stephino_Rpg_Config {
                                             if ('id' !== $configItem) {
                                                 $keyRegEx = '%^' . $configSection . '\.\d+\.' . $configItem . '$%';
                                                 $keyMatch = false;
-                                                foreach ($stephino_rpg_i18n_keys as $allowedKey) {
+                                                foreach ($wp_rpg_i18n_keys as $allowedKey) {
                                                     if (preg_match($keyRegEx, $allowedKey)) {
                                                         $keyMatch = true;
                                                         break;

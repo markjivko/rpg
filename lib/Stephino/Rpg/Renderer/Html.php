@@ -200,7 +200,7 @@ class Stephino_Rpg_Renderer_Html {
     }
     
     /**
-     * Enqueue CSS and JS scripts with the given names. You must pass at least one JS script to initialize the "stephino_rpg_data" JS data variable.
+     * Enqueue CSS and JS scripts with the given names. You must pass at least one JS script to initialize the "wp_rpg_data" JS data variable.
      * 
      * @param string[] $cssList     (optional) CSS Scripts; default <b>empty array</b>
      * @param string[] $jsList      (optional) JS Scripts; default <b>empty array</b>

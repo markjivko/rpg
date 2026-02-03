@@ -21,7 +21,7 @@
     <head>
         <?php wp_head(); ?>
         <link rel="shortcut icon" type="image/png" href="<?php echo esc_attr(Stephino_Rpg_Utils_Media::getPluginsUrl() . '/ui/img/icon.png'); ?>" />
-        <link rel="manifest" id="stephino_rpg_manifest" />
+        <link rel="manifest" id="wp_rpg_manifest" />
         <link rel="apple-touch-icon" href="<?php echo esc_attr(Stephino_Rpg_Utils_Themes::getActive()->getFileUrl(Stephino_Rpg_Theme::FOLDER_IMG_UI . '/192.png')); ?>">
         <!--[if lt IE 10]><meta http-equiv="refresh" content="0; url=<?php echo esc_attr(get_dashboard_url());?>"><![endif]-->
         <?php if (Stephino_Rpg_Renderer_Ajax::VIEW_PWA == $viewName):?><meta http-equiv="refresh" content="5" /><?php endif;?>
